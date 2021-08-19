@@ -1,27 +1,24 @@
 package main;
 
 import java.awt.image.BufferedImage;
-import java.util.EnumMap;
+import java.util.HashMap;
 
 public class ScaledImageCache {
 
     private final float scale;
-    private EnumMap<Koma.Type, BufferedImage> imageMap = new EnumMap<>(Koma.Type.class);
-    private BufferedImage ban;
-    private BufferedImage masu;
-    private BufferedImage masuBG;
+    private HashMap<String, BufferedImage> imageMap = new HashMap<>();
 
     ScaledImageCache(float scale) {
         this.scale = scale;
     }
     
-    public void putKomaImage(Koma.Type komaType, BufferedImage image) {
-        getImageMap().put(komaType, image);
+    public void putImage(String identifier, BufferedImage image) {
+        getImageMap().put(identifier, image);
     }
     
-    public BufferedImage getKomaImage(Koma.Type komaType) {
-        if (getImageMap().containsKey(komaType)) {
-            return getImageMap().get(komaType);
+    public BufferedImage getImage(String identifier) {
+        if (getImageMap().containsKey(identifier)) {
+            return getImageMap().get(identifier);
         } else {
             return null;
         }
@@ -37,56 +34,14 @@ public class ScaledImageCache {
     /**
      * @return the imageMap
      */
-    public EnumMap<Koma.Type, BufferedImage> getImageMap() {
+    public HashMap<String, BufferedImage> getImageMap() {
         return imageMap;
     }
 
     /**
      * @param imageMap the imageMap to set
      */
-    public void setImageMap(EnumMap<Koma.Type, BufferedImage> imageMap) {
+    public void setImageMap(HashMap<String, BufferedImage> imageMap) {
         this.imageMap = imageMap;
-    }
-
-    /**
-     * @return the ban
-     */
-    public BufferedImage getBan() {
-        return ban;
-    }
-
-    /**
-     * @param ban the ban to set
-     */
-    public void setBan(BufferedImage ban) {
-        this.ban = ban;
-    }
-
-    /**
-     * @return the masu
-     */
-    public BufferedImage getMasu() {
-        return masu;
-    }
-
-    /**
-     * @param masu the masu to set
-     */
-    public void setMasu(BufferedImage masu) {
-        this.masu = masu;
-    }
-
-    /**
-     * @return the masuBG
-     */
-    public BufferedImage getMasuBG() {
-        return masuBG;
-    }
-
-    /**
-     * @param masuBG the masuBG to set
-     */
-    public void setMasuBG(BufferedImage masuBG) {
-        this.masuBG = masuBG;
     }
 }
