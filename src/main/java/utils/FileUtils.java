@@ -1,9 +1,10 @@
-package main;
+package utils;
 
 import java.io.File;
-import static main.StringUtils.substituteKomaName;
+import objects.Koma;
+import static utils.StringUtils.substituteKomaName;
 
-public class KomaResources {
+public class FileUtils {
 
     public static final String RESOURCE_PATH = "src/main/resources/";
 
@@ -12,7 +13,7 @@ public class KomaResources {
     }
 
     public static File getKomaImageFile(Koma.Type komaType) {
-        return new File(KomaResources.getImagePath(komaType));
+        return new File(FileUtils.getImagePath(komaType));
     }
 
 }

@@ -1,4 +1,4 @@
-package main;
+package utils;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -12,6 +12,10 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import objects.Board;
+import objects.Koma;
+import main.LoadBoard;
+import objects.ScaledImageCache;
 import org.apache.batik.transcoder.Transcoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -60,11 +64,11 @@ public class ImageUtils {
     }
 
     public static BufferedImage getScaledKomaImage(Koma.Type komaType, float scale) {
-        File imageFile = KomaResources.getKomaImageFile(komaType);
+        File imageFile = FileUtils.getKomaImageFile(komaType);
         try {
             return transcodeSVGToBufferedImage(imageFile, Math.round(scale * MathUtils.KOMA_X), Math.round(scale * MathUtils.KOMA_Y));
         } catch (TranscoderException ex) {
-            Logger.getLogger(KomaResources.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -72,7 +76,7 @@ public class ImageUtils {
     public static BufferedImage getScaledImage(ScaledImageCache imageCache, String imageName, int width, int height) {
         BufferedImage imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
-            File sourceFile = new File(KomaResources.RESOURCE_PATH + imageName);
+            File sourceFile = new File(FileUtils.RESOURCE_PATH + imageName);
             try {
                 imageFile = transcodeSVGToBufferedImage(sourceFile, width, height);
                 imageCache.putImage(imageName, imageFile);
@@ -86,7 +90,7 @@ public class ImageUtils {
     public static void drawImage(Board board, float scale, JPanel boardPanel, String imageName, int xCoord, int yCoord, int width, int height) {
         BufferedImage imageFile = board.getScaledImageCache().getImage(imageName);
         if (imageFile == null) {
-            File sourceFile = new File(KomaResources.RESOURCE_PATH + imageName);
+            File sourceFile = new File(FileUtils.RESOURCE_PATH + imageName);
             try {
                 imageFile = transcodeSVGToBufferedImage(sourceFile, width, height);
                 board.getScaledImageCache().putImage(imageName, imageFile);

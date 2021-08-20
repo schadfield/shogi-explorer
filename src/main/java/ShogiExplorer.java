@@ -1,4 +1,4 @@
-import main.Board;
+import objects.Board;
 import main.LoadBoard;
 
 public class ShogiExplorer extends javax.swing.JFrame {

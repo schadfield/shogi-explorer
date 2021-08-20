@@ -1,4 +1,4 @@
-package main;
+package objects;
 
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ public class ScaledImageCache {
     private final float scale;
     private HashMap<String, BufferedImage> imageMap = new HashMap<>();
 
-    ScaledImageCache(float scale) {
+    public ScaledImageCache(float scale) {
         this.scale = scale;
     }
     

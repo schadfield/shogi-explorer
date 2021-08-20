@@ -1,9 +1,14 @@
 package main;
 
+import objects.ScaledImageCache;
+import objects.Koma;
+import objects.Board;
+import utils.MathUtils;
+import utils.ImageUtils;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
-import static main.MathUtils.calculateScaleFactor;
-import static main.StringUtils.substituteKomaName;
+import static utils.MathUtils.calculateScaleFactor;
+import static utils.StringUtils.substituteKomaName;
 
 public class LoadBoard {
 
