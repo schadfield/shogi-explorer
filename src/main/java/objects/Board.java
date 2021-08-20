@@ -10,7 +10,20 @@ public class Board {
 
     public Board() {
         
-        inHandKomaMap.put(Koma.Type.GFU, 2);
+        inHandKomaMap.put(Koma.Type.GFU, 1);
+        inHandKomaMap.put(Koma.Type.GKY, 2);
+        inHandKomaMap.put(Koma.Type.GKE, 3);
+        inHandKomaMap.put(Koma.Type.GGI, 4);
+        inHandKomaMap.put(Koma.Type.GKI, 5);
+        inHandKomaMap.put(Koma.Type.GKA, 6);
+        inHandKomaMap.put(Koma.Type.GHI, 7);
+        inHandKomaMap.put(Koma.Type.SFU, 1);
+        inHandKomaMap.put(Koma.Type.SKY, 2);
+        inHandKomaMap.put(Koma.Type.SKE, 3);
+        inHandKomaMap.put(Koma.Type.SGI, 4);
+        inHandKomaMap.put(Koma.Type.SKI, 5);
+        inHandKomaMap.put(Koma.Type.SKA, 6);
+        inHandKomaMap.put(Koma.Type.SHI, 7);
 
         for (int i = 0;
                 i < 9; i++) {
