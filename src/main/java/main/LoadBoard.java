@@ -36,7 +36,7 @@ public class LoadBoard {
 
         drawPieces(board, boardPanel);
         drawPiecesInHand(board, boardPanel);
-        // TODO: drawCoordinates();
+        drawCoordinates(board, boardPanel);
         drawGrid(board, boardPanel);
         drawBans(board, boardPanel);
         drawBackground(board, boardPanel);
@@ -44,69 +44,97 @@ public class LoadBoard {
         boardPanel.setVisible(false);
         boardPanel.setVisible(true);
     }
-    
+
+    public static void drawCoordinates(Board board, JPanel boardPanel) {
+        ScaledImageCache scaledImageCache = board.scaledImageCache;
+        for (int i = 0; i < 9; i++) {
+            boardPanel.add(
+                    ImageUtils.getTextLabelForBan(
+                            scaledImageCache.getScale(),
+                            i,
+                            0,
+                            Math.round(MathUtils.KOMA_X) + MathUtils.COORD_XY * 4,
+                            -(MathUtils.COORD_XY / 2) - 3,
+                            Integer.toString(9 - i)
+                    ));
+        }
+        Character letter = 'a';
+        for (int i = 0; i < 9; i++) {
+            boardPanel.add(
+                    ImageUtils.getTextLabelForBan(
+                            scaledImageCache.getScale(),
+                            0,
+                            i,
+                            MathUtils.KOMA_X * 10 + Math.round(MathUtils.COORD_XY * 3.3),
+                            MathUtils.COORD_XY / 2 + 6,
+                            letter.toString()
+                    ));
+            letter++;
+        }
+    }
+
     public static void drawPiecesInHand(Board board, JPanel boardPanel) {
-        final int SBAN_XOFFSET = (MathUtils.BOARD_XY + 2) * MathUtils.KOMA_X + MathUtils.COORD_XY*4;
-        final int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY*2;
-        
+        final int SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
+        final int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
+
         //<editor-fold defaultstate="collapsed" desc="Map initialization">
         xOffsetMap.put(Koma.Type.GFU, 0);
         yOffsetMap.put(Koma.Type.GFU, 0);
-        xCoordMap.put( Koma.Type.GFU, 0);
-        yCoordMap.put( Koma.Type.GFU, 0);
+        xCoordMap.put(Koma.Type.GFU, 0);
+        yCoordMap.put(Koma.Type.GFU, 0);
         xOffsetMap.put(Koma.Type.GKY, 0);
         yOffsetMap.put(Koma.Type.GKY, 0);
-        xCoordMap.put( Koma.Type.GKY, 0);
-        yCoordMap.put( Koma.Type.GKY, 1);
+        xCoordMap.put(Koma.Type.GKY, 0);
+        yCoordMap.put(Koma.Type.GKY, 1);
         xOffsetMap.put(Koma.Type.GKE, 0);
         yOffsetMap.put(Koma.Type.GKE, 0);
-        xCoordMap.put( Koma.Type.GKE, 0);
-        yCoordMap.put( Koma.Type.GKE, 2);
+        xCoordMap.put(Koma.Type.GKE, 0);
+        yCoordMap.put(Koma.Type.GKE, 2);
         xOffsetMap.put(Koma.Type.GGI, 0);
         yOffsetMap.put(Koma.Type.GGI, 0);
-        xCoordMap.put( Koma.Type.GGI, 0);
-        yCoordMap.put( Koma.Type.GGI, 3);
+        xCoordMap.put(Koma.Type.GGI, 0);
+        yCoordMap.put(Koma.Type.GGI, 3);
         xOffsetMap.put(Koma.Type.GKI, 0);
         yOffsetMap.put(Koma.Type.GKI, 0);
-        xCoordMap.put( Koma.Type.GKI, 0);
-        yCoordMap.put( Koma.Type.GKI, 4);
+        xCoordMap.put(Koma.Type.GKI, 0);
+        yCoordMap.put(Koma.Type.GKI, 4);
         xOffsetMap.put(Koma.Type.GKA, 0);
         yOffsetMap.put(Koma.Type.GKA, 0);
-        xCoordMap.put( Koma.Type.GKA, 0);
-        yCoordMap.put( Koma.Type.GKA, 5);
+        xCoordMap.put(Koma.Type.GKA, 0);
+        yCoordMap.put(Koma.Type.GKA, 5);
         xOffsetMap.put(Koma.Type.GHI, 0);
         yOffsetMap.put(Koma.Type.GHI, 0);
-        xCoordMap.put( Koma.Type.GHI, 0);
-        yCoordMap.put( Koma.Type.GHI, 6);
-        
+        xCoordMap.put(Koma.Type.GHI, 0);
+        yCoordMap.put(Koma.Type.GHI, 6);
+
         xOffsetMap.put(Koma.Type.SFU, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SFU, SBAN_YOFFSET);
-        xCoordMap.put( Koma.Type.SFU, 0);
-        yCoordMap.put( Koma.Type.SFU, 6);
+        xCoordMap.put(Koma.Type.SFU, 0);
+        yCoordMap.put(Koma.Type.SFU, 6);
         xOffsetMap.put(Koma.Type.SKY, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKY, SBAN_YOFFSET);
-        xCoordMap.put( Koma.Type.SKY, 0);
-        yCoordMap.put( Koma.Type.SKY, 5);
+        xCoordMap.put(Koma.Type.SKY, 0);
+        yCoordMap.put(Koma.Type.SKY, 5);
         xOffsetMap.put(Koma.Type.SKE, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKE, SBAN_YOFFSET);
-        xCoordMap.put( Koma.Type.SKE, 0);
-        yCoordMap.put( Koma.Type.SKE, 4);
+        xCoordMap.put(Koma.Type.SKE, 0);
+        yCoordMap.put(Koma.Type.SKE, 4);
         xOffsetMap.put(Koma.Type.SGI, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SGI, SBAN_YOFFSET);
-        xCoordMap.put( Koma.Type.SGI, 0);
-        yCoordMap.put( Koma.Type.SGI, 3);
+        xCoordMap.put(Koma.Type.SGI, 0);
+        yCoordMap.put(Koma.Type.SGI, 3);
         xOffsetMap.put(Koma.Type.SKI, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKI, SBAN_YOFFSET);
-        xCoordMap.put( Koma.Type.SKI, 0);
-        yCoordMap.put( Koma.Type.SKI, 2);
+        xCoordMap.put(Koma.Type.SKI, 0);
+        yCoordMap.put(Koma.Type.SKI, 2);
         xOffsetMap.put(Koma.Type.SKA, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKA, SBAN_YOFFSET);
-        xCoordMap.put( Koma.Type.SKA, 0);
-        yCoordMap.put( Koma.Type.SKA, 1);
+        xCoordMap.put(Koma.Type.SKA, 0);
+        yCoordMap.put(Koma.Type.SKA, 1);
         xOffsetMap.put(Koma.Type.SHI, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SHI, SBAN_YOFFSET);
-        xCoordMap.put( Koma.Type.SHI, 0);
-        yCoordMap.put( Koma.Type.SHI, 0);
+        xCoordMap.put(Koma.Type.SHI, 0);
+        yCoordMap.put(Koma.Type.SHI, 0);
         //</editor-fold>
 
         ScaledImageCache scaledImageCache = board.scaledImageCache;
@@ -128,16 +156,16 @@ public class LoadBoard {
                                 xOffsetMap.get(komaType),
                                 yOffsetMap.get(komaType)
                         ));
-   
-                      boardPanel.add(
+
+                boardPanel.add(
                         ImageUtils.getTextLabelForBan(
                                 scaledImageCache.getScale(),
-                                xCoordMap.get(komaType)+1,
+                                xCoordMap.get(komaType) + 1,
                                 yCoordMap.get(komaType),
                                 xOffsetMap.get(komaType),
                                 yOffsetMap.get(komaType),
-                                numberHeld
-                        ));          
+                                numberHeld.toString()
+                        ));
             }
         }
 
@@ -161,7 +189,7 @@ public class LoadBoard {
                             pieceImage,
                             i,
                             j,
-                            2 * MathUtils.KOMA_X + 2 * MathUtils.COORD_XY,
+                            MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
                             MathUtils.COORD_XY
                     ));
                 }
@@ -174,10 +202,11 @@ public class LoadBoard {
                 board,
                 boardPanel,
                 "grid.svg",
-                MathUtils.KOMA_X * 2 + MathUtils.COORD_XY,
+                //MathUtils.KOMA_X  + MathUtils.COORD_XY*2,
+                MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
                 0,
-                MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY,
-                MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY);
+                MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
+                MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2);
     }
 
     public static void drawBans(Board board, JPanel boardPanel) {
@@ -185,7 +214,7 @@ public class LoadBoard {
                 board,
                 boardPanel,
                 "ban.svg",
-                MathUtils.KOMA_X * (MathUtils.BOARD_XY + 2) + MathUtils.COORD_XY * 4,
+                MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
                 MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2,
                 MathUtils.KOMA_X + MathUtils.COORD_XY,
                 MathUtils.KOMA_Y * 7);
@@ -205,7 +234,8 @@ public class LoadBoard {
                 board,
                 boardPanel,
                 "background.svg",
-                MathUtils.KOMA_X * 2 + MathUtils.COORD_XY,
+                //MathUtils.KOMA_X + MathUtils.COORD_XY*3,
+                MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
                 0,
                 MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
                 MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2);

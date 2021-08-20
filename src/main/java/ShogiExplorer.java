@@ -51,7 +51,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
 
-        boardPanel.setPreferredSize(new java.awt.Dimension(639, 472));
+        boardPanel.setPreferredSize(new java.awt.Dimension(636, 472));
 
         javax.swing.GroupLayout boardPanelLayout = new javax.swing.GroupLayout(boardPanel);
         boardPanel.setLayout(boardPanelLayout);

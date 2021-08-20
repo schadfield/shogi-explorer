@@ -89,7 +89,7 @@ public class ImageUtils {
         return null;
     }
 
-    public static JLabel getPieceLabelForKoma(float scale, BufferedImage image, int i, int j, int xOffset, int yOffset) {
+    public static JLabel getPieceLabelForKoma(float scale, BufferedImage image, long i, long j, long xOffset, long yOffset) {
         JLabel pieceLabel = new JLabel(new ImageIcon(image));
         pieceLabel.setBounds(
                 Math.round(scale * (i * MathUtils.KOMA_X + xOffset)), 
@@ -99,8 +99,8 @@ public class ImageUtils {
         return pieceLabel;
     }
     
-        public static JLabel getTextLabelForBan(float scale, int i, int j, int xOffset, int yOffset, int numberHeld) {
-        JLabel numberLabel = new JLabel(Integer.toString(numberHeld));
+        public static JLabel getTextLabelForBan(float scale, long i, long j, long xOffset, long yOffset, String text) {
+        JLabel numberLabel = new JLabel(text);
         numberLabel.setBounds(
                 Math.round(scale * (i * MathUtils.KOMA_X + xOffset)), 
                 Math.round(scale * (j * MathUtils.KOMA_Y + yOffset)),

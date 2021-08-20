@@ -99,7 +99,7 @@
                 <Container class="javax.swing.JPanel" name="boardPanel">
                   <Properties>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[639, 472]"/>
+                      <Dimension value="[636, 472]"/>
                     </Property>
                   </Properties>
                   <Constraints>
