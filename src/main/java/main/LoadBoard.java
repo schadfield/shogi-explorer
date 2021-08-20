@@ -44,11 +44,12 @@ public class LoadBoard {
         boardPanel.setVisible(false);
         boardPanel.setVisible(true);
     }
-
+    
     public static void drawPiecesInHand(Board board, JPanel boardPanel) {
         final int SBAN_XOFFSET = (MathUtils.BOARD_XY + 2) * MathUtils.KOMA_X + MathUtils.COORD_XY*4;
         final int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY*2;
         
+        //<editor-fold defaultstate="collapsed" desc="Map initialization">
         xOffsetMap.put(Koma.Type.GFU, 0);
         yOffsetMap.put(Koma.Type.GFU, 0);
         xCoordMap.put( Koma.Type.GFU, 0);
@@ -106,6 +107,7 @@ public class LoadBoard {
         yOffsetMap.put(Koma.Type.SHI, SBAN_YOFFSET);
         xCoordMap.put( Koma.Type.SHI, 0);
         yCoordMap.put( Koma.Type.SHI, 0);
+        //</editor-fold>
 
         ScaledImageCache scaledImageCache = board.scaledImageCache;
 
@@ -130,7 +132,6 @@ public class LoadBoard {
                       boardPanel.add(
                         ImageUtils.getTextLabelForBan(
                                 scaledImageCache.getScale(),
-                                pieceImage,
                                 xCoordMap.get(komaType)+1,
                                 yCoordMap.get(komaType),
                                 xOffsetMap.get(komaType),
