@@ -7,9 +7,13 @@ public class Board {
     public Koma[][] masu = new Koma[9][9];
     public ScaledImageCache scaledImageCache = null;
     public EnumMap<Koma.Type, Integer> inHandKomaMap = new EnumMap<>(Koma.Type.class);
+    public enum Turn { SENTE, GOTE };
+    public Turn nextMove;
 
     public Board() {
         
+        nextMove = Turn.SENTE;
+                
         inHandKomaMap.put(Koma.Type.GFU, 1);
         inHandKomaMap.put(Koma.Type.GKY, 2);
         inHandKomaMap.put(Koma.Type.GKE, 3);

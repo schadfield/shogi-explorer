@@ -8,6 +8,7 @@ import utils.ImageUtils;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import javax.swing.JPanel;
+import objects.Board.Turn;
 import static utils.MathUtils.calculateScaleFactor;
 import static utils.StringUtils.substituteKomaName;
 
@@ -17,6 +18,8 @@ public class LoadBoard {
     public static final HashMap<Koma.Type, Integer> yOffsetMap = new HashMap<>();
     public static final HashMap<Koma.Type, Integer> xCoordMap = new HashMap<>();
     public static final HashMap<Koma.Type, Integer> yCoordMap = new HashMap<>();
+    final static int SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
+    final static int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
 
     public static void loadBoard(Board board, javax.swing.JPanel boardPanel) {
         // TODO: why is loadBoard() being called when the boardPanel has no width?
@@ -40,6 +43,7 @@ public class LoadBoard {
         drawGrid(board, boardPanel);
         drawBans(board, boardPanel);
         drawBackground(board, boardPanel);
+        drawTurnNotification(board, boardPanel);
 
         boardPanel.setVisible(false);
         boardPanel.setVisible(true);
@@ -73,9 +77,45 @@ public class LoadBoard {
         }
     }
 
+    public static void drawTurnNotification(Board board, JPanel boardPanel) {
+        ScaledImageCache scaledImageCache = board.scaledImageCache;
+
+        if (board.nextMove == Turn.SENTE) {
+            BufferedImage image = ImageUtils.getScaledImage(
+                    scaledImageCache,
+                    "sente.svg",
+                    MathUtils.KOMA_X, MathUtils.KOMA_Y
+            );
+            boardPanel.add(
+                    ImageUtils.getPieceLabelForKoma(
+                            scaledImageCache.getScale(),
+                            image,
+                            0,
+                            -2,
+                            SBAN_XOFFSET + MathUtils.COORD_XY,
+                            SBAN_YOFFSET - MathUtils.COORD_XY
+                    )
+            );
+        } else {
+            BufferedImage image = ImageUtils.getScaledImage(
+                    scaledImageCache,
+                    "gote.svg",
+                    MathUtils.KOMA_X, MathUtils.KOMA_Y
+            );
+            boardPanel.add(
+                    ImageUtils.getPieceLabelForKoma(
+                            scaledImageCache.getScale(),
+                            image,
+                            0,
+                            8,
+                            0,
+                            +MathUtils.COORD_XY
+                    )
+            );
+        }
+    }
+
     public static void drawPiecesInHand(Board board, JPanel boardPanel) {
-        final int SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
-        final int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
 
         //<editor-fold defaultstate="collapsed" desc="Map initialization">
         xOffsetMap.put(Koma.Type.GFU, 0);
