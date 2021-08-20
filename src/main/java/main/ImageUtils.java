@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import org.apache.batik.transcoder.Transcoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -66,6 +67,36 @@ public class ImageUtils {
             Logger.getLogger(KomaResources.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public static BufferedImage getScaledImage(ScaledImageCache imageCache, String imageName, int width, int height) {
+        BufferedImage imageFile = imageCache.getImage(imageName);
+        if (imageFile == null) {
+            File sourceFile = new File(KomaResources.RESOURCE_PATH + imageName);
+            try {
+                imageFile = transcodeSVGToBufferedImage(sourceFile, width, height);
+                imageCache.putImage(imageName, imageFile);
+            } catch (TranscoderException ex) {
+                Logger.getLogger(LoadBoard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return imageFile;
+    }
+
+    public static void drawImage(Board board, float scale, JPanel boardPanel, String imageName, int xCoord, int yCoord, int width, int height) {
+        BufferedImage imageFile = board.getScaledImageCache().getImage(imageName);
+        if (imageFile == null) {
+            File sourceFile = new File(KomaResources.RESOURCE_PATH + imageName);
+            try {
+                imageFile = transcodeSVGToBufferedImage(sourceFile, width, height);
+                board.getScaledImageCache().putImage(imageName, imageFile);
+            } catch (TranscoderException ex) {
+                Logger.getLogger(LoadBoard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        JLabel imageLable = new JLabel(new ImageIcon(imageFile));
+        imageLable.setBounds(xCoord, yCoord, width, height);
+        boardPanel.add(imageLable);
     }
 
 }
