@@ -1,5 +1,6 @@
 package utils;
 
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,6 +17,7 @@ import objects.Board;
 import objects.Koma;
 import main.LoadBoard;
 import objects.ScaledImageCache;
+import org.apache.batik.gvt.renderer.ImageRenderer;
 import org.apache.batik.transcoder.Transcoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -25,13 +27,53 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 public class ImageUtils {
 
     public static BufferedImage transcodeSVGToBufferedImage(File file, int width, int height) throws TranscoderException {
-        // Create a PNG transcoder.
-        Transcoder t = new PNGTranscoder();
+        Transcoder transcoder = new PNGTranscoder() {
+            @Override
+            protected ImageRenderer createRenderer() {
+                ImageRenderer r = super.createRenderer();
 
+                RenderingHints rh = r.getRenderingHints();
+                
+                //TODO: Can we improve this?
+
+                //rh.add(new RenderingHints(RenderingHints.KEY_ALPHA_INTERPOLATION,
+                //        RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY));
+                
+                //rh.add(new RenderingHints(RenderingHints.KEY_INTERPOLATION,
+                //        RenderingHints.VALUE_INTERPOLATION_BICUBIC));
+
+                //rh.add(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+                //        RenderingHints.VALUE_ANTIALIAS_ON));
+
+                //rh.add(new RenderingHints(RenderingHints.KEY_COLOR_RENDERING,
+                //        RenderingHints.VALUE_COLOR_RENDER_QUALITY));
+                
+                //rh.add(new RenderingHints(RenderingHints.KEY_DITHERING,
+                //        RenderingHints.VALUE_DITHER_DISABLE));
+
+                //rh.add(new RenderingHints(RenderingHints.KEY_RENDERING,
+                //        RenderingHints.VALUE_RENDER_QUALITY));
+
+                //rh.add(new RenderingHints(RenderingHints.KEY_STROKE_CONTROL,
+                //        RenderingHints.VALUE_STROKE_PURE));
+
+                //rh.add(new RenderingHints(RenderingHints.KEY_FRACTIONALMETRICS,
+                //        RenderingHints.VALUE_FRACTIONALMETRICS_ON));
+                
+                //rh.add(new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
+                //        RenderingHints.VALUE_TEXT_ANTIALIAS_OFF));
+
+                r.setRenderingHints(rh);
+
+                return r;
+            }
+        };
+        
         // Set the transcoding hints.
-        t.addTranscodingHint(PNGTranscoder.KEY_WIDTH, (float) width);
-        t.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float) height);
-        t.addTranscodingHint(PNGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 3.543f);
+        transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, (float) width);
+        transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float) height);
+        transcoder.addTranscodingHint(PNGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 3.543f);
+        
         try ( FileInputStream inputStream = new FileInputStream(file)) {
             // Create the transcoder input.
             TranscoderInput input = new TranscoderInput(inputStream);
@@ -41,7 +83,7 @@ public class ImageUtils {
             TranscoderOutput output = new TranscoderOutput(outputStream);
 
             // Save the image.
-            t.transcode(input, output);
+            transcoder.transcode(input, output);
 
             // Flush and close the stream.
             outputStream.flush();

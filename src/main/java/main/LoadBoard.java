@@ -30,7 +30,8 @@ public class LoadBoard {
 
         drawPieces(board, boardPanel, scale);
 
-        // drawPiecesInHand();
+        // TODO: drawPiecesInHand();
+        // TODO: drawCoordinates();
         drawGrid(board, scale, boardPanel);
         drawBans(board, scale, boardPanel);
         drawBackground(board, scale, boardPanel);
