@@ -9,25 +9,27 @@ public class Board {
     public EnumMap<Koma.Type, Integer> inHandKomaMap = new EnumMap<>(Koma.Type.class);
     public enum Turn { SENTE, GOTE };
     public Turn nextMove;
+    public boolean isRotated;
 
     public Board() {
         
         nextMove = Turn.SENTE;
+        isRotated = false;
                 
         inHandKomaMap.put(Koma.Type.GFU, 1);
-        inHandKomaMap.put(Koma.Type.GKY, 2);
-        inHandKomaMap.put(Koma.Type.GKE, 3);
-        inHandKomaMap.put(Koma.Type.GGI, 4);
-        inHandKomaMap.put(Koma.Type.GKI, 5);
-        inHandKomaMap.put(Koma.Type.GKA, 6);
-        inHandKomaMap.put(Koma.Type.GHI, 7);
-        inHandKomaMap.put(Koma.Type.SFU, 1);
+        inHandKomaMap.put(Koma.Type.GKY, 1);
+        inHandKomaMap.put(Koma.Type.GKE, 1);
+        inHandKomaMap.put(Koma.Type.GGI, 1);
+        //inHandKomaMap.put(Koma.Type.GKI, 1);
+        inHandKomaMap.put(Koma.Type.GKA, 1);
+        inHandKomaMap.put(Koma.Type.GHI, 1);
+        inHandKomaMap.put(Koma.Type.SFU, 2);
         inHandKomaMap.put(Koma.Type.SKY, 2);
-        inHandKomaMap.put(Koma.Type.SKE, 3);
-        inHandKomaMap.put(Koma.Type.SGI, 4);
-        inHandKomaMap.put(Koma.Type.SKI, 5);
-        inHandKomaMap.put(Koma.Type.SKA, 6);
-        inHandKomaMap.put(Koma.Type.SHI, 7);
+        inHandKomaMap.put(Koma.Type.SKE, 2);
+        //inHandKomaMap.put(Koma.Type.SGI, 2);
+        inHandKomaMap.put(Koma.Type.SKI, 2);
+        inHandKomaMap.put(Koma.Type.SKA, 2);
+        inHandKomaMap.put(Koma.Type.SHI, 2);
 
         for (int i = 0;
                 i < 9; i++) {

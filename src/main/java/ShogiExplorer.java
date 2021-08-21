@@ -33,6 +33,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Shogi Explorer");
@@ -51,6 +53,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
 
+        boardPanel.setBackground(new java.awt.Color(204, 204, 204));
         boardPanel.setPreferredSize(new java.awt.Dimension(636, 472));
 
         javax.swing.GroupLayout boardPanelLayout = new javax.swing.GroupLayout(boardPanel);
@@ -113,6 +116,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenu2.setText("Edit");
         jMenuBar1.add(jMenu2);
 
+        jMenu3.setLabel("View");
+
+        jRadioButtonMenuItem1.setLabel("Rotate View");
+        jRadioButtonMenuItem1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRadioButtonMenuItem1ItemStateChanged(evt);
+            }
+        });
+        jMenu3.add(jRadioButtonMenuItem1);
+
+        jMenuBar1.add(jMenu3);
+
         setJMenuBar(jMenuBar1);
         jMenuBar1.getAccessibleContext().setAccessibleName("");
 
@@ -145,6 +160,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
         // TODO add your handling code here:
         LoadBoard.loadBoard(board, boardPanel);
     }//GEN-LAST:event_jSplitPane1PropertyChange
+
+    private void jRadioButtonMenuItem1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ItemStateChanged
+        // TODO add your handling code here:
+        board.isRotated = !board.isRotated;
+        LoadBoard.loadBoard(board, boardPanel);
+    }//GEN-LAST:event_jRadioButtonMenuItem1ItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -189,9 +210,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JPanel boardPanel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
