@@ -5,10 +5,10 @@ import java.util.HashMap;
 
 public class ScaledImageCache {
 
-    private final float scale;
+    private final double scale;
     private HashMap<String, BufferedImage> imageMap = new HashMap<>();
 
-    public ScaledImageCache(float scale) {
+    public ScaledImageCache(double scale) {
         this.scale = scale;
     }
     
@@ -27,7 +27,7 @@ public class ScaledImageCache {
     /**
      * @return the scale
      */
-    public float getScale() {
+    public double getScale() {
         return scale;
     }
 

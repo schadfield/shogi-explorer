@@ -9,8 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import javax.swing.JPanel;
 import objects.Board.Turn;
-import static utils.MathUtils.calculateCenterX;
-import static utils.MathUtils.calculateCenterY;
+import objects.ScaleItem;
 import static utils.MathUtils.calculateScaleFactor;
 import static utils.StringUtils.substituteKomaName;
 import static utils.StringUtils.substituteKomaNameRotated;
@@ -27,8 +26,8 @@ public class LoadBoard {
     public static final HashMap<Koma.Type, Integer> yCoordMapRotated = new HashMap<>();
     final static int SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
     final static int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
-    private static int centerX;
-    private static int centerY;
+    private static long centerX;
+    private static long centerY;
 
 
     public static void loadBoard(Board board, javax.swing.JPanel boardPanel) {
@@ -36,13 +35,14 @@ public class LoadBoard {
         if (boardPanel.getWidth() == 0) {
             return;
         }
-
-        float scale = calculateScaleFactor(boardPanel);
-        centerX = calculateCenterX(boardPanel);
-        centerY = calculateCenterY(boardPanel);
+        
+        ScaleItem scaleItem = calculateScaleFactor(boardPanel);
+        double scale = scaleItem.getScale();
+        centerX = scaleItem.getCenterX();
+        centerY = scaleItem.getCenterY();
 
         // If the scale of the board has changed we need to create a new image cache.
-        if (board.getScaledImageCache() == null || Float.compare(scale, board.getScaledImageCache().getScale()) != 0) {
+        if (board.getScaledImageCache() == null || Double.compare(scale, board.getScaledImageCache().getScale()) != 0) {
             board.setScaledImageCache(new ScaledImageCache(scale));
         }
 

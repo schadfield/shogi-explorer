@@ -1,44 +1,28 @@
 package utils;
 
 import javax.swing.JPanel;
+import objects.ScaleItem;
 
 public class MathUtils {
-    
+
     public static final int KOMA_X = 43;
     public static final int KOMA_Y = 48;
     public static final int BOARD_XY = 9;
     public static final int COORD_XY = 20;
-    
-    public static float calculateScaleFactor(JPanel board) {
-        float xScale = ((float) board.getWidth()-10.0f) / ((float) KOMA_X * (float) (BOARD_XY + 2) + (float) COORD_XY * 6);
-        float yScale = ((float) board.getHeight()-10.0f) / ((float) KOMA_Y * (float) BOARD_XY + (float) COORD_XY * 2);
+
+    public static ScaleItem calculateScaleFactor(JPanel board) {
+        ScaleItem scaleItem = new ScaleItem();
+        double xScale = ((double) board.getWidth()-10.0f) / ((double) KOMA_X * (double) (BOARD_XY + 2) + (double) COORD_XY * 6);
+        double yScale = ((double) board.getHeight()-10.0f) / ((double) KOMA_Y * (double) BOARD_XY + (double) COORD_XY * 2);
         if (xScale < yScale) {
-            return xScale;
+            scaleItem.setScale(xScale);
+            scaleItem.setCenterX(5);
+            scaleItem.setCenterY(Math.round(((double) board.getHeight() - xScale * ((double) KOMA_Y * (double) BOARD_XY + (double) COORD_XY * 2.0f)) / 2.0f));
         } else {
-            return yScale;
+            scaleItem.setScale(yScale);
+            scaleItem.setCenterX(Math.round(((double) board.getWidth() - yScale * ((double) KOMA_X * (double) (BOARD_XY + 2) + (double) COORD_XY * 6)) / 2.0f));
+            scaleItem.setCenterY(5);
         }
+        return scaleItem;
     }
-    
-    public static int calculateCenterX(JPanel board) {
-        float xScale = (float) board.getWidth() / ((float) KOMA_X * (float) (BOARD_XY + 2) + (float) COORD_XY * 6);
-        float yScale = (float) board.getHeight() / ((float) KOMA_Y * (float) BOARD_XY + (float) COORD_XY * 2);
-        if (xScale < yScale) {
-            return 5;
-        } else {
-            System.out.println("CenterX");
-            return Math.round(((float) board.getWidth() - yScale * ((float) KOMA_X * (float) (BOARD_XY + 2) + (float) COORD_XY * 6)) / 2.0f);
-        }
-    }    
-    
-    public static int calculateCenterY(JPanel board) {
-        float xScale = (float) board.getWidth() / ((float) KOMA_X * (float) (BOARD_XY + 2) + (float) COORD_XY * 6);
-        float yScale = (float) board.getHeight() / ((float) KOMA_Y * (float) BOARD_XY + (float) COORD_XY * 2);
-        if (xScale < yScale) {
-            System.out.println("CenterY");
-            return Math.round(((float) board.getHeight() - xScale * ((float) KOMA_Y * (float) BOARD_XY + (float) COORD_XY * 2.0f)) / 2.0f);
-        } else {
-            return 5;
-        }
-    }
-    
 }

@@ -26,7 +26,7 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 
 public class ImageUtils {
 
-    public static BufferedImage transcodeSVGToBufferedImage(File file, int width, int height) throws TranscoderException {
+    public static BufferedImage transcodeSVGToBufferedImage(File file, long width, long height) throws TranscoderException {
         Transcoder transcoder = new PNGTranscoder() {
             @Override
             protected ImageRenderer createRenderer() {
@@ -35,26 +35,25 @@ public class ImageUtils {
                 RenderingHints rh = r.getRenderingHints();
 
                 //TODO: Can we improve this?
-                //rh.add(new RenderingHints(RenderingHints.KEY_ALPHA_INTERPOLATION,
-                //        RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY));
-                //rh.add(new RenderingHints(RenderingHints.KEY_INTERPOLATION,
-                //        RenderingHints.VALUE_INTERPOLATION_BICUBIC));
-                //rh.add(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
-                //        RenderingHints.VALUE_ANTIALIAS_ON));
-                //rh.add(new RenderingHints(RenderingHints.KEY_COLOR_RENDERING,
-                //        RenderingHints.VALUE_COLOR_RENDER_QUALITY));
-                //rh.add(new RenderingHints(RenderingHints.KEY_DITHERING,
-                //        RenderingHints.VALUE_DITHER_DISABLE));
-                //rh.add(new RenderingHints(RenderingHints.KEY_RENDERING,
-                //        RenderingHints.VALUE_RENDER_QUALITY));
-                //rh.add(new RenderingHints(RenderingHints.KEY_STROKE_CONTROL,
-                //        RenderingHints.VALUE_STROKE_PURE));
-                //rh.add(new RenderingHints(RenderingHints.KEY_FRACTIONALMETRICS,
-                //        RenderingHints.VALUE_FRACTIONALMETRICS_ON));
-                //rh.add(new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
-                //        RenderingHints.VALUE_TEXT_ANTIALIAS_OFF));
+                rh.add(new RenderingHints(RenderingHints.KEY_ALPHA_INTERPOLATION,
+                        RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY));
+                rh.add(new RenderingHints(RenderingHints.KEY_INTERPOLATION,
+                        RenderingHints.VALUE_INTERPOLATION_BICUBIC));
+                rh.add(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON));
+                rh.add(new RenderingHints(RenderingHints.KEY_COLOR_RENDERING,
+                        RenderingHints.VALUE_COLOR_RENDER_QUALITY));
+                rh.add(new RenderingHints(RenderingHints.KEY_DITHERING,
+                        RenderingHints.VALUE_DITHER_DISABLE));
+                rh.add(new RenderingHints(RenderingHints.KEY_RENDERING,
+                        RenderingHints.VALUE_RENDER_QUALITY));
+                rh.add(new RenderingHints(RenderingHints.KEY_STROKE_CONTROL,
+                        RenderingHints.VALUE_STROKE_PURE));
+                rh.add(new RenderingHints(RenderingHints.KEY_FRACTIONALMETRICS,
+                        RenderingHints.VALUE_FRACTIONALMETRICS_ON));
+                rh.add(new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
+                        RenderingHints.VALUE_TEXT_ANTIALIAS_OFF));
                 r.setRenderingHints(rh);
-
                 return r;
             }
         };
@@ -62,7 +61,7 @@ public class ImageUtils {
         // Set the transcoding hints.
         transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, (float) width);
         transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float) height);
-        transcoder.addTranscodingHint(PNGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 3.543f);
+        //transcoder.addTranscodingHint(PNGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 3.543f);
 
         try ( FileInputStream inputStream = new FileInputStream(file)) {
             // Create the transcoder input.
@@ -89,27 +88,27 @@ public class ImageUtils {
         return null;
     }
 
-    public static JLabel getPieceLabelForKoma(float scale, BufferedImage image, long i, long j, long xOffset, long yOffset, int centerX, int centerY) {
+    public static JLabel getPieceLabelForKoma(double scale, BufferedImage image, int i, int j, long xOffset, long yOffset, long centerX, long centerY) {
         JLabel pieceLabel = new JLabel(new ImageIcon(image));
         pieceLabel.setBounds(
-                centerX + Math.round(scale * (i * MathUtils.KOMA_X + xOffset)),
-                centerY + Math.round(scale * (j * MathUtils.KOMA_Y + yOffset)),
-                Math.round(scale * MathUtils.KOMA_X),
-                Math.round(scale * MathUtils.KOMA_Y));
+                (int) (centerX + Math.round(scale * (i * MathUtils.KOMA_X + xOffset))),
+                (int) (centerY + Math.round(scale * (j * MathUtils.KOMA_Y + yOffset))),
+                (int) Math.round(scale * MathUtils.KOMA_X),
+                (int) Math.round(scale * MathUtils.KOMA_Y));
         return pieceLabel;
     }
 
-    public static JLabel getTextLabelForBan(float scale, long i, long j, long xOffset, long yOffset, int centerX, int centerY, String text) {
+    public static JLabel getTextLabelForBan(double scale, int i, int j, long xOffset, long yOffset, long centerX, long centerY, String text) {
         JLabel numberLabel = new JLabel(text);
         numberLabel.setBounds(
-                centerX + Math.round(scale * (i * MathUtils.KOMA_X + xOffset)),
-                centerY + Math.round(scale * (j * MathUtils.KOMA_Y + yOffset)),
-                Math.round(scale * MathUtils.KOMA_X),
-                Math.round(scale * MathUtils.KOMA_Y));
+                (int) (centerX + Math.round(scale * (i * MathUtils.KOMA_X + xOffset))),
+                (int) (centerY + Math.round(scale * (j * MathUtils.KOMA_Y + yOffset))),
+                (int) Math.round(scale * MathUtils.KOMA_X),
+                (int) Math.round(scale * MathUtils.KOMA_Y));
         return numberLabel;
     }
 
-    public static BufferedImage getScaledKomaImage(Koma.Type komaType, float scale) {
+    public static BufferedImage getScaledKomaImage(Koma.Type komaType, double scale) {
         File imageFile = FileUtils.getKomaImageFile(komaType);
         try {
             return transcodeSVGToBufferedImage(imageFile, Math.round(scale * MathUtils.KOMA_X), Math.round(scale * MathUtils.KOMA_Y));
@@ -119,12 +118,12 @@ public class ImageUtils {
         return null;
     }
 
-    public static BufferedImage getScaledImage(ScaledImageCache imageCache, String imageName, int width, int height) {
+    public static BufferedImage getScaledImage(ScaledImageCache imageCache, String imageName, long width, long height) {
         BufferedImage imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
             File sourceFile = new File(FileUtils.RESOURCE_PATH + imageName);
             try {
-                float scale = imageCache.getScale();
+                double scale = imageCache.getScale();
                 imageFile = transcodeSVGToBufferedImage(sourceFile, Math.round(scale * width), Math.round(scale * height));
                 imageCache.putImage(imageName, imageFile);
             } catch (TranscoderException ex) {
@@ -134,9 +133,9 @@ public class ImageUtils {
         return imageFile;
     }
 
-    public static void drawImage(Board board, JPanel boardPanel, String imageName, int xCoord, int yCoord, int width, int height, int centerX, int centerY) {
+    public static void drawImage(Board board, JPanel boardPanel, String imageName, long xCoord, long yCoord, long width, long height, long centerX, long centerY) {
         ScaledImageCache scaledImageCache = board.getScaledImageCache();
-        float scale = scaledImageCache.getScale();
+        double scale = scaledImageCache.getScale();
         BufferedImage imageFile = scaledImageCache.getImage(imageName);
         if (imageFile == null) {
             File sourceFile = new File(FileUtils.RESOURCE_PATH + imageName);
@@ -149,10 +148,10 @@ public class ImageUtils {
         }
         JLabel imageLable = new JLabel(new ImageIcon(imageFile));
         imageLable.setBounds(
-                centerX+Math.round(scale * xCoord), 
-                centerY+Math.round(scale * yCoord), 
-                Math.round(scale * width), 
-                Math.round(scale * height));
+                (int) (centerX + Math.round(scale * xCoord)),
+                (int) (centerY + Math.round(scale * yCoord)),
+                (int) (Math.round(scale * width)),
+                (int) (Math.round(scale * height)));
         boardPanel.add(imageLable);
     }
 
