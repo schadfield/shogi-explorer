@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import javax.swing.JPanel;
 import objects.Board.Turn;
+import static utils.MathUtils.calculateCenterX;
+import static utils.MathUtils.calculateCenterY;
 import static utils.MathUtils.calculateScaleFactor;
 import static utils.StringUtils.substituteKomaName;
 import static utils.StringUtils.substituteKomaNameRotated;
@@ -25,6 +27,9 @@ public class LoadBoard {
     public static final HashMap<Koma.Type, Integer> yCoordMapRotated = new HashMap<>();
     final static int SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
     final static int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
+    private static int centerX;
+    private static int centerY;
+
 
     public static void loadBoard(Board board, javax.swing.JPanel boardPanel) {
         // TODO: why is loadBoard() being called when the boardPanel has no width?
@@ -33,6 +38,8 @@ public class LoadBoard {
         }
 
         float scale = calculateScaleFactor(boardPanel);
+        centerX = calculateCenterX(boardPanel);
+        centerY = calculateCenterY(boardPanel);
 
         // If the scale of the board has changed we need to create a new image cache.
         if (board.getScaledImageCache() == null || Float.compare(scale, board.getScaledImageCache().getScale()) != 0) {
@@ -65,6 +72,8 @@ public class LoadBoard {
                                 0,
                                 Math.round(MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2),
                                 Math.round(MathUtils.BOARD_XY * MathUtils.KOMA_Y + MathUtils.COORD_XY / 2 - 3),
+                                centerX,
+                                centerY,
                                 Integer.toString(i + 1)
                         ));
             }
@@ -77,6 +86,8 @@ public class LoadBoard {
                                 i,
                                 Math.round(MathUtils.COORD_XY * 4.5),
                                 MathUtils.COORD_XY / 2 + 7,
+                                centerX,
+                                centerY,
                                 letter.toString()
                         ));
                 letter--;
@@ -91,6 +102,8 @@ public class LoadBoard {
                                 0,
                                 Math.round(MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2),
                                 -(MathUtils.COORD_XY / 2) - 3,
+                                centerX,
+                                centerY,
                                 Integer.toString(9 - i)
                         ));
             }
@@ -103,6 +116,8 @@ public class LoadBoard {
                                 i,
                                 MathUtils.KOMA_X * 10 + Math.round(MathUtils.COORD_XY * 3.3),
                                 MathUtils.COORD_XY / 2 + 7,
+                                centerX,
+                                centerY,
                                 letter.toString()
                         ));
                 letter++;
@@ -127,7 +142,9 @@ public class LoadBoard {
                                 0,
                                 8,
                                 MathUtils.COORD_XY,
-                                MathUtils.COORD_XY
+                                MathUtils.COORD_XY,
+                                centerX,
+                                centerY
                         )
                 );
             } else {
@@ -138,7 +155,9 @@ public class LoadBoard {
                                 0,
                                 -2,
                                 SBAN_XOFFSET,
-                                SBAN_YOFFSET - MathUtils.COORD_XY
+                                SBAN_YOFFSET - MathUtils.COORD_XY,
+                                centerX,
+                                centerY
                         )
                 );
             }
@@ -156,7 +175,9 @@ public class LoadBoard {
                                 0,
                                 -2,
                                 SBAN_XOFFSET,
-                                SBAN_YOFFSET - MathUtils.COORD_XY
+                                SBAN_YOFFSET - MathUtils.COORD_XY,
+                                centerX,
+                                centerY
                         )
                 );
             } else {
@@ -167,7 +188,9 @@ public class LoadBoard {
                                 0,
                                 8,
                                 MathUtils.COORD_XY,
-                                MathUtils.COORD_XY
+                                MathUtils.COORD_XY,
+                                centerX,
+                                centerY
                         )
                 );
             }
@@ -321,7 +344,9 @@ public class LoadBoard {
                                     xCoordMapRotated.get(komaType),
                                     yCoordMapRotated.get(komaType),
                                     xOffsetMapRotated.get(komaType),
-                                    yOffsetMapRotated.get(komaType)
+                                    yOffsetMapRotated.get(komaType),
+                                    centerX,
+                                    centerY
                             ));
                     boardPanel.add(
                             ImageUtils.getTextLabelForBan(
@@ -330,6 +355,8 @@ public class LoadBoard {
                                     yCoordMapRotated.get(komaType),
                                     xOffsetMapRotated.get(komaType),
                                     yOffsetMapRotated.get(komaType),
+                                    centerX,
+                                    centerY,
                                     numberHeld.toString()
                             ));
                 } else {
@@ -340,7 +367,9 @@ public class LoadBoard {
                                     xCoordMap.get(komaType),
                                     yCoordMap.get(komaType),
                                     xOffsetMap.get(komaType),
-                                    yOffsetMap.get(komaType)
+                                    yOffsetMap.get(komaType),
+                                    centerX,
+                                    centerY
                             ));
                     boardPanel.add(
                             ImageUtils.getTextLabelForBan(
@@ -349,6 +378,8 @@ public class LoadBoard {
                                     yCoordMap.get(komaType),
                                     xOffsetMap.get(komaType),
                                     yOffsetMap.get(komaType),
+                                    centerX,
+                                    centerY,
                                     numberHeld.toString()
                             ));
                 }
@@ -376,7 +407,9 @@ public class LoadBoard {
                                 i,
                                 j,
                                 MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                                MathUtils.COORD_XY
+                                MathUtils.COORD_XY,
+                                centerX,
+                                centerY
                         ));
                     }
                 } else {
@@ -394,7 +427,9 @@ public class LoadBoard {
                                 i,
                                 j,
                                 MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                                MathUtils.COORD_XY
+                                MathUtils.COORD_XY,
+                                centerX,
+                                centerY
                         ));
                     }
                 }
@@ -412,7 +447,10 @@ public class LoadBoard {
                 MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
                 0,
                 MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
-                MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2);
+                MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
+                centerX,
+                centerY
+        );
     }
 
     public static void drawBans(Board board, JPanel boardPanel) {
@@ -423,7 +461,10 @@ public class LoadBoard {
                 MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
                 MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2,
                 MathUtils.KOMA_X + MathUtils.COORD_XY,
-                MathUtils.KOMA_Y * 7);
+                MathUtils.KOMA_Y * 7,
+                centerX,
+                centerY
+        );
 
         ImageUtils.drawImage(
                 board,
@@ -432,7 +473,10 @@ public class LoadBoard {
                 0,
                 0,
                 MathUtils.KOMA_X + MathUtils.COORD_XY,
-                MathUtils.KOMA_Y * 7);
+                MathUtils.KOMA_Y * 7,
+                centerX,
+                centerY
+        );
     }
 
     public static void drawBackground(Board board, JPanel boardPanel) {
@@ -444,7 +488,10 @@ public class LoadBoard {
                 MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
                 0,
                 MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
-                MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2);
+                MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
+                centerX,
+                centerY
+        );
     }
 
 }

@@ -1,8 +1,6 @@
 package utils;
 
-import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -91,21 +89,21 @@ public class ImageUtils {
         return null;
     }
 
-    public static JLabel getPieceLabelForKoma(float scale, BufferedImage image, long i, long j, long xOffset, long yOffset) {
+    public static JLabel getPieceLabelForKoma(float scale, BufferedImage image, long i, long j, long xOffset, long yOffset, int centerX, int centerY) {
         JLabel pieceLabel = new JLabel(new ImageIcon(image));
         pieceLabel.setBounds(
-                Math.round(scale * (i * MathUtils.KOMA_X + xOffset)),
-                Math.round(scale * (j * MathUtils.KOMA_Y + yOffset)),
+                centerX + Math.round(scale * (i * MathUtils.KOMA_X + xOffset)),
+                centerY + Math.round(scale * (j * MathUtils.KOMA_Y + yOffset)),
                 Math.round(scale * MathUtils.KOMA_X),
                 Math.round(scale * MathUtils.KOMA_Y));
         return pieceLabel;
     }
 
-    public static JLabel getTextLabelForBan(float scale, long i, long j, long xOffset, long yOffset, String text) {
+    public static JLabel getTextLabelForBan(float scale, long i, long j, long xOffset, long yOffset, int centerX, int centerY, String text) {
         JLabel numberLabel = new JLabel(text);
         numberLabel.setBounds(
-                Math.round(scale * (i * MathUtils.KOMA_X + xOffset)),
-                Math.round(scale * (j * MathUtils.KOMA_Y + yOffset)),
+                centerX + Math.round(scale * (i * MathUtils.KOMA_X + xOffset)),
+                centerY + Math.round(scale * (j * MathUtils.KOMA_Y + yOffset)),
                 Math.round(scale * MathUtils.KOMA_X),
                 Math.round(scale * MathUtils.KOMA_Y));
         return numberLabel;
@@ -136,7 +134,7 @@ public class ImageUtils {
         return imageFile;
     }
 
-    public static void drawImage(Board board, JPanel boardPanel, String imageName, int xCoord, int yCoord, int width, int height) {
+    public static void drawImage(Board board, JPanel boardPanel, String imageName, int xCoord, int yCoord, int width, int height, int centerX, int centerY) {
         ScaledImageCache scaledImageCache = board.getScaledImageCache();
         float scale = scaledImageCache.getScale();
         BufferedImage imageFile = scaledImageCache.getImage(imageName);
@@ -150,7 +148,11 @@ public class ImageUtils {
             }
         }
         JLabel imageLable = new JLabel(new ImageIcon(imageFile));
-        imageLable.setBounds(Math.round(scale * xCoord), Math.round(scale * yCoord), Math.round(scale * width), Math.round(scale * height));
+        imageLable.setBounds(
+                centerX+Math.round(scale * xCoord), 
+                centerY+Math.round(scale * yCoord), 
+                Math.round(scale * width), 
+                Math.round(scale * height));
         boardPanel.add(imageLable);
     }
 
