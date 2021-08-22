@@ -129,7 +129,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } catch (BackingStoreException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //RenderBoard.loadBoard(board, boardPanel);
+        RenderBoard.loadBoard(board, boardPanel);
     }//GEN-LAST:event_jRadioButtonMenuItem1ItemStateChanged
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
