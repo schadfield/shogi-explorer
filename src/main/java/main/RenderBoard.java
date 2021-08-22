@@ -14,7 +14,7 @@ import static utils.MathUtils.calculateScaleFactor;
 import static utils.StringUtils.substituteKomaName;
 import static utils.StringUtils.substituteKomaNameRotated;
 
-public class LoadBoard {
+public class RenderBoard {
 
     public static final HashMap<Koma.Type, Integer> xOffsetMap = new HashMap<>();
     public static final HashMap<Koma.Type, Integer> yOffsetMap = new HashMap<>();
@@ -443,7 +443,6 @@ public class LoadBoard {
                 board,
                 boardPanel,
                 "grid.svg",
-                //MathUtils.KOMA_X  + MathUtils.COORD_XY*2,
                 MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
                 0,
                 MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
@@ -484,7 +483,6 @@ public class LoadBoard {
                 board,
                 boardPanel,
                 "background.svg",
-                //MathUtils.KOMA_X + MathUtils.COORD_XY*3,
                 MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
                 0,
                 MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,

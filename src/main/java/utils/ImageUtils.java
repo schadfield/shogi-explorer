@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import objects.Board;
 import objects.Koma;
-import main.LoadBoard;
+import main.RenderBoard;
 import objects.ScaledImageCache;
 import org.apache.batik.gvt.renderer.ImageRenderer;
 import org.apache.batik.transcoder.Transcoder;
@@ -127,7 +127,7 @@ public class ImageUtils {
                 imageFile = transcodeSVGToBufferedImage(sourceFile, Math.round(scale * width), Math.round(scale * height));
                 imageCache.putImage(imageName, imageFile);
             } catch (TranscoderException ex) {
-                Logger.getLogger(LoadBoard.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(RenderBoard.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return imageFile;
@@ -143,7 +143,7 @@ public class ImageUtils {
                 imageFile = transcodeSVGToBufferedImage(sourceFile, Math.round(scale * width), Math.round(scale * height));
                 scaledImageCache.putImage(imageName, imageFile);
             } catch (TranscoderException ex) {
-                Logger.getLogger(LoadBoard.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(RenderBoard.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         JLabel imageLable = new JLabel(new ImageIcon(imageFile));
