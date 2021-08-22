@@ -1,16 +1,29 @@
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 import objects.Board;
 import main.LoadBoard;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
     Board board;
+    Preferences prefs;
 
     /**
      * Creates new form NewJFrame
      */
     public ShogiExplorer() {
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
         initComponents();
         board = new Board();
+        prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
+        String rotated = (prefs.get("rotated", "false"));
+        System.out.println(rotated);
+        if (rotated.compareTo("true") == 0) {
+            jRadioButtonMenuItem1.doClick();
+        }
     }
 
     /**
@@ -39,6 +52,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Shogi Explorer");
         setAlwaysOnTop(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -54,7 +72,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
 
         boardPanel.setBackground(new java.awt.Color(204, 204, 204));
-        boardPanel.setPreferredSize(new java.awt.Dimension(636, 472));
+        boardPanel.setPreferredSize(new java.awt.Dimension(556, 440));
+        boardPanel.setRequestFocusEnabled(false);
 
         javax.swing.GroupLayout boardPanelLayout = new javax.swing.GroupLayout(boardPanel);
         boardPanel.setLayout(boardPanelLayout);
@@ -164,8 +183,26 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jRadioButtonMenuItem1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ItemStateChanged
         // TODO add your handling code here:
         board.isRotated = !board.isRotated;
+        if (board.isRotated) {
+            System.out.println("Saving rotated true");
+            prefs.put("rotated", "true");
+        } else {
+            System.out.println("Saving rotated false");
+            prefs.put("rotated", "false");
+        }
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
         LoadBoard.loadBoard(board, boardPanel);
     }//GEN-LAST:event_jRadioButtonMenuItem1ItemStateChanged
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        System.out.println("Save window size here?");
+
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
