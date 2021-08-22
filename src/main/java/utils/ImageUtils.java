@@ -44,7 +44,7 @@ public class ImageUtils {
                 rh.add(new RenderingHints(RenderingHints.KEY_COLOR_RENDERING,
                         RenderingHints.VALUE_COLOR_RENDER_QUALITY));
                 rh.add(new RenderingHints(RenderingHints.KEY_DITHERING,
-                        RenderingHints.VALUE_DITHER_DISABLE));
+                        RenderingHints.VALUE_DITHER_ENABLE));
                 rh.add(new RenderingHints(RenderingHints.KEY_RENDERING,
                         RenderingHints.VALUE_RENDER_QUALITY));
                 rh.add(new RenderingHints(RenderingHints.KEY_STROKE_CONTROL,
@@ -52,7 +52,7 @@ public class ImageUtils {
                 rh.add(new RenderingHints(RenderingHints.KEY_FRACTIONALMETRICS,
                         RenderingHints.VALUE_FRACTIONALMETRICS_ON));
                 rh.add(new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
-                        RenderingHints.VALUE_TEXT_ANTIALIAS_OFF));
+                        RenderingHints.VALUE_TEXT_ANTIALIAS_DEFAULT));
                 r.setRenderingHints(rh);
                 return r;
             }
@@ -61,7 +61,7 @@ public class ImageUtils {
         // Set the transcoding hints.
         transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, (float) width);
         transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float) height);
-        //transcoder.addTranscodingHint(PNGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 3.543f);
+        //transcoder.addTranscodingHint(PNGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 2.1167f);
 
         try ( FileInputStream inputStream = new FileInputStream(file)) {
             // Create the transcoder input.
