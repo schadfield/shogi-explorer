@@ -117,10 +117,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         // TODO add your handling code here:
         board.setIsRotated(!board.isIsRotated());
         if (board.isIsRotated()) {
-            System.out.println("Saving rotated true");
             prefs.put("rotated", "true");
         } else {
-            System.out.println("Saving rotated false");
             prefs.put("rotated", "false");
         }
         try {

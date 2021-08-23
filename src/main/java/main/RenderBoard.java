@@ -62,6 +62,8 @@ public class RenderBoard {
     }
 
     public static void drawCoordinates(Board board, JPanel boardPanel) {
+        String[] rank = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
+        
         if (board.isIsRotated()) {
             ScaledImageCache scaledImageCache = board.getScaledImageCache();
             for (int i = 0; i < 9; i++) {
@@ -77,20 +79,18 @@ public class RenderBoard {
                                 Integer.toString(i + 1)
                         ));
             }
-            Character letter = 'i';
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(
                         ImageUtils.getTextLabelForBan(
                                 scaledImageCache.getScale(),
                                 0,
                                 i,
-                                Math.round(MathUtils.COORD_XY * 4.5),
+                                Math.round(MathUtils.COORD_XY * 4.4),
                                 MathUtils.COORD_XY / 2 + 7,
                                 centerX,
                                 centerY,
-                                letter.toString()
+                                rank[8-i]
                         ));
-                letter--;
             }
         } else {
             ScaledImageCache scaledImageCache = board.getScaledImageCache();
@@ -107,20 +107,18 @@ public class RenderBoard {
                                 Integer.toString(9 - i)
                         ));
             }
-            Character letter = 'a';
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(
                         ImageUtils.getTextLabelForBan(
                                 scaledImageCache.getScale(),
                                 0,
                                 i,
-                                MathUtils.KOMA_X * 10 + Math.round(MathUtils.COORD_XY * 3.3),
+                                MathUtils.KOMA_X * 10 + Math.round(MathUtils.COORD_XY * 3.1),
                                 MathUtils.COORD_XY / 2 + 7,
                                 centerX,
                                 centerY,
-                                letter.toString()
+                                rank[i]
                         ));
-                letter++;
             }
         }
     }
