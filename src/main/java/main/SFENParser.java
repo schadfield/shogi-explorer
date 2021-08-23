@@ -81,11 +81,11 @@ public class SFENParser {
                                         inHandCount = 1;
                                         break;
                                     case 'G':
-                                        board.inHandKomaMap.put(Koma.Type.SGI, inHandCount);
+                                        board.inHandKomaMap.put(Koma.Type.SKI, inHandCount);
                                         inHandCount = 1;
                                         break;
                                     case 'S':
-                                        board.inHandKomaMap.put(Koma.Type.SKI, inHandCount);
+                                        board.inHandKomaMap.put(Koma.Type.SGI, inHandCount);
                                         inHandCount = 1;
                                         break;
                                     case 'N':
@@ -109,11 +109,11 @@ public class SFENParser {
                                         inHandCount = 1;
                                         break;
                                     case 'g':
-                                        board.inHandKomaMap.put(Koma.Type.GGI, inHandCount);
+                                        board.inHandKomaMap.put(Koma.Type.GKI, inHandCount);
                                         inHandCount = 1;
                                         break;
                                     case 's':
-                                        board.inHandKomaMap.put(Koma.Type.GKI, inHandCount);
+                                        board.inHandKomaMap.put(Koma.Type.GGI, inHandCount);
                                         inHandCount = 1;
                                         break;
                                     case 'n':
