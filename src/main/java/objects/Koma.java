@@ -2,9 +2,9 @@ package objects;
 
 public class Koma {
 
-    private final Type type;
+    public final Type type;
     
-    Koma(Type komaType) {
+    public Koma(Type komaType) {
         type = komaType;
     }
     

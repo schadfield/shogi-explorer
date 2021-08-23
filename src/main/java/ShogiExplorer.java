@@ -5,6 +5,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import objects.Board;
 import main.RenderBoard;
+import main.SFENParser;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
@@ -17,7 +18,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     public ShogiExplorer() {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         initComponents();
-        board = new Board();
+        board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
         String rotated = (prefs.get("rotated", "false"));
         System.out.println(rotated);
