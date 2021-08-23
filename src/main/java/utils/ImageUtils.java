@@ -58,10 +58,16 @@ public class ImageUtils {
             }
         };
 
+        //int RESOLUTION_DPI = 226;
+        //float SCALE_BY_RESOLUTION = RESOLUTION_DPI / 72f;
+        //float scaledWidth = width * SCALE_BY_RESOLUTION;
+        //float scaledHeight = height * SCALE_BY_RESOLUTION;
+        //float pixelUnitToMM = new Float(25.4f / RESOLUTION_DPI);
+
         // Set the transcoding hints.
         transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, (float) width);
         transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float) height);
-        //transcoder.addTranscodingHint(PNGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 2.1167f);
+        //transcoder.addTranscodingHint(PNGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, pixelUnitToMM);
 
         try ( FileInputStream inputStream = new FileInputStream(file)) {
             // Create the transcoder input.
