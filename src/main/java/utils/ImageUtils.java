@@ -104,7 +104,7 @@ public class ImageUtils {
         return pieceLabel;
     }
 
-    public static JLabel getTextLabelForBan(double scale, int i, int j, long xOffset, long yOffset, long centerX, long centerY, String text) {
+    public static JLabel getTextLabelForBan(double scale, int i, int j, double xOffset, double yOffset, long centerX, long centerY, String text) {
         JLabel numberLabel = new JLabel(text);
         numberLabel.setBounds(
                 (int) (centerX + Math.round(scale * (i * MathUtils.KOMA_X + xOffset))),
