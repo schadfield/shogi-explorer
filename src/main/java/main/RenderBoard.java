@@ -62,8 +62,8 @@ public class RenderBoard {
     }
 
     public static void drawCoordinates(Board board, JPanel boardPanel) {
-        if (board.isRotated) {
-            ScaledImageCache scaledImageCache = board.scaledImageCache;
+        if (board.isIsRotated()) {
+            ScaledImageCache scaledImageCache = board.getScaledImageCache();
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(
                         ImageUtils.getTextLabelForBan(
@@ -93,7 +93,7 @@ public class RenderBoard {
                 letter--;
             }
         } else {
-            ScaledImageCache scaledImageCache = board.scaledImageCache;
+            ScaledImageCache scaledImageCache = board.getScaledImageCache();
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(
                         ImageUtils.getTextLabelForBan(
@@ -126,15 +126,15 @@ public class RenderBoard {
     }
 
     public static void drawTurnNotification(Board board, JPanel boardPanel) {
-        ScaledImageCache scaledImageCache = board.scaledImageCache;
+        ScaledImageCache scaledImageCache = board.getScaledImageCache();
 
-        if (board.nextMove == Turn.SENTE) {
+        if (board.getNextMove() == Turn.SENTE) {
             BufferedImage image = ImageUtils.getScaledImage(
                     scaledImageCache,
                     "sente.svg",
                     MathUtils.KOMA_X, MathUtils.KOMA_Y
             );
-            if (board.isRotated) {
+            if (board.isIsRotated()) {
                 boardPanel.add(
                         ImageUtils.getPieceLabelForKoma(
                                 scaledImageCache.getScale(),
@@ -167,7 +167,7 @@ public class RenderBoard {
                     "gote.svg",
                     MathUtils.KOMA_X, MathUtils.KOMA_Y
             );
-            if (board.isRotated) {
+            if (board.isIsRotated()) {
                 boardPanel.add(
                         ImageUtils.getPieceLabelForKoma(
                                 scaledImageCache.getScale(),
@@ -317,13 +317,13 @@ public class RenderBoard {
         yCoordMapRotated.put(Koma.Type.GHI, 0);
 
         //</editor-fold>
-        ScaledImageCache scaledImageCache = board.scaledImageCache;
+        ScaledImageCache scaledImageCache = board.getScaledImageCache();
 
         for (Koma.Type komaType : Koma.Type.values()) {
-            Integer numberHeld = board.inHandKomaMap.get(komaType);
+            Integer numberHeld = board.getInHandKomaMap().get(komaType);
             if (numberHeld != null && numberHeld > 0) {
                 BufferedImage pieceImage;
-                if (board.isRotated) {
+                if (board.isIsRotated()) {
                     pieceImage = ImageUtils.getScaledImage(
                             scaledImageCache,
                             substituteKomaNameRotated(komaType.toString()) + ".svg",
@@ -336,7 +336,7 @@ public class RenderBoard {
                             MathUtils.KOMA_X, MathUtils.KOMA_Y
                     );
                 }
-                if (board.isRotated) {
+                if (board.isIsRotated()) {
                     boardPanel.add(
                             ImageUtils.getPieceLabelForKoma(
                                     scaledImageCache.getScale(),
@@ -389,12 +389,12 @@ public class RenderBoard {
     }
 
     public static void drawPieces(Board board, JPanel boardPanel) {
-        ScaledImageCache scaledImageCache = board.scaledImageCache;
+        ScaledImageCache scaledImageCache = board.getScaledImageCache();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                if (board.isRotated) {
-                    if (board.masu[8 - i][8 - j] != null) {
-                        Koma koma = board.masu[8 - i][8 - j];
+                if (board.isIsRotated()) {
+                    if (board.getMasu()[8 - i][8 - j] != null) {
+                        Koma koma = board.getMasu()[8 - i][8 - j];
                         BufferedImage pieceImage = ImageUtils.getScaledImage(
                                 scaledImageCache,
                                 substituteKomaNameRotated(koma.getType().toString()) + ".svg",
@@ -413,8 +413,8 @@ public class RenderBoard {
                         ));
                     }
                 } else {
-                    if (board.masu[i][j] != null) {
-                        Koma koma = board.masu[i][j];
+                    if (board.getMasu()[i][j] != null) {
+                        Koma koma = board.getMasu()[i][j];
                         BufferedImage pieceImage = ImageUtils.getScaledImage(
                                 scaledImageCache,
                                 substituteKomaName(koma.getType().toString()) + ".svg",

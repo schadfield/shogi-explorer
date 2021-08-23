@@ -4,12 +4,13 @@ import java.util.EnumMap;
 
 public class Board {
 
-    public Koma[][] masu = new Koma[9][9];
-    public ScaledImageCache scaledImageCache = null;
-    public EnumMap<Koma.Type, Integer> inHandKomaMap;
+    private Koma[][] masu = new Koma[9][9];
+    private ScaledImageCache scaledImageCache = null;
+    private EnumMap<Koma.Type, Integer> inHandKomaMap;
     public enum Turn { SENTE, GOTE };
-    public Turn nextMove;
-    public boolean isRotated;
+    private Turn nextMove;
+    private boolean isRotated;
+    private int moveCount;
 
     public Board() {
         
@@ -34,7 +35,7 @@ public class Board {
      * @param masu the masu to set
      */
     public void setMasu(Koma[][] masu) {
-        this.masu = masu;
+        this.setMasu(masu);
     }
 
     /**
@@ -49,6 +50,62 @@ public class Board {
      */
     public void setScaledImageCache(ScaledImageCache scaledImageCache) {
         this.scaledImageCache = scaledImageCache;
+    }
+
+    /**
+     * @return the inHandKomaMap
+     */
+    public EnumMap<Koma.Type, Integer> getInHandKomaMap() {
+        return inHandKomaMap;
+    }
+
+    /**
+     * @param inHandKomaMap the inHandKomaMap to set
+     */
+    public void setInHandKomaMap(EnumMap<Koma.Type, Integer> inHandKomaMap) {
+        this.inHandKomaMap = inHandKomaMap;
+    }
+
+    /**
+     * @return the nextMove
+     */
+    public Turn getNextMove() {
+        return nextMove;
+    }
+
+    /**
+     * @param nextMove the nextMove to set
+     */
+    public void setNextMove(Turn nextMove) {
+        this.nextMove = nextMove;
+    }
+
+    /**
+     * @return the isRotated
+     */
+    public boolean isIsRotated() {
+        return isRotated;
+    }
+
+    /**
+     * @param isRotated the isRotated to set
+     */
+    public void setIsRotated(boolean isRotated) {
+        this.isRotated = isRotated;
+    }
+
+    /**
+     * @return the moveCount
+     */
+    public int getMoveCount() {
+        return moveCount;
+    }
+
+    /**
+     * @param moveCount the moveCount to set
+     */
+    public void setMoveCount(int moveCount) {
+        this.moveCount = moveCount;
     }
 
 }
