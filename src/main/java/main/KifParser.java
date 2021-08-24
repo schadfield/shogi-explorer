@@ -19,6 +19,28 @@ import objects.Koma;
  */
 public class KifParser {
 
+    public static final String PROMOTED = "成";
+    public static final String RESIGNS = "投了";
+    public static final String DROP = "打";
+    public static final String SAME = "同";
+    public static final String ICHI = "一";
+    public static final String NI = "二";
+    public static final String SAN = "三";
+    public static final String SHI = "四";
+    public static final String GO = "五";
+    public static final String ROKU = "六";
+    public static final String NANA = "七";
+    public static final String HACHI = "八";
+    public static final String KYUU = "九";
+    public static final String KOMA_HI = "飛";
+    public static final String KOMA_KA = "角";
+    public static final String KOMA_KI = "金";
+    public static final String KOMA_GI = "銀";
+    public static final String KOMA_KE = "桂";
+    public static final String KOMA_KY = "香";
+    public static final String KOMA_FU = "歩";
+    public static final String MOVE_HEADER = "手数----指手---------消費時間-";
+
     public static void parseKif(Board board, JPanel boardPanel, JTextArea moveText) throws FileNotFoundException, IOException {
 
         File kifFile = openFile("test.kif");
@@ -31,11 +53,19 @@ public class KifParser {
         Coordinate lastDestination = null;
         BufferedReader kifBuf = new BufferedReader(fileReader);
         String line;
-        int lineNum = 0;
+        boolean foundHeader = false;
         try {
             while ((line = kifBuf.readLine()) != null) {
-                lineNum++;
-                if (lineNum > 8) {
+                if (!foundHeader) {
+                    foundHeader = isHeader(line);
+                    if (foundHeader) {
+                        line = kifBuf.readLine();
+                    }
+                }
+                if (foundHeader) {
+                    while (isComment(line)) {
+                        line = kifBuf.readLine();
+                    }
                     String splitLine[] = line.split("\\s+");
                     int gameNum = Integer.parseInt(splitLine[0]);
                     String move;
@@ -86,34 +116,32 @@ public class KifParser {
             if (!isDrop(move)) {
                 if (!isSame(move)) {
                     //regular
-                    if (board.masu[9 - thisDestination.getX()][thisDestination.getY() - 1] != null) {
-                        addPieceToInHand(board.masu[9 - thisDestination.getX()][thisDestination.getY() - 1], board);
+                    if (getKoma(board, thisDestination) != null) {
+                        addPieceToInHand(getKoma(board, thisDestination), board);
                     }
-                    board.masu[9 - thisDestination.getX()][thisDestination.getY() - 1]
-                            = promCheck(board.masu[9 - thisSource.getX()][thisSource.getY() - 1], move);
-                    board.masu[9 - thisSource.getX()][thisSource.getY() - 1] = null;
+                    putKoma(board, thisDestination, promCheck(getKoma(board, thisSource), move));
+                    putKoma(board, thisSource, null);
                 } else {
                     //same
-                    thisDestination.setX(lastDestination.getX());
-                    thisDestination.setY(lastDestination.getY());
-                    if (board.masu[9 - thisDestination.getX()][thisDestination.getY() - 1] != null) {
-                        addPieceToInHand(board.masu[9 - thisDestination.getX()][thisDestination.getY() - 1], board);
+                    copyCoords(lastDestination, thisDestination);
+                    Koma thisKoma = getKoma(board, thisDestination);
+                    if (thisKoma != null) {
+                        addPieceToInHand(thisKoma, board);
                     }
-                    board.masu[9 - thisDestination.getX()][thisDestination.getY() - 1]
-                            = promCheck(board.masu[9 - thisSource.getX()][thisSource.getY() - 1], move);
-                    board.masu[9 - thisSource.getX()][thisSource.getY() - 1] = null;
+                    putKoma(board, thisDestination, promCheck(getKoma(board, thisSource), move));
+                    putKoma(board, thisSource, null);
 
                 }
             } else {
                 //drop
                 Koma koma = getDropKoma(move, board.getNextMove());
-                board.masu[9 - thisDestination.getX()][thisDestination.getY() - 1] = koma;
-                removePieceInHand(koma, board);
+                putKoma(board, thisDestination, koma);
+                removePieceInHand(koma.getType(), board);
             }
         }
         RenderBoard.loadBoard(board, boardPanel);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(250);
         } catch (InterruptedException ex) {
             Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -121,16 +149,29 @@ public class KifParser {
         return thisDestination;
     }
 
-    public static void removePieceInHand(Koma koma, Board board) {
-        if (board.getInHandKomaMap().get(koma.getType()) == 1) {
-            board.getInHandKomaMap().remove(koma.getType());
+    public static void copyCoords(Coordinate from, Coordinate to) {
+        to.setX(from.getX());
+        to.setY(from.getY());
+    }
+
+    public static Koma getKoma(Board board, Coordinate coords) {
+        return board.masu[9 - coords.getX()][coords.getY() - 1];
+    }
+
+    public static void putKoma(Board board, Coordinate coords, Koma koma) {
+        board.masu[9 - coords.getX()][coords.getY() - 1] = koma;
+    }
+
+    public static void removePieceInHand(Koma.Type komaType, Board board) {
+        if (board.getInHandKomaMap().get(komaType) == 1) {
+            board.getInHandKomaMap().remove(komaType);
         } else {
-            board.getInHandKomaMap().put(koma.getType(), board.getInHandKomaMap().get(koma.getType()) - 1);
+            board.getInHandKomaMap().put(komaType, board.getInHandKomaMap().get(komaType) - 1);
         }
     }
 
     public static void addPieceToInHand(Koma koma, Board board) {
-        Koma invertedKoma = invertKoma(koma);
+        Koma invertedKoma = invertKoma(koma.getType());
         if (board.getInHandKomaMap().containsKey(invertedKoma.type)) {
             board.getInHandKomaMap().put(invertedKoma.type, 1 + board.getInHandKomaMap().get(invertedKoma.type));
         } else {
@@ -138,8 +179,8 @@ public class KifParser {
         }
     }
 
-    public static Koma invertKoma(Koma koma) {
-        switch (koma.type) {
+    public static Koma invertKoma(Koma.Type komaType) {
+        switch (komaType) {
             case SFU:
             case STO:
                 return new Koma(Koma.Type.GFU);
@@ -184,8 +225,8 @@ public class KifParser {
         return null;
     }
 
-    public static Koma promoteKoma(Koma koma) {
-        switch (koma.type) {
+    public static Koma promoteKoma(Koma.Type komaType) {
+        switch (komaType) {
             case SFU:
                 return new Koma(Koma.Type.STO);
             case SKY:
@@ -217,43 +258,43 @@ public class KifParser {
     public static Koma getDropKoma(String move, Board.Turn turn) {
         String pieceName = move.substring(2, 3);
         switch (pieceName) {
-            case "飛":
+            case KOMA_HI:
                 if (turn == Board.Turn.SENTE) {
                     return new Koma(Koma.Type.SHI);
                 } else {
                     return new Koma(Koma.Type.GHI);
                 }
-            case "角":
+            case KOMA_KA:
                 if (turn == Board.Turn.SENTE) {
                     return new Koma(Koma.Type.SKA);
                 } else {
                     return new Koma(Koma.Type.GKA);
                 }
-            case "金":
+            case KOMA_KI:
                 if (turn == Board.Turn.SENTE) {
                     return new Koma(Koma.Type.SKI);
                 } else {
                     return new Koma(Koma.Type.GKI);
                 }
-            case "銀":
+            case KOMA_GI:
                 if (turn == Board.Turn.SENTE) {
                     return new Koma(Koma.Type.SGI);
                 } else {
                     return new Koma(Koma.Type.GGI);
                 }
-            case "桂":
+            case KOMA_KE:
                 if (turn == Board.Turn.SENTE) {
                     return new Koma(Koma.Type.SKE);
                 } else {
                     return new Koma(Koma.Type.GKE);
                 }
-            case "香":
+            case KOMA_KY:
                 if (turn == Board.Turn.SENTE) {
                     return new Koma(Koma.Type.SKY);
                 } else {
                     return new Koma(Koma.Type.GKY);
                 }
-            case "歩":
+            case KOMA_FU:
                 if (turn == Board.Turn.SENTE) {
                     return new Koma(Koma.Type.SFU);
                 } else {
@@ -267,24 +308,32 @@ public class KifParser {
         if (!isPromoted(move)) {
             return koma;
         } else {
-            return promoteKoma(koma);
+            return promoteKoma(koma.getType());
         }
     }
 
+    public static boolean isComment(String line) {
+        return line.startsWith("*");
+    }
+
+    public static boolean isHeader(String line) {
+        return line.startsWith(MOVE_HEADER);
+    }
+
     public static boolean isPromoted(String move) {
-        return move.contains("成");
+        return move.contains(PROMOTED);
     }
 
     public static boolean isResigns(String move) {
-        return move.contains("投了");
+        return move.contains(RESIGNS);
     }
 
     public static boolean isDrop(String move) {
-        return move.contains("打");
+        return move.contains(DROP);
     }
 
     public static boolean isSame(String move) {
-        return move.contains("同");
+        return move.contains(SAME);
     }
 
     public static Coordinate getDestinationCoordinate(String move) {
@@ -297,23 +346,23 @@ public class KifParser {
 
     public static Integer parseJapaneseNumber(String thisChar) {
         switch (thisChar) {
-            case "一":
+            case ICHI:
                 return 1;
-            case "二":
+            case NI:
                 return 2;
-            case "三":
+            case SAN:
                 return 3;
-            case "四":
+            case SHI:
                 return 4;
-            case "五":
+            case GO:
                 return 5;
-            case "六":
+            case ROKU:
                 return 6;
-            case "七":
+            case NANA:
                 return 7;
-            case "八":
+            case HACHI:
                 return 8;
-            case "九":
+            case KYUU:
                 return 9;
         }
         return null;
