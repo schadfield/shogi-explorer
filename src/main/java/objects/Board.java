@@ -4,7 +4,7 @@ import java.util.EnumMap;
 
 public class Board {
 
-    private Koma[][] masu = new Koma[9][9];
+    public Koma[][] masu = new Koma[9][9];
     private ScaledImageCache scaledImageCache = null;
     private EnumMap<Koma.Type, Integer> inHandKomaMap;
     public enum Turn { SENTE, GOTE };
