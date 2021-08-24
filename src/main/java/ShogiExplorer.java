@@ -178,6 +178,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
+                    board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
                     main.KifParser.parseKif(board, boardPanel, moveText);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);

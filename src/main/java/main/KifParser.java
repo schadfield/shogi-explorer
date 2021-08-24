@@ -56,16 +56,16 @@ public class KifParser {
         boolean foundHeader = false;
         try {
             while ((line = kifBuf.readLine()) != null) {
+                if (isComment(line)) {
+                    continue;
+                }
                 if (!foundHeader) {
                     foundHeader = isHeader(line);
                     if (foundHeader) {
-                        line = kifBuf.readLine();
+                        continue;
                     }
                 }
                 if (foundHeader) {
-                    while (isComment(line)) {
-                        line = kifBuf.readLine();
-                    }
                     String splitLine[] = line.split("\\s+");
                     int gameNum = Integer.parseInt(splitLine[0]);
                     String move;
@@ -99,16 +99,12 @@ public class KifParser {
         Coordinate thisDestination = new Coordinate();
         Coordinate thisSource = null;
         if (isSame(move)) {
-            System.out.println("same");
             thisSource = getFromCoordinate(move);
-            System.out.println("(" + lastDestination.getX() + "," + lastDestination.getY() + ")");
         } else if (isResigns(move)) {
-            System.out.println("resign");
+            return null;
         } else if (isDrop(move)) {
-            System.out.println("drop");
             thisDestination = getDestinationCoordinate(move);
         } else {
-            System.out.println("regular");
             thisSource = getFromCoordinate(move);
             thisDestination = getDestinationCoordinate(move);
         }
@@ -340,7 +336,6 @@ public class KifParser {
         Coordinate result = new Coordinate();
         result.setX(Integer.parseInt(move.substring(0, 1)));
         result.setY(parseJapaneseNumber(move.substring(1, 2)));
-        System.out.println("(" + result.getX() + "," + result.getY() + ")");
         return result;
     }
 
@@ -372,7 +367,6 @@ public class KifParser {
         Coordinate result = new Coordinate();
         result.setX(Integer.parseInt(move.substring(move.indexOf("(") + 1, move.indexOf("(") + 2)));
         result.setY(Integer.parseInt(move.substring(move.indexOf("(") + 1, move.indexOf(")"))) - result.getX() * 10);
-        System.out.println("(" + result.getX() + "," + result.getY() + ")");
         return result;
     }
 
