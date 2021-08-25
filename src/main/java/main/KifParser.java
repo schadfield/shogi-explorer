@@ -52,11 +52,10 @@ public class KifParser {
         Coordinate lastDestination = null;
         BufferedReader kifBuf = new BufferedReader(fileReader);
         String line;
-        boolean endOfGame = false;
+        int count = 0;
         boolean foundHeader = false;
         try {
             while ((line = kifBuf.readLine()) != null) {
-                System.out.println(line);
                 if (isResigns(line)) {
                     break;
                 }
@@ -70,6 +69,7 @@ public class KifParser {
                     }
                 }
                 if (foundHeader) {
+                    count++;
                     long parenCount = line.chars().filter(ch -> ch == '(').count();
                     int timeStartIndex;
                     if (parenCount == 2) {
@@ -79,7 +79,6 @@ public class KifParser {
                     }
                     String time = line.substring(timeStartIndex);
                     String splitLine[] = line.substring(0, timeStartIndex - 1).trim().split("\\s+");
-                    System.out.println("\"" + line.substring(0, timeStartIndex - 1) + "\"");
                     int gameNum = Integer.parseInt(splitLine[0]);
                     String move;
                     if (splitLine.length == 4) {
@@ -93,7 +92,6 @@ public class KifParser {
                         moveText.append(gameNum + " ☖" + move + "\n");
                     }
                     moveText.setCaretPosition(moveText.getDocument().getLength());
-                    System.out.println(move);
                     lastDestination = executeMove(board, boardPanel, move, lastDestination);
                     if (board.getNextMove() == Board.Turn.SENTE) {
                         board.setNextMove(Board.Turn.GOTE);
@@ -114,6 +112,7 @@ public class KifParser {
         Coordinate thisSource = null;
         if (isSame(move)) {
             thisSource = getFromCoordinate(move);
+            copyCoords(lastDestination, thisDestination);
         } else if (isResigns(move)) {
             return null;
         } else if (isDrop(move)) {
@@ -133,7 +132,6 @@ public class KifParser {
                     putKoma(board, thisSource, null);
                 } else {
                     //same
-                    copyCoords(lastDestination, thisDestination);
                     Koma thisKoma = getKoma(board, thisDestination);
                     if (thisKoma != null) {
                         addPieceToInHand(thisKoma, board);
@@ -255,7 +253,7 @@ public class KifParser {
                 return new Koma(Koma.Type.GNY);
             case GKE:
                 return new Koma(Koma.Type.GNK);
-            case GNG:
+            case GGI:
                 return new Koma(Koma.Type.GNG);
             case GKA:
                 return new Koma(Koma.Type.GUM);
@@ -331,7 +329,10 @@ public class KifParser {
     }
 
     public static boolean isPromoted(String move) {
-        return move.contains(PROMOTED);
+        if (isDrop(move)) {
+            return false;
+        }
+        return move.charAt(move.indexOf('(') - 1) == PROMOTED.charAt(0);
     }
 
     public static boolean isResigns(String move) {
