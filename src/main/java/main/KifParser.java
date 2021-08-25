@@ -41,9 +41,8 @@ public class KifParser {
     public static final String KOMA_FU = "歩";
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
 
-    public static void parseKif(Board board, JPanel boardPanel, JTextArea moveText) throws FileNotFoundException, IOException {
-
-        File kifFile = openFile("test.kif");
+    public static void parseKif(Board board, JPanel boardPanel, JTextArea moveText, File kifFile) throws FileNotFoundException, IOException {
+        System.out.println(kifFile);
         FileReader fileReader = null;
         try {
             fileReader = new FileReader(kifFile);
@@ -53,9 +52,14 @@ public class KifParser {
         Coordinate lastDestination = null;
         BufferedReader kifBuf = new BufferedReader(fileReader);
         String line;
+        boolean endOfGame = false;
         boolean foundHeader = false;
         try {
             while ((line = kifBuf.readLine()) != null) {
+                System.out.println(line);
+                if (isResigns(line)) {
+                    break;
+                }
                 if (isComment(line)) {
                     continue;
                 }
@@ -66,18 +70,28 @@ public class KifParser {
                     }
                 }
                 if (foundHeader) {
-                    String splitLine[] = line.split("\\s+");
+                    long parenCount = line.chars().filter(ch -> ch == '(').count();
+                    int timeStartIndex;
+                    if (parenCount == 2) {
+                        timeStartIndex = line.indexOf("(", line.indexOf("(") + 1);
+                    } else {
+                        timeStartIndex = line.indexOf("(");
+                    }
+                    String time = line.substring(timeStartIndex);
+                    String splitLine[] = line.substring(0, timeStartIndex - 1).trim().split("\\s+");
+                    System.out.println("\"" + line.substring(0, timeStartIndex - 1) + "\"");
                     int gameNum = Integer.parseInt(splitLine[0]);
                     String move;
-                    String time;
                     if (splitLine.length == 4) {
                         move = splitLine[1] + " " + splitLine[2];
-                        time = splitLine[3];
                     } else {
                         move = splitLine[1];
-                        time = splitLine[2];
                     }
-                    moveText.append(gameNum + " " + move + "\n");
+                    if (board.getNextMove() == Board.Turn.SENTE) {
+                        moveText.append(gameNum + " ☗" + move + "\n");
+                    } else {
+                        moveText.append(gameNum + " ☖" + move + "\n");
+                    }
                     moveText.setCaretPosition(moveText.getDocument().getLength());
                     System.out.println(move);
                     lastDestination = executeMove(board, boardPanel, move, lastDestination);

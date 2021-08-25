@@ -1,9 +1,13 @@
 
+import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import objects.Board;
 import main.RenderBoard;
 import main.SFENParser;
@@ -35,6 +39,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         jSplitPane2 = new javax.swing.JSplitPane();
         jSplitPane1 = new javax.swing.JSplitPane();
         boardPanel = new javax.swing.JPanel();
@@ -258,17 +263,26 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_boardPanelComponentResized
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        jFileChooser1.setFileFilter(new FileNameExtensionFilter("KIF files", "kif"));
+        File dirFile = new File(prefs.get("fileOpenDir", null));
+        jFileChooser1.setCurrentDirectory(dirFile);
+        jFileChooser1.showOpenDialog(jPanel1);
+        File kifFile = jFileChooser1.getSelectedFile();
+        prefs.put("fileOpenDir", kifFile.getParent());
+
         new Thread() {
             @Override
             public void run() {
                 try {
                     board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
-                    main.KifParser.parseKif(board, boardPanel, moveText);
+                    main.KifParser.parseKif(board, boardPanel, moveText, kifFile);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }.start();
+
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
@@ -319,6 +333,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
