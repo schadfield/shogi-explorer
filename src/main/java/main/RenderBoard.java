@@ -57,8 +57,8 @@ public class RenderBoard {
         drawBackground(board, boardPanel);
         drawTurnNotification(board, boardPanel);
 
-        boardPanel.setVisible(false);
         boardPanel.setVisible(true);
+        boardPanel.repaint();
     }
 
     public static void drawCoordinates(Board board, JPanel boardPanel) {

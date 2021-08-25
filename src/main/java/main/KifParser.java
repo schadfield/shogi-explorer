@@ -5,9 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import objects.Board;
 import objects.Coordinate;
@@ -41,8 +41,12 @@ public class KifParser {
     public static final String KOMA_FU = "歩";
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
 
-    public static void parseKif(Board board, JPanel boardPanel, JTextArea moveText, File kifFile) throws FileNotFoundException, IOException {
+    public static LinkedList<String> parseKif(JTextArea moveText, File kifFile) throws FileNotFoundException, IOException {
         System.out.println(kifFile);
+        moveText.setText("");
+        Board board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
+        LinkedList<String> game = new LinkedList<>();
+        game.add(SFENParser.getSFEN(board));
         FileReader fileReader = null;
         try {
             fileReader = new FileReader(kifFile);
@@ -92,22 +96,24 @@ public class KifParser {
                         moveText.append(gameNum + " ☖" + move + "\n");
                     }
                     moveText.setCaretPosition(moveText.getDocument().getLength());
-                    lastDestination = executeMove(board, boardPanel, move, lastDestination);
+                    lastDestination = executeMove(board, move, lastDestination);
                     if (board.getNextMove() == Board.Turn.SENTE) {
                         board.setNextMove(Board.Turn.GOTE);
                     } else {
                         board.setNextMove(Board.Turn.SENTE);
-
                     }
+                    game.add(SFENParser.getSFEN(board));
                 }
             }
         } catch (IOException ex) {
             Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        return game;
+
     }
 
-    public static Coordinate executeMove(Board board, JPanel boardPanel, String move, Coordinate lastDestination) {
+    public static Coordinate executeMove(Board board, String move, Coordinate lastDestination) {
         Coordinate thisDestination = new Coordinate();
         Coordinate thisSource = null;
         if (isSame(move)) {
@@ -147,13 +153,6 @@ public class KifParser {
                 removePieceInHand(koma.getType(), board);
             }
         }
-        RenderBoard.loadBoard(board, boardPanel);
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         return thisDestination;
     }
 

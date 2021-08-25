@@ -1,13 +1,13 @@
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
 import objects.Board;
 import main.RenderBoard;
 import main.SFENParser;
@@ -16,6 +16,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     Board board;
     Preferences prefs;
+    LinkedList<String> game;
+    int moveNumber;
+    boolean play;
 
     /**
      * Creates new form NewJFrame
@@ -96,8 +99,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jSplitPane1.setLeftComponent(boardPanel);
 
+        moveText.setEditable(false);
         moveText.setColumns(20);
         moveText.setRows(5);
+        moveText.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                moveTextMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(moveText);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -130,6 +139,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jButton1.setMinimumSize(new java.awt.Dimension(40, 24));
         jButton1.setPreferredSize(new java.awt.Dimension(40, 24));
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton1);
 
         jButton2.setFocusable(false);
@@ -139,6 +153,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jButton2.setMinimumSize(new java.awt.Dimension(40, 24));
         jButton2.setPreferredSize(new java.awt.Dimension(40, 24));
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton2);
 
         jButton3.setFocusable(false);
@@ -148,6 +167,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jButton3.setMinimumSize(new java.awt.Dimension(24, 24));
         jButton3.setPreferredSize(new java.awt.Dimension(40, 24));
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton3);
 
         jButton4.setFocusable(false);
@@ -157,6 +181,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jButton4.setMinimumSize(new java.awt.Dimension(24, 24));
         jButton4.setPreferredSize(new java.awt.Dimension(40, 24));
         jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton4);
 
         jButton5.setFocusable(false);
@@ -166,6 +195,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jButton5.setMinimumSize(new java.awt.Dimension(24, 24));
         jButton5.setPreferredSize(new java.awt.Dimension(40, 24));
         jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton5);
 
         jButton6.setFocusable(false);
@@ -175,6 +209,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jButton6.setMinimumSize(new java.awt.Dimension(40, 24));
         jButton6.setPreferredSize(new java.awt.Dimension(40, 24));
         jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton6);
 
         jButton7.setFocusable(false);
@@ -184,6 +223,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jButton7.setMinimumSize(new java.awt.Dimension(40, 24));
         jButton7.setPreferredSize(new java.awt.Dimension(40, 24));
         jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton7);
 
         jMenu1.setText(bundle.getString("ShogiExplorer.jMenu1.text")); // NOI18N
@@ -275,15 +319,149 @@ public class ShogiExplorer extends javax.swing.JFrame {
             public void run() {
                 try {
                     board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
-                    main.KifParser.parseKif(board, boardPanel, moveText, kifFile);
+                    RenderBoard.loadBoard(board, boardPanel);
+                    game = main.KifParser.parseKif(moveText, kifFile);
+                    moveNumber = 0;
+                    selectMoveText();
+                    jScrollPane1.getVerticalScrollBar().setValue(0);
+                    for (int i = 0; i < game.size(); i++) {
+                        System.out.println(game.get(i));
+                    }
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                moveNumber = 0;
             }
         }.start();
 
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void selectMoveText() {
+        try {
+            if (moveNumber == 0) {
+                moveText.select(0, 0);
+            } else {
+                moveText.select(moveText.getLineStartOffset(moveNumber - 1), moveText.getLineEndOffset(moveNumber - 1));
+            }
+        } catch (BadLocationException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        moveNumber++;
+        if (moveNumber == game.size()) {
+            moveNumber--;
+        }
+        System.out.println("pushed " + moveNumber);
+        board = SFENParser.parse(new Board(), game.get(moveNumber));
+        RenderBoard.loadBoard(board, boardPanel);
+        selectMoveText();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        moveNumber--;
+        if (moveNumber < 0) {
+            moveNumber = 0;
+        }
+        System.out.println("pushed " + moveNumber);
+        board = SFENParser.parse(new Board(), game.get(moveNumber));
+        RenderBoard.loadBoard(board, boardPanel);
+        selectMoveText();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        moveNumber = 0;
+        System.out.println("pushed " + moveNumber);
+        board = SFENParser.parse(new Board(), game.get(moveNumber));
+        RenderBoard.loadBoard(board, boardPanel);
+        selectMoveText();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        moveNumber = game.size() - 1;
+        System.out.println("pushed " + moveNumber);
+        board = SFENParser.parse(new Board(), game.get(moveNumber));
+        RenderBoard.loadBoard(board, boardPanel);
+        selectMoveText();
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        play = false;
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        new Thread() {
+            @Override
+            public void run() {
+                if (play) {
+                    play = false;
+                    return;
+                }
+                play = true;
+                while (play) {
+                    moveNumber++;
+                    if (moveNumber == game.size()) {
+                        moveNumber--;
+                        play = false;
+                    } else {
+                        board = SFENParser.parse(new Board(), game.get(moveNumber));
+                        RenderBoard.loadBoard(board, boardPanel);
+                        selectMoveText();
+                        try {
+                            Thread.sleep(500L);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        }.start();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        new Thread() {
+            @Override
+            public void run() {
+                if (play) {
+                    play = false;
+                    return;
+                }
+                play = true;
+                while (play) {
+                    moveNumber--;
+                    if (moveNumber < 0) {
+                        moveNumber = 0;
+                        play = false;
+                    } else {
+                        board = SFENParser.parse(new Board(), game.get(moveNumber));
+                        RenderBoard.loadBoard(board, boardPanel);
+                        selectMoveText();
+                        try {
+                            Thread.sleep(500L);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        }.start();    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void moveTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moveTextMouseClicked
+        try {
+            // TODO add your handling code here:
+            play = false;
+            int line = moveText.getLineOfOffset(moveText.getCaret().getMark());
+            System.out.println(line);
+            moveNumber = line +1;
+            board = SFENParser.parse(new Board(), game.get(moveNumber));
+            RenderBoard.loadBoard(board, boardPanel);
+            selectMoveText();
+        } catch (BadLocationException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_moveTextMouseClicked
 
     /**
      * @param args the command line arguments
