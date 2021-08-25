@@ -43,6 +43,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
         moveText = new javax.swing.JTextArea();
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -51,7 +57,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Shogi Explorer");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("Bundle"); // NOI18N
+        setTitle(bundle.getString("ShogiExplorer.title")); // NOI18N
         setAlwaysOnTop(true);
         setPreferredSize(new java.awt.Dimension(750, 650));
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -111,15 +118,72 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButton1.setText("jButton1");
+        jButton1.setText(bundle.getString("ShogiExplorer.jButton1.text")); // NOI18N
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setMaximumSize(new java.awt.Dimension(40, 24));
+        jButton1.setMinimumSize(new java.awt.Dimension(40, 24));
+        jButton1.setPreferredSize(new java.awt.Dimension(40, 24));
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton1);
 
-        jMenu1.setText("File");
+        jButton2.setFocusable(false);
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton2.setLabel(bundle.getString("ShogiExplorer.jButton2.label")); // NOI18N
+        jButton2.setMaximumSize(new java.awt.Dimension(40, 24));
+        jButton2.setMinimumSize(new java.awt.Dimension(40, 24));
+        jButton2.setPreferredSize(new java.awt.Dimension(40, 24));
+        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton2);
 
-        jMenuItem1.setText("Open Kif");
+        jButton3.setFocusable(false);
+        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton3.setLabel(bundle.getString("ShogiExplorer.jButton3.label")); // NOI18N
+        jButton3.setMaximumSize(new java.awt.Dimension(24, 24));
+        jButton3.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButton3.setPreferredSize(new java.awt.Dimension(40, 24));
+        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton3);
+
+        jButton4.setFocusable(false);
+        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton4.setLabel(bundle.getString("ShogiExplorer.jButton4.label")); // NOI18N
+        jButton4.setMaximumSize(new java.awt.Dimension(24, 24));
+        jButton4.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButton4.setPreferredSize(new java.awt.Dimension(40, 24));
+        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton4);
+
+        jButton5.setFocusable(false);
+        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton5.setLabel(bundle.getString("ShogiExplorer.jButton5.label")); // NOI18N
+        jButton5.setMaximumSize(new java.awt.Dimension(24, 24));
+        jButton5.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButton5.setPreferredSize(new java.awt.Dimension(40, 24));
+        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton5);
+
+        jButton6.setFocusable(false);
+        jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton6.setLabel(bundle.getString("ShogiExplorer.jButton6.label")); // NOI18N
+        jButton6.setMaximumSize(new java.awt.Dimension(40, 24));
+        jButton6.setMinimumSize(new java.awt.Dimension(40, 24));
+        jButton6.setPreferredSize(new java.awt.Dimension(40, 24));
+        jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton6);
+
+        jButton7.setFocusable(false);
+        jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton7.setLabel(bundle.getString("ShogiExplorer.jButton7.label")); // NOI18N
+        jButton7.setMaximumSize(new java.awt.Dimension(40, 24));
+        jButton7.setMinimumSize(new java.awt.Dimension(40, 24));
+        jButton7.setPreferredSize(new java.awt.Dimension(40, 24));
+        jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton7);
+
+        jMenu1.setText(bundle.getString("ShogiExplorer.jMenu1.text")); // NOI18N
+
+        jMenuItem1.setText(bundle.getString("ShogiExplorer.jMenuItem1.text")); // NOI18N
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -129,12 +193,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText(bundle.getString("ShogiExplorer.jMenu2.text")); // NOI18N
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setLabel("View");
+        jMenu3.setLabel(bundle.getString("ShogiExplorer.jMenu3.label")); // NOI18N
 
-        jRadioButtonMenuItem1.setLabel("Rotate View");
+        jRadioButtonMenuItem1.setLabel(bundle.getString("ShogiExplorer.jRadioButtonMenuItem1.label")); // NOI18N
         jRadioButtonMenuItem1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jRadioButtonMenuItem1ItemStateChanged(evt);
@@ -145,7 +209,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
-        jMenuBar1.getAccessibleContext().setAccessibleName("");
+        jMenuBar1.getAccessibleContext().setAccessibleName(bundle.getString("ShogiExplorer.jMenuBar1.AccessibleContext.accessibleName")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -249,6 +313,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel boardPanel;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
