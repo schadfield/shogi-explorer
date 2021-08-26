@@ -63,6 +63,11 @@ public class KifParser {
             while ((line = kifBuf.readLine()) != null) {
                 if (isResigns(line)) {
                     count++;
+                    if (board.getNextMove() == Board.Turn.SENTE) {
+                        board.setNextMove(Board.Turn.GOTE);
+                    } else {
+                        board.setNextMove(Board.Turn.SENTE);
+                    }
                     long parenCount = line.chars().filter(ch -> ch == '(').count();
                     int timeStartIndex;
                     if (parenCount == 2) {
@@ -78,7 +83,7 @@ public class KifParser {
                     } else {
                         move = splitLine[1];
                     }
-                    if (board.getNextMove() == Board.Turn.SENTE) {
+                    if (board.getNextMove() == Board.Turn.GOTE) {
                         moveListModel.addElement(gameNum + " ☗" + move + "\n");
                     } else {
                         moveListModel.addElement(gameNum + " ☖" + move + "\n");
@@ -98,6 +103,11 @@ public class KifParser {
                 }
                 if (foundHeader) {
                     count++;
+                    if (board.getNextMove() == Board.Turn.SENTE) {
+                        board.setNextMove(Board.Turn.GOTE);
+                    } else {
+                        board.setNextMove(Board.Turn.SENTE);
+                    }
                     long parenCount = line.chars().filter(ch -> ch == '(').count();
                     int timeStartIndex;
                     if (parenCount == 2) {
@@ -114,7 +124,7 @@ public class KifParser {
                     } else {
                         move = splitLine[1];
                     }
-                    if (board.getNextMove() == Board.Turn.SENTE) {
+                    if (board.getNextMove() == Board.Turn.GOTE) {
                         moveListModel.addElement(gameNum + " ☗" + move + "\n");
                     } else {
                         moveListModel.addElement(gameNum + " ☖" + move + "\n");
@@ -122,11 +132,6 @@ public class KifParser {
                     Position position = executeMove(board, move, lastDestination);
                     lastDestination = position.getDestination();
                     positionList.add(position);
-                    if (board.getNextMove() == Board.Turn.SENTE) {
-                        board.setNextMove(Board.Turn.GOTE);
-                    } else {
-                        board.setNextMove(Board.Turn.SENTE);
-                    }
                 }
             }
         } catch (IOException ex) {
@@ -291,43 +296,43 @@ public class KifParser {
         String pieceName = move.substring(2, 3);
         switch (pieceName) {
             case KOMA_HI:
-                if (turn == Board.Turn.SENTE) {
+                if (turn == Board.Turn.GOTE) {
                     return new Koma(Koma.Type.SHI);
                 } else {
                     return new Koma(Koma.Type.GHI);
                 }
             case KOMA_KA:
-                if (turn == Board.Turn.SENTE) {
+                if (turn == Board.Turn.GOTE) {
                     return new Koma(Koma.Type.SKA);
                 } else {
                     return new Koma(Koma.Type.GKA);
                 }
             case KOMA_KI:
-                if (turn == Board.Turn.SENTE) {
+                if (turn == Board.Turn.GOTE) {
                     return new Koma(Koma.Type.SKI);
                 } else {
                     return new Koma(Koma.Type.GKI);
                 }
             case KOMA_GI:
-                if (turn == Board.Turn.SENTE) {
+                if (turn == Board.Turn.GOTE) {
                     return new Koma(Koma.Type.SGI);
                 } else {
                     return new Koma(Koma.Type.GGI);
                 }
             case KOMA_KE:
-                if (turn == Board.Turn.SENTE) {
+                if (turn == Board.Turn.GOTE) {
                     return new Koma(Koma.Type.SKE);
                 } else {
                     return new Koma(Koma.Type.GKE);
                 }
             case KOMA_KY:
-                if (turn == Board.Turn.SENTE) {
+                if (turn == Board.Turn.GOTE) {
                     return new Koma(Koma.Type.SKY);
                 } else {
                     return new Koma(Koma.Type.GKY);
                 }
             case KOMA_FU:
-                if (turn == Board.Turn.SENTE) {
+                if (turn == Board.Turn.GOTE) {
                     return new Koma(Koma.Type.SFU);
                 } else {
                     return new Koma(Koma.Type.GFU);
