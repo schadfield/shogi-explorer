@@ -62,6 +62,29 @@ public class KifParser {
         try {
             while ((line = kifBuf.readLine()) != null) {
                 if (isResigns(line)) {
+                    count++;
+                    long parenCount = line.chars().filter(ch -> ch == '(').count();
+                    int timeStartIndex;
+                    if (parenCount == 2) {
+                        timeStartIndex = line.indexOf("(", line.indexOf("(") + 1);
+                    } else {
+                        timeStartIndex = line.indexOf("(");
+                    }
+                    String splitLine[] = line.substring(0, timeStartIndex - 1).trim().split("\\s+");
+                    int gameNum = Integer.parseInt(splitLine[0]);
+                    String move;
+                    if (splitLine.length == 4) {
+                        move = splitLine[1] + " " + splitLine[2];
+                    } else {
+                        move = splitLine[1];
+                    }
+                    if (board.getNextMove() == Board.Turn.SENTE) {
+                        moveListModel.addElement(gameNum + " ☗" + move + "\n");
+                    } else {
+                        moveListModel.addElement(gameNum + " ☖" + move + "\n");
+                    }
+                    Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination());
+                    positionList.add(position);
                     break;
                 }
                 if (isComment(line)) {
