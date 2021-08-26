@@ -312,28 +312,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jFileChooser1.showOpenDialog(jPanel1);
         File kifFile = jFileChooser1.getSelectedFile();
         prefs.put("fileOpenDir", kifFile.getParent());
-
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
-                    RenderBoard.loadBoard(board, boardPanel);
-                    game = main.KifParser.parseKif(moveListModel, kifFile);
-
-                    moveNumber = 0;
-                    moveList.setSelectedIndex(moveNumber - 1);
-                    for (int i = 0; i < game.size(); i++) {
-                        System.out.println(game.get(i));
-                    }
-                } catch (IOException ex) {
-                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                moveNumber = 0;
-            }
-        }.start();
-
-
+        try {
+            game = main.KifParser.parseKif(moveListModel, kifFile);
+        } catch (IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        moveNumber = 0;
+        moveList.clearSelection();
+        board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
+        RenderBoard.loadBoard(board, boardPanel);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed

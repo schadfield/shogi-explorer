@@ -9,8 +9,6 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.JTextArea;
 import objects.Board;
 import objects.Coordinate;
 import objects.Koma;
