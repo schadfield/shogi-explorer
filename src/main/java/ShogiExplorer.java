@@ -57,6 +57,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
         jToolBar1 = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         mediaReverse = new javax.swing.JButton();
@@ -76,7 +78,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("Bundle"); // NOI18N
         setTitle(bundle.getString("ShogiExplorer.title")); // NOI18N
         setAlwaysOnTop(true);
-        setPreferredSize(new java.awt.Dimension(750, 650));
+        setMinimumSize(new java.awt.Dimension(1000, 650));
+        setPreferredSize(new java.awt.Dimension(1000, 650));
+        setSize(new java.awt.Dimension(1000, 650));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -84,6 +88,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
 
         jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        jSplitPane2.setPreferredSize(new java.awt.Dimension(1000, 486));
 
         boardPanel.setBackground(new java.awt.Color(204, 204, 204));
         boardPanel.setPreferredSize(new java.awt.Dimension(556, 440));
@@ -133,12 +138,21 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
         );
+
+        jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane4.setPreferredSize(new java.awt.Dimension(230, 84));
+        jScrollPane4.setSize(new java.awt.Dimension(230, 84));
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane4.setViewportView(jTextArea2);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -146,8 +160,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 2, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -156,7 +174,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -299,7 +319,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane2)
+            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -311,7 +331,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane2))
+                .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -427,16 +447,19 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_mediaPlayActionPerformed
 
     private void moveListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_moveListValueChanged
-        // TODO add your handling code here:
-        moveNumber = moveList.getSelectedIndex() + 1;
-        if (moveNumber > 0) {
-            moveList.ensureIndexIsVisible(moveNumber-1);
+        if (!evt.getValueIsAdjusting()) {
+            moveNumber = moveList.getSelectedIndex() + 1;
+            if (moveNumber > 0) {
+                moveList.ensureIndexIsVisible(moveNumber - 1);
+            }
+            Position position = game.getPositionList().get(moveNumber);
+            board = SFENParser.parse(new Board(), position.game);
+            board.setSource(position.source);
+            board.setDestination(position.destination);
+            jTextArea2.setText(null);
+            jTextArea2.append(position.comment);
+            RenderBoard.loadBoard(board, boardPanel, rotatedView);
         }
-        Position position = game.getPositionList().get(moveNumber);
-        board = SFENParser.parse(new Board(), position.game);
-        board.setSource(position.source);
-        board.setDestination(position.destination);
-        RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }//GEN-LAST:event_moveListValueChanged
 
     private void mediaReverseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaReverseActionPerformed
@@ -519,9 +542,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton mediaBack;
     private javax.swing.JButton mediaEnd;

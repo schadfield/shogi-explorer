@@ -8,11 +8,13 @@ public class Position {
     public String game;
     public Coordinate source;
     public Coordinate destination;
+    public String comment;
     
     public Position(String game, Coordinate source, Coordinate destination) {
         this.game = game;
         this.source = source;
         this.destination = destination;
+        this.comment = "";
     }
 
     /**
@@ -55,5 +57,19 @@ public class Position {
      */
     public void setDestination(Coordinate destination) {
         this.destination = destination;
+    }
+
+    /**
+     * @return the comment
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * @param comment the comment to set
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

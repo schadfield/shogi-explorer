@@ -49,7 +49,6 @@ public class KifParser {
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
 
     public static Game parseKif(DefaultListModel moveListModel, File kifFile) throws FileNotFoundException, IOException {
-        System.out.println(kifFile);
         moveListModel.clear();
         Board board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         Game game = new Game();
@@ -66,6 +65,7 @@ public class KifParser {
         String line;
         int count = 0;
         boolean foundHeader = false;
+        String comment = "";
         try {
             while ((line = kifBuf.readLine()) != null) {
                 if (isResigns(line)) {
@@ -82,6 +82,7 @@ public class KifParser {
                     } else {
                         timeStartIndex = line.indexOf("(");
                     }
+                    String time = line.substring(timeStartIndex).trim();
                     String splitLine[] = line.substring(0, timeStartIndex - 1).trim().split("\\s+");
                     int gameNum = Integer.parseInt(splitLine[0]);
                     String move;
@@ -97,10 +98,12 @@ public class KifParser {
                     }
                     Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination());
                     positionList.add(position);
-                    break;
+                    continue;
                 }
                 if (isComment(line)) {
-                    continue;
+                    if (!foundHeader) {
+                        continue;
+                    }
                 }
                 if (line.startsWith(SENTE)) {
                     game.setSente(line.substring(SENTE.length()));
@@ -124,6 +127,14 @@ public class KifParser {
                     }
                 }
                 if (foundHeader) {
+                    if (isComment(line)) {
+                        comment += line.substring(1) + "\n";
+                        continue;
+                    }
+                    if (comment.length() > 0) {
+                        positionList.getLast().setComment(comment);
+                        comment = "";
+                    }
                     count++;
                     if (board.getNextMove() == Board.Turn.SENTE) {
                         board.setNextMove(Board.Turn.GOTE);
@@ -135,7 +146,11 @@ public class KifParser {
                     if (parenCount == 2) {
                         timeStartIndex = line.indexOf("(", line.indexOf("(") + 1);
                     } else {
-                        timeStartIndex = line.indexOf("(");
+                        if (parenCount == 1) {
+                            timeStartIndex = line.indexOf("(");
+                        } else {
+                            continue;
+                        }
                     }
                     //String time = line.substring(timeStartIndex);
                     String splitLine[] = line.substring(0, timeStartIndex - 1).trim().split("\\s+");
@@ -159,10 +174,11 @@ public class KifParser {
         } catch (IOException ex) {
             Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        if (comment.length() > 0) {
+            positionList.getLast().setComment(comment);
+        }
         game.setPositionList(positionList);
         return game;
-
     }
 
     public static Position executeMove(Board board, String move, Coordinate lastDestination) {
