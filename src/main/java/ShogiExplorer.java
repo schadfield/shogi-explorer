@@ -187,7 +187,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jToolBar1.setRollover(true);
 
         mediaStart.setText(bundle.getString("ShogiExplorer.mediaStart.text")); // NOI18N
-        mediaStart.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaStart.setFocusable(false);
         mediaStart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaStart.setMaximumSize(new java.awt.Dimension(40, 24));
@@ -201,7 +200,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         jToolBar1.add(mediaStart);
 
-        mediaReverse.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaReverse.setFocusable(false);
         mediaReverse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaReverse.setLabel(bundle.getString("ShogiExplorer.mediaReverse.label")); // NOI18N
@@ -216,7 +214,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         jToolBar1.add(mediaReverse);
 
-        mediaBack.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaBack.setFocusable(false);
         mediaBack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaBack.setLabel(bundle.getString("ShogiExplorer.mediaBack.label")); // NOI18N
@@ -231,7 +228,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         jToolBar1.add(mediaBack);
 
-        mediaStop.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaStop.setFocusable(false);
         mediaStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaStop.setLabel(bundle.getString("ShogiExplorer.mediaStop.label")); // NOI18N
@@ -246,7 +242,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         jToolBar1.add(mediaStop);
 
-        mediaForward.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaForward.setFocusable(false);
         mediaForward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaForward.setLabel(bundle.getString("ShogiExplorer.mediaForward.label")); // NOI18N
@@ -261,7 +256,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         jToolBar1.add(mediaForward);
 
-        mediaPlay.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaPlay.setFocusable(false);
         mediaPlay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaPlay.setLabel(bundle.getString("ShogiExplorer.mediaPlay.label")); // NOI18N
@@ -276,7 +270,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         jToolBar1.add(mediaPlay);
 
-        mediaEnd.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaEnd.setFocusable(false);
         mediaEnd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaEnd.setLabel(bundle.getString("ShogiExplorer.mediaEnd.label")); // NOI18N
