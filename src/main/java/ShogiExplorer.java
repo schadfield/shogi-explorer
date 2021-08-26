@@ -149,8 +149,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jScrollPane4.setPreferredSize(new java.awt.Dimension(230, 84));
         jScrollPane4.setSize(new java.awt.Dimension(230, 84));
 
+        jTextArea2.setEditable(false);
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
+        jTextArea2.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextArea2.setEnabled(false);
+        jTextArea2.setFocusable(false);
         jScrollPane4.setViewportView(jTextArea2);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
