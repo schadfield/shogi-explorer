@@ -12,13 +12,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import objects.Board;
 import main.RenderBoard;
 import main.SFENParser;
+import objects.Game;
 import objects.Position;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
     Board board;
     Preferences prefs;
-    LinkedList<Position> positionList;
+    Game game;
     int moveNumber;
     boolean play;
     DefaultListModel moveListModel = new DefaultListModel();
@@ -53,6 +54,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         moveList = new javax.swing.JList<>();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jToolBar1 = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         mediaReverse = new javax.swing.JButton();
@@ -111,19 +115,48 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(moveList);
 
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(100, 84));
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextArea1.setEnabled(false);
+        jTextArea1.setFocusable(false);
+        jTextArea1.setPreferredSize(new java.awt.Dimension(100, 80));
+        jTextArea1.setRequestFocusEnabled(false);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -316,10 +349,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
         File kifFile = jFileChooser1.getSelectedFile();
         prefs.put("fileOpenDir", kifFile.getParent());
         try {
-            positionList = main.KifParser.parseKif(moveListModel, kifFile);
+            game = main.KifParser.parseKif(moveListModel, kifFile);
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        jTextArea1.setText(null);
+        jTextArea1.append("Sente: " + game.getSente() + "\n");
+        jTextArea1.append("Gote: " + game.getGote() + "\n");
+        jTextArea1.append("Place: " + game.getPlace() + "\n");
+        jTextArea1.append("Date: " + game.getDate() + "\n");
+        jTextArea1.append("Time Limit: " + game.getTimeLimit() + "\n");
         moveNumber = 0;
         moveList.clearSelection();
         moveList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -328,7 +367,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
-        if (!play && moveNumber < positionList.size() + 1) {
+        if (!play && moveNumber < game.getPositionList().size() + 1) {
             moveNumber++;
             moveList.setSelectedIndex(moveNumber - 1);
         }
@@ -350,7 +389,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void mediaEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaEndActionPerformed
         if (!play) {
-            moveNumber = positionList.size() - 1;
+            moveNumber = game.getPositionList().size() - 1;
             moveList.setSelectedIndex(moveNumber - 1);
         }
     }//GEN-LAST:event_mediaEndActionPerformed
@@ -370,7 +409,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     }
                     play = true;
                     while (play) {
-                        if (moveNumber < positionList.size() + 1) {
+                        if (moveNumber < game.getPositionList().size() + 1) {
                             moveNumber++;
                             moveList.setSelectedIndex(moveNumber - 1);
                             try {
@@ -393,7 +432,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (moveNumber > 0) {
             moveList.ensureIndexIsVisible(moveNumber-1);
         }
-        Position position = positionList.get(moveNumber);
+        Position position = game.getPositionList().get(moveNumber);
         board = SFENParser.parse(new Board(), position.game);
         board.setSource(position.source);
         board.setDestination(position.destination);
@@ -476,10 +515,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton mediaBack;
     private javax.swing.JButton mediaEnd;

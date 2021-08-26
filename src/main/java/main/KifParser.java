@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import objects.Board;
 import objects.Coordinate;
+import objects.Game;
 import objects.Koma;
 import objects.Position;
 
@@ -40,12 +41,18 @@ public class KifParser {
     public static final String KOMA_KE = "桂";
     public static final String KOMA_KY = "香";
     public static final String KOMA_FU = "歩";
+    public static final String DATE = "開始日時：";
+    public static final String PLACE = "場所：";
+    public static final String TIME_LIMIT = "持ち時間：";
+    public static final String SENTE = "先手：";
+    public static final String GOTE = "後手：";
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
 
-    public static LinkedList<Position> parseKif(DefaultListModel moveListModel, File kifFile) throws FileNotFoundException, IOException {
+    public static Game parseKif(DefaultListModel moveListModel, File kifFile) throws FileNotFoundException, IOException {
         System.out.println(kifFile);
         moveListModel.clear();
         Board board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
+        Game game = new Game();
         LinkedList<Position> positionList = new LinkedList<>();
         positionList.add(new Position(SFENParser.getSFEN(board), null, null));
         FileReader fileReader = null;
@@ -95,6 +102,21 @@ public class KifParser {
                 if (isComment(line)) {
                     continue;
                 }
+                if (line.startsWith(SENTE)) {
+                    game.setSente(line.substring(SENTE.length()));
+                }
+                if (line.startsWith(GOTE)) {
+                    game.setGote(line.substring(GOTE.length()));
+                }
+                if (line.startsWith(PLACE)) {
+                    game.setPlace(line.substring(PLACE.length()));
+                }
+                if (line.startsWith(TIME_LIMIT)) {
+                    game.setTimeLimit(line.substring(TIME_LIMIT.length()));
+                }
+                if (line.startsWith(DATE)) {
+                    game.setDate(line.substring(DATE.length()));
+                }
                 if (!foundHeader) {
                     foundHeader = isHeader(line);
                     if (foundHeader) {
@@ -138,7 +160,8 @@ public class KifParser {
             Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return positionList;
+        game.setPositionList(positionList);
+        return game;
 
     }
 
