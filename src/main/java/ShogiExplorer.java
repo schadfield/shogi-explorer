@@ -324,27 +324,31 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
-        if (moveNumber < game.size() + 1) {
+        if (!play && moveNumber < game.size() + 1) {
             moveNumber++;
             moveList.setSelectedIndex(moveNumber - 1);
         }
     }//GEN-LAST:event_mediaForwardActionPerformed
 
     private void mediaBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaBackActionPerformed
-        if (moveNumber > 0) {
+        if (!play && moveNumber > 0) {
             moveNumber--;
             moveList.setSelectedIndex(moveNumber - 1);
         }
     }//GEN-LAST:event_mediaBackActionPerformed
 
     private void mediaStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaStartActionPerformed
-        moveNumber = 0;
-        moveList.clearSelection();
+        if (!play) {
+            moveNumber = 0;
+            moveList.clearSelection();
+        }
     }//GEN-LAST:event_mediaStartActionPerformed
 
     private void mediaEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaEndActionPerformed
-        moveNumber = game.size() - 1;
-        moveList.setSelectedIndex(moveNumber - 1);
+        if (!play) {
+            moveNumber = game.size() - 1;
+            moveList.setSelectedIndex(moveNumber - 1);
+        }
     }//GEN-LAST:event_mediaEndActionPerformed
 
     private void mediaStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaStopActionPerformed
@@ -352,29 +356,31 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_mediaStopActionPerformed
 
     private void mediaPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaPlayActionPerformed
-        new Thread() {
-            @Override
-            public void run() {
-                if (play) {
-                    play = false;
-                    return;
-                }
-                play = true;
-                while (play) {
-                    if (moveNumber < game.size() + 1) {
-                        moveNumber++;
-                        moveList.setSelectedIndex(moveNumber - 1);
-                        try {
-                            Thread.sleep(500L);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
+        if (!play) {
+            new Thread() {
+                @Override
+                public void run() {
+                    if (play) {
                         play = false;
+                        return;
+                    }
+                    play = true;
+                    while (play) {
+                        if (moveNumber < game.size() + 1) {
+                            moveNumber++;
+                            moveList.setSelectedIndex(moveNumber - 1);
+                            try {
+                                Thread.sleep(500L);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else {
+                            play = false;
+                        }
                     }
                 }
-            }
-        }.start();
+            }.start();
+        }
     }//GEN-LAST:event_mediaPlayActionPerformed
 
     private void moveListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_moveListValueChanged
@@ -385,29 +391,31 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_moveListValueChanged
 
     private void mediaReverseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaReverseActionPerformed
-        new Thread() {
-            @Override
-            public void run() {
-                if (play) {
-                    play = false;
-                    return;
-                }
-                play = true;
-                while (play) {
-                    if (moveNumber > 0) {
-                        moveNumber--;
-                        moveList.setSelectedIndex(moveNumber - 1);
-                        try {
-                            Thread.sleep(500L);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
+        if (!play) {
+            new Thread() {
+                @Override
+                public void run() {
+                    if (play) {
                         play = false;
+                        return;
+                    }
+                    play = true;
+                    while (play) {
+                        if (moveNumber > 0) {
+                            moveNumber--;
+                            moveList.setSelectedIndex(moveNumber - 1);
+                            try {
+                                Thread.sleep(500L);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else {
+                            play = false;
+                        }
                     }
                 }
-            }
-        }.start();
+            }.start();
+        }
     }//GEN-LAST:event_mediaReverseActionPerformed
 
     /**
