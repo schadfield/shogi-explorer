@@ -370,6 +370,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jFileChooser1.setCurrentDirectory(dirFile);
         jFileChooser1.showOpenDialog(jPanel1);
         File kifFile = jFileChooser1.getSelectedFile();
+        if (kifFile == null) {
+            return;
+        }
         prefs.put("fileOpenDir", kifFile.getParent());
         try {
             game = main.KifParser.parseKif(moveListModel, kifFile);
