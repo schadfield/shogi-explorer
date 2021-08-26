@@ -9,13 +9,12 @@ public class Board {
     private EnumMap<Koma.Type, Integer> inHandKomaMap;
     public enum Turn { SENTE, GOTE };
     private Turn nextMove;
-    private boolean isRotated;
     private int moveCount;
+    private Coordinate source = null;
+    private Coordinate destination = null;
 
     public Board() {
         
-        isRotated = false;
-
         for (int i = 0;
                 i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -81,20 +80,6 @@ public class Board {
     }
 
     /**
-     * @return the isRotated
-     */
-    public boolean isIsRotated() {
-        return isRotated;
-    }
-
-    /**
-     * @param isRotated the isRotated to set
-     */
-    public void setIsRotated(boolean isRotated) {
-        this.isRotated = isRotated;
-    }
-
-    /**
      * @return the moveCount
      */
     public int getMoveCount() {
@@ -106,6 +91,34 @@ public class Board {
      */
     public void setMoveCount(int moveCount) {
         this.moveCount = moveCount;
+    }
+
+    /**
+     * @return the source
+     */
+    public Coordinate getSource() {
+        return source;
+    }
+
+    /**
+     * @param source the source to set
+     */
+    public void setSource(Coordinate source) {
+        this.source = source;
+    }
+
+    /**
+     * @return the destination
+     */
+    public Coordinate getDestination() {
+        return destination;
+    }
+
+    /**
+     * @param destination the destination to set
+     */
+    public void setDestination(Coordinate destination) {
+        this.destination = destination;
     }
 
 }
