@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.DefaultListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import objects.Board;
 import main.RenderBoard;
@@ -319,6 +320,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
         moveNumber = 0;
         moveList.clearSelection();
+        moveList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         RenderBoard.loadBoard(board, boardPanel);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -386,6 +388,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void moveListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_moveListValueChanged
         // TODO add your handling code here:
         moveNumber = moveList.getSelectedIndex() + 1;
+        if (moveNumber > 0) {
+            moveList.ensureIndexIsVisible(moveNumber-1);
+        }
         board = SFENParser.parse(new Board(), game.get(moveNumber));
         RenderBoard.loadBoard(board, boardPanel);
     }//GEN-LAST:event_moveListValueChanged
