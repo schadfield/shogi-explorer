@@ -12,15 +12,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import objects.Board;
 import main.RenderBoard;
 import main.SFENParser;
+import objects.Position;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
     Board board;
     Preferences prefs;
-    LinkedList<String> game;
+    LinkedList<Position> positionList;
     int moveNumber;
     boolean play;
     DefaultListModel moveListModel = new DefaultListModel();
+    boolean rotatedView;
 
     /**
      * Creates new form NewJFrame
@@ -284,8 +286,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void jRadioButtonMenuItem1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ItemStateChanged
         // TODO add your handling code here:
-        board.setIsRotated(!board.isIsRotated());
-        if (board.isIsRotated()) {
+        rotatedView = !rotatedView;
+        if (rotatedView) {
             prefs.put("rotated", "true");
         } else {
             prefs.put("rotated", "false");
@@ -295,7 +297,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } catch (BackingStoreException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        RenderBoard.loadBoard(board, boardPanel);
+        RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }//GEN-LAST:event_jRadioButtonMenuItem1ItemStateChanged
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -303,7 +305,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void boardPanelComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_boardPanelComponentResized
-        RenderBoard.loadBoard(board, boardPanel);
+        RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }//GEN-LAST:event_boardPanelComponentResized
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -314,7 +316,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         File kifFile = jFileChooser1.getSelectedFile();
         prefs.put("fileOpenDir", kifFile.getParent());
         try {
-            game = main.KifParser.parseKif(moveListModel, kifFile);
+            positionList = main.KifParser.parseKif(moveListModel, kifFile);
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -322,11 +324,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         moveList.clearSelection();
         moveList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
-        RenderBoard.loadBoard(board, boardPanel);
+        RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
-        if (!play && moveNumber < game.size() + 1) {
+        if (!play && moveNumber < positionList.size() + 1) {
             moveNumber++;
             moveList.setSelectedIndex(moveNumber - 1);
         }
@@ -348,7 +350,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void mediaEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaEndActionPerformed
         if (!play) {
-            moveNumber = game.size() - 1;
+            moveNumber = positionList.size() - 1;
             moveList.setSelectedIndex(moveNumber - 1);
         }
     }//GEN-LAST:event_mediaEndActionPerformed
@@ -368,7 +370,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     }
                     play = true;
                     while (play) {
-                        if (moveNumber < game.size() + 1) {
+                        if (moveNumber < positionList.size() + 1) {
                             moveNumber++;
                             moveList.setSelectedIndex(moveNumber - 1);
                             try {
@@ -391,8 +393,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (moveNumber > 0) {
             moveList.ensureIndexIsVisible(moveNumber-1);
         }
-        board = SFENParser.parse(new Board(), game.get(moveNumber));
-        RenderBoard.loadBoard(board, boardPanel);
+        Position position = positionList.get(moveNumber);
+        board = SFENParser.parse(new Board(), position.game);
+        board.setSource(position.source);
+        board.setDestination(position.destination);
+        RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }//GEN-LAST:event_moveListValueChanged
 
     private void mediaReverseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaReverseActionPerformed

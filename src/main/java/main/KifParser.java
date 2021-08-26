@@ -12,6 +12,7 @@ import javax.swing.DefaultListModel;
 import objects.Board;
 import objects.Coordinate;
 import objects.Koma;
+import objects.Position;
 
 /**
  *
@@ -41,12 +42,12 @@ public class KifParser {
     public static final String KOMA_FU = "歩";
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
 
-    public static LinkedList<String> parseKif(DefaultListModel moveListModel, File kifFile) throws FileNotFoundException, IOException {
+    public static LinkedList<Position> parseKif(DefaultListModel moveListModel, File kifFile) throws FileNotFoundException, IOException {
         System.out.println(kifFile);
         moveListModel.clear();
         Board board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
-        LinkedList<String> game = new LinkedList<>();
-        game.add(SFENParser.getSFEN(board));
+        LinkedList<Position> positionList = new LinkedList<>();
+        positionList.add(new Position(SFENParser.getSFEN(board), null, null));
         FileReader fileReader = null;
         try {
             fileReader = new FileReader(kifFile);
@@ -81,7 +82,7 @@ public class KifParser {
                     } else {
                         timeStartIndex = line.indexOf("(");
                     }
-                    String time = line.substring(timeStartIndex);
+                    //String time = line.substring(timeStartIndex);
                     String splitLine[] = line.substring(0, timeStartIndex - 1).trim().split("\\s+");
                     int gameNum = Integer.parseInt(splitLine[0]);
                     String move;
@@ -95,24 +96,25 @@ public class KifParser {
                     } else {
                         moveListModel.addElement(gameNum + " ☖" + move + "\n");
                     }
-                    lastDestination = executeMove(board, move, lastDestination);
+                    Position position = executeMove(board, move, lastDestination);
+                    lastDestination = position.getDestination();
+                    positionList.add(position);
                     if (board.getNextMove() == Board.Turn.SENTE) {
                         board.setNextMove(Board.Turn.GOTE);
                     } else {
                         board.setNextMove(Board.Turn.SENTE);
                     }
-                    game.add(SFENParser.getSFEN(board));
                 }
             }
         } catch (IOException ex) {
             Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return game;
+        return positionList;
 
     }
 
-    public static Coordinate executeMove(Board board, String move, Coordinate lastDestination) {
+    public static Position executeMove(Board board, String move, Coordinate lastDestination) {
         Coordinate thisDestination = new Coordinate();
         Coordinate thisSource = null;
         if (isSame(move)) {
@@ -122,6 +124,7 @@ public class KifParser {
             return null;
         } else if (isDrop(move)) {
             thisDestination = getDestinationCoordinate(move);
+            thisSource = null;
         } else {
             thisSource = getFromCoordinate(move);
             thisDestination = getDestinationCoordinate(move);
@@ -152,7 +155,7 @@ public class KifParser {
                 removePieceInHand(koma.getType(), board);
             }
         }
-        return thisDestination;
+        return new Position(SFENParser.getSFEN(board), thisSource, thisDestination);
     }
 
     public static void copyCoords(Coordinate from, Coordinate to) {
