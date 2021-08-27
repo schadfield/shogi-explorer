@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
+   width="43"
+   height="48"
+   viewBox="0 0 43 48"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
@@ -25,17 +25,19 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="60"
-     inkscape:cy="562.85714"
-     inkscape:document-units="mm"
+     inkscape:zoom="9.4166667"
+     inkscape:cx="17.252212"
+     inkscape:cy="26.491004"
+     inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1286"
-     inkscape:window-height="793"
-     inkscape:window-x="58"
-     inkscape:window-y="1"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="1083"
+     inkscape:window-height="657"
+     inkscape:window-x="209"
+     inkscape:window-y="22"
+     inkscape:window-maximized="0"
+     showborder="false"
+     units="px" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -51,13 +53,14 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(0,-284.3)">
     <rect
-       style="fill:#008080;stroke-width:0.15290074"
+       style="opacity:0.95999995;fill:#66e1cb;fill-opacity:1;stroke-width:0.15290074"
        id="rect10"
        width="43"
        height="48"
        x="-7.1054274e-15"
-       y="249" />
+       y="284.30002" />
   </g>
 </svg>
