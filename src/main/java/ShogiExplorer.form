@@ -183,7 +183,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="moveListScrollPane" pref="161" max="32767" attributes="0"/>
+                          <Component id="moveListScrollPane" min="-2" pref="161" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="commentScrollPane" pref="248" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
