@@ -45,7 +45,7 @@
      inkscape:pagecheckerboard="false"
      inkscape:zoom="1.361954"
      inkscape:cx="134.26009"
-     inkscape:cy="461.80409"
+     inkscape:cy="538.03092"
      inkscape:window-x="68"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
@@ -57,70 +57,10 @@
      id="svg_document_defs" />
   <g
      id="main_group" />
-  <rect
-     height="431"
-     x="20.500004"
-     id="rect1"
-     width="386"
-     y="20.500006"
-     visibility="visible"
-     style="visibility:visible;fill:none;stroke:#000000;stroke-width:1.00000608;stroke-miterlimit:4;stroke-dasharray:none" />
-  <rect
-     x="20.499947"
-     height="47.000107"
-     y="68.499947"
-     id="rect2"
-     width="386.00009"
-     style="fill:none;stroke:#000000;stroke-width:0.99989295;stroke-miterlimit:4;stroke-dasharray:none" />
-  <rect
-     x="20.499947"
-     height="47.000107"
-     y="164.49995"
-     width="386.00009"
-     id="rect4"
-     style="fill:none;stroke:#000000;stroke-width:0.99989295;stroke-miterlimit:4;stroke-dasharray:none" />
-  <rect
-     x="20.499947"
-     height="47.000107"
-     y="260.49994"
-     width="386.00009"
-     id="rect6"
-     style="fill:none;stroke:#000000;stroke-width:0.99989295;stroke-miterlimit:4;stroke-dasharray:none" />
-  <rect
-     x="20.499947"
-     height="47.000107"
-     y="356.49994"
-     width="386.00009"
-     id="rect8"
-     style="fill:none;stroke:#000000;stroke-width:0.99989295;stroke-miterlimit:4;stroke-dasharray:none" />
-  <rect
-     height="431.00012"
-     x="63.499931"
-     id="rect9"
-     width="42.000134"
-     y="20.499933"
-     style="fill:none;stroke:#000000;stroke-width:0.99986571;stroke-miterlimit:4;stroke-dasharray:none" />
-  <rect
-     height="431.00012"
-     x="149.49994"
-     width="42.000134"
-     y="20.499933"
-     id="rect10"
-     style="fill:none;stroke:#000000;stroke-width:0.99986571;stroke-miterlimit:4;stroke-dasharray:none" />
-  <rect
-     height="431.00012"
-     x="235.49994"
-     width="42.000134"
-     y="20.499933"
-     id="rect11"
-     style="fill:none;stroke:#000000;stroke-width:0.99986571;stroke-miterlimit:4;stroke-dasharray:none" />
-  <rect
-     height="431.00012"
-     x="321.49994"
-     width="42.000134"
-     y="20.499933"
+  <path
      id="rect12"
-     style="fill:none;stroke:#000000;stroke-width:0.99986571;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:none;stroke:#000000;stroke-width:0.99986571;stroke-miterlimit:4;stroke-dasharray:none"
+     d="m 321.49994,20.499933 h 42.00013 V 451.50006 h -42.00013 z m -86,0 h 42.00013 V 451.50006 h -42.00013 z m -86,0 h 42.00013 V 451.50006 h -42.00013 z m -86.000009,0 H 105.50006 V 451.50006 H 63.499931 Z M 20.499947,356.49994 H 406.50004 v 47.00011 H 20.499947 Z m 0,-96 H 406.50004 v 47.00011 H 20.499947 Z m 0,-95.99999 H 406.50004 v 47.00011 H 20.499947 Z m 0,-96.000003 H 406.50004 V 115.50005 H 20.499947 Z m 5.7e-5,-47.999941 H 406.5 V 451.50001 H 20.500004 Z" />
   <circle
      id="circle1"
      cy="164.5"
