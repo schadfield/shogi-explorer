@@ -82,7 +82,7 @@ public class KifParser {
                     } else {
                         timeStartIndex = line.indexOf("(");
                     }
-                    String time = line.substring(timeStartIndex).trim();
+                    //String time = line.substring(timeStartIndex).trim();
                     String splitLine[] = line.substring(0, timeStartIndex - 1).trim().split("\\s+");
                     int gameNum = Integer.parseInt(splitLine[0]);
                     String move;
@@ -183,7 +183,7 @@ public class KifParser {
 
     public static Position executeMove(Board board, String move, Coordinate lastDestination) {
         Coordinate thisDestination = new Coordinate();
-        Coordinate thisSource = null;
+        Coordinate thisSource;
         if (isSame(move)) {
             thisSource = getFromCoordinate(move);
             copyCoords(lastDestination, thisDestination);
