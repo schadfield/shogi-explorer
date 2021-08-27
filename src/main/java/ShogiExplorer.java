@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -380,7 +381,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append("Date: " + game.getDate() + "\n");
         gameTextArea.append("Time Limit: " + game.getTimeLimit() + "\n");
         moveNumber = 0;
-        moveList.clearSelection();
+        moveList.setSelectedIndex(0);
         board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -402,7 +403,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void mediaStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaStartActionPerformed
         if (!play) {
             moveNumber = 0;
-            moveList.clearSelection();
+            moveList.setSelectedIndex(0);
         }
     }//GEN-LAST:event_mediaStartActionPerformed
 
@@ -424,9 +425,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 public void run() {
                     play = true;
                     while (play) {
-                        if (moveNumber < game.getPositionList().size() + 1) {
+                        if (moveNumber < game.getPositionList().size()) {
                             moveNumber++;
-                            moveList.setSelectedIndex(moveNumber - 1);
+                            moveList.setSelectedIndex(moveNumber);
                             try {
                                 Thread.sleep(500L);
                             } catch (InterruptedException ex) {
@@ -443,10 +444,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void moveListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_moveListValueChanged
         if (!evt.getValueIsAdjusting()) {
-            moveNumber = moveList.getSelectedIndex() + 1;
-            if (moveNumber > 0) {
-                moveList.ensureIndexIsVisible(moveNumber - 1);
-            }
+            moveNumber = moveList.getSelectedIndex();
+            //if (moveNumber > 0) {
+                moveList.ensureIndexIsVisible(moveNumber);
+            //}
             Position position = game.getPositionList().get(moveNumber);
             board = SFENParser.parse(new Board(), position.game);
             board.setSource(position.source);
