@@ -1,4 +1,3 @@
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -24,7 +23,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     DefaultListModel moveListModel = new DefaultListModel();
     boolean rotatedView;
     FileNameExtensionFilter kifFileFilter;
-
 
     /**
      * Creates new form NewJFrame
@@ -129,6 +127,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameScrollPanel.setViewportView(gameTextArea);
 
         moveList.setModel(moveListModel);
+        moveList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         moveList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 moveListValueChanged(evt);
@@ -338,7 +337,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jRadioButtonMenuItem1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ItemStateChanged
-        // TODO add your handling code here:
         rotatedView = !rotatedView;
         if (rotatedView) {
             prefs.put("rotated", "true");
@@ -383,7 +381,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append("Time Limit: " + game.getTimeLimit() + "\n");
         moveNumber = 0;
         moveList.clearSelection();
-        moveList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -425,10 +422,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             new Thread() {
                 @Override
                 public void run() {
-                    if (play) {
-                        play = false;
-                        return;
-                    }
                     play = true;
                     while (play) {
                         if (moveNumber < game.getPositionList().size() + 1) {
@@ -469,10 +462,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             new Thread() {
                 @Override
                 public void run() {
-                    if (play) {
-                        play = false;
-                        return;
-                    }
                     play = true;
                     while (play) {
                         if (moveNumber > 0) {
@@ -496,7 +485,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -511,8 +499,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ShogiExplorer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
         //</editor-fold>
 
         /* Create and display the form */
