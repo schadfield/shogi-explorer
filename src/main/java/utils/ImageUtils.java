@@ -7,6 +7,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -26,7 +29,7 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 
 public class ImageUtils {
 
-    public static BufferedImage transcodeSVGToBufferedImage(File file, long width, long height) throws TranscoderException {
+    public static BufferedImage transcodeSVGToBufferedImage(InputStream inputStream, long width, long height) throws TranscoderException {
         Transcoder transcoder = new PNGTranscoder() {
             @Override
             protected ImageRenderer createRenderer() {
@@ -69,28 +72,36 @@ public class ImageUtils {
         transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float) height);
         transcoder.addTranscodingHint(PNGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, pixelUnitToMM);
 
-        try ( FileInputStream inputStream = new FileInputStream(file)) {
-            // Create the transcoder input.
-            TranscoderInput input = new TranscoderInput(inputStream);
+        // Create the transcoder input.
+        TranscoderInput input = new TranscoderInput(inputStream);
 
-            // Create the transcoder output.
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            TranscoderOutput output = new TranscoderOutput(outputStream);
+        // Create the transcoder output.
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        TranscoderOutput output = new TranscoderOutput(outputStream);
 
-            // Save the image.
-            transcoder.transcode(input, output);
+        // Save the image.
+        transcoder.transcode(input, output);
 
+        try {
             // Flush and close the stream.
             outputStream.flush();
-            outputStream.close();
-
-            // Convert the byte stream into an image.
-            byte[] imgData = outputStream.toByteArray();
-            return ImageIO.read(new ByteArrayInputStream(imgData));
-
-        } catch (IOException | TranscoderException e) {
-            //log.error("Conversion error", e);
+        } catch (IOException ex) {
+            Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
+        try {
+            outputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // Convert the byte stream into an image.
+        byte[] imgData = outputStream.toByteArray();
+        try {
+            return ImageIO.read(new ByteArrayInputStream(imgData));
+        } catch (IOException ex) {
+            Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return null;
     }
 
@@ -114,23 +125,13 @@ public class ImageUtils {
         return numberLabel;
     }
 
-    public static BufferedImage getScaledKomaImage(Koma.Type komaType, double scale) {
-        File imageFile = FileUtils.getKomaImageFile(komaType);
-        try {
-            return transcodeSVGToBufferedImage(imageFile, Math.round(scale * MathUtils.KOMA_X), Math.round(scale * MathUtils.KOMA_Y));
-        } catch (TranscoderException ex) {
-            Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
     public static BufferedImage getScaledImage(ScaledImageCache imageCache, String imageName, long width, long height) {
         BufferedImage imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
-            File sourceFile = new File(FileUtils.RESOURCE_PATH + imageName);
+            InputStream fileStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName);
             try {
                 double scale = imageCache.getScale();
-                imageFile = transcodeSVGToBufferedImage(sourceFile, Math.round(scale * width), Math.round(scale * height));
+                imageFile = transcodeSVGToBufferedImage(fileStream, Math.round(scale * width), Math.round(scale * height));
                 imageCache.putImage(imageName, imageFile);
             } catch (TranscoderException ex) {
                 Logger.getLogger(RenderBoard.class.getName()).log(Level.SEVERE, null, ex);
@@ -144,9 +145,9 @@ public class ImageUtils {
         double scale = scaledImageCache.getScale();
         BufferedImage imageFile = scaledImageCache.getImage(imageName);
         if (imageFile == null) {
-            File sourceFile = new File(FileUtils.RESOURCE_PATH + imageName);
+            InputStream fileStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName);
             try {
-                imageFile = transcodeSVGToBufferedImage(sourceFile, Math.round(scale * width), Math.round(scale * height));
+                imageFile = transcodeSVGToBufferedImage(fileStream, Math.round(scale * width), Math.round(scale * height));
                 scaledImageCache.putImage(imageName, imageFile);
             } catch (TranscoderException ex) {
                 Logger.getLogger(RenderBoard.class.getName()).log(Level.SEVERE, null, ex);
