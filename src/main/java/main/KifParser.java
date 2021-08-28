@@ -76,22 +76,15 @@ public class KifParser {
                     } else {
                         board.setNextMove(Board.Turn.SENTE);
                     }
-                    long parenCount = line.chars().filter(ch -> ch == '(').count();
-                    int timeStartIndex;
-                    if (parenCount == 2) {
-                        timeStartIndex = line.indexOf("(", line.indexOf("(") + 1);
-                    } else {
-                        timeStartIndex = line.indexOf("(");
-                    }
-                    //String time = line.substring(timeStartIndex).trim();
-                    String splitLine[] = line.substring(0, timeStartIndex - 1).trim().split("\\s+");
-                    int gameNum = Integer.parseInt(splitLine[0]);
+
+                    String splitLine[] = line.trim().split("\\s+");
                     String move;
-                    if (splitLine.length == 4) {
-                        move = splitLine[1] + " " + splitLine[2];
-                    } else {
-                        move = splitLine[1];
+                    int gameNum = Integer.parseInt(splitLine[0]);
+                    move = splitLine[1];
+                    if (isSame(line)) {
+                        move += splitLine[2];
                     }
+
                     if (board.getNextMove() == Board.Turn.GOTE) {
                         moveListModel.addElement(gameNum + " ☗" + move + "\n");
                     } else {
@@ -142,26 +135,15 @@ public class KifParser {
                     } else {
                         board.setNextMove(Board.Turn.SENTE);
                     }
-                    long parenCount = line.chars().filter(ch -> ch == '(').count();
-                    int timeStartIndex;
-                    if (parenCount == 2) {
-                        timeStartIndex = line.indexOf("(", line.indexOf("(") + 1);
-                    } else {
-                        if (parenCount == 1) {
-                            timeStartIndex = line.indexOf("(");
-                        } else {
-                            continue;
-                        }
-                    }
-                    //String time = line.substring(timeStartIndex);
-                    String splitLine[] = line.substring(0, timeStartIndex - 1).trim().split("\\s+");
-                    int gameNum = Integer.parseInt(splitLine[0]);
+
+                    String splitLine[] = line.trim().split("\\s+");
                     String move;
-                    if (splitLine.length == 4) {
-                        move = splitLine[1] + " " + splitLine[2];
-                    } else {
-                        move = splitLine[1];
+                    int gameNum = Integer.parseInt(splitLine[0]);
+                    move = splitLine[1];
+                    if (isSame(line)) {
+                        move += splitLine[2];
                     }
+
                     if (board.getNextMove() == Board.Turn.GOTE) {
                         moveListModel.addElement(gameNum + " ☗" + move + "\n");
                     } else {
@@ -180,6 +162,19 @@ public class KifParser {
         }
         game.setPositionList(positionList);
         return game;
+    }
+
+    public static String getTimestamp(String line) {
+        long parenCount = line.chars().filter(ch -> ch == '(').count();
+        Integer timeStartIndex = null;
+        if (parenCount == 2) {
+            timeStartIndex = line.indexOf("(", line.indexOf("(") + 1);
+        } else {
+            if (parenCount == 1) {
+                timeStartIndex = line.indexOf("(");
+            }
+        }
+        return line.substring(timeStartIndex);
     }
 
     public static Position executeMove(Board board, String move, Coordinate lastDestination) {
@@ -387,6 +382,10 @@ public class KifParser {
         } else {
             return promoteKoma(koma.getType());
         }
+    }
+
+    public static boolean usesTimestamp(String line) {
+        return line.contains(" (");
     }
 
     public static boolean isComment(String line) {
