@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.DefaultListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import objects.Board;
 import main.RenderBoard;
@@ -382,8 +381,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append("Time Limit: " + game.getTimeLimit() + "\n");
         moveNumber = 0;
         moveList.setSelectedIndex(0);
-        board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
-        RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
@@ -445,9 +442,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void moveListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_moveListValueChanged
         if (!evt.getValueIsAdjusting()) {
             moveNumber = moveList.getSelectedIndex();
-            //if (moveNumber > 0) {
-                moveList.ensureIndexIsVisible(moveNumber);
-            //}
+            if (moveNumber < 0) {
+                return;
+            }
+            moveList.ensureIndexIsVisible(moveNumber);
             Position position = game.getPositionList().get(moveNumber);
             board = SFENParser.parse(new Board(), position.game);
             board.setSource(position.source);
