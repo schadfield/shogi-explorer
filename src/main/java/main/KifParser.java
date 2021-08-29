@@ -109,7 +109,7 @@ public class KifParser {
                     game.setPlace(line.substring(PLACE.length()));
                 }
                 if (line.startsWith(TIME_LIMIT)) {
-                    game.setTimeLimit(line.substring(TIME_LIMIT.length()));
+                    game.setTimeLimit(line.substring(TIME_LIMIT.length()).split("#")[0]);
                 }
                 if (line.startsWith(DATE)) {
                     game.setDate(line.substring(DATE.length()));
@@ -138,7 +138,12 @@ public class KifParser {
 
                     String splitLine[] = line.trim().split("\\s+|\\u3000");
                     String move;
-                    int gameNum = Integer.parseInt(splitLine[0]);
+                    int gameNum;
+                    try {
+                        gameNum = Integer.parseInt(splitLine[0]);
+                    } catch (NumberFormatException ex) {
+                        continue;
+                    }
                     move = splitLine[1];
                     if (isSame(line)) {
                         move += "\u3000" + splitLine[2];
