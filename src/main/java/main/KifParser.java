@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,20 +56,20 @@ public class KifParser {
         Game game = new Game();
         LinkedList<Position> positionList = new LinkedList<>();
         positionList.add(new Position(SFENParser.getSFEN(board), null, null));
-        FileReader fileReader = null;
+        BufferedReader fileReader = null;
         try {
-            fileReader = new FileReader(kifFile);
+            fileReader = Files.newBufferedReader(kifFile.toPath());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
         }
         Coordinate lastDestination = null;
-        BufferedReader kifBuf = new BufferedReader(fileReader);
+        //BufferedReader kifBuf = new BufferedReader(fileReader);
         String line;
         int count = 0;
         boolean foundHeader = false;
         String comment = "";
         try {
-            while ((line = kifBuf.readLine()) != null) {
+            while ((line = fileReader.readLine()) != null) {
                 if (isResigns(line)) {
                     count++;
                     if (board.getNextMove() == Board.Turn.SENTE) {
