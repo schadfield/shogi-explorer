@@ -77,12 +77,12 @@ public class KifParser {
                         board.setNextMove(Board.Turn.SENTE);
                     }
 
-                    String splitLine[] = line.trim().split("\\s+");
+                    String splitLine[] = line.trim().split("\\s+|\\u3000");
                     String move;
                     int gameNum = Integer.parseInt(splitLine[0]);
                     move = splitLine[1];
                     if (isSame(line)) {
-                        move += splitLine[2];
+                        move += "\u3000" + splitLine[2];
                     }
 
                     if (board.getNextMove() == Board.Turn.GOTE) {
@@ -136,12 +136,12 @@ public class KifParser {
                         board.setNextMove(Board.Turn.SENTE);
                     }
 
-                    String splitLine[] = line.trim().split("\\s+");
+                    String splitLine[] = line.trim().split("\\s+|\\u3000");
                     String move;
                     int gameNum = Integer.parseInt(splitLine[0]);
                     move = splitLine[1];
                     if (isSame(line)) {
-                        move += splitLine[2];
+                        move += "\u3000" + splitLine[2];
                     }
 
                     if (board.getNextMove() == Board.Turn.GOTE) {
