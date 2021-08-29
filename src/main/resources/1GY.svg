@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -38,48 +38,57 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="696"
-     inkscape:window-height="480"
+     inkscape:window-width="937"
+     inkscape:window-height="628"
      id="namedview2540"
      showgrid="false"
      inkscape:zoom="0.19666667"
-     inkscape:cx="-244.06779"
-     inkscape:cy="600.00001"
+     inkscape:cx="559.38722"
+     inkscape:cy="600.00002"
      inkscape:window-x="146"
      inkscape:window-y="76"
      inkscape:window-maximized="0"
      inkscape:current-layer="g2534" />
   <rect
+     fill-opacity="0"
+     fill="rgb(0,0,0)"
      height="300"
      width="300"
-     y="-150.00006"
+     y="-150"
      x="-150"
-     id="rect2524"
-     transform="scale(-1)"
-     style="fill:#000000;fill-opacity:0" />
-  <g
-     style="fill:#ffffff;stroke-linejoin:round"
-     id="g2534"
-     transform="rotate(-180,0,3.2624952e-5)">
-    <path
-       style="fill:#f7eaa6;stroke:none;stroke-linecap:butt;stroke-linejoin:round;fill-opacity:1"
-       inkscape:connector-curvature="0"
-       id="path2526"
-       d="M 0.002,-147 -98.2614,-95.185 -122.8267,147 h 245.653 L 98.261,-95.185 Z" />
-    <path
-       style="fill:#000000;stroke:none;stroke-linecap:butt;stroke-linejoin:round"
-       inkscape:connector-curvature="0"
-       id="path2528"
-       d="M 10.452999,75.683 V 24.9097 h 57.3067 V 3.2564 h -57.3067 v -41.0667 h 65.519999 v -21.84 h -152.32 v 21.84 h 62.3467 V 3.2564 h -53.3867 v 21.6533 h 53.3867 V 75.683 h -70.56 v 21.6533 h 169.12 V 75.683 Z" />
-    <path
-       style="fill:#000000;stroke:none;stroke-linecap:butt;stroke-linejoin:round"
-       inkscape:connector-curvature="0"
-       id="path2530"
-       d="m 22.213,40.216999 c 10.2667,10.4533 24.64,25.0133 31.36,33.7867 l 16.8,-14.9333 c -7.28,-8.58667 -22.0267,-22.2133 -32.1067,-31.7333 z" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
-       inkscape:connector-curvature="0"
-       id="path2532"
-       d="M 0.002,-147 -98.2614,-95.185 -122.8267,147 h 245.653 L 98.261,-95.185 Z" />
-  </g>
+     id="rect2524" />
+  <svg
+     version="1.1"
+     y="-250"
+     x="-250"
+     viewBox="-250 -250 500 500"
+     height="500"
+     width="500"
+     style="overflow:visible"
+     id="svg2536">
+    <g
+       id="g2534"
+       style="fill:#ffffff;stroke-linejoin:round">
+      <path
+         d="M -0.00218,132.30006 88.43488,85.666556 110.54365,-132.29994 h -221.0877 l 22.10877,217.966496 z"
+         id="path2526"
+         inkscape:connector-curvature="0"
+         style="fill:#f7eaa6;fill-opacity:1;stroke:none;stroke-width:0.89999998;stroke-linecap:butt;stroke-linejoin:round" />
+      <path
+         d="m -9.4080791,-68.114644 v 45.69597 H -60.984109 V -2.9307046 H -9.4080791 V 34.029326 H -68.376078 v 19.656 h 137.088 v -19.656 H 12.599892 V -2.9307046 h 48.04803 V -22.418674 h -48.04803 v -45.69597 h 63.504 v -19.48797 h -152.208 v 19.48797 z"
+         id="path2528"
+         inkscape:connector-curvature="0"
+         style="fill:#000000;stroke:none;stroke-width:0.89999998;stroke-linecap:butt;stroke-linejoin:round" />
+      <path
+         d="m -19.99208,-36.195243 c -9.24003,-9.40797 -22.176,-22.51197 -28.224,-30.40803 l -15.12,13.43997 c 6.552,7.728003 19.82403,19.99197 28.89603,28.55997 z"
+         id="path2530"
+         inkscape:connector-curvature="0"
+         style="fill:#000000;stroke:none;stroke-width:0.89999998;stroke-linecap:butt;stroke-linejoin:round" />
+      <path
+         d="M -0.00218,132.30006 88.43488,85.666556 110.54365,-132.29994 h -221.0877 l 22.10877,217.966496 z"
+         id="path2532"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#000000;stroke-width:9;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1" />
+    </g>
+  </svg>
 </svg>
