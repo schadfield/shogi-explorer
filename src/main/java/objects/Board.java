@@ -5,7 +5,7 @@ import java.util.EnumMap;
 public class Board {
 
     public Koma[][] masu = new Koma[9][9];
-    private ScaledImageCache scaledImageCache = null;
+    private ImageCache scaledImageCache = null;
     private EnumMap<Koma.Type, Integer> inHandKomaMap;
     public enum Turn { SENTE, GOTE };
     private Turn nextMove;
@@ -34,20 +34,20 @@ public class Board {
      * @param masu the masu to set
      */
     public void setMasu(Koma[][] masu) {
-        this.setMasu(masu);
+        this.masu = masu;
     }
 
     /**
      * @return the scaledImageCache
      */
-    public ScaledImageCache getScaledImageCache() {
+    public ImageCache getImageCache() {
         return scaledImageCache;
     }
 
     /**
      * @param scaledImageCache the scaledImageCache to set
      */
-    public void setScaledImageCache(ScaledImageCache scaledImageCache) {
+    public void setImageCache(ImageCache scaledImageCache) {
         this.scaledImageCache = scaledImageCache;
     }
 

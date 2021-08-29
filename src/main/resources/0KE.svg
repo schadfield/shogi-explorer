@@ -9,9 +9,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    style="overflow:visible"
-   viewBox="-150 -150 300 300"
-   height="1200px"
-   width="1200px"
+   viewBox="-150 -150 350 350"
+   height="1400"
+   width="1400"
    id="svg6005"
    sodipodi:docname="0KE.svg"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -43,24 +43,28 @@
      id="namedview6007"
      showgrid="false"
      inkscape:zoom="0.46166667"
-     inkscape:cx="571.84116"
-     inkscape:cy="600"
+     inkscape:cx="264.62095"
+     inkscape:cy="700"
      inkscape:window-x="106"
      inkscape:window-y="22"
      inkscape:window-maximized="0"
      inkscape:current-layer="g6001"
-     showguides="true" />
+     showguides="true"
+     fit-margin-top="100"
+     fit-margin-left="100"
+     fit-margin-right="100"
+     fit-margin-bottom="100" />
   <rect
-     fill-opacity="0"
-     fill="rgb(0,0,0)"
      height="300"
      width="300"
-     y="-150"
-     x="-150"
-     id="rect5993" />
+     y="-125"
+     x="-125"
+     id="rect5993"
+     style="fill:#000000;fill-opacity:0" />
   <g
      style="fill:#ffffff;stroke-linejoin:round"
-     id="g6001">
+     id="g6001"
+     transform="translate(25,25)">
     <path
        style="fill:#f7eaa6;fill-opacity:1;stroke:none;stroke-width:0.89999998;stroke-linecap:butt;stroke-linejoin:round"
        inkscape:connector-curvature="0"
@@ -68,7 +72,7 @@
        d="M 0.00178,-132.3 -88.43528,-85.666497 -110.54405,132.3 h 221.0877 L 88.43488,-85.666497 Z" />
     <path
        style="fill:#000000;stroke:none;stroke-width:3.7444942;stroke-linecap:butt;stroke-linejoin:round"
-       d="m 677.95117,348.9707 v 82.1543 l -120.66006,-2.16606 2.16606,82.85165 118.494,-2.16606 v 74.15625 H 532.79883 v 79.97266 h 145.15234 v 64.87695 l -130.88863,-2.16606 0,78.16988 130.88863,4.33212 v 86.9707 H 522.87745 v 81.1191 l 396.99364,2.16606 V 895.95703 H 760.60742 v -86.9707 H 893.66406 V 728.65039 H 760.60742 V 663.77344 H 911.80664 V 583.80078 H 760.60742 V 509.64453 H 884.25391 V 431.125 H 760.60742 v -82.1543 z"
+       d="m 677.95117,348.9707 v 82.1543 l -120.66006,-2.16606 2.16606,82.85165 118.494,-2.16606 v 74.15625 H 532.79883 v 79.97266 h 145.15234 v 64.87695 l -130.88863,-2.16606 v 78.16988 l 130.88863,4.33212 v 86.9707 H 522.87745 v 81.1191 l 396.99364,2.16606 V 895.95703 H 760.60742 v -86.9707 H 893.66406 V 728.65039 H 760.60742 V 663.77344 H 911.80664 V 583.80078 H 760.60742 V 509.64453 H 884.25391 V 431.125 H 760.60742 v -82.1543 z"
        transform="matrix(0.25,0,0,0.25,-150,-150)"
        id="path1500"
        inkscape:connector-curvature="0"

@@ -9,9 +9,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    style="overflow:visible"
-   viewBox="-150 -150 300 300"
-   height="1200px"
-   width="1200px"
+   viewBox="-150 -150 350 350"
+   height="1400"
+   width="1400"
    id="svg2538"
    sodipodi:docname="0OU.svg"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
@@ -43,38 +43,42 @@
      id="namedview2540"
      showgrid="false"
      inkscape:zoom="0.19666667"
-     inkscape:cx="630.72719"
-     inkscape:cy="600.00001"
+     inkscape:cx="-225.205"
+     inkscape:cy="700.00026"
      inkscape:window-x="97"
      inkscape:window-y="43"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g2534" />
+     inkscape:current-layer="g2534"
+     fit-margin-top="100"
+     fit-margin-left="100"
+     fit-margin-right="100"
+     fit-margin-bottom="100" />
   <rect
      height="300"
      width="300"
-     y="-150.00006"
-     x="-150"
+     y="-175"
+     x="-175"
      id="rect2524"
      transform="scale(-1)"
      style="fill:#000000;fill-opacity:0" />
   <g
      style="fill:#ffffff;stroke-linejoin:round"
      id="g2534"
-     transform="rotate(-180,0,3.2624952e-5)">
+     transform="rotate(-180,12.5,12.500002)">
     <path
        style="fill:#f7eaa6;fill-opacity:1;stroke:none;stroke-width:0.89999998;stroke-linecap:butt;stroke-linejoin:round"
        inkscape:connector-curvature="0"
        id="path2526"
-       d="m -0.00218,132.30006 88.43706,-46.633504 22.10877,-217.966496 -221.0877,0 22.10877,217.966496 z" />
+       d="M -0.00218,132.30006 88.43488,85.666556 110.54365,-132.29994 h -221.0877 l 22.10877,217.966496 z" />
     <path
        style="fill:#000000;stroke:none;stroke-width:0.89999998;stroke-linecap:butt;stroke-linejoin:round"
        inkscape:connector-curvature="0"
        id="path2528"
-       d="m -9.4080791,-68.114644 0,45.69597 -51.5760299,0 0,19.4879694 51.5760299,0 0,36.9600306 -58.9679989,0 v 19.656 l 137.088,0 v -19.656 l -56.11203,0 0,-36.9600306 48.04803,0 0,-19.4879694 -48.04803,0 0,-45.69597 63.504,0 0,-19.48797 -152.208,0 0,19.48797 z" />
+       d="m -9.4080791,-68.114644 v 45.69597 H -60.984109 V -2.9307046 H -9.4080791 V 34.029326 H -68.376078 v 19.656 h 137.088 v -19.656 H 12.599892 V -2.9307046 h 48.04803 V -22.418674 h -48.04803 v -45.69597 h 63.504 v -19.48797 h -152.208 v 19.48797 z" />
     <path
        style="fill:none;stroke:#000000;stroke-width:9;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
        inkscape:connector-curvature="0"
        id="path2532"
-       d="m -0.00218,132.30006 88.43706,-46.633504 22.10877,-217.966496 -221.0877,0 22.10877,217.966496 z" />
+       d="M -0.00218,132.30006 88.43488,85.666556 110.54365,-132.29994 h -221.0877 l 22.10877,217.966496 z" />
   </g>
 </svg>

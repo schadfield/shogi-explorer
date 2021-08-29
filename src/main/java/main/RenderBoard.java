@@ -1,6 +1,6 @@
 package main;
 
-import objects.ScaledImageCache;
+import objects.ImageCache;
 import objects.Koma;
 import objects.Board;
 import utils.MathUtils;
@@ -10,8 +10,6 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 import objects.Board.Turn;
 import objects.Coordinate;
-import objects.ScaleItem;
-import static utils.MathUtils.calculateScaleFactor;
 import static utils.StringUtils.substituteKomaName;
 import static utils.StringUtils.substituteKomaNameRotated;
 
@@ -27,8 +25,8 @@ public class RenderBoard {
     public static final HashMap<Koma.Type, Integer> yCoordMapRotated = new HashMap<>();
     final static int SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
     final static int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
-    private static long centerX;
-    private static long centerY;
+    final static long CENTRE_X = 5;
+    final static long CENTRE_Y = 5;
 
     public static void loadBoard(Board board, javax.swing.JPanel boardPanel, boolean rotatedView) {
         // TODO: why is loadBoard() being called when the boardPanel has no width?
@@ -36,14 +34,8 @@ public class RenderBoard {
             return;
         }
 
-        ScaleItem scaleItem = calculateScaleFactor(boardPanel);
-        double scale = scaleItem.getScale();
-        centerX = scaleItem.getCenterX();
-        centerY = scaleItem.getCenterY();
-
-        // If the scale of the board has changed we need to create a new image cache.
-        if (board.getScaledImageCache() == null || Double.compare(scale, board.getScaledImageCache().getScale()) != 0) {
-            board.setScaledImageCache(new ScaledImageCache(scale));
+        if (board.getImageCache() == null) {
+            board.setImageCache(new ImageCache());
         }
 
         // Start with a clean slate.
@@ -66,131 +58,99 @@ public class RenderBoard {
         String[] rank = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
 
         if (rotatedView) {
-            ScaledImageCache scaledImageCache = board.getScaledImageCache();
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(
-                        ImageUtils.getTextLabelForBan(
-                                scaledImageCache.getScale(),
-                                i,
-                                0,
-                                MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
-                                MathUtils.BOARD_XY * MathUtils.KOMA_Y + MathUtils.COORD_XY / 2 - 3,
-                                centerX,
-                                centerY,
-                                Integer.toString(i + 1)
-                        ));
+                boardPanel.add(ImageUtils.getTextLabelForBan(i,
+                        0,
+                        MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
+                        MathUtils.BOARD_XY * MathUtils.KOMA_Y + MathUtils.COORD_XY / 2 - 3,
+                        CENTRE_X,
+                        CENTRE_Y,
+                        Integer.toString(i + 1)
+                ));
             }
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(
-                        ImageUtils.getTextLabelForBan(
-                                scaledImageCache.getScale(),
-                                0,
-                                i,
-                                MathUtils.COORD_XY * 4.35f,
-                                MathUtils.COORD_XY / 2 + 7,
-                                centerX,
-                                centerY,
-                                rank[8 - i]
-                        ));
+                boardPanel.add(ImageUtils.getTextLabelForBan(0,
+                        i,
+                        MathUtils.COORD_XY * 4.35f,
+                        MathUtils.COORD_XY / 2 + 7,
+                        CENTRE_X,
+                        CENTRE_Y,
+                        rank[8 - i]
+                ));
             }
         } else {
-            ScaledImageCache scaledImageCache = board.getScaledImageCache();
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(
-                        ImageUtils.getTextLabelForBan(
-                                scaledImageCache.getScale(),
-                                i,
-                                0,
-                                MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
-                                -(MathUtils.COORD_XY / 2) - 3,
-                                centerX,
-                                centerY,
-                                Integer.toString(9 - i)
-                        ));
+                boardPanel.add(ImageUtils.getTextLabelForBan(i,
+                        0,
+                        MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
+                        -(MathUtils.COORD_XY / 2) - 3,
+                        CENTRE_X,
+                        CENTRE_Y,
+                        Integer.toString(9 - i)
+                ));
             }
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(
-                        ImageUtils.getTextLabelForBan(
-                                scaledImageCache.getScale(),
-                                0,
-                                i,
-                                MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3.1f,
-                                MathUtils.COORD_XY / 2 + 7,
-                                centerX,
-                                centerY,
-                                rank[i]
-                        ));
+                boardPanel.add(ImageUtils.getTextLabelForBan(0,
+                        i,
+                        MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3.1f,
+                        MathUtils.COORD_XY / 2 + 7,
+                        CENTRE_X,
+                        CENTRE_Y,
+                        rank[i]
+                ));
             }
         }
     }
 
     public static void drawTurnNotification(Board board, JPanel boardPanel, boolean rotatedView) {
-        ScaledImageCache scaledImageCache = board.getScaledImageCache();
-
         if (board.getNextMove() == Turn.SENTE) {
-            BufferedImage image = ImageUtils.getScaledImage(
-                    scaledImageCache,
-                    "sente.svg",
-                    MathUtils.KOMA_X, MathUtils.KOMA_Y
+            BufferedImage image = ImageUtils.loadImageFromResources(
+                    "sente.png"
             );
             if (rotatedView) {
-                boardPanel.add(
-                        ImageUtils.getPieceLabelForKoma(
-                                scaledImageCache.getScale(),
-                                image,
-                                0,
-                                8,
-                                MathUtils.COORD_XY,
-                                MathUtils.COORD_XY,
-                                centerX,
-                                centerY
-                        )
+                boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
+                        0,
+                        8,
+                        MathUtils.COORD_XY,
+                        MathUtils.COORD_XY,
+                        CENTRE_X,
+                        CENTRE_Y
+                )
                 );
             } else {
-                boardPanel.add(
-                        ImageUtils.getPieceLabelForKoma(
-                                scaledImageCache.getScale(),
-                                image,
-                                0,
-                                -2,
-                                SBAN_XOFFSET,
-                                SBAN_YOFFSET - MathUtils.COORD_XY,
-                                centerX,
-                                centerY
-                        )
+                boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
+                        0,
+                        -2,
+                        SBAN_XOFFSET,
+                        SBAN_YOFFSET - MathUtils.COORD_XY,
+                        CENTRE_X,
+                        CENTRE_Y
+                )
                 );
             }
         } else {
-            BufferedImage image = ImageUtils.getScaledImage(
-                    scaledImageCache,
-                    "gote.svg",
-                    MathUtils.KOMA_X, MathUtils.KOMA_Y
+            BufferedImage image = ImageUtils.loadImageFromResources(
+                    "gote.png"
             );
             if (rotatedView) {
-                boardPanel.add(
-                        ImageUtils.getPieceLabelForKoma(
-                                scaledImageCache.getScale(),
-                                image,
-                                0,
-                                -2,
-                                SBAN_XOFFSET,
-                                SBAN_YOFFSET - MathUtils.COORD_XY,
-                                centerX,
-                                centerY
-                        )
+                boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
+                        0,
+                        -2,
+                        SBAN_XOFFSET,
+                        SBAN_YOFFSET - MathUtils.COORD_XY,
+                        CENTRE_X,
+                        CENTRE_Y
+                )
                 );
             } else {
-                boardPanel.add(
-                        ImageUtils.getPieceLabelForKoma(
-                                scaledImageCache.getScale(),
-                                image,
-                                0,
-                                8,
-                                MathUtils.COORD_XY,
-                                MathUtils.COORD_XY,
-                                centerX,
-                                centerY
-                        )
+                boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
+                        0,
+                        8,
+                        MathUtils.COORD_XY,
+                        MathUtils.COORD_XY,
+                        CENTRE_X,
+                        CENTRE_Y
+                )
                 );
             }
         }
@@ -316,71 +276,54 @@ public class RenderBoard {
         yCoordMapRotated.put(Koma.Type.GHI, 0);
 
         //</editor-fold>
-        ScaledImageCache scaledImageCache = board.getScaledImageCache();
 
         for (Koma.Type komaType : Koma.Type.values()) {
             Integer numberHeld = board.getInHandKomaMap().get(komaType);
             if (numberHeld != null && numberHeld > 0) {
                 BufferedImage pieceImage;
                 if (rotatedView) {
-                    pieceImage = ImageUtils.getScaledImage(
-                            scaledImageCache,
-                            substituteKomaNameRotated(komaType.toString()) + ".svg",
-                            MathUtils.KOMA_X, MathUtils.KOMA_Y
+                    pieceImage = ImageUtils.loadImageFromResources(
+                            substituteKomaNameRotated(komaType.toString()) + ".png"
                     );
                 } else {
-                    pieceImage = ImageUtils.getScaledImage(
-                            scaledImageCache,
-                            substituteKomaName(komaType.toString()) + ".svg",
-                            MathUtils.KOMA_X, MathUtils.KOMA_Y
+                    pieceImage = ImageUtils.loadImageFromResources(
+                            substituteKomaName(komaType.toString()) + ".png"
                     );
                 }
                 if (rotatedView) {
-                    boardPanel.add(
-                            ImageUtils.getPieceLabelForKoma(
-                                    scaledImageCache.getScale(),
-                                    pieceImage,
-                                    xCoordMapRotated.get(komaType),
-                                    yCoordMapRotated.get(komaType),
-                                    xOffsetMapRotated.get(komaType),
-                                    yOffsetMapRotated.get(komaType),
-                                    centerX,
-                                    centerY
-                            ));
-                    boardPanel.add(
-                            ImageUtils.getTextLabelForBan(
-                                    scaledImageCache.getScale(),
-                                    xCoordMapRotated.get(komaType) + 1,
-                                    yCoordMapRotated.get(komaType),
-                                    xOffsetMapRotated.get(komaType),
-                                    yOffsetMapRotated.get(komaType),
-                                    centerX,
-                                    centerY,
-                                    numberHeld.toString()
-                            ));
+                    boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
+                            xCoordMapRotated.get(komaType),
+                            yCoordMapRotated.get(komaType),
+                            xOffsetMapRotated.get(komaType),
+                            yOffsetMapRotated.get(komaType),
+                            CENTRE_X,
+                            CENTRE_Y
+                    ));
+                    boardPanel.add(ImageUtils.getTextLabelForBan(xCoordMapRotated.get(komaType) + 1,
+                            yCoordMapRotated.get(komaType),
+                            xOffsetMapRotated.get(komaType),
+                            yOffsetMapRotated.get(komaType),
+                            CENTRE_X,
+                            CENTRE_Y,
+                            numberHeld.toString()
+                    ));
                 } else {
-                    boardPanel.add(
-                            ImageUtils.getPieceLabelForKoma(
-                                    scaledImageCache.getScale(),
-                                    pieceImage,
-                                    xCoordMap.get(komaType),
-                                    yCoordMap.get(komaType),
-                                    xOffsetMap.get(komaType),
-                                    yOffsetMap.get(komaType),
-                                    centerX,
-                                    centerY
-                            ));
-                    boardPanel.add(
-                            ImageUtils.getTextLabelForBan(
-                                    scaledImageCache.getScale(),
-                                    xCoordMap.get(komaType) + 1,
-                                    yCoordMap.get(komaType),
-                                    xOffsetMap.get(komaType),
-                                    yOffsetMap.get(komaType),
-                                    centerX,
-                                    centerY,
-                                    numberHeld.toString()
-                            ));
+                    boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
+                            xCoordMap.get(komaType),
+                            yCoordMap.get(komaType),
+                            xOffsetMap.get(komaType),
+                            yOffsetMap.get(komaType),
+                            CENTRE_X,
+                            CENTRE_Y
+                    ));
+                    boardPanel.add(ImageUtils.getTextLabelForBan(xCoordMap.get(komaType) + 1,
+                            yCoordMap.get(komaType),
+                            xOffsetMap.get(komaType),
+                            yOffsetMap.get(komaType),
+                            CENTRE_X,
+                            CENTRE_Y,
+                            numberHeld.toString()
+                    ));
                 }
             }
         }
@@ -388,107 +331,86 @@ public class RenderBoard {
     }
 
     public static void drawHighlights(Board board, JPanel boardPanel, boolean rotatedView) {
-        ScaledImageCache scaledImageCache = board.getScaledImageCache();
         Coordinate thisCoord = board.getSource();
         if (thisCoord != null) {
-            BufferedImage pieceImage = ImageUtils.getScaledImage(
-                    scaledImageCache,
-                    "highlight.svg",
-                    MathUtils.KOMA_X,
-                    MathUtils.KOMA_Y
+            BufferedImage pieceImage = ImageUtils.loadImageFromResources(
+                    "highlight.png"
             );
             int x;
             int y;
             if (rotatedView) {
-                x = thisCoord.getX()-1;
-                y = 9-thisCoord.getY();
+                x = thisCoord.getX() - 1;
+                y = 9 - thisCoord.getY();
             } else {
-                x = 9-thisCoord.getX();
-                y = thisCoord.getY()-1;
+                x = 9 - thisCoord.getX();
+                y = thisCoord.getY() - 1;
             }
-            boardPanel.add(ImageUtils.getPieceLabelForKoma(
-                    scaledImageCache.getScale(),
-                    pieceImage,
+            boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
                     x,
                     y,
                     MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
                     MathUtils.COORD_XY,
-                    centerX,
-                    centerY
+                    CENTRE_X,
+                    CENTRE_Y
             ));
         }
         thisCoord = board.getDestination();
         if (thisCoord != null) {
-            BufferedImage pieceImage = ImageUtils.getScaledImage(
-                    scaledImageCache,
-                    "highlight.svg",
-                    MathUtils.KOMA_X,
-                    MathUtils.KOMA_Y
+            BufferedImage pieceImage = ImageUtils.loadImageFromResources(
+                    "highlight.png"
             );
             int x;
             int y;
             if (rotatedView) {
-                x = thisCoord.getX()-1;
-                y = 9-thisCoord.getY();
+                x = thisCoord.getX() - 1;
+                y = 9 - thisCoord.getY();
             } else {
-                x = 9-thisCoord.getX();
-                y = thisCoord.getY()-1;
+                x = 9 - thisCoord.getX();
+                y = thisCoord.getY() - 1;
             }
-            boardPanel.add(ImageUtils.getPieceLabelForKoma(
-                    scaledImageCache.getScale(),
-                    pieceImage,
+            boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
                     x,
                     y,
                     MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
                     MathUtils.COORD_XY,
-                    centerX,
-                    centerY
+                    CENTRE_X,
+                    CENTRE_Y
             ));
         }
     }
 
     public static void drawPieces(Board board, JPanel boardPanel, boolean rotatedView) {
-        ScaledImageCache scaledImageCache = board.getScaledImageCache();
+        ImageCache scaledImageCache = board.getImageCache();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (rotatedView) {
                     if (board.getMasu()[8 - i][8 - j] != null) {
                         Koma koma = board.getMasu()[8 - i][8 - j];
-                        BufferedImage pieceImage = ImageUtils.getScaledImage(
-                                scaledImageCache,
-                                substituteKomaNameRotated(koma.getType().toString()) + ".svg",
-                                MathUtils.KOMA_X,
-                                MathUtils.KOMA_Y
+                        BufferedImage pieceImage = ImageUtils.loadImageFromResources(
+                                substituteKomaNameRotated(koma.getType().toString()) + ".png"
                         );
-                        boardPanel.add(ImageUtils.getPieceLabelForKoma(
-                                scaledImageCache.getScale(),
-                                pieceImage,
+                        boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
                                 i,
                                 j,
                                 MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
                                 MathUtils.COORD_XY,
-                                centerX,
-                                centerY
+                                CENTRE_X,
+                                CENTRE_Y
                         ));
                     }
                 } else {
                     if (board.getMasu()[i][j] != null) {
                         Koma koma = board.getMasu()[i][j];
-                        BufferedImage pieceImage = ImageUtils.getScaledImage(
-                                scaledImageCache,
-                                substituteKomaName(koma.getType().toString()) + ".svg",
-                                MathUtils.KOMA_X,
-                                MathUtils.KOMA_Y
+                        BufferedImage pieceImage = ImageUtils.loadImageFromResources(
+                                substituteKomaName(koma.getType().toString()) + ".png"
                         );
-                        boardPanel.add(ImageUtils.getPieceLabelForKoma(
-                                scaledImageCache.getScale(),
-                                pieceImage,
+                        boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
                                 i,
                                 j,
                                 MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
                                 MathUtils.COORD_XY,
-                                centerX,
-                                centerY
+                                CENTRE_X,
+                                CENTRE_Y
                         ));
                     }
                 }
@@ -498,56 +420,52 @@ public class RenderBoard {
     }
 
     public static void drawGrid(Board board, JPanel boardPanel) {
-        ImageUtils.drawImage(
-                board,
+        ImageUtils.drawImage(board,
                 boardPanel,
-                "grid.svg",
+                "grid.png",
                 MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
                 0,
                 MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
                 MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
-                centerX,
-                centerY
+                CENTRE_X,
+                CENTRE_Y
         );
     }
 
     public static void drawBans(Board board, JPanel boardPanel) {
-        ImageUtils.drawImage(
-                board,
+        ImageUtils.drawImage(board,
                 boardPanel,
-                "ban.svg",
+                "ban.png",
                 MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
                 MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2,
                 MathUtils.KOMA_X + MathUtils.COORD_XY,
                 MathUtils.KOMA_Y * 7,
-                centerX,
-                centerY
+                CENTRE_X,
+                CENTRE_Y
         );
 
-        ImageUtils.drawImage(
-                board,
+        ImageUtils.drawImage(board,
                 boardPanel,
-                "ban.svg",
+                "ban.png",
                 0,
                 0,
                 MathUtils.KOMA_X + MathUtils.COORD_XY,
                 MathUtils.KOMA_Y * 7,
-                centerX,
-                centerY
+                CENTRE_X,
+                CENTRE_Y
         );
     }
 
     public static void drawBackground(Board board, JPanel boardPanel) {
-        ImageUtils.drawImage(
-                board,
+        ImageUtils.drawImage(board,
                 boardPanel,
-                "background.svg",
+                "background.png",
                 MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
                 0,
                 MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
                 MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
-                centerX,
-                centerY
+                CENTRE_X,
+                CENTRE_Y
         );
     }
 

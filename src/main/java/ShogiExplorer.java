@@ -50,16 +50,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void initComponents() {
 
         kifFileChooser = new javax.swing.JFileChooser();
-        mainSplitPane = new javax.swing.JSplitPane();
-        topSplitPane = new javax.swing.JSplitPane();
-        boardPanel = new javax.swing.JPanel();
-        rightPanel = new javax.swing.JPanel();
-        gameScrollPanel = new javax.swing.JScrollPane();
-        gameTextArea = new javax.swing.JTextArea();
-        moveListScrollPane = new javax.swing.JScrollPane();
-        moveList = new javax.swing.JList<>();
-        commentScrollPane = new javax.swing.JScrollPane();
-        commentTextArea = new javax.swing.JTextArea();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         mediaReverse = new javax.swing.JButton();
@@ -68,6 +58,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mediaForward = new javax.swing.JButton();
         mediaPlay = new javax.swing.JButton();
         mediaEnd = new javax.swing.JButton();
+        gameScrollPanel = new javax.swing.JScrollPane();
+        gameTextArea = new javax.swing.JTextArea();
+        commentScrollPane = new javax.swing.JScrollPane();
+        commentTextArea = new javax.swing.JTextArea();
+        moveListScrollPane = new javax.swing.JScrollPane();
+        moveList = new javax.swing.JList<>();
+        boardPanel = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -89,100 +87,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 formWindowClosing(evt);
             }
         });
-
-        mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        mainSplitPane.setPreferredSize(new java.awt.Dimension(1000, 486));
-
-        boardPanel.setPreferredSize(new java.awt.Dimension(556, 440));
-        boardPanel.setRequestFocusEnabled(false);
-        boardPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                boardPanelComponentResized(evt);
-            }
-        });
-
-        javax.swing.GroupLayout boardPanelLayout = new javax.swing.GroupLayout(boardPanel);
-        boardPanel.setLayout(boardPanelLayout);
-        boardPanelLayout.setHorizontalGroup(
-            boardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 556, Short.MAX_VALUE)
-        );
-        boardPanelLayout.setVerticalGroup(
-            boardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 432, Short.MAX_VALUE)
-        );
-
-        topSplitPane.setLeftComponent(boardPanel);
-
-        gameScrollPanel.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        gameScrollPanel.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        gameScrollPanel.setPreferredSize(new java.awt.Dimension(100, 84));
-
-        gameTextArea.setEditable(false);
-        gameTextArea.setColumns(20);
-        gameTextArea.setRows(5);
-        gameTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        gameTextArea.setEnabled(false);
-        gameTextArea.setFocusable(false);
-        gameTextArea.setPreferredSize(new java.awt.Dimension(100, 80));
-        gameTextArea.setRequestFocusEnabled(false);
-        gameScrollPanel.setViewportView(gameTextArea);
-
-        moveList.setModel(moveListModel);
-        moveList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        moveList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                moveListValueChanged(evt);
-            }
-        });
-        moveListScrollPane.setViewportView(moveList);
-
-        commentScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        commentScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        commentScrollPane.setPreferredSize(new java.awt.Dimension(230, 84));
-
-        commentTextArea.setEditable(false);
-        commentTextArea.setColumns(20);
-        commentTextArea.setRows(5);
-        commentTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        commentTextArea.setEnabled(false);
-        commentTextArea.setFocusable(false);
-        commentScrollPane.setViewportView(commentTextArea);
-
-        javax.swing.GroupLayout rightPanelLayout = new javax.swing.GroupLayout(rightPanel);
-        rightPanel.setLayout(rightPanelLayout);
-        rightPanelLayout.setHorizontalGroup(
-            rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rightPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(moveListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rightPanelLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(gameScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
-                    .addContainerGap()))
-        );
-        rightPanelLayout.setVerticalGroup(
-            rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rightPanelLayout.createSequentialGroup()
-                .addGap(118, 118, 118)
-                .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(moveListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(rightPanelLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(gameScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(332, Short.MAX_VALUE)))
-        );
-
-        topSplitPane.setRightComponent(rightPanel);
-
-        mainSplitPane.setTopComponent(topSplitPane);
 
         mainToolBar.setFloatable(false);
         mainToolBar.setRollover(true);
@@ -285,6 +189,74 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         mainToolBar.add(mediaEnd);
 
+        gameScrollPanel.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        gameScrollPanel.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        gameScrollPanel.setPreferredSize(new java.awt.Dimension(100, 84));
+
+        gameTextArea.setEditable(false);
+        gameTextArea.setColumns(20);
+        gameTextArea.setRows(5);
+        gameTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        gameTextArea.setEnabled(false);
+        gameTextArea.setFocusable(false);
+        gameTextArea.setPreferredSize(new java.awt.Dimension(100, 80));
+        gameTextArea.setRequestFocusEnabled(false);
+        gameScrollPanel.setViewportView(gameTextArea);
+
+        commentScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        commentScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        commentScrollPane.setPreferredSize(new java.awt.Dimension(230, 84));
+
+        commentTextArea.setEditable(false);
+        commentTextArea.setColumns(20);
+        commentTextArea.setRows(5);
+        commentTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        commentTextArea.setEnabled(false);
+        commentTextArea.setFocusable(false);
+        commentScrollPane.setViewportView(commentTextArea);
+
+        moveList.setModel(moveListModel);
+        moveList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        moveList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                moveListValueChanged(evt);
+            }
+        });
+        moveListScrollPane.setViewportView(moveList);
+
+        boardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        boardPanel.setMaximumSize(new java.awt.Dimension(603, 482));
+        boardPanel.setMinimumSize(new java.awt.Dimension(603, 482));
+        boardPanel.setPreferredSize(new java.awt.Dimension(603, 482));
+        boardPanel.setRequestFocusEnabled(false);
+        boardPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                boardPanelComponentResized(evt);
+            }
+        });
+
+        javax.swing.GroupLayout boardPanelLayout = new javax.swing.GroupLayout(boardPanel);
+        boardPanel.setLayout(boardPanelLayout);
+        boardPanelLayout.setHorizontalGroup(
+            boardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 601, Short.MAX_VALUE)
+        );
+        boardPanelLayout.setVerticalGroup(
+            boardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 480, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 105, Short.MAX_VALUE)
+        );
+
         jMenu1.setText(bundle.getString("ShogiExplorer.jMenu1.text")); // NOI18N
 
         jMenuItem1.setText(bundle.getString("ShogiExplorer.jMenuItem1.text")); // NOI18N
@@ -319,19 +291,39 @@ public class ShogiExplorer extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(mainToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(mainToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(boardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(moveListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
+                            .addComponent(gameScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(mainToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(mainToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(gameScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(boardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(144, 144, 144)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(commentScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(moveListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -363,7 +355,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));
         kifFileChooser.setCurrentDirectory(dirFile);
-        kifFileChooser.showOpenDialog(rightPanel);
+        kifFileChooser.showOpenDialog(boardPanel);
         File kifFile = kifFileChooser.getSelectedFile();
         if (kifFile == null) {
             return;
@@ -516,9 +508,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JFileChooser kifFileChooser;
-    private javax.swing.JSplitPane mainSplitPane;
     private javax.swing.JToolBar mainToolBar;
     private javax.swing.JButton mediaBack;
     private javax.swing.JButton mediaEnd;
@@ -529,7 +521,5 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton mediaStop;
     private javax.swing.JList<String> moveList;
     private javax.swing.JScrollPane moveListScrollPane;
-    private javax.swing.JPanel rightPanel;
-    private javax.swing.JSplitPane topSplitPane;
     // End of variables declaration//GEN-END:variables
 }

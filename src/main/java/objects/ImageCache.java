@@ -3,13 +3,11 @@ package objects;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-public class ScaledImageCache {
+public class ImageCache {
 
-    private final double scale;
     private HashMap<String, BufferedImage> imageMap = new HashMap<>();
 
-    public ScaledImageCache(double scale) {
-        this.scale = scale;
+    public ImageCache() {
     }
     
     public void putImage(String identifier, BufferedImage image) {
@@ -22,13 +20,6 @@ public class ScaledImageCache {
         } else {
             return null;
         }
-    }
-
-    /**
-     * @return the scale
-     */
-    public double getScale() {
-        return scale;
     }
 
     /**
