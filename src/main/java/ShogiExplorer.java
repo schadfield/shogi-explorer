@@ -378,29 +378,25 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
         if (!play && game != null && moveNumber < game.getPositionList().size() + 1) {
-            moveNumber++;
-            moveList.setSelectedIndex(moveNumber - 1);
+            moveList.setSelectedIndex(moveNumber +1 );
         }
     }//GEN-LAST:event_mediaForwardActionPerformed
 
     private void mediaBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaBackActionPerformed
         if (!play && moveNumber > 0) {
-            moveNumber--;
             moveList.setSelectedIndex(moveNumber - 1);
         }
     }//GEN-LAST:event_mediaBackActionPerformed
 
     private void mediaStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaStartActionPerformed
         if (!play) {
-            moveNumber = 0;
             moveList.setSelectedIndex(0);
         }
     }//GEN-LAST:event_mediaStartActionPerformed
 
     private void mediaEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaEndActionPerformed
         if (!play && game != null) {
-            moveNumber = game.getPositionList().size() - 1;
-            moveList.setSelectedIndex(moveNumber - 1);
+            moveList.setSelectedIndex(game.getPositionList().size() - 1);
         }
     }//GEN-LAST:event_mediaEndActionPerformed
 
@@ -415,9 +411,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 public void run() {
                     play = true;
                     while (play) {
-                        if (moveNumber < game.getPositionList().size()) {
-                            moveNumber++;
-                            moveList.setSelectedIndex(moveNumber);
+                        if (moveNumber < game.getPositionList().size()-1) {
+                            moveList.setSelectedIndex(moveNumber+1);
                             try {
                                 Thread.sleep(500L);
                             } catch (InterruptedException ex) {
@@ -456,8 +451,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 public void run() {
                     play = true;
                     while (play) {
+                        System.out.println(moveNumber);
                         if (moveNumber > 0) {
-                            moveNumber--;
                             moveList.setSelectedIndex(moveNumber - 1);
                             try {
                                 Thread.sleep(500L);
