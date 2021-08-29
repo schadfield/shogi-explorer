@@ -451,7 +451,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 public void run() {
                     play = true;
                     while (play) {
-                        System.out.println(moveNumber);
                         if (moveNumber > 0) {
                             moveList.setSelectedIndex(moveNumber - 1);
                             try {
