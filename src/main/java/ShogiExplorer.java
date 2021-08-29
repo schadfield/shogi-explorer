@@ -140,7 +140,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         commentScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         commentScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         commentScrollPane.setPreferredSize(new java.awt.Dimension(230, 84));
-        commentScrollPane.setSize(new java.awt.Dimension(230, 84));
 
         commentTextArea.setEditable(false);
         commentTextArea.setColumns(20);
