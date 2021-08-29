@@ -362,7 +362,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_boardPanelComponentResized
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        File dirFile = new File(prefs.get("fileOpenDir", null));
+        File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));
         kifFileChooser.setCurrentDirectory(dirFile);
         kifFileChooser.showOpenDialog(rightPanel);
         File kifFile = kifFileChooser.getSelectedFile();
