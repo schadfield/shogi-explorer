@@ -3,7 +3,6 @@ package main;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.LinkedList;
@@ -56,11 +55,12 @@ public class KifParser {
         Game game = new Game();
         LinkedList<Position> positionList = new LinkedList<>();
         positionList.add(new Position(SFENParser.getSFEN(board), null, null));
-        BufferedReader fileReader = null;
+        BufferedReader fileReader;
         try {
             fileReader = Files.newBufferedReader(kifFile.toPath());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
+            return game;
         }
         Coordinate lastDestination = null;
         //BufferedReader kifBuf = new BufferedReader(fileReader);

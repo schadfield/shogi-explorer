@@ -380,7 +380,6 @@ public class RenderBoard {
     }
 
     public static void drawPieces(Board board, JPanel boardPanel, boolean rotatedView) {
-        ImageCache scaledImageCache = board.getImageCache();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (rotatedView) {
