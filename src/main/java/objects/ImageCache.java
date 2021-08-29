@@ -1,20 +1,20 @@
 package objects;
 
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import java.util.HashMap;
 
 public class ImageCache {
 
-    private HashMap<String, BufferedImage> imageMap = new HashMap<>();
+    private HashMap<String, Image> imageMap = new HashMap<>();
 
     public ImageCache() {
     }
     
-    public void putImage(String identifier, BufferedImage image) {
+    public void putImage(String identifier, Image image) {
         getImageMap().put(identifier, image);
     }
     
-    public BufferedImage getImage(String identifier) {
+    public Image getImage(String identifier) {
         if (getImageMap().containsKey(identifier)) {
             return getImageMap().get(identifier);
         } else {
@@ -25,14 +25,14 @@ public class ImageCache {
     /**
      * @return the imageMap
      */
-    public HashMap<String, BufferedImage> getImageMap() {
+    public HashMap<String, Image> getImageMap() {
         return imageMap;
     }
 
     /**
      * @param imageMap the imageMap to set
      */
-    public void setImageMap(HashMap<String, BufferedImage> imageMap) {
+    public void setImageMap(HashMap<String, Image> imageMap) {
         this.imageMap = imageMap;
     }
 }

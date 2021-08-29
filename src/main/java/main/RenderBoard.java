@@ -1,11 +1,11 @@
 package main;
 
+import java.awt.Image;
 import objects.ImageCache;
 import objects.Koma;
 import objects.Board;
 import utils.MathUtils;
 import utils.ImageUtils;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import javax.swing.JPanel;
 import objects.Board.Turn;
@@ -104,7 +104,7 @@ public class RenderBoard {
 
     public static void drawTurnNotification(Board board, JPanel boardPanel, boolean rotatedView) {
         if (board.getNextMove() == Turn.SENTE) {
-            BufferedImage image = ImageUtils.loadImageFromResources(
+            Image image = ImageUtils.loadImageFromResources(
                     "sente.png"
             );
             if (rotatedView) {
@@ -129,7 +129,7 @@ public class RenderBoard {
                 );
             }
         } else {
-            BufferedImage image = ImageUtils.loadImageFromResources(
+            Image image = ImageUtils.loadImageFromResources(
                     "gote.png"
             );
             if (rotatedView) {
@@ -280,7 +280,7 @@ public class RenderBoard {
         for (Koma.Type komaType : Koma.Type.values()) {
             Integer numberHeld = board.getInHandKomaMap().get(komaType);
             if (numberHeld != null && numberHeld > 0) {
-                BufferedImage pieceImage;
+                Image pieceImage;
                 if (rotatedView) {
                     pieceImage = ImageUtils.loadImageFromResources(
                             substituteKomaNameRotated(komaType.toString()) + ".png"
@@ -333,7 +333,7 @@ public class RenderBoard {
     public static void drawHighlights(Board board, JPanel boardPanel, boolean rotatedView) {
         Coordinate thisCoord = board.getSource();
         if (thisCoord != null) {
-            BufferedImage pieceImage = ImageUtils.loadImageFromResources(
+            Image pieceImage = ImageUtils.loadImageFromResources(
                     "highlight.png"
             );
             int x;
@@ -356,7 +356,7 @@ public class RenderBoard {
         }
         thisCoord = board.getDestination();
         if (thisCoord != null) {
-            BufferedImage pieceImage = ImageUtils.loadImageFromResources(
+            Image pieceImage = ImageUtils.loadImageFromResources(
                     "highlight.png"
             );
             int x;
@@ -385,7 +385,7 @@ public class RenderBoard {
                 if (rotatedView) {
                     if (board.getMasu()[8 - i][8 - j] != null) {
                         Koma koma = board.getMasu()[8 - i][8 - j];
-                        BufferedImage pieceImage = ImageUtils.loadImageFromResources(
+                        Image pieceImage = ImageUtils.loadImageFromResources(
                                 substituteKomaNameRotated(koma.getType().toString()) + ".png"
                         );
                         boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
@@ -400,7 +400,7 @@ public class RenderBoard {
                 } else {
                     if (board.getMasu()[i][j] != null) {
                         Koma koma = board.getMasu()[i][j];
-                        BufferedImage pieceImage = ImageUtils.loadImageFromResources(
+                        Image pieceImage = ImageUtils.loadImageFromResources(
                                 substituteKomaName(koma.getType().toString()) + ".png"
                         );
                         boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,

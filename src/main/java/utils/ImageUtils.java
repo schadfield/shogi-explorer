@@ -1,10 +1,8 @@
 package utils;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,7 +11,7 @@ import objects.ImageCache;
 
 public class ImageUtils {
 
-    public static JLabel getPieceLabelForKoma(BufferedImage image, int i, int j, long xOffset, long yOffset, long centerX, long centerY) {
+    public static JLabel getPieceLabelForKoma(Image image, int i, int j, long xOffset, long yOffset, long centerX, long centerY) {
         JLabel pieceLabel = new JLabel(new ImageIcon(image));
         pieceLabel.setBounds(
                 (int) (centerX + (i * MathUtils.KOMA_X + xOffset)),
@@ -33,19 +31,14 @@ public class ImageUtils {
         return numberLabel;
     }
 
-    public static BufferedImage loadImageFromResources(String imageName) {
-        try {
-            return ImageIO.read(ClassLoader.getSystemClassLoader().getResourceAsStream(imageName));
-        } catch (IOException ex) {
-            Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
+    public static Image loadImageFromResources(String imageName) {
+            URL url = ClassLoader.getSystemClassLoader().getResource(imageName);
+            return Toolkit.getDefaultToolkit().getImage(url);
     }
 
     public static void drawImage(Board board, JPanel boardPanel, String imageName, long xCoord, long yCoord, long width, long height, long centerX, long centerY) {
         ImageCache imageCache = board.getImageCache();
-        BufferedImage imageFile = imageCache.getImage(imageName);
+        Image imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
             imageFile = loadImageFromResources(imageName);
             imageCache.putImage(imageName, imageFile);
