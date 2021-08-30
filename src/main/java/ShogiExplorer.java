@@ -55,6 +55,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jDialog1 = new javax.swing.JDialog();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        jButton1 = new javax.swing.JButton();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         mediaReverse = new javax.swing.JButton();
@@ -89,25 +90,33 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jList1.setModel(engineListModel);
         jScrollPane1.setViewportView(jList1);
 
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("Bundle"); // NOI18N
+        jButton1.setText(bundle.getString("ShogiExplorer.jButton1.text")); // NOI18N
+
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
         jDialog1Layout.setHorizontalGroup(
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialog1Layout.createSequentialGroup()
-                .addGap(91, 91, 91)
+                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(47, Short.MAX_VALUE))
         );
         jDialog1Layout.setVerticalGroup(
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialog1Layout.createSequentialGroup()
-                .addGap(79, 79, 79)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(37, 37, 37))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("Bundle"); // NOI18N
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
         setAlwaysOnTop(true);
         setBounds(new java.awt.Rectangle(58, 25, 1000, 650));
@@ -545,6 +554,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JTextArea commentTextArea;
     private javax.swing.JScrollPane gameScrollPanel;
     private javax.swing.JTextArea gameTextArea;
+    private javax.swing.JButton jButton1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JList<String> jList1;
     private javax.swing.JMenu jMenu1;
