@@ -3,7 +3,12 @@ package utils;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BaseMultiResolutionImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,15 +38,21 @@ public class ImageUtils {
     }
 
     public static Image loadImageFromResources(String imageName) {
-        Image image1;
-        Image image2;
-        Image image3;
-        return Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemClassLoader().getResource(imageName + ".png"));
+        Image image1 = null;
+        Image image2 =null;
+        Image image3 = null;
+        try {
+            image1 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + ".png"));
+            //image1 = ImageIO.read(new File(imageName + ".png"));
+            image3 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "@2x.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //image1 = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemClassLoader().getResource(imageName + ".png"));
         //image2 = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemClassLoader().getResource(imageName + "@1.25x.png"));
         //image3 = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemClassLoader().getResource(imageName + "@2x.png"));
-        //BaseMultiResolutionImage mri = new BaseMultiResolutionImage(new Image[]{image1, image3});
-        //return (mri);
+        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(new Image[]{image1, image3});
+        return (mri);
     }
 
     public static void drawImage(Board board, JPanel boardPanel, String imageName, long xCoord, long yCoord, long width, long height, long centerX, long centerY) {
