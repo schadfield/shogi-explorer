@@ -2,6 +2,7 @@ package utils;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BaseMultiResolutionImage;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -32,8 +33,19 @@ public class ImageUtils {
     }
 
     public static Image loadImageFromResources(String imageName) {
-            URL url = ClassLoader.getSystemClassLoader().getResource(imageName);
-            return Toolkit.getDefaultToolkit().getImage(url);
+        URL url = ClassLoader.getSystemClassLoader().getResource(imageName);
+        Image image1;
+        Image image2;
+        Image image3;
+        if (imageName.contains("0FU")) {
+            image1 = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemClassLoader().getResource("0FU.png"));
+            image2 = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemClassLoader().getResource("0FU@1.25x.png"));
+            image3 = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemClassLoader().getResource("0FU@2x.png"));
+            BaseMultiResolutionImage mri = new BaseMultiResolutionImage(new Image[]{image1, image2, image3});
+            System.out.println("meep");
+            return (mri);
+        }
+        return Toolkit.getDefaultToolkit().getImage(url);
     }
 
     public static void drawImage(Board board, JPanel boardPanel, String imageName, long xCoord, long yCoord, long width, long height, long centerX, long centerY) {
