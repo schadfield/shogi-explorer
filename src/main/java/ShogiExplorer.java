@@ -31,7 +31,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
      * Creates new form NewJFrame
      */
     public ShogiExplorer() {
-        Locale.setDefault(Locale.JAPAN);
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         this.kifFileFilter = new FileNameExtensionFilter(bundle.getString("label_kif_files"), "kif");
         System.setProperty("apple.laf.useScreenMenuBar", "true");
