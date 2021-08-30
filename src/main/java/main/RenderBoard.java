@@ -105,7 +105,7 @@ public class RenderBoard {
     public static void drawTurnNotification(Board board, JPanel boardPanel, boolean rotatedView) {
         if (board.getNextMove() == Turn.SENTE) {
             Image image = ImageUtils.loadImageFromResources(
-                    "sente.png"
+                    "sente"
             );
             if (rotatedView) {
                 boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
@@ -130,7 +130,7 @@ public class RenderBoard {
             }
         } else {
             Image image = ImageUtils.loadImageFromResources(
-                    "gote.png"
+                    "gote"
             );
             if (rotatedView) {
                 boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
@@ -283,11 +283,11 @@ public class RenderBoard {
                 Image pieceImage;
                 if (rotatedView) {
                     pieceImage = ImageUtils.loadImageFromResources(
-                            substituteKomaNameRotated(komaType.toString()) + ".png"
+                            substituteKomaNameRotated(komaType.toString())
                     );
                 } else {
                     pieceImage = ImageUtils.loadImageFromResources(
-                            substituteKomaName(komaType.toString()) + ".png"
+                            substituteKomaName(komaType.toString())
                     );
                 }
                 if (rotatedView) {
@@ -334,7 +334,7 @@ public class RenderBoard {
         Coordinate thisCoord = board.getSource();
         if (thisCoord != null) {
             Image pieceImage = ImageUtils.loadImageFromResources(
-                    "highlight.png"
+                    "highlight"
             );
             int x;
             int y;
@@ -357,7 +357,7 @@ public class RenderBoard {
         thisCoord = board.getDestination();
         if (thisCoord != null) {
             Image pieceImage = ImageUtils.loadImageFromResources(
-                    "highlight.png"
+                    "highlight"
             );
             int x;
             int y;
@@ -386,7 +386,7 @@ public class RenderBoard {
                     if (board.getMasu()[8 - i][8 - j] != null) {
                         Koma koma = board.getMasu()[8 - i][8 - j];
                         Image pieceImage = ImageUtils.loadImageFromResources(
-                                substituteKomaNameRotated(koma.getType().toString()) + ".png"
+                                substituteKomaNameRotated(koma.getType().toString())
                         );
                         boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
                                 i,
@@ -401,7 +401,7 @@ public class RenderBoard {
                     if (board.getMasu()[i][j] != null) {
                         Koma koma = board.getMasu()[i][j];
                         Image pieceImage = ImageUtils.loadImageFromResources(
-                                substituteKomaName(koma.getType().toString()) + ".png"
+                                substituteKomaName(koma.getType().toString())
                         );
                         boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
                                 i,
@@ -421,7 +421,7 @@ public class RenderBoard {
     public static void drawGrid(Board board, JPanel boardPanel) {
         ImageUtils.drawImage(board,
                 boardPanel,
-                "grid.png",
+                "grid",
                 MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
                 0,
                 MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
@@ -434,7 +434,7 @@ public class RenderBoard {
     public static void drawBans(Board board, JPanel boardPanel) {
         ImageUtils.drawImage(board,
                 boardPanel,
-                "ban.png",
+                "ban",
                 MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
                 MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2,
                 MathUtils.KOMA_X + MathUtils.COORD_XY,
@@ -445,7 +445,7 @@ public class RenderBoard {
 
         ImageUtils.drawImage(board,
                 boardPanel,
-                "ban.png",
+                "ban",
                 0,
                 0,
                 MathUtils.KOMA_X + MathUtils.COORD_XY,
@@ -458,7 +458,7 @@ public class RenderBoard {
     public static void drawBackground(Board board, JPanel boardPanel) {
         ImageUtils.drawImage(board,
                 boardPanel,
-                "background.png",
+                "background",
                 MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
                 0,
                 MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
