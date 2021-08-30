@@ -43,15 +43,12 @@ public class ImageUtils {
         Image image3 = null;
         try {
             image1 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + ".png"));
-            //image1 = ImageIO.read(new File(imageName + ".png"));
+            image2 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "@1.25x.png"));
             image3 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "@2x.png"));
         } catch (IOException ex) {
             Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //image1 = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemClassLoader().getResource(imageName + ".png"));
-        //image2 = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemClassLoader().getResource(imageName + "@1.25x.png"));
-        //image3 = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemClassLoader().getResource(imageName + "@2x.png"));
-        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(new Image[]{image1, image3});
+        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(new Image[]{image1, image2, image3});
         return (mri);
     }
 
