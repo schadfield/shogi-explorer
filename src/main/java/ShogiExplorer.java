@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
@@ -29,7 +31,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
      * Creates new form NewJFrame
      */
     public ShogiExplorer() {
-        this.kifFileFilter = new FileNameExtensionFilter("KIF files", "kif");
+        Locale.setDefault(Locale.JAPAN);
+        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+        this.kifFileFilter = new FileNameExtensionFilter(bundle.getString("label_kif_files"), "kif");
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         initComponents();
         board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
@@ -410,12 +414,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         gameTextArea.setText(null);
-        gameTextArea.append("Sente: " + game.getSente() + "\n");
-        gameTextArea.append("Gote: " + game.getGote() + "\n");
-        gameTextArea.append("Place: " + game.getPlace() + "\n");
-        gameTextArea.append("Date: " + game.getDate() + "\n");
-        gameTextArea.append("Time Limit: " + game.getTimeLimit() + "\n");
+        gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
+        gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
+        gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
+        gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
+        gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
         moveNumber = 0;
         moveList.setSelectedIndex(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.LinkedList;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -49,8 +50,9 @@ public class KifParser {
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
 
     public static Game parseKif(DefaultListModel moveListModel, File kifFile) throws FileNotFoundException, IOException {
+        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         moveListModel.clear();
-        moveListModel.addElement("Start");
+        moveListModel.addElement(bundle.getString("label_start_position"));
         Board board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         Game game = new Game();
         LinkedList<Position> positionList = new LinkedList<>();
@@ -63,7 +65,6 @@ public class KifParser {
             return game;
         }
         Coordinate lastDestination = null;
-        //BufferedReader kifBuf = new BufferedReader(fileReader);
         String line;
         int count = 0;
         boolean foundHeader = false;
