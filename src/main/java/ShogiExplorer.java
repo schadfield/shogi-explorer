@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +23,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     int moveNumber;
     boolean play;
     DefaultListModel moveListModel = new DefaultListModel();
+    DefaultListModel engineListModel = new DefaultListModel();
     boolean rotatedView;
     FileNameExtensionFilter kifFileFilter;
 
@@ -86,11 +86,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jDialog1.setModal(true);
         jDialog1.setSize(new java.awt.Dimension(400, 300));
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jList1.setModel(engineListModel);
         jScrollPane1.setViewportView(jList1);
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
@@ -100,19 +96,19 @@ public class ShogiExplorer extends javax.swing.JFrame {
             .addGroup(jDialog1Layout.createSequentialGroup()
                 .addGap(91, 91, 91)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(266, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         jDialog1Layout.setVerticalGroup(
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialog1Layout.createSequentialGroup()
                 .addGap(79, 79, 79)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("Bundle"); // NOI18N
-        setTitle(bundle.getString("ShogiExplorer.title")); // NOI18N
+        setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
         setAlwaysOnTop(true);
         setBounds(new java.awt.Rectangle(58, 25, 1000, 650));
         setMinimumSize(new java.awt.Dimension(1000, 650));
@@ -126,7 +122,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.setFloatable(false);
         mainToolBar.setRollover(true);
 
-        mediaStart.setText(bundle.getString("ShogiExplorer.mediaStart.text")); // NOI18N
+        mediaStart.setText(bundle.getString("ShogiExplorer.mediaStart.text_1")); // NOI18N
         mediaStart.setFocusable(false);
         mediaStart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaStart.setMaximumSize(new java.awt.Dimension(40, 24));
@@ -142,7 +138,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         mediaReverse.setFocusable(false);
         mediaReverse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        mediaReverse.setLabel(bundle.getString("ShogiExplorer.mediaReverse.label")); // NOI18N
+        mediaReverse.setLabel(bundle.getString("ShogiExplorer.mediaReverse.label_1")); // NOI18N
         mediaReverse.setMaximumSize(new java.awt.Dimension(40, 24));
         mediaReverse.setMinimumSize(new java.awt.Dimension(40, 24));
         mediaReverse.setPreferredSize(new java.awt.Dimension(40, 24));
@@ -156,7 +152,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         mediaBack.setFocusable(false);
         mediaBack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        mediaBack.setLabel(bundle.getString("ShogiExplorer.mediaBack.label")); // NOI18N
+        mediaBack.setLabel(bundle.getString("ShogiExplorer.mediaBack.label_1")); // NOI18N
         mediaBack.setMaximumSize(new java.awt.Dimension(24, 24));
         mediaBack.setMinimumSize(new java.awt.Dimension(24, 24));
         mediaBack.setPreferredSize(new java.awt.Dimension(40, 24));
@@ -170,7 +166,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         mediaStop.setFocusable(false);
         mediaStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        mediaStop.setLabel(bundle.getString("ShogiExplorer.mediaStop.label")); // NOI18N
+        mediaStop.setLabel(bundle.getString("ShogiExplorer.mediaStop.label_1")); // NOI18N
         mediaStop.setMaximumSize(new java.awt.Dimension(24, 24));
         mediaStop.setMinimumSize(new java.awt.Dimension(24, 24));
         mediaStop.setPreferredSize(new java.awt.Dimension(40, 24));
@@ -184,7 +180,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         mediaForward.setFocusable(false);
         mediaForward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        mediaForward.setLabel(bundle.getString("ShogiExplorer.mediaForward.label")); // NOI18N
+        mediaForward.setLabel(bundle.getString("ShogiExplorer.mediaForward.label_1")); // NOI18N
         mediaForward.setMaximumSize(new java.awt.Dimension(24, 24));
         mediaForward.setMinimumSize(new java.awt.Dimension(24, 24));
         mediaForward.setPreferredSize(new java.awt.Dimension(40, 24));
@@ -198,7 +194,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         mediaPlay.setFocusable(false);
         mediaPlay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        mediaPlay.setLabel(bundle.getString("ShogiExplorer.mediaPlay.label")); // NOI18N
+        mediaPlay.setLabel(bundle.getString("ShogiExplorer.mediaPlay.label_1")); // NOI18N
         mediaPlay.setMaximumSize(new java.awt.Dimension(40, 24));
         mediaPlay.setMinimumSize(new java.awt.Dimension(40, 24));
         mediaPlay.setPreferredSize(new java.awt.Dimension(40, 24));
@@ -212,7 +208,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         mediaEnd.setFocusable(false);
         mediaEnd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        mediaEnd.setLabel(bundle.getString("ShogiExplorer.mediaEnd.label")); // NOI18N
+        mediaEnd.setLabel(bundle.getString("ShogiExplorer.mediaEnd.label_1")); // NOI18N
         mediaEnd.setMaximumSize(new java.awt.Dimension(40, 24));
         mediaEnd.setMinimumSize(new java.awt.Dimension(40, 24));
         mediaEnd.setPreferredSize(new java.awt.Dimension(40, 24));
@@ -292,9 +288,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
             .addGap(0, 105, Short.MAX_VALUE)
         );
 
-        jMenu1.setText(bundle.getString("ShogiExplorer.jMenu1.text")); // NOI18N
+        jMenu1.setText(bundle.getString("ShogiExplorer.jMenu1.text_1")); // NOI18N
 
-        jMenuItem1.setText(bundle.getString("ShogiExplorer.jMenuItem1.text")); // NOI18N
+        jMenuItem1.setText(bundle.getString("ShogiExplorer.jMenuItem1.text_1")); // NOI18N
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -304,12 +300,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText(bundle.getString("ShogiExplorer.jMenu2.text")); // NOI18N
+        jMenu2.setText(bundle.getString("ShogiExplorer.jMenu2.text_1")); // NOI18N
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setLabel(bundle.getString("ShogiExplorer.jMenu3.label")); // NOI18N
+        jMenu3.setLabel(bundle.getString("ShogiExplorer.jMenu3.label_1")); // NOI18N
 
-        jRadioButtonMenuItem1.setLabel(bundle.getString("ShogiExplorer.jRadioButtonMenuItem1.label")); // NOI18N
+        jRadioButtonMenuItem1.setLabel(bundle.getString("ShogiExplorer.jRadioButtonMenuItem1.label_1")); // NOI18N
         jRadioButtonMenuItem1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jRadioButtonMenuItem1ItemStateChanged(evt);
@@ -319,9 +315,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
-        jMenu4.setText(bundle.getString("ShogiExplorer.jMenu4.text")); // NOI18N
+        jMenu4.setText(bundle.getString("ShogiExplorer.jMenu4.text_1")); // NOI18N
 
-        jMenuItem2.setText(bundle.getString("ShogiExplorer.jMenuItem2.text")); // NOI18N
+        jMenuItem2.setText(bundle.getString("ShogiExplorer.jMenuItem2.text_1")); // NOI18N
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -332,7 +328,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
-        jMenuBar1.getAccessibleContext().setAccessibleName(bundle.getString("ShogiExplorer.jMenuBar1.AccessibleContext.accessibleName")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
