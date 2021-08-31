@@ -13,10 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -45,6 +43,10 @@ public class EngineManager {
         jEngineList.setSelectedIndex(index - 1);
         SaveEngines(newEngineList);
         return newEngineList;
+    }
+    
+    public static Engine addOption(Engine engine, String optionLine) {
+        return engine;
     }
 
     public static void addNewEngine(File engineFile, DefaultListModel engineListModel, JList<String> jEngineList, List<Engine> engineList) {
@@ -75,6 +77,8 @@ public class EngineManager {
                 while ((line = bufferedReader.readLine()) != null) {
                     if (line.startsWith("id name")) {
                         engineName = line.substring(7);
+                    } if (line.startsWith("option")) {
+                        System.out.println(line);
                     } else {
                         if (line.contains("usiok")) {
                             stdin.write("quit\n".getBytes());
