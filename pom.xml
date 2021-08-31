@@ -11,6 +11,18 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <name>ShogiExplorer</name>
+    <dependencies>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.18</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.external</groupId>
+            <artifactId>AbsoluteLayout</artifactId>
+            <version>RELEASE124</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
