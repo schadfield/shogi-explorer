@@ -1,4 +1,4 @@
-package utils;
+package com.chadfield.shogiexplorer.utils;
 
 import java.awt.Image;
 import java.awt.image.BaseMultiResolutionImage;
@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import objects.Board;
-import objects.ImageCache;
+import com.chadfield.shogiexplorer.objects.Board;
+import com.chadfield.shogiexplorer.objects.ImageCache;
 
 public class ImageUtils {
 

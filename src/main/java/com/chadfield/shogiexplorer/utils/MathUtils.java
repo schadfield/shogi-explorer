@@ -1,4 +1,4 @@
-package utils;
+package com.chadfield.shogiexplorer.utils;
 
 public class MathUtils {
     public static final int KOMA_X = 43;

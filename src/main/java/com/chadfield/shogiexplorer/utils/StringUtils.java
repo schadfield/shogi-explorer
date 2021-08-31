@@ -1,4 +1,4 @@
-package utils;
+package com.chadfield.shogiexplorer.utils;
 
 /**
  *

@@ -1,8 +1,8 @@
-package utils;
+package com.chadfield.shogiexplorer.utils;
 
 import java.io.File;
-import objects.Koma;
-import static utils.StringUtils.substituteKomaName;
+import com.chadfield.shogiexplorer.objects.Koma;
+import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaName;
 
 public class FileUtils {
 

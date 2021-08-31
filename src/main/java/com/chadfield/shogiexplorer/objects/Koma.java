@@ -1,4 +1,4 @@
-package objects;
+package com.chadfield.shogiexplorer.objects;
 
 public class Koma {
 

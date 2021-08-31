@@ -1,10 +1,10 @@
-package main;
+package com.chadfield.shogiexplorer.main;
 
 import java.util.EnumMap;
 import java.util.HashMap;
-import objects.Board;
-import objects.Board.Turn;
-import objects.Koma;
+import com.chadfield.shogiexplorer.objects.Board;
+import com.chadfield.shogiexplorer.objects.Board.Turn;
+import com.chadfield.shogiexplorer.objects.Koma;
 
 /**
  *

@@ -1,4 +1,4 @@
-package main;
+package com.chadfield.shogiexplorer.main;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,11 +10,11 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import objects.Board;
-import objects.Coordinate;
-import objects.Game;
-import objects.Koma;
-import objects.Position;
+import com.chadfield.shogiexplorer.objects.Board;
+import com.chadfield.shogiexplorer.objects.Coordinate;
+import com.chadfield.shogiexplorer.objects.Game;
+import com.chadfield.shogiexplorer.objects.Koma;
+import com.chadfield.shogiexplorer.objects.Position;
 
 /**
  *

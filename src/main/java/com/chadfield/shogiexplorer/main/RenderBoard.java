@@ -1,17 +1,17 @@
-package main;
+package com.chadfield.shogiexplorer.main;
 
 import java.awt.Image;
-import objects.ImageCache;
-import objects.Koma;
-import objects.Board;
-import utils.MathUtils;
-import utils.ImageUtils;
+import com.chadfield.shogiexplorer.objects.ImageCache;
+import com.chadfield.shogiexplorer.objects.Koma;
+import com.chadfield.shogiexplorer.objects.Board;
+import com.chadfield.shogiexplorer.utils.MathUtils;
+import com.chadfield.shogiexplorer.utils.ImageUtils;
 import java.util.HashMap;
 import javax.swing.JPanel;
-import objects.Board.Turn;
-import objects.Coordinate;
-import static utils.StringUtils.substituteKomaName;
-import static utils.StringUtils.substituteKomaNameRotated;
+import com.chadfield.shogiexplorer.objects.Board.Turn;
+import com.chadfield.shogiexplorer.objects.Coordinate;
+import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaName;
+import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaNameRotated;
 
 public class RenderBoard {
 

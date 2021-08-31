@@ -1,3 +1,5 @@
+package com.chadfield.shogiexplorer;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -9,11 +11,11 @@ import javax.swing.DefaultListModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import objects.Board;
-import main.RenderBoard;
-import main.SFENParser;
-import objects.Game;
-import objects.Position;
+import com.chadfield.shogiexplorer.objects.Board;
+import com.chadfield.shogiexplorer.main.RenderBoard;
+import com.chadfield.shogiexplorer.main.SFENParser;
+import com.chadfield.shogiexplorer.objects.Game;
+import com.chadfield.shogiexplorer.objects.Position;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
@@ -413,7 +415,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
         prefs.put("fileOpenDir", kifFile.getParent());
         try {
-            game = main.KifParser.parseKif(moveListModel, kifFile);
+            game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
