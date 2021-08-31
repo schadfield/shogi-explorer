@@ -4,13 +4,19 @@ import com.chadfield.shogiexplorer.objects.Engine;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.StreamException;
 import com.thoughtworks.xstream.security.AnyTypePermission;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -21,36 +27,66 @@ import javax.swing.JList;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class EngineManager {
-    
-    public static void deleteSelectedEngine(DefaultListModel engineListModel, JList<String> jEngineList, List<Engine> engineList) {
+
+    public static List<Engine> deleteSelectedEngine(DefaultListModel engineListModel, JList<String> jEngineList, List<Engine> engineList) {
         int index = jEngineList.getSelectedIndex();
         String name = (String) engineListModel.get(index);
         engineListModel.remove(index);
         List<Engine> newEngineList = new ArrayList<>();
-        for (Engine thisEngine: engineList) {
+        for (Engine thisEngine : engineList) {
             if (!thisEngine.getName().contentEquals(name)) {
                 newEngineList.add(thisEngine);
             }
         }
-        engineList = newEngineList;
-        int newIndex = index-1;
+        int newIndex = index - 1;
         if (newIndex < 0) {
             index = 0;
         }
-        jEngineList.setSelectedIndex(index-1);
-        SaveEngines(engineList);
+        jEngineList.setSelectedIndex(index - 1);
+        SaveEngines(newEngineList);
+        return newEngineList;
     }
 
     public static void addNewEngine(File engineFile, DefaultListModel engineListModel, JList<String> jEngineList, List<Engine> engineList) {
-        for (Engine thisEngine: engineList) {
+        for (Engine thisEngine : engineList) {
             if (thisEngine.getPath().contentEquals(engineFile.getPath())) {
                 return;
             }
         }
-        Engine newEngine = new Engine(engineFile.getName(), engineFile.getPath());
+        
+        Process process;
+
+        try {
+            process = Runtime.getRuntime().exec(engineFile.toPath().toString());
+        } catch (IOException ex) {
+            Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+
+        OutputStream stdin = process.getOutputStream();
+        InputStream stdout = process.getInputStream();
+        String engineName = "";
+
+        try {
+            stdin.write("usi\nquit\n".getBytes());
+            stdin.flush();
+            String line;
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stdout));
+            while ((line = bufferedReader.readLine()) != null) {
+                if (line.startsWith("id name")) {
+                    engineName = line.substring(7);
+                }
+            }
+            System.out.println("HERE ");
+            bufferedReader.close();
+        } catch (IOException ex) {
+            Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Engine newEngine = new Engine(engineName, engineFile.getPath());
         engineList.add(newEngine);
         engineListModel.add(engineListModel.size(), newEngine.getName());
-        jEngineList.setSelectedIndex(engineListModel.size()-1);
+        jEngineList.setSelectedIndex(engineListModel.size() - 1);
         SaveEngines(engineList);
     }
 

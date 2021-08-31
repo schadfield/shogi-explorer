@@ -585,7 +585,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void deleteEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteEngineButtonActionPerformed
-        EngineManager.deleteSelectedEngine(engineListModel, jEngineList, engineList);
+        engineList = EngineManager.deleteSelectedEngine(engineListModel, jEngineList, engineList);
     }//GEN-LAST:event_deleteEngineButtonActionPerformed
 
     private void addEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEngineButtonActionPerformed
