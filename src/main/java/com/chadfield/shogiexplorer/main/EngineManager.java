@@ -53,11 +53,11 @@ public class EngineManager {
                 return;
             }
         }
-        
+
         Process process;
 
         try {
-            process = Runtime.getRuntime().exec(engineFile.toPath().toString());
+            process = new ProcessBuilder(engineFile.getPath()).start();
         } catch (IOException ex) {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
             return;
@@ -68,17 +68,21 @@ public class EngineManager {
         String engineName = "";
 
         try {
-            stdin.write("usi\nquit\n".getBytes());
+            stdin.write("usi\n".getBytes());
             stdin.flush();
             String line;
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stdout));
-            while ((line = bufferedReader.readLine()) != null) {
-                if (line.startsWith("id name")) {
-                    engineName = line.substring(7);
+            try ( BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stdout))) {
+                while ((line = bufferedReader.readLine()) != null) {
+                    if (line.startsWith("id name")) {
+                        engineName = line.substring(7);
+                    } else {
+                        if (line.contains("usiok")) {
+                            stdin.write("quit\n".getBytes());
+                            stdin.flush();
+                        }
+                    }
                 }
             }
-            System.out.println("HERE ");
-            bufferedReader.close();
         } catch (IOException ex) {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
         }
