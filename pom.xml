@@ -39,7 +39,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ShogiExplorer</mainClass>
+                            <mainClass>com.chadfield.shogiexplorer.ShogiExplorer</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

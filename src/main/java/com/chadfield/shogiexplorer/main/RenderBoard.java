@@ -1,5 +1,6 @@
 package com.chadfield.shogiexplorer.main;
 
+import com.chadfield.shogiexplorer.ShogiExplorer;
 import java.awt.Image;
 import com.chadfield.shogiexplorer.objects.ImageCache;
 import com.chadfield.shogiexplorer.objects.Koma;
@@ -50,8 +51,13 @@ public class RenderBoard {
         drawBackground(board, boardPanel);
         drawTurnNotification(board, boardPanel, rotatedView);
 
-        boardPanel.setVisible(true);
-        boardPanel.repaint();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                boardPanel.setVisible(true);
+                boardPanel.repaint();
+            }
+        });
     }
 
     public static void drawCoordinates(Board board, JPanel boardPanel, boolean rotatedView) {
@@ -276,7 +282,6 @@ public class RenderBoard {
         yCoordMapRotated.put(Koma.Type.GHI, 0);
 
         //</editor-fold>
-
         for (Koma.Type komaType : Koma.Type.values()) {
             Integer numberHeld = board.getInHandKomaMap().get(komaType);
             if (numberHeld != null && numberHeld > 0) {
