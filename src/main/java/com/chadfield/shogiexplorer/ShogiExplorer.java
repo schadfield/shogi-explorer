@@ -518,26 +518,32 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));
         jKifFileChooser.setCurrentDirectory(dirFile);
-        jKifFileChooser.showOpenDialog(mainToolBar);
-        File kifFile = jKifFileChooser.getSelectedFile();
-        if (kifFile == null) {
-            return;
-        }
-        prefs.put("fileOpenDir", kifFile.getParent());
-        try {
-            game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
-        } catch (IOException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
-        gameTextArea.setText(null);
-        gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
-        gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
-        gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
-        gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
-        gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
-        moveNumber = 0;
-        moveList.setSelectedIndex(0);
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                jKifFileChooser.showOpenDialog(null);
+                File kifFile = jKifFileChooser.getSelectedFile();
+                if (kifFile == null) {
+                    return;
+                }
+                prefs.put("fileOpenDir", kifFile.getParent());
+                try {
+                    game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
+                } catch (IOException ex) {
+                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+                gameTextArea.setText(null);
+                gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
+                gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
+                gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
+                gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
+                gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
+                moveNumber = 0;
+                moveList.setSelectedIndex(0);
+            }
+        });
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
@@ -641,6 +647,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
+                jEngineManagerDialog.pack();
+                jEngineManagerDialog.setLocationRelativeTo(boardPanel);
                 jEngineManagerDialog.setVisible(true);
             }
         });
@@ -670,18 +678,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_addEngineButtonActionPerformed
 
     private void configureEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureEngineButtonActionPerformed
-//        jEngineConfDialog.addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowOpened(WindowEvent e) {
-//                jEngineConfDialog.removeWindowListener(this);
-//                jEngineConfDialog.toFront();
-//            }
-//        });
-
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ConfigurationManager.configureEngine(engineList.get(jEngineList.getSelectedIndex()), jTextArea1, jEngineConfDialog);
+                ConfigurationManager.configureEngine(engineList.get(jEngineList.getSelectedIndex()), jTextArea1, jEngineConfDialog, jEngineManagerDialog);
             }
         });
     }//GEN-LAST:event_configureEngineButtonActionPerformed

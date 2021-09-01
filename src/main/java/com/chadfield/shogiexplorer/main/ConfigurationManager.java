@@ -4,7 +4,6 @@ import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
 import javax.swing.JDialog;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -12,15 +11,20 @@ import javax.swing.SwingUtilities;
  */
 public class ConfigurationManager {
 
-    public static void configureEngine(Engine engine, JTextArea textArea, JDialog engineConfDialog) {
+    public static void configureEngine(Engine engine, JTextArea textArea, JDialog engineConfDialog, JDialog jEngineManagerDialog) {
         textArea.setText(null);
         for (EngineOption thisOption : engine.getEngineOptionList()) {
             System.out.println(thisOption.getName());
             textArea.append(thisOption.getName() + "\n");
         }
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                engineConfDialog.pack();
+                engineConfDialog.setLocationRelativeTo(jEngineManagerDialog);
+                engineConfDialog.setVisible(true);
+            }
+        });
 
-        if (!engineConfDialog.isVisible()) {
-            engineConfDialog.setVisible(true);
-        }
     }
 }
