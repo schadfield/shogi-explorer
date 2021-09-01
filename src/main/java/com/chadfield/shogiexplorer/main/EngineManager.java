@@ -1,6 +1,7 @@
 package com.chadfield.shogiexplorer.main;
 
 import com.chadfield.shogiexplorer.objects.Engine;
+import com.chadfield.shogiexplorer.objects.EngineOption;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.StreamException;
 import com.thoughtworks.xstream.security.AnyTypePermission;
@@ -45,8 +46,70 @@ public class EngineManager {
         return newEngineList;
     }
     
-    public static Engine addOption(Engine engine, String optionLine) {
-        return engine;
+    public static EngineOption parseOption(String optionLine) {
+        System.out.println(optionLine);
+        EngineOption engineOption = new EngineOption();
+        String[] optionArray = optionLine.trim().split(" ");
+        int index = 0;
+        while (index < optionArray.length) {
+            switch(optionArray[index]) {
+                case "option":
+                    index++;
+                    break;
+                case "name":
+                   engineOption.setName(optionArray[index+1]);
+                   index += 2;
+                   break;
+                case "type":
+                    switch(optionArray[index+1]) {
+                        case "check":
+                            engineOption.setType(EngineOption.Type.check);
+                            break;
+                        case "spin":
+                            engineOption.setType(EngineOption.Type.spin);
+                            break;
+                        case "combo":
+                            engineOption.setType(EngineOption.Type.combo);
+                            break;
+                        case "button":
+                            engineOption.setType(EngineOption.Type.button);
+                            break;
+                        case "string":
+                            engineOption.setType(EngineOption.Type.string);
+                            break;
+                        case "filename":
+                            engineOption.setType(EngineOption.Type.filename);
+                            break;
+                    }
+                   index += 2;
+                   break;
+                case "default":
+                   engineOption.setDef(optionArray[index+1]);
+                   engineOption.setValue(optionArray[index+1]);
+                   index += 2;
+                   break;
+                case "min":
+                   engineOption.setMin(optionArray[index+1]);
+                   index += 2;
+                   break;
+                case "max":
+                   engineOption.setMax(optionArray[index+1]);
+                   index += 2;
+                   break;
+                case "var":
+                    List<String> varList = engineOption.getVar();
+                    if (varList == null) {
+                        varList = new ArrayList<>();
+                    }
+                   varList.add(optionArray[index+1]);
+                   engineOption.setVar(varList);
+                   index += 2;
+                   break;
+                default:
+                    index +=2;
+            }
+        }
+        return engineOption;
     }
 
     public static void addNewEngine(File engineFile, DefaultListModel engineListModel, JList<String> jEngineList, List<Engine> engineList) {
@@ -67,7 +130,8 @@ public class EngineManager {
 
         OutputStream stdin = process.getOutputStream();
         InputStream stdout = process.getInputStream();
-        String engineName = "";
+        Engine newEngine = new Engine("", engineFile.getPath());
+        List<EngineOption> engineOptionList = new ArrayList<>();
 
         try {
             stdin.write("usi\n".getBytes());
@@ -76,9 +140,9 @@ public class EngineManager {
             try ( BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stdout))) {
                 while ((line = bufferedReader.readLine()) != null) {
                     if (line.startsWith("id name")) {
-                        engineName = line.substring(7);
+                        newEngine.setName(line.substring(7));
                     } if (line.startsWith("option")) {
-                        System.out.println(line);
+                        engineOptionList.add(parseOption(line));
                     } else {
                         if (line.contains("usiok")) {
                             stdin.write("quit\n".getBytes());
@@ -91,7 +155,7 @@ public class EngineManager {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Engine newEngine = new Engine(engineName, engineFile.getPath());
+        newEngine.setEngineOptionList(engineOptionList);
         engineList.add(newEngine);
         engineListModel.add(engineListModel.size(), newEngine.getName());
         jEngineList.setSelectedIndex(engineListModel.size() - 1);
@@ -107,6 +171,7 @@ public class EngineManager {
         XStream xstream = new XStream();
         xstream.addPermission(AnyTypePermission.ANY);
         xstream.alias("engine", Engine.class);
+        xstream.alias("engineOption", EngineOption.class);
         try {
             List<Engine> result;
             try ( FileInputStream inputFileStream = new FileInputStream(directoryName + File.separator + "engines.xml")) {
@@ -138,6 +203,7 @@ public class EngineManager {
 
         XStream xstream = new XStream();
         xstream.alias("engine", Engine.class);
+        xstream.alias("engineOption", EngineOption.class);
         String dataXml = xstream.toXML(engineList);
         FileWriter fileWriter;
         try {

@@ -1,5 +1,7 @@
 package com.chadfield.shogiexplorer.objects;
 
+import java.util.List;
+
 /**
  *
  * @author Stephen Chadfield <stephen@chadfield.com>
@@ -7,6 +9,7 @@ package com.chadfield.shogiexplorer.objects;
 public class Engine {
     private String name;
     private String path;
+    private List<EngineOption> engineOptionList;
     
     public Engine(String name, String path) {
         this.name = name;
@@ -39,6 +42,20 @@ public class Engine {
      */
     public void setPath(String path) {
         this.path = path;
+    }
+
+    /**
+     * @return the engineOptionList
+     */
+    public List<EngineOption> getEngineOptionList() {
+        return engineOptionList;
+    }
+
+    /**
+     * @param engineOptionList the engineOptionList to set
+     */
+    public void setEngineOptionList(List<EngineOption> engineOptionList) {
+        this.engineOptionList = engineOptionList;
     }
     
 }
