@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -18,42 +20,79 @@ import javax.swing.JPanel;
  */
 public class ConfigurationManager {
     
-    public final static int XDIM = 400;
-    public final static  int YDIM = 20;
+    //public final static int XDIM = 0;
+    //public final static  int YDIM = 0;
 
     public static void configureEngine(Engine engine, JDialog engineConfDialog, JDialog jEngineManagerDialog, JPanel jEngineConfPanel) {
         List<ConfigurationItem> configurationItemList = new ArrayList<>();
 
         jEngineConfPanel.removeAll();
+        int count = 0;
         for (EngineOption thisOption : engine.getEngineOptionList()) {
             ConfigurationItem thisConfigurationItem = new ConfigurationItem(thisOption.getName());
             thisConfigurationItem.setType(thisOption.getType());
-            System.out.println(thisOption.getName());
+            System.out.println(thisOption.getName());          
                 switch(thisOption.getType()) {
                     case check:
                         JCheckBox newCheckBox = new JCheckBox(thisOption.getName());
-                        newCheckBox.setSize(XDIM, YDIM);
+                        if (thisOption.getValue().contains("true")) {
+                            newCheckBox.setSelected(true);
+                        } else {
+                            newCheckBox.setSelected(false);
+                        }
                         jEngineConfPanel.add(newCheckBox);
-                        thisConfigurationItem.setComponent(newCheckBox);
-                        configurationItemList.add(thisConfigurationItem);
+                        count++;
+                        jEngineConfPanel.add(new JLabel(""));
+                        count++;
+                        break;
+                    case button:
+                        break;
+                    case filename:
+                        int remainder = count % 4;
+                        for (int i = remainder; i == 4; i++) {
+                            jEngineConfPanel.add(new JLabel(""));
+                            count++;
+                        }
+                        JLabel itemName = new JLabel(thisOption.getName() + "  ");
+                        jEngineConfPanel.add(itemName);
+                        count++;
+                        JTextField newTextField = new JTextField(thisOption.getValue());
+                        jEngineConfPanel.add(newTextField);
+                        count++;
+                        thisConfigurationItem.setComponent(newTextField);
+                        configurationItemList.add(thisConfigurationItem);   
+                        JButton chooseFileButton = new JButton("Choose File");
+                        jEngineConfPanel.add(chooseFileButton);
+                        count++;
+                        jEngineConfPanel.add(new JLabel(""));
+                        count++;
+                        break;
+                    case string:
+                        JLabel itemNameS = new JLabel(thisOption.getName() + "  ");
+                        jEngineConfPanel.add(itemNameS);
+                        count++;
+                        JTextField newTextFieldS = new JTextField(thisOption.getValue());
+                        jEngineConfPanel.add(newTextFieldS);
+                        count++;
+                        thisConfigurationItem.setComponent(newTextFieldS);
+                        configurationItemList.add(thisConfigurationItem);   
                         break;
                     default:
-                        JCheckBox newCheckBoxX = new JCheckBox("Z:" + thisOption.getName());
-                        newCheckBoxX.setSize(XDIM, YDIM);
-                        jEngineConfPanel.add(newCheckBoxX);
-                        thisConfigurationItem.setComponent(newCheckBoxX);
-                        configurationItemList.add(thisConfigurationItem);                }   
+                        JLabel itemNameDef = new JLabel(thisOption.getName() + "  ");
+                        jEngineConfPanel.add(itemNameDef);
+                        count++;
+                        jEngineConfPanel.add(new JLabel("DUMMY"));
+                        count++;
+                }   
             }
-        if (engine.getEngineOptionList().size()  % 2 != 0) {
-            JLabel nullLabel = new JLabel("");
-            nullLabel.setSize(XDIM, YDIM);
-            jEngineConfPanel.add(nullLabel);
+        int remainder = count % 4;
+        System.out.println("rem: " + remainder + " count: " + count);
+        for (int i = 0; i < remainder; i++) {
+            jEngineConfPanel.add(new JLabel(""));
         }
         JButton applyButton = new JButton("Apply");
-        applyButton.setSize(XDIM, YDIM);
         jEngineConfPanel.add(applyButton);
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.setSize(XDIM, YDIM);
         jEngineConfPanel.add(cancelButton);
         engineConfDialog.pack();
         java.awt.EventQueue.invokeLater(new Runnable() {
