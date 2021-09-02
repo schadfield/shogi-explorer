@@ -6,8 +6,10 @@ import com.chadfield.shogiexplorer.objects.EngineOption;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -22,8 +24,6 @@ public class ConfigurationManager {
     public static void configureEngine(Engine engine, JDialog engineConfDialog, JDialog jEngineManagerDialog, JPanel jEngineConfPanel) {
         List<ConfigurationItem> configurationItemList = new ArrayList<>();
 
-        jEngineConfPanel.setLayout(new java.awt.GridLayout(Math.round(engine.getEngineOptionList().size()/2.0f), 2));
-        //System.out.println(Math.round(engine.getEngineOptionList().size()/2.0f)+1);
         jEngineConfPanel.removeAll();
         for (EngineOption thisOption : engine.getEngineOptionList()) {
             ConfigurationItem thisConfigurationItem = new ConfigurationItem(thisOption.getName());
@@ -31,7 +31,6 @@ public class ConfigurationManager {
             System.out.println(thisOption.getName());
                 switch(thisOption.getType()) {
                     case check:
-                        System.out.println("checkbox");
                         JCheckBox newCheckBox = new JCheckBox(thisOption.getName());
                         newCheckBox.setSize(XDIM, YDIM);
                         jEngineConfPanel.add(newCheckBox);
@@ -39,26 +38,24 @@ public class ConfigurationManager {
                         configurationItemList.add(thisConfigurationItem);
                         break;
                     default:
-                        System.out.println("NOTcheckbox");
                         JCheckBox newCheckBoxX = new JCheckBox("Z:" + thisOption.getName());
                         newCheckBoxX.setSize(XDIM, YDIM);
                         jEngineConfPanel.add(newCheckBoxX);
                         thisConfigurationItem.setComponent(newCheckBoxX);
                         configurationItemList.add(thisConfigurationItem);                }   
             }
-        
-        //jEngineConfPanel.setSize(XDIM*2,y+YDIM);
-        //jEngineConfPanel.setPreferredSize(jEngineConfPanel.getPreferredSize());
-        //jEngineConfPanel.setBackground(Color.RED);
-        //engineConfDialog.setSize(jEngineConfPanel.getSize());
-        //engineConfDialog.setPreferredSize(engineConfDialog.getPreferredSize());
-        //engineConfDialog.pack();
-        //jEngineConfPanel.getTopLevelAncestor().validate();
+        if (engine.getEngineOptionList().size()  % 2 != 0) {
+            JLabel nullLabel = new JLabel("");
+            nullLabel.setSize(XDIM, YDIM);
+            jEngineConfPanel.add(nullLabel);
+        }
+        JButton applyButton = new JButton("Apply");
+        applyButton.setSize(XDIM, YDIM);
+        jEngineConfPanel.add(applyButton);
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setSize(XDIM, YDIM);
+        jEngineConfPanel.add(cancelButton);
         engineConfDialog.pack();
-        //System.out.println(jEngineConfPanel.getSize());
-        //engineConfDialog.setSize(jEngineConfPanel.getSize());
-
-
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
