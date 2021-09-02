@@ -639,12 +639,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_addEngineButtonActionPerformed
 
     private void configureEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureEngineButtonActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                ConfigurationManager.configureEngine(engineList, engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel);
-            }
-        });
+        if (engineList.size() > 0) {
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    ConfigurationManager.configureEngine(engineList, engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel);
+                }
+            });
+        }
     }//GEN-LAST:event_configureEngineButtonActionPerformed
 
     /**
