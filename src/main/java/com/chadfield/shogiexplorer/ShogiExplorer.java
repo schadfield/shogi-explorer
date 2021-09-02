@@ -21,6 +21,7 @@ import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Position;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
@@ -35,6 +36,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     List<Engine> engineList = new ArrayList<>();
     FileNameExtensionFilter kifFileFilter;
     File newEngineFile;
+    static JFrame mainFrame;
 
     /**
      * Creates new form NewJFrame
@@ -488,7 +490,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                jKifFileChooser.showOpenDialog(null);
+                jKifFileChooser.showOpenDialog(mainFrame);
                 File kifFile = jKifFileChooser.getSelectedFile();
                 if (kifFile == null) {
                     return;
@@ -614,7 +616,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             @Override
             public void run() {
                 jEngineManagerDialog.pack();
-                jEngineManagerDialog.setLocationRelativeTo(boardPanel);
+                jEngineManagerDialog.setLocationRelativeTo(mainFrame);
                 jEngineManagerDialog.setVisible(true);
             }
         });
@@ -668,7 +670,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new ShogiExplorer().setVisible(true);
+                mainFrame = new ShogiExplorer();
+                mainFrame.setVisible(true);
             }
         });
     }
