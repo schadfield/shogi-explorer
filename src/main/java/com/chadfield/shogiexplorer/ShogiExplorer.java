@@ -647,7 +647,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ConfigurationManager.configureEngine(engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel);
+                ConfigurationManager.configureEngine(engineList, engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel);
             }
         });
     }//GEN-LAST:event_configureEngineButtonActionPerformed

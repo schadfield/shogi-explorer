@@ -3,12 +3,10 @@ package com.chadfield.shogiexplorer.main;
 import com.chadfield.shogiexplorer.objects.ConfigurationItem;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,27 +22,28 @@ public class ConfigurationManager {
     //public final static int XDIM = 0;
     //public final static  int YDIM = 0;
 
-    public static void configureEngine(Engine engine, JDialog engineConfDialog, JDialog jEngineManagerDialog, JPanel jEngineConfPanel) {
+    public static void configureEngine(List<Engine> engineList, Engine engine, JDialog engineConfDialog, JDialog jEngineManagerDialog, JPanel jEngineConfPanel) {
         List<ConfigurationItem> configurationItemList = new ArrayList<>();
 
         jEngineConfPanel.removeAll();
         int count = 0;
         for (EngineOption thisOption : engine.getEngineOptionList()) {
             ConfigurationItem thisConfigurationItem = new ConfigurationItem(thisOption.getName());
-            thisConfigurationItem.setType(thisOption.getType());
+            thisConfigurationItem.setEngineOption(thisOption);
             System.out.println(thisOption.getName());          
                 switch(thisOption.getType()) {
                     case check:
-                        JCheckBox newCheckBox = new JCheckBox(thisOption.getName());
+                        thisConfigurationItem.setCheckBox(new JCheckBox(thisOption.getName()));
                         if (thisOption.getValue().contains("true")) {
-                            newCheckBox.setSelected(true);
+                            thisConfigurationItem.getCheckBox().setSelected(true);
                         } else {
-                            newCheckBox.setSelected(false);
+                            thisConfigurationItem.getCheckBox().setSelected(false);
                         }
-                        jEngineConfPanel.add(newCheckBox);
+                        jEngineConfPanel.add(thisConfigurationItem.getCheckBox());
                         count++;
                         jEngineConfPanel.add(new JLabel(""));
                         count++;
+                        configurationItemList.add(thisConfigurationItem);
                         break;
                     case button:
                         break;
@@ -61,7 +60,6 @@ public class ConfigurationManager {
                         jEngineConfPanel.add(newTextField);
                         count++;
                         thisConfigurationItem.setComponent(newTextField);
-                        configurationItemList.add(thisConfigurationItem);   
                         JButton chooseFileButton = new JButton("Choose File");
                         jEngineConfPanel.add(chooseFileButton);
                         count++;
@@ -76,7 +74,6 @@ public class ConfigurationManager {
                         jEngineConfPanel.add(newTextFieldStr);
                         count++;
                         thisConfigurationItem.setComponent(newTextFieldStr);
-                        configurationItemList.add(thisConfigurationItem);   
                         break;
                     case combo:
                         JLabel itemNameC = new JLabel(thisOption.getName());
@@ -93,12 +90,7 @@ public class ConfigurationManager {
                         JSpinner spin = new JSpinner();
                         jEngineConfPanel.add(spin);
                         count++;
-                        break;                    default:
-                        JLabel itemNameDef = new JLabel(thisOption.getName());
-                        jEngineConfPanel.add(itemNameDef);
-                        count++;
-                        jEngineConfPanel.add(new JLabel("DUMMY"));
-                        count++;
+                        break;
                 }   
             }
         int remainder = count % 4;
@@ -107,8 +99,20 @@ public class ConfigurationManager {
             jEngineConfPanel.add(new JLabel(""));
         }
         JButton applyButton = new JButton("Apply");
+        applyButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                applyChanges(configurationItemList, engineList, engineConfDialog);
+            }
+        });
         jEngineConfPanel.add(applyButton);
         JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelChanges(engineConfDialog);
+            }
+        });
         jEngineConfPanel.add(cancelButton);
         engineConfDialog.pack();
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -119,5 +123,37 @@ public class ConfigurationManager {
             }
         });
 
+    }
+    
+    private static void applyChanges(List<ConfigurationItem> configurationItemList, List<Engine> engineList, JDialog engineConfDialog) {
+        for (ConfigurationItem thisItem : configurationItemList) {
+            switch(thisItem.getEngineOption().getType()) {
+                case check:
+                    System.out.println(thisItem.getCheckBox().isSelected() + " " + thisItem.getEngineOption().getValue());
+                    if (thisItem.getCheckBox().isSelected()) {
+                        thisItem.getEngineOption().setValue("true");
+                    } else {
+                        thisItem.getEngineOption().setValue("false");
+                    }
+                    break;
+                default:  
+            }
+            EngineManager.SaveEngines(engineList);
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    engineConfDialog.setVisible(false);
+                }
+            });
+        }
+    }
+    
+    private static void cancelChanges(JDialog engineConfDialog) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                engineConfDialog.setVisible(false);
+            }
+        });
     }
 }

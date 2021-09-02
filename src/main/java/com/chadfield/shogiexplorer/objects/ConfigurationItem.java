@@ -1,5 +1,6 @@
 package com.chadfield.shogiexplorer.objects;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 
 /**
@@ -12,7 +13,9 @@ public class ConfigurationItem {
 
     private JComponent component;
 
-    private EngineOption.Type type;
+    private EngineOption engineOption;
+    
+    private JCheckBox checkBox;
 
     public ConfigurationItem(String optionName) {
         this.optionName = optionName;
@@ -47,17 +50,31 @@ public class ConfigurationItem {
     }
 
     /**
-     * @return the type
+     * @return the checkBox
      */
-    public EngineOption.Type getType() {
-        return type;
+    public JCheckBox getCheckBox() {
+        return checkBox;
     }
 
     /**
-     * @param type the type to set
+     * @param checkBox the checkBox to set
      */
-    public void setType(EngineOption.Type type) {
-        this.type = type;
+    public void setCheckBox(JCheckBox checkBox) {
+        this.checkBox = checkBox;
+    }
+
+    /**
+     * @return the engineOption
+     */
+    public EngineOption getEngineOption() {
+        return engineOption;
+    }
+
+    /**
+     * @param engineOption the engineOption to set
+     */
+    public void setEngineOption(EngineOption engineOption) {
+        this.engineOption = engineOption;
     }
 
 }
