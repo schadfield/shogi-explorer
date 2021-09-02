@@ -626,14 +626,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void addEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEngineButtonActionPerformed
         File dirFile = new File(prefs.get("engineOpenDir", System.getProperty("user.home")));
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                jEngineFileChooser1.setCurrentDirectory(dirFile);
-                jEngineFileChooser1.showOpenDialog(jEngineManagerDialog);
-                newEngineFile = jEngineFileChooser1.getSelectedFile();
-            }
-        });
+        jEngineFileChooser1.setCurrentDirectory(dirFile);
+        jEngineFileChooser1.showOpenDialog(jEngineManagerDialog);
+        newEngineFile = jEngineFileChooser1.getSelectedFile();
 
         if (newEngineFile == null) {
             return;
