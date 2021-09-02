@@ -76,9 +76,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         renameEngineButton = new javax.swing.JButton();
         jEngineFileChooser1 = new javax.swing.JFileChooser();
         jEngineConfDialog = new javax.swing.JDialog(jEngineManagerDialog);
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jEngineConfPanel = new javax.swing.JPanel();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         mediaReverse = new javax.swing.JButton();
@@ -189,43 +187,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jEngineConfDialog.setAlwaysOnTop(true);
         jEngineConfDialog.setModal(true);
-        jEngineConfDialog.setSize(new java.awt.Dimension(400, 400));
+        jEngineConfDialog.setResizable(false);
+        jEngineConfDialog.setSize(new java.awt.Dimension(100, 100));
+        jEngineConfDialog.getContentPane().setLayout(new java.awt.FlowLayout());
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                .addGap(69, 69, 69))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-                .addGap(117, 117, 117))
-        );
-
-        javax.swing.GroupLayout jEngineConfDialogLayout = new javax.swing.GroupLayout(jEngineConfDialog.getContentPane());
-        jEngineConfDialog.getContentPane().setLayout(jEngineConfDialogLayout);
-        jEngineConfDialogLayout.setHorizontalGroup(
-            jEngineConfDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jEngineConfDialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jEngineConfDialogLayout.setVerticalGroup(
-            jEngineConfDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jEngineConfDialogLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jEngineConfPanel.setLayout(new java.awt.GridLayout(10, 2));
+        jEngineConfDialog.getContentPane().add(jEngineConfPanel);
 
         jEngineConfDialog.getAccessibleContext().setAccessibleParent(null);
 
@@ -680,7 +647,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                ConfigurationManager.configureEngine(engineList.get(jEngineList.getSelectedIndex()), jTextArea1, jEngineConfDialog, jEngineManagerDialog);
+                ConfigurationManager.configureEngine(engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel);
             }
         });
     }//GEN-LAST:event_configureEngineButtonActionPerformed
@@ -719,6 +686,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JScrollPane gameScrollPanel;
     private javax.swing.JTextArea gameTextArea;
     private javax.swing.JDialog jEngineConfDialog;
+    private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JFileChooser jEngineFileChooser1;
     private javax.swing.JList<String> jEngineList;
     private javax.swing.JDialog jEngineManagerDialog;
@@ -732,11 +700,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JToolBar mainToolBar;
     private javax.swing.JButton mediaBack;
     private javax.swing.JButton mediaEnd;
