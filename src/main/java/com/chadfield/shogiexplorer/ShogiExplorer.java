@@ -191,7 +191,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jEngineConfDialog.setSize(new java.awt.Dimension(100, 100));
         jEngineConfDialog.getContentPane().setLayout(new java.awt.FlowLayout());
 
-        jEngineConfPanel.setLayout(new java.awt.GridLayout(0, 4));
+        jEngineConfPanel.setLayout(new java.awt.GridLayout(0, 4, 20, 0));
         jEngineConfDialog.getContentPane().add(jEngineConfPanel);
 
         jEngineConfDialog.getAccessibleContext().setAccessibleParent(null);

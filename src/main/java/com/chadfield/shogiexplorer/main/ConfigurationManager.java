@@ -12,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 /**
@@ -53,7 +54,7 @@ public class ConfigurationManager {
                             jEngineConfPanel.add(new JLabel(""));
                             count++;
                         }
-                        JLabel itemName = new JLabel(thisOption.getName() + "  ");
+                        JLabel itemName = new JLabel(thisOption.getName());
                         jEngineConfPanel.add(itemName);
                         count++;
                         JTextField newTextField = new JTextField(thisOption.getValue());
@@ -68,17 +69,32 @@ public class ConfigurationManager {
                         count++;
                         break;
                     case string:
-                        JLabel itemNameS = new JLabel(thisOption.getName() + "  ");
-                        jEngineConfPanel.add(itemNameS);
+                        JLabel itemNameStr = new JLabel(thisOption.getName());
+                        jEngineConfPanel.add(itemNameStr);
                         count++;
-                        JTextField newTextFieldS = new JTextField(thisOption.getValue());
-                        jEngineConfPanel.add(newTextFieldS);
+                        JTextField newTextFieldStr = new JTextField(thisOption.getValue());
+                        jEngineConfPanel.add(newTextFieldStr);
                         count++;
-                        thisConfigurationItem.setComponent(newTextFieldS);
+                        thisConfigurationItem.setComponent(newTextFieldStr);
                         configurationItemList.add(thisConfigurationItem);   
                         break;
-                    default:
-                        JLabel itemNameDef = new JLabel(thisOption.getName() + "  ");
+                    case combo:
+                        JLabel itemNameC = new JLabel(thisOption.getName());
+                        jEngineConfPanel.add(itemNameC);
+                        count++;
+                        JSpinner combo = new JSpinner();
+                        jEngineConfPanel.add(combo);
+                        count++;
+                        break;
+                    case spin:
+                        JLabel itemNameS = new JLabel(thisOption.getName());
+                        jEngineConfPanel.add(itemNameS);
+                        count++;
+                        JSpinner spin = new JSpinner();
+                        jEngineConfPanel.add(spin);
+                        count++;
+                        break;                    default:
+                        JLabel itemNameDef = new JLabel(thisOption.getName());
                         jEngineConfPanel.add(itemNameDef);
                         count++;
                         jEngineConfPanel.add(new JLabel("DUMMY"));
