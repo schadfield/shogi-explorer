@@ -57,15 +57,13 @@ public class KifParser {
         Game game = new Game();
         LinkedList<Position> positionList = new LinkedList<>();
         positionList.add(new Position(SFENParser.getSFEN(board), null, null));
-        
-        BufferedReader fileReader = Files.newBufferedReader(kifFile.toPath());
 
         Coordinate lastDestination = null;
         String line;
         int count = 0;
         boolean foundHeader = false;
         String comment = "";
-        try {
+        try (BufferedReader fileReader = Files.newBufferedReader(kifFile.toPath())) {
             while ((line = fileReader.readLine()) != null) {
                 if (isResigns(line)) {
                     count++;
@@ -153,7 +151,9 @@ public class KifParser {
                         moveListModel.addElement(gameNum + " ☖" + move + "\n");
                     }
                     Position position = executeMove(board, move, lastDestination);
-                    lastDestination = position.getDestination();
+                    if (position != null) {
+                        lastDestination = position.getDestination();
+                    }
                     positionList.add(position);
                 }
             }
@@ -200,7 +200,10 @@ public class KifParser {
                 if (!isSame(move)) {
                     //regular
                     if (getKoma(board, thisDestination) != null) {
-                        addPieceToInHand(getKoma(board, thisDestination), board);
+                        Koma thisKoma = getKoma(board, thisDestination);
+                        if (thisKoma != null) {
+                            addPieceToInHand(getKoma(board, thisDestination), board);
+                        }
                     }
                     putKoma(board, thisDestination, promCheck(getKoma(board, thisSource), move));
                     putKoma(board, thisSource, null);
@@ -217,8 +220,10 @@ public class KifParser {
             } else {
                 //drop
                 Koma koma = getDropKoma(move, board.getNextMove());
-                putKoma(board, thisDestination, koma);
-                removePieceInHand(koma.getType(), board);
+                if (koma != null) {
+                    putKoma(board, thisDestination, koma);
+                    removePieceInHand(koma.getType(), board);
+                }
             }
         }
         return new Position(SFENParser.getSFEN(board), thisSource, thisDestination);
@@ -247,10 +252,12 @@ public class KifParser {
 
     public static void addPieceToInHand(Koma koma, Board board) {
         Koma invertedKoma = invertKoma(koma.getType());
-        if (board.getInHandKomaMap().containsKey(invertedKoma.type)) {
-            board.getInHandKomaMap().put(invertedKoma.type, 1 + board.getInHandKomaMap().get(invertedKoma.type));
-        } else {
-            board.getInHandKomaMap().put(invertedKoma.type, 1);
+        if (invertedKoma != null) {
+            if (board.getInHandKomaMap().containsKey(invertedKoma.type)) {
+                board.getInHandKomaMap().put(invertedKoma.type, 1 + board.getInHandKomaMap().get(invertedKoma.type));
+            } else {
+                board.getInHandKomaMap().put(invertedKoma.type, 1);
+            }
         }
     }
 
