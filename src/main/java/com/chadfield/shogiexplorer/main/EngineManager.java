@@ -140,7 +140,7 @@ public class EngineManager {
             try ( BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stdout))) {
                 while ((line = bufferedReader.readLine()) != null) {
                     if (line.startsWith("id name")) {
-                        newEngine.setName(line.substring(7));
+                        newEngine.setName(line.substring(7).trim());
                     } if (line.startsWith("option")) {
                         engineOptionList.add(parseOption(line));
                     } else {

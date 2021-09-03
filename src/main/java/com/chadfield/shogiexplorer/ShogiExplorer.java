@@ -78,7 +78,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         configureEngineButton = new javax.swing.JButton();
         deleteEngineButton = new javax.swing.JButton();
         addEngineButton = new javax.swing.JButton();
-        renameEngineButton = new javax.swing.JButton();
         jEngineFileChooser1 = new javax.swing.JFileChooser();
         jEngineConfDialog = new javax.swing.JDialog(jEngineManagerDialog);
         jEngineConfPanel = new javax.swing.JPanel();
@@ -141,8 +140,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
 
-        renameEngineButton.setText(bundle.getString("ShogiExplorer.renameEngineButton.text")); // NOI18N
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -150,21 +147,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(configureEngineButton)
-                    .addComponent(deleteEngineButton)
                     .addComponent(addEngineButton)
-                    .addComponent(renameEngineButton))
+                    .addComponent(deleteEngineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 8, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(136, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(addEngineButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deleteEngineButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(renameEngineButton)
-                .addGap(2, 2, 2)
                 .addComponent(configureEngineButton)
                 .addContainerGap())
         );
@@ -186,7 +180,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jEngineManagerDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -715,6 +709,5 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton mediaStop;
     private javax.swing.JList<String> moveList;
     private javax.swing.JScrollPane moveListScrollPane;
-    private javax.swing.JButton renameEngineButton;
     // End of variables declaration//GEN-END:variables
 }
