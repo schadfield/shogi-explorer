@@ -241,11 +241,16 @@ public class KifParser {
     }
 
     public static Koma getKoma(Board board, Coordinate coords) {
+        if (coords == null) {
+            return null;
+        }
         return board.masu[9 - coords.getX()][coords.getY() - 1];
     }
 
     public static void putKoma(Board board, Coordinate coords, Koma koma) {
-        board.masu[9 - coords.getX()][coords.getY() - 1] = koma;
+        if (coords != null) {
+            board.masu[9 - coords.getX()][coords.getY() - 1] = koma;
+        }
     }
 
     public static void removePieceInHand(Koma.Type komaType, Board board) {
