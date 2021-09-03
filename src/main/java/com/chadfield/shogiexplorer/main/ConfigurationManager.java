@@ -37,7 +37,7 @@ public class ConfigurationManager {
             thisConfigurationItem.setEngineOption(thisOption);
             System.out.println(thisOption.getName());          
                 switch(thisOption.getType()) {
-                    case check:
+                    case CHECK:
                         thisConfigurationItem.setCheckBox(new JCheckBox(thisOption.getName()));
                         if (thisOption.getValue().contains("true")) {
                             thisConfigurationItem.getCheckBox().setSelected(true);
@@ -50,9 +50,9 @@ public class ConfigurationManager {
                         count++;
                         configurationItemList.add(thisConfigurationItem);
                         break;
-                    case button:
+                    case BUTTON:
                         break;
-                    case filename:
+                    case FILENAME:
                         int remainder = count % 4;
                         for (int i = remainder; i == 4; i++) {
                             jEngineConfPanel.add(new JLabel(""));
@@ -81,7 +81,7 @@ public class ConfigurationManager {
                         count++;
                         configurationItemList.add(thisConfigurationItem);
                         break;
-                    case string:
+                    case STRING:
                         JLabel itemNameStr = new JLabel(thisOption.getName());
                         jEngineConfPanel.add(itemNameStr);
                         count++;
@@ -90,7 +90,7 @@ public class ConfigurationManager {
                         count++;
                         configurationItemList.add(thisConfigurationItem);
                         break;
-                    case combo:
+                    case COMBO:
                         JLabel itemNameC = new JLabel(thisOption.getName());
                         jEngineConfPanel.add(itemNameC);
                         count++;
@@ -104,7 +104,7 @@ public class ConfigurationManager {
                         count++;
                         configurationItemList.add(thisConfigurationItem);
                         break;
-                    case spin:
+                    case SPIN:
                         JLabel itemNameS = new JLabel(thisOption.getName());
                         jEngineConfPanel.add(itemNameS);
                         count++;
@@ -159,17 +159,17 @@ public class ConfigurationManager {
     private static void applyChanges(List<ConfigurationItem> configurationItemList, List<Engine> engineList, JDialog engineConfDialog) {
         for (ConfigurationItem thisItem : configurationItemList) {
             switch(thisItem.getEngineOption().getType()) {
-                case check:
+                case CHECK:
                     if (thisItem.getCheckBox().isSelected()) {
                         thisItem.getEngineOption().setValue("true");
                     } else {
                         thisItem.getEngineOption().setValue("false");
                     }
                     break;
-                case string:
+                case STRING:
                     thisItem.getEngineOption().setValue(thisItem.getTextField().getText());
                     break;
-                case spin:
+                case SPIN:
                     {
                         try {
                             thisItem.getSpinField().commitEdit();
@@ -179,10 +179,10 @@ public class ConfigurationManager {
                     }
                     thisItem.getEngineOption().setValue(((Long) thisItem.getSpinField().getModel().getValue()).toString());
                     break;
-                case combo:
+                case COMBO:
                     thisItem.getEngineOption().setValue(thisItem.getComboBox().getSelectedItem().toString());
                     break;
-                case filename:
+                case FILENAME:
                     thisItem.getEngineOption().setValue(thisItem.getTextField().getText());
                     break;
                 default:  

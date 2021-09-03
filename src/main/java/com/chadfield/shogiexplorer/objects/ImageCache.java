@@ -6,9 +6,6 @@ import java.util.HashMap;
 public class ImageCache {
 
     private HashMap<String, Image> imageMap = new HashMap<>();
-
-    public ImageCache() {
-    }
     
     public void putImage(String identifier, Image image) {
         getImageMap().put(identifier, image);

@@ -303,8 +303,9 @@ public class KifParser {
             case GHI:
             case GRY:
                 return new Koma(Koma.Type.SHI);
+            default:
+                return null;
         }
-        return null;
     }
 
     public static Koma promoteKoma(Koma.Type komaType) {
@@ -333,8 +334,9 @@ public class KifParser {
                 return new Koma(Koma.Type.GUM);
             case GHI:
                 return new Koma(Koma.Type.GRY);
+            default:
+                return null;
         }
-        return null;
     }
 
     public static Koma getDropKoma(String move, Board.Turn turn) {
@@ -382,8 +384,9 @@ public class KifParser {
                 } else {
                     return new Koma(Koma.Type.GFU);
                 }
+            default:
+                return null;
         }
-        return null;
     }
 
     public static Koma promCheck(Koma koma, String move) {
@@ -452,8 +455,9 @@ public class KifParser {
                 return 8;
             case KYUU:
                 return 9;
+            default:
+                return null;
         }
-        return null;
     }
 
     public static Coordinate getFromCoordinate(String move) {

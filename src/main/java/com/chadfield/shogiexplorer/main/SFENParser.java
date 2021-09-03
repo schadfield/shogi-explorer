@@ -133,6 +133,8 @@ public class SFENParser {
                                         board.getInHandKomaMap().put(Koma.Type.GFU, inHandCount);
                                         inHandCount = 1;
                                         break;
+                                    default:
+                                        break;
                                 }
                             }
                         }

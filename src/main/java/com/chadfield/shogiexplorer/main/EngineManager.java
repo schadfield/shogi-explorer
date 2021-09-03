@@ -63,23 +63,25 @@ public class EngineManager {
                 case "type":
                     switch(optionArray[index+1]) {
                         case "check":
-                            engineOption.setType(EngineOption.Type.check);
+                            engineOption.setType(EngineOption.Type.CHECK);
                             break;
                         case "spin":
-                            engineOption.setType(EngineOption.Type.spin);
+                            engineOption.setType(EngineOption.Type.SPIN);
                             break;
                         case "combo":
-                            engineOption.setType(EngineOption.Type.combo);
+                            engineOption.setType(EngineOption.Type.COMBO);
                             break;
                         case "button":
-                            engineOption.setType(EngineOption.Type.button);
+                            engineOption.setType(EngineOption.Type.BUTTON);
                             break;
                         case "string":
-                            engineOption.setType(EngineOption.Type.string);
+                            engineOption.setType(EngineOption.Type.STRING);
                             break;
                         case "filename":
-                            engineOption.setType(EngineOption.Type.filename);
+                            engineOption.setType(EngineOption.Type.FILENAME);
                             break;
+                        default:
+                            engineOption.setType(null);
                     }
                    index += 2;
                    break;
@@ -141,7 +143,7 @@ public class EngineManager {
                 while ((line = bufferedReader.readLine()) != null) {
                     if (line.startsWith("id name")) {
                         newEngine.setName(line.substring(7).trim());
-                    } if (line.startsWith("option")) {
+                    } else if (line.startsWith("option")) {
                         engineOptionList.add(parseOption(line));
                     } else {
                         if (line.contains("usiok")) {

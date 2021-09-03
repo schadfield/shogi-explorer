@@ -11,7 +11,7 @@ public class EngineOption {
     private String name;
 
     public enum Type {
-        check, spin, combo, button, string, filename
+        CHECK, SPIN, COMBO, BUTTON, STRING, FILENAME
     };
     
     private Type type;
