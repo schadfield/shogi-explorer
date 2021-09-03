@@ -4,6 +4,7 @@ import com.chadfield.shogiexplorer.objects.ConfigurationItem;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
 import java.awt.Dimension;
+import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +14,11 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerListModel;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
 /**
@@ -27,9 +27,6 @@ import javax.swing.SpinnerNumberModel;
  */
 public class ConfigurationManager {
     
-    //public final static int XDIM = 0;
-    //public final static  int YDIM = 0;
-
     public static void configureEngine(List<Engine> engineList, Engine engine, JDialog engineConfDialog, JDialog jEngineManagerDialog, JPanel jEngineConfPanel) {
         List<ConfigurationItem> configurationItemList = new ArrayList<>();
 
@@ -64,14 +61,25 @@ public class ConfigurationManager {
                         JLabel itemName = new JLabel(thisOption.getName());
                         jEngineConfPanel.add(itemName);
                         count++;
-                        JTextField newTextField = new JTextField(thisOption.getValue());
+                        JTextField newTextField = new JTextField();
+                        Dimension sizeTF = newTextField.getPreferredSize();
+                        newTextField.setText(thisOption.getValue());
+                        newTextField.setPreferredSize(sizeTF);
                         jEngineConfPanel.add(newTextField);
+                        thisConfigurationItem.setTextField(newTextField);
                         count++;
                         JButton chooseFileButton = new JButton("Choose File");
+                        chooseFileButton.addActionListener(new java.awt.event.ActionListener() {
+                            @Override
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                chooseFile(engineConfDialog, new File(engine.getPath()), thisConfigurationItem.getTextField());
+                            }
+                        });
                         jEngineConfPanel.add(chooseFileButton);
                         count++;
                         jEngineConfPanel.add(new JLabel(""));
                         count++;
+                        configurationItemList.add(thisConfigurationItem);
                         break;
                     case string:
                         JLabel itemNameStr = new JLabel(thisOption.getName());
@@ -174,6 +182,9 @@ public class ConfigurationManager {
                 case combo:
                     thisItem.getEngineOption().setValue(thisItem.getComboBox().getSelectedItem().toString());
                     break;
+                case filename:
+                    thisItem.getEngineOption().setValue(thisItem.getTextField().getText());
+                    break;
                 default:  
             }
             EngineManager.SaveEngines(engineList);
@@ -195,7 +206,17 @@ public class ConfigurationManager {
         });
     }
     
-    private static void chooseFile() {
-        
+    private static void chooseFile(JDialog dialog, File startDir, JTextField textField) {
+        System.out.println("chooseFile()");
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(startDir);
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    chooser.showOpenDialog(dialog);
+                    File thisFile = chooser.getSelectedFile();
+                    textField.setText(thisFile.getAbsoluteFile().toString());
+            }
+        });
     }
 }
