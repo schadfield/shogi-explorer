@@ -3,15 +3,23 @@ package com.chadfield.shogiexplorer.main;
 import com.chadfield.shogiexplorer.objects.ConfigurationItem;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
+import java.awt.Dimension;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerListModel;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
@@ -59,7 +67,6 @@ public class ConfigurationManager {
                         JTextField newTextField = new JTextField(thisOption.getValue());
                         jEngineConfPanel.add(newTextField);
                         count++;
-                        thisConfigurationItem.setComponent(newTextField);
                         JButton chooseFileButton = new JButton("Choose File");
                         jEngineConfPanel.add(chooseFileButton);
                         count++;
@@ -70,26 +77,42 @@ public class ConfigurationManager {
                         JLabel itemNameStr = new JLabel(thisOption.getName());
                         jEngineConfPanel.add(itemNameStr);
                         count++;
-                        JTextField newTextFieldStr = new JTextField(thisOption.getValue());
-                        jEngineConfPanel.add(newTextFieldStr);
+                        thisConfigurationItem.setTextField(new JTextField(thisOption.getValue()));
+                        jEngineConfPanel.add(thisConfigurationItem.getTextField());
                         count++;
-                        thisConfigurationItem.setComponent(newTextFieldStr);
+                        configurationItemList.add(thisConfigurationItem);
                         break;
                     case combo:
                         JLabel itemNameC = new JLabel(thisOption.getName());
                         jEngineConfPanel.add(itemNameC);
                         count++;
-                        JSpinner combo = new JSpinner();
-                        jEngineConfPanel.add(combo);
+                        JComboBox combo = new JComboBox();
+                        for (String thisVar : thisOption.getVarList()) {
+                            combo.addItem(thisVar);
+                        }
+                        combo.setSelectedItem(thisOption.getValue());
+                        thisConfigurationItem.setComboBox(combo);
+                        jEngineConfPanel.add(thisConfigurationItem.getComboBox());
                         count++;
+                        configurationItemList.add(thisConfigurationItem);
                         break;
                     case spin:
                         JLabel itemNameS = new JLabel(thisOption.getName());
                         jEngineConfPanel.add(itemNameS);
                         count++;
-                        JSpinner spin = new JSpinner();
-                        jEngineConfPanel.add(spin);
+                        JSpinner thisSpinner = new JSpinner();
+                        Dimension size = thisSpinner.getPreferredSize();
+                        thisSpinner.setModel(new SpinnerNumberModel(
+                                        Long.valueOf(thisOption.getValue()),
+                                        Long.valueOf(thisOption.getMin()),
+                                        Long.valueOf(thisOption.getMax()),
+                                        Long.valueOf("1")
+                                ));
+                        thisSpinner.setPreferredSize(size);
+                        thisConfigurationItem.setSpinField(thisSpinner);
+                        jEngineConfPanel.add(thisConfigurationItem.getSpinField());
                         count++;
+                        configurationItemList.add(thisConfigurationItem);
                         break;
                 }   
             }
@@ -129,12 +152,27 @@ public class ConfigurationManager {
         for (ConfigurationItem thisItem : configurationItemList) {
             switch(thisItem.getEngineOption().getType()) {
                 case check:
-                    System.out.println(thisItem.getCheckBox().isSelected() + " " + thisItem.getEngineOption().getValue());
                     if (thisItem.getCheckBox().isSelected()) {
                         thisItem.getEngineOption().setValue("true");
                     } else {
                         thisItem.getEngineOption().setValue("false");
                     }
+                    break;
+                case string:
+                    thisItem.getEngineOption().setValue(thisItem.getTextField().getText());
+                    break;
+                case spin:
+                    {
+                        try {
+                            thisItem.getSpinField().commitEdit();
+                        } catch (ParseException ex) {
+                            Logger.getLogger(ConfigurationManager.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    thisItem.getEngineOption().setValue(((Long) thisItem.getSpinField().getModel().getValue()).toString());
+                    break;
+                case combo:
+                    thisItem.getEngineOption().setValue(thisItem.getComboBox().getSelectedItem().toString());
                     break;
                 default:  
             }

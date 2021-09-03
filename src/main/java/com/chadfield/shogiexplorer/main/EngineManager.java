@@ -97,12 +97,12 @@ public class EngineManager {
                    index += 2;
                    break;
                 case "var":
-                    List<String> varList = engineOption.getVar();
+                    List<String> varList = engineOption.getVarList();
                     if (varList == null) {
                         varList = new ArrayList<>();
                     }
                    varList.add(optionArray[index+1]);
-                   engineOption.setVar(varList);
+                   engineOption.setVarList(varList);
                    index += 2;
                    break;
                 default:

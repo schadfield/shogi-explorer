@@ -1,7 +1,9 @@
 package com.chadfield.shogiexplorer.objects;
 
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 
 /**
  *
@@ -11,11 +13,15 @@ public class ConfigurationItem {
 
     private String optionName;
 
-    private JComponent component;
-
     private EngineOption engineOption;
     
     private JCheckBox checkBox;
+    
+    private JTextField textField;
+    
+    private JSpinner spinField;
+    
+    private JComboBox comboBox;
 
     public ConfigurationItem(String optionName) {
         this.optionName = optionName;
@@ -33,20 +39,6 @@ public class ConfigurationItem {
      */
     public void setOptionName(String optionName) {
         this.optionName = optionName;
-    }
-
-    /**
-     * @return the component
-     */
-    public JComponent getComponent() {
-        return component;
-    }
-
-    /**
-     * @param component the component to set
-     */
-    public void setComponent(JComponent component) {
-        this.component = component;
     }
 
     /**
@@ -75,6 +67,48 @@ public class ConfigurationItem {
      */
     public void setEngineOption(EngineOption engineOption) {
         this.engineOption = engineOption;
+    }
+
+    /**
+     * @return the textField
+     */
+    public JTextField getTextField() {
+        return textField;
+    }
+
+    /**
+     * @param textField the textField to set
+     */
+    public void setTextField(JTextField textField) {
+        this.textField = textField;
+    }
+
+    /**
+     * @return the spinField
+     */
+    public JSpinner getSpinField() {
+        return spinField;
+    }
+
+    /**
+     * @param spinField the spinField to set
+     */
+    public void setSpinField(JSpinner spinField) {
+        this.spinField = spinField;
+    }
+
+    /**
+     * @return the comboBox
+     */
+    public JComboBox getComboBox() {
+        return comboBox;
+    }
+
+    /**
+     * @param comboBox the comboBox to set
+     */
+    public void setComboBox(JComboBox comboBox) {
+        this.comboBox = comboBox;
     }
 
 }

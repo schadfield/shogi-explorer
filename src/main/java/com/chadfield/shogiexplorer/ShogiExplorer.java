@@ -54,6 +54,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
             jRadioButtonMenuItem1.doClick();
         }
         engineList = EngineManager.loadEngines(engineListModel);
+        if (engineList == null) {
+            engineList = new ArrayList<>();
+        }
         if (engineList.size() > 0) {
             jEngineList.setSelectedIndex(0);
         }

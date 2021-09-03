@@ -22,7 +22,7 @@ public class EngineOption {
 
     private String max;
     
-    private List<String> var;
+    private List<String> varList;
     
     private String value;
 
@@ -83,17 +83,17 @@ public class EngineOption {
     }
 
     /**
-     * @return the var
+     * @return the varList
      */
-    public List<String> getVar() {
-        return var;
+    public List<String> getVarList() {
+        return varList;
     }
 
     /**
-     * @param var the var to set
+     * @param varList the varList to set
      */
-    public void setVar(List<String> var) {
-        this.var = var;
+    public void setVarList(List<String> varList) {
+        this.varList = varList;
     }
 
     /**
