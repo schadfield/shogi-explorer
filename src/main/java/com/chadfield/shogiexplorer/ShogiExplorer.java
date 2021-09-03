@@ -25,18 +25,19 @@ import javax.swing.JFrame;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
-    Board board;
-    Preferences prefs;
-    Game game;
+    transient Board board;
+    transient Preferences prefs;
+    transient Game game;
     int moveNumber;
     boolean play;
     DefaultListModel moveListModel = new DefaultListModel();
     DefaultListModel engineListModel = new DefaultListModel();
     boolean rotatedView;
-    List<Engine> engineList = new ArrayList<>();
-    FileNameExtensionFilter kifFileFilter;
+    transient List<Engine> engineList = new ArrayList<>();
+    transient FileNameExtensionFilter kifFileFilter;
     File newEngineFile;
     static JFrame mainFrame;
+    final static String ROTATED = "rotated";
 
     /**
      * Creates new form NewJFrame
@@ -49,7 +50,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         initComponents();
         board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
-        String rotated = (prefs.get("rotated", "false"));
+        String rotated = (prefs.get(ROTATED, "false"));
         if (rotated.compareTo("true") == 0) {
             jRadioButtonMenuItem1.doClick();
         }
@@ -460,9 +461,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jRadioButtonMenuItem1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ItemStateChanged
         rotatedView = !rotatedView;
         if (rotatedView) {
-            prefs.put("rotated", "true");
+            prefs.put(ROTATED, "true");
         } else {
-            prefs.put("rotated", "false");
+            prefs.put(ROTATED, "false");
         }
         try {
             prefs.flush();
