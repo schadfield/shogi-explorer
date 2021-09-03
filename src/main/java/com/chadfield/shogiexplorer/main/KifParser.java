@@ -205,7 +205,10 @@ public class KifParser {
                             addPieceToInHand(getKoma(board, thisDestination), board);
                         }
                     }
-                    putKoma(board, thisDestination, promCheck(getKoma(board, thisSource), move));
+                    Koma thisKoma = getKoma(board, thisSource);
+                    if (thisKoma != null) {
+                        putKoma(board, thisDestination, promCheck(thisKoma, move));
+                    }
                     putKoma(board, thisSource, null);
                 } else {
                     //same
@@ -213,7 +216,10 @@ public class KifParser {
                     if (thisKoma != null) {
                         addPieceToInHand(thisKoma, board);
                     }
-                    putKoma(board, thisDestination, promCheck(getKoma(board, thisSource), move));
+                    Koma thisOtherKoma = getKoma(board, thisSource);
+                    if (thisOtherKoma != null) {
+                        putKoma(board, thisDestination, promCheck(thisOtherKoma, move));
+                    }
                     putKoma(board, thisSource, null);
 
                 }

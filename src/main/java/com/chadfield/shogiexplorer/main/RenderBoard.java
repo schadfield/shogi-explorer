@@ -1,6 +1,5 @@
 package com.chadfield.shogiexplorer.main;
 
-import com.chadfield.shogiexplorer.ShogiExplorer;
 import java.awt.Image;
 import com.chadfield.shogiexplorer.objects.ImageCache;
 import com.chadfield.shogiexplorer.objects.Koma;
@@ -77,7 +76,7 @@ public class RenderBoard {
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(ImageUtils.getTextLabelForBan(0,
                         i,
-                        MathUtils.COORD_XY * 4.35f,
+                        MathUtils.COORD_XY * 4 + 7,
                         MathUtils.COORD_XY / 2 + 7,
                         CENTRE_X,
                         CENTRE_Y,
@@ -98,7 +97,7 @@ public class RenderBoard {
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(ImageUtils.getTextLabelForBan(0,
                         i,
-                        MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3.1f,
+                        MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 3,
                         MathUtils.COORD_XY / 2 + 7,
                         CENTRE_X,
                         CENTRE_Y,
