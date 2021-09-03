@@ -552,6 +552,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                                 Thread.sleep(500L);
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                                Thread.currentThread().interrupt();
                             }
                         } else {
                             play = false;
@@ -597,6 +598,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                                 Thread.sleep(500L);
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                                Thread.currentThread().interrupt();
                             }
                         } else {
                             play = false;

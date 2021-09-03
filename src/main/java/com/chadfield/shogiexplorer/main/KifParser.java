@@ -57,13 +57,9 @@ public class KifParser {
         Game game = new Game();
         LinkedList<Position> positionList = new LinkedList<>();
         positionList.add(new Position(SFENParser.getSFEN(board), null, null));
-        BufferedReader fileReader;
-        try {
-            fileReader = Files.newBufferedReader(kifFile.toPath());
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
-            return game;
-        }
+        
+        BufferedReader fileReader = Files.newBufferedReader(kifFile.toPath());
+
         Coordinate lastDestination = null;
         String line;
         int count = 0;

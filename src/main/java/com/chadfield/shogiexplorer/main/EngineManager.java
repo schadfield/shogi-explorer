@@ -205,9 +205,7 @@ public class EngineManager {
         xstream.alias("engine", Engine.class);
         xstream.alias("engineOption", EngineOption.class);
         String dataXml = xstream.toXML(engineList);
-        FileWriter fileWriter;
-        try {
-            fileWriter = new FileWriter(engineFile, false); // true to append
+        try (FileWriter fileWriter = new FileWriter(engineFile, false)) {
             fileWriter.write(dataXml);
             fileWriter.close();
         } catch (IOException ex) {
