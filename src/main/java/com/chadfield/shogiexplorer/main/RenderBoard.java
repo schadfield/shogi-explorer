@@ -338,87 +338,67 @@ public class RenderBoard {
     public static void drawHighlights(Board board, JPanel boardPanel, boolean rotatedView) {
         Coordinate thisCoord = board.getSource();
         if (thisCoord != null) {
-            Image pieceImage = ImageUtils.loadImageFromResources(
-                    "highlight"
-            );
-            int x;
-            int y;
-            if (rotatedView) {
-                x = thisCoord.getX() - 1;
-                y = 9 - thisCoord.getY();
-            } else {
-                x = 9 - thisCoord.getX();
-                y = thisCoord.getY() - 1;
-            }
-            boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                    x,
-                    y,
-                    MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                    MathUtils.COORD_XY,
-                    CENTRE_X,
-                    CENTRE_Y
-            ));
+            drawThisHighlight(rotatedView, boardPanel, thisCoord);
         }
         thisCoord = board.getDestination();
         if (thisCoord != null) {
-            Image pieceImage = ImageUtils.loadImageFromResources(
-                    "highlight"
-            );
-            int x;
-            int y;
-            if (rotatedView) {
-                x = thisCoord.getX() - 1;
-                y = 9 - thisCoord.getY();
-            } else {
-                x = 9 - thisCoord.getX();
-                y = thisCoord.getY() - 1;
-            }
-            boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                    x,
-                    y,
-                    MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                    MathUtils.COORD_XY,
-                    CENTRE_X,
-                    CENTRE_Y
-            ));
+            drawThisHighlight(rotatedView, boardPanel, thisCoord);
         }
+    }
+    
+    public static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord) {
+        Image pieceImage = ImageUtils.loadImageFromResources(
+                "highlight"
+        );
+        int x;
+        int y;
+        if (rotatedView) {
+            x = thisCoord.getX() - 1;
+            y = 9 - thisCoord.getY();
+        } else {
+            x = 9 - thisCoord.getX();
+            y = thisCoord.getY() - 1;
+        }
+        boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
+                x,
+                y,
+                MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
+                MathUtils.COORD_XY,
+                CENTRE_X,
+                CENTRE_Y
+        ));
     }
 
     public static void drawPieces(Board board, JPanel boardPanel, boolean rotatedView) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
+                Koma koma = null;
+                Image pieceImage = null;
                 if (rotatedView) {
                     if (board.getMasu()[8 - i][8 - j] != null) {
-                        Koma koma = board.getMasu()[8 - i][8 - j];
-                        Image pieceImage = ImageUtils.loadImageFromResources(
+                        koma = board.getMasu()[8 - i][8 - j];
+                        pieceImage = ImageUtils.loadImageFromResources(
                                 substituteKomaNameRotated(koma.getType().toString())
                         );
-                        boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                                i,
-                                j,
-                                MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                                MathUtils.COORD_XY,
-                                CENTRE_X,
-                                CENTRE_Y
-                        ));
                     }
                 } else {
                     if (board.getMasu()[i][j] != null) {
-                        Koma koma = board.getMasu()[i][j];
-                        Image pieceImage = ImageUtils.loadImageFromResources(
+                        koma = board.getMasu()[i][j];
+                        pieceImage = ImageUtils.loadImageFromResources(
                                 substituteKomaName(koma.getType().toString())
                         );
-                        boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                                i,
-                                j,
-                                MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                                MathUtils.COORD_XY,
-                                CENTRE_X,
-                                CENTRE_Y
-                        ));
                     }
                 }
-
+                if (koma != null && pieceImage != null) {
+                    boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
+                            i,
+                            j,
+                            MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
+                            MathUtils.COORD_XY,
+                            CENTRE_X,
+                            CENTRE_Y
+                    ));
+                }
             }
         }
     }
