@@ -5,6 +5,8 @@ import java.util.HashMap;
 import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.objects.Board.Turn;
 import com.chadfield.shogiexplorer.objects.Koma;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
  *
@@ -244,110 +246,48 @@ public class SFENParser {
         if (board.getInHandKomaMap().isEmpty()) {
             return " -";
         } else {
-            String result = " ";
-            if (board.getInHandKomaMap().containsKey(Koma.Type.SHI)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.SHI);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "R";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.SKA)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.SKA);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "B";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.SKI)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.SKI);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "G";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.SGI)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.SGI);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "S";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.SKE)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.SKE);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "N";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.SKY)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.SKY);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "L";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.SFU)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.SFU);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "P";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.GHI)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.GHI);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "r";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.GKA)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.GKA);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "b";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.GKI)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.GKI);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "g";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.GGI)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.GGI);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "s";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.GKE)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.GKE);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "n";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.GKY)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.GKY);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "l";
-            }
-            if (board.getInHandKomaMap().containsKey(Koma.Type.GFU)) {
-                int number = board.getInHandKomaMap().get(Koma.Type.GFU);
-                if (number > 1) {
-                    result += number;
-                }
-                result += "p";
-            }
-            return result;
+            return getNonEmptyInHandString(board);
         }
 
     }
 
+    public static String getNonEmptyInHandString(Board board) {
+        LinkedHashMap<Koma.Type, String> pieceMap = new LinkedHashMap<>();
+
+        //<editor-fold defaultstate="collapsed" desc="Map initialization">
+        pieceMap.put(Koma.Type.SHI, "R");
+        pieceMap.put(Koma.Type.SKA, "B");
+        pieceMap.put(Koma.Type.SKI, "G");
+        pieceMap.put(Koma.Type.SGI, "S");
+        pieceMap.put(Koma.Type.SKE, "N");
+        pieceMap.put(Koma.Type.SKY, "L");
+        pieceMap.put(Koma.Type.SFU, "P");
+        
+        pieceMap.put(Koma.Type.GHI, "R");
+        pieceMap.put(Koma.Type.GKA, "B");
+        pieceMap.put(Koma.Type.GKI, "G");
+        pieceMap.put(Koma.Type.GGI, "S");
+        pieceMap.put(Koma.Type.GKE, "N");
+        pieceMap.put(Koma.Type.GKY, "L");
+        pieceMap.put(Koma.Type.GFU, "P");
+        //</editor-fold>
+        
+        
+        String result = " ";
+        
+        Set<Koma.Type> keys = pieceMap.keySet();
+        for(Koma.Type thisType: keys) {
+            if (board.getInHandKomaMap().containsKey(thisType)) {
+                int number = board.getInHandKomaMap().get(thisType);
+                if (number > 1) {
+                    result += number;
+                }
+                result += pieceMap.get(thisType);
+            }            
+        }
+        return result;
+    }
+    
     public static String getSFENCode(Koma koma) {
         HashMap<Koma.Type, String> pieceMap = new HashMap<>();
 
