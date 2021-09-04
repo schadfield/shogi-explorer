@@ -58,11 +58,11 @@ public class KifParser {
         LinkedList<Position> positionList = new LinkedList<>();
         positionList.add(new Position(SFENParser.getSFEN(board), null, null));
 
-        Coordinate lastDestination = null;
-        String line;
-        int count = 0;
         Boolean foundHeader = false;
         try (BufferedReader fileReader = Files.newBufferedReader(kifFile.toPath())) {
+            int count = 0;
+            String line;
+            Coordinate lastDestination = null;
             while ((line = fileReader.readLine()) != null) {
                 if (!foundHeader) {
                     foundHeader = isHeader(line);
@@ -83,21 +83,7 @@ public class KifParser {
                         continue;
                     }
 
-                    board.setNextMove(switchTurn(board.getNextMove()));
-
-                    String splitLine[] = line.trim().split("\\s+|\\u3000");
-                            
-                    String move = parseRegularMove(splitLine, isSame(line));
-
-                    int gameNum = Integer.parseInt(splitLine[0]);
-                    
-                    addMoveToMoveList(board, moveListModel, gameNum, move);
-
-                    Position position = executeMove(board, move, lastDestination);
-                    if (position != null) {
-                        lastDestination = position.getDestination();
-                    }
-                    positionList.add(position);
+                    lastDestination = parseRegularMove(board, line, moveListModel, lastDestination, positionList);
                 }
 
             }
@@ -108,8 +94,26 @@ public class KifParser {
         return game;
     }
     
+    public static Coordinate parseRegularMove(Board board, String line, DefaultListModel moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
+        board.setNextMove(switchTurn(board.getNextMove()));
+
+        String splitLine[] = line.trim().split("\\s+|\\u3000");
+
+        String move = extractRegularMove(splitLine, isSame(line));
+
+        int gameNum = Integer.parseInt(splitLine[0]);
+
+        addMoveToMoveList(board, moveListModel, gameNum, move);
+
+        Position position = executeMove(board, move, lastDestination);
+        if (position != null) {
+            lastDestination = position.getDestination();
+        }
+        positionList.add(position);
+        return lastDestination;
+    }
     
-    public static String parseRegularMove(String[] moveArray, boolean isSame) {
+    public static String extractRegularMove(String[] moveArray, boolean isSame) {
         String move = moveArray[1];
         if (isSame) {
             move += "\u3000" + moveArray[2];
