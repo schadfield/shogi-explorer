@@ -223,20 +223,24 @@ public class SFENParser {
             }
         }
 
-        if (board.getNextMove() == Board.Turn.SENTE) {
-            result += " b";
-        } else {
-            result += " w";
-        }
-
-        result += getInHandCode(board);
+        result += getNextTurnString(board.getNextMove());
+        
+        result += getInHandString(board);
 
         result += " " + board.getMoveCount();
 
         return result;
     }
+    
+    public static String getNextTurnString(Turn nextMove) {
+        if (nextMove == Board.Turn.SENTE) {
+            return " b";
+        } else {
+            return " w";
+        }
+    }
 
-    public static String getInHandCode(Board board) {
+    public static String getInHandString(Board board) {
         if (board.getInHandKomaMap().isEmpty()) {
             return " -";
         } else {
