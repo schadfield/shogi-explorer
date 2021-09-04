@@ -47,7 +47,6 @@ public class EngineManager {
     }
     
     public static EngineOption parseOption(String optionLine) {
-        System.out.println(optionLine);
         EngineOption engineOption = new EngineOption();
         String[] optionArray = optionLine.trim().split(" ");
         int index = 0;
@@ -213,8 +212,6 @@ public class EngineManager {
         } catch (IOException ex) {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        System.out.println(dataXml);
     }
 
 }

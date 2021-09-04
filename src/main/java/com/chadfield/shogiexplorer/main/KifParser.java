@@ -60,7 +60,7 @@ public class KifParser {
 
         Boolean foundHeader = false;
         try (BufferedReader fileReader = Files.newBufferedReader(kifFile.toPath())) {
-            int count = 0;
+            int count = 1;
             String line;
             Coordinate lastDestination = null;
             while ((line = fileReader.readLine()) != null) {
@@ -82,6 +82,8 @@ public class KifParser {
                         parseResignLine(board, line, moveListModel, positionList);
                         continue;
                     }
+                    
+                    board.setMoveCount(count);
 
                     lastDestination = parseRegularMove(board, line, moveListModel, lastDestination, positionList);
                 }

@@ -21,140 +21,122 @@ public class SFENParser {
     public static Board parse(String sfen) {
         
         Board board = new Board();
-        int sfenLength = sfen.length();
-        ParseState state = ParseState.BOARD;
-        int i = 0;
-        int j = 0;
-        boolean isPromoted = false;
-        int inHandCount = 1;
-        int moveCount = 0;
         board.setInHandKomaMap(new EnumMap<>(Koma.Type.class));
-
-        for (int k = 0; k < sfenLength; k++) {
-            char thisChar = sfen.charAt(k);
-            if (thisChar != ' ' || state == ParseState.INHAND) {
-                switch (state) {
-                    case BOARD:
-                        if (isNumber(thisChar)) {
-                            i += putBlanks(thisChar, board, i, j, k);
-                        } else {
-                            if (thisChar != '/') {
-                                if (thisChar == '+') {
-                                    isPromoted = true;
-                                } else {
-                                    board.getMasu()[i][j] = getKoma(thisChar, isPromoted);
-                                    isPromoted = false;
-                                    i++;
-                                }
-                            }
-                        }
-                        if (i == 9) {
-                            i = 0;
-                            j++;
-                        }
-                        if (j == 9) {
-                            state = ParseState.MOVE;
-                        }
-                        break;
-                    case MOVE:
-                        board.setNextMove(getTurn(thisChar));
-                        state = ParseState.INHAND;
-                        k++;
-                        break;
-                    case INHAND:
-                        if (thisChar == '-') {
-                            state = ParseState.COUNT;
-                        } else {
-                            if (isNumber(thisChar)) {
-                                inHandCount = thisChar - 48;
-                            } else {
-                                switch (thisChar) {
-                                    case ' ':
-                                        state = ParseState.COUNT;
-                                        break;
-                                    case 'R':
-                                        board.getInHandKomaMap().put(Koma.Type.SHI, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'B':
-                                        board.getInHandKomaMap().put(Koma.Type.SKA, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'G':
-                                        board.getInHandKomaMap().put(Koma.Type.SKI, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'S':
-                                        board.getInHandKomaMap().put(Koma.Type.SGI, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'N':
-                                        board.getInHandKomaMap().put(Koma.Type.SKE, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'L':
-                                        board.getInHandKomaMap().put(Koma.Type.SKY, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'P':
-                                        board.getInHandKomaMap().put(Koma.Type.SFU, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'r':
-                                        board.getInHandKomaMap().put(Koma.Type.GHI, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'b':
-                                        board.getInHandKomaMap().put(Koma.Type.GKA, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'g':
-                                        board.getInHandKomaMap().put(Koma.Type.GKI, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 's':
-                                        board.getInHandKomaMap().put(Koma.Type.GGI, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'n':
-                                        board.getInHandKomaMap().put(Koma.Type.GKE, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'l':
-                                        board.getInHandKomaMap().put(Koma.Type.GKY, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    case 'p':
-                                        board.getInHandKomaMap().put(Koma.Type.GFU, inHandCount);
-                                        inHandCount = 1;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        }
-                        break;
-                    case COUNT:
-                        moveCount = calculateMoveCount(moveCount, thisChar);
-                        break;
-                }
-            }
-        }
-
-        board.setMoveCount(moveCount);
+        
+        String[] splitSfen = sfen.split(" ");
+     
+        board = parsePieces(board, splitSfen[0]);
+        board.setNextMove(getTurn(splitSfen[1]));
+        board = parseInHand(board, splitSfen[2]);
+        board.setMoveCount(Integer.parseInt(splitSfen[3]));
         return board;
     }
     
-    public static int calculateMoveCount(int moveCount, char thisChar) {
-        if (moveCount == 0) {
-            return thisChar - 48;
-        } else {
-            return moveCount * 10 + thisChar - 48;
+    private static Board parseInHand(Board board, String pieceStr) {
+        int inHandCount = 1;
+        for (int k = 0; k < pieceStr.length(); k++) {
+            char thisChar = pieceStr.charAt(k);
+            if (thisChar == '-') {
+                return board;
+            } else {
+                if (isNumber(thisChar)) {
+                    inHandCount = thisChar - 48;
+                } else {
+                    switch (thisChar) {
+                        case 'R':
+                            board.getInHandKomaMap().put(Koma.Type.SHI, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'B':
+                            board.getInHandKomaMap().put(Koma.Type.SKA, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'G':
+                            board.getInHandKomaMap().put(Koma.Type.SKI, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'S':
+                            board.getInHandKomaMap().put(Koma.Type.SGI, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'N':
+                            board.getInHandKomaMap().put(Koma.Type.SKE, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'L':
+                            board.getInHandKomaMap().put(Koma.Type.SKY, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'P':
+                            board.getInHandKomaMap().put(Koma.Type.SFU, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'r':
+                            board.getInHandKomaMap().put(Koma.Type.GHI, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'b':
+                            board.getInHandKomaMap().put(Koma.Type.GKA, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'g':
+                            board.getInHandKomaMap().put(Koma.Type.GKI, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 's':
+                            board.getInHandKomaMap().put(Koma.Type.GGI, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'n':
+                            board.getInHandKomaMap().put(Koma.Type.GKE, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'l':
+                            board.getInHandKomaMap().put(Koma.Type.GKY, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        case 'p':
+                            board.getInHandKomaMap().put(Koma.Type.GFU, inHandCount);
+                            inHandCount = 1;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
         }
+        return board;
     }
     
-    private static Board.Turn getTurn(char thisChar) {
-        if (thisChar == 'b') {
+    private static Board parsePieces(Board board, String pieceStr) {
+        int i = 0;
+        int j = 0;
+        boolean isPromoted = false;
+        for (int k = 0; k < pieceStr.length(); k++) {
+            char thisChar = pieceStr.charAt(k);
+            if (isNumber(thisChar)) {
+                i += putBlanks(thisChar, board, i, j, k);
+            } else {
+                if (thisChar != '/') {
+                    if (thisChar == '+') {
+                        isPromoted = true;
+                    } else {
+                        board.getMasu()[i][j] = getKoma(thisChar, isPromoted);
+                        isPromoted = false;
+                        i++;
+                    }
+                }
+            }
+            if (i == 9) {
+                i = 0;
+                j++;
+            }
+        }
+        return board;
+    }
+        
+    private static Board.Turn getTurn(String thisStr) {
+        if (thisStr.contains("b")) {
             return Turn.SENTE;
         } else {
             return Turn.GOTE;
@@ -243,7 +225,7 @@ public class SFENParser {
         result += getInHandString(board);
 
         result += " " + board.getMoveCount();
-
+        
         return result;
     }
     
@@ -276,13 +258,13 @@ public class SFENParser {
         pieceMap.put(Koma.Type.SKY, "L");
         pieceMap.put(Koma.Type.SFU, "P");
         
-        pieceMap.put(Koma.Type.GHI, "R");
-        pieceMap.put(Koma.Type.GKA, "B");
-        pieceMap.put(Koma.Type.GKI, "G");
-        pieceMap.put(Koma.Type.GGI, "S");
-        pieceMap.put(Koma.Type.GKE, "N");
-        pieceMap.put(Koma.Type.GKY, "L");
-        pieceMap.put(Koma.Type.GFU, "P");
+        pieceMap.put(Koma.Type.GHI, "r");
+        pieceMap.put(Koma.Type.GKA, "b");
+        pieceMap.put(Koma.Type.GKI, "g");
+        pieceMap.put(Koma.Type.GGI, "s");
+        pieceMap.put(Koma.Type.GKE, "n");
+        pieceMap.put(Koma.Type.GKY, "l");
+        pieceMap.put(Koma.Type.GFU, "p");
         //</editor-fold>
         
         

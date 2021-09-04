@@ -35,7 +35,6 @@ public class ConfigurationManager {
         for (EngineOption thisOption : engine.getEngineOptionList()) {
             ConfigurationItem thisConfigurationItem = new ConfigurationItem(thisOption.getName());
             thisConfigurationItem.setEngineOption(thisOption);
-            System.out.println(thisOption.getName());          
                 switch(thisOption.getType()) {
                     case CHECK:
                         thisConfigurationItem.setCheckBox(new JCheckBox(thisOption.getName()));
@@ -125,7 +124,6 @@ public class ConfigurationManager {
                 }   
             }
         int remainder = count % 4;
-        System.out.println("rem: " + remainder + " count: " + count);
         for (int i = 0; i < remainder; i++) {
             jEngineConfPanel.add(new JLabel(""));
         }
@@ -207,7 +205,6 @@ public class ConfigurationManager {
     }
     
     private static void chooseFile(JDialog dialog, File startDir, JTextField textField) {
-        System.out.println("chooseFile()");
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(startDir);
             java.awt.EventQueue.invokeLater(new Runnable() {
