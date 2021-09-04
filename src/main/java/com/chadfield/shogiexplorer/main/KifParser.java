@@ -349,54 +349,54 @@ public class KifParser {
                 return null;
         }
     }
-
-    public static Koma getDropKoma(String move, Board.Turn turn) {
-        String pieceName = move.substring(2, 3);
-        switch (pieceName) {
+    
+    public static Koma getGoteTurnDropKoma(String move) {
+        switch (move.substring(2, 3)) {
             case KOMA_HI:
-                if (turn == Board.Turn.GOTE) {
-                    return new Koma(Koma.Type.SHI);
-                } else {
-                    return new Koma(Koma.Type.GHI);
-                }
+                return new Koma(Koma.Type.SHI);
             case KOMA_KA:
-                if (turn == Board.Turn.GOTE) {
-                    return new Koma(Koma.Type.SKA);
-                } else {
-                    return new Koma(Koma.Type.GKA);
-                }
+                return new Koma(Koma.Type.SKA);
             case KOMA_KI:
-                if (turn == Board.Turn.GOTE) {
-                    return new Koma(Koma.Type.SKI);
-                } else {
-                    return new Koma(Koma.Type.GKI);
-                }
+                return new Koma(Koma.Type.SKI);
             case KOMA_GI:
-                if (turn == Board.Turn.GOTE) {
-                    return new Koma(Koma.Type.SGI);
-                } else {
-                    return new Koma(Koma.Type.GGI);
-                }
+                return new Koma(Koma.Type.SGI);
             case KOMA_KE:
-                if (turn == Board.Turn.GOTE) {
-                    return new Koma(Koma.Type.SKE);
-                } else {
-                    return new Koma(Koma.Type.GKE);
-                }
+                return new Koma(Koma.Type.SKE);
             case KOMA_KY:
-                if (turn == Board.Turn.GOTE) {
-                    return new Koma(Koma.Type.SKY);
-                } else {
-                    return new Koma(Koma.Type.GKY);
-                }
+                return new Koma(Koma.Type.SKY);
             case KOMA_FU:
-                if (turn == Board.Turn.GOTE) {
-                    return new Koma(Koma.Type.SFU);
-                } else {
-                    return new Koma(Koma.Type.GFU);
-                }
+                return new Koma(Koma.Type.SFU);
             default:
                 return null;
+        }
+    }
+
+    public static Koma getSenteTurnDropKoma(String move) {
+        switch (move.substring(2, 3)) {
+            case KOMA_HI:
+                return new Koma(Koma.Type.GHI);
+            case KOMA_KA:
+                return new Koma(Koma.Type.GKA);
+            case KOMA_KI:
+                return new Koma(Koma.Type.GKI);
+            case KOMA_GI:
+                return new Koma(Koma.Type.GGI);
+            case KOMA_KE:
+                return new Koma(Koma.Type.GKE);
+            case KOMA_KY:
+                return new Koma(Koma.Type.GKY);
+            case KOMA_FU:
+                return new Koma(Koma.Type.GFU);
+            default:
+                return null;
+        }
+    }
+
+    public static Koma getDropKoma(String move, Board.Turn turn) {
+        if (turn == Board.Turn.GOTE) {
+            return getGoteTurnDropKoma(move);
+        } else {
+            return getSenteTurnDropKoma(move);
         }
     }
 
