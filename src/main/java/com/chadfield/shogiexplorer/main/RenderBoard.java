@@ -15,16 +15,16 @@ import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaNameRo
 
 public class RenderBoard {
 
-    public static final HashMap<Koma.Type, Integer> xOffsetMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> yOffsetMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> xOffsetMapRotated = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> yOffsetMapRotated = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> xCoordMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> yCoordMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> xCoordMapRotated = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> yCoordMapRotated = new HashMap<>();
-    final static int SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
-    final static int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
+    public static final HashMap<Koma.Type, Long> xOffsetMap = new HashMap<>();
+    public static final HashMap<Koma.Type, Long> yOffsetMap = new HashMap<>();
+    public static final HashMap<Koma.Type, Long> xOffsetMapRotated = new HashMap<>();
+    public static final HashMap<Koma.Type, Long> yOffsetMapRotated = new HashMap<>();
+    public static final HashMap<Koma.Type, Long> xCoordMap = new HashMap<>();
+    public static final HashMap<Koma.Type, Long> yCoordMap = new HashMap<>();
+    public static final HashMap<Koma.Type, Long> xCoordMapRotated = new HashMap<>();
+    public static final HashMap<Koma.Type, Long> yCoordMapRotated = new HashMap<>();
+    final static long SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
+    final static long SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
     final static long CENTRE_X = 5;
     final static long CENTRE_Y = 5;
 
@@ -64,7 +64,8 @@ public class RenderBoard {
 
         if (rotatedView) {
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(ImageUtils.getTextLabelForBan(i,
+                boardPanel.add(ImageUtils.getTextLabelForBan(
+                        i,
                         0,
                         MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
                         MathUtils.BOARD_XY * MathUtils.KOMA_Y + MathUtils.COORD_XY / 2 - 3,
@@ -164,121 +165,121 @@ public class RenderBoard {
     public static void drawPiecesInHand(Board board, JPanel boardPanel, boolean rotatedView) {
 
         //<editor-fold defaultstate="collapsed" desc="Map initialization">
-        xOffsetMap.put(Koma.Type.GFU, 0);
-        yOffsetMap.put(Koma.Type.GFU, 0);
-        xCoordMap.put(Koma.Type.GFU, 0);
-        yCoordMap.put(Koma.Type.GFU, 0);
-        xOffsetMap.put(Koma.Type.GKY, 0);
-        yOffsetMap.put(Koma.Type.GKY, 0);
-        xCoordMap.put(Koma.Type.GKY, 0);
-        yCoordMap.put(Koma.Type.GKY, 1);
-        xOffsetMap.put(Koma.Type.GKE, 0);
-        yOffsetMap.put(Koma.Type.GKE, 0);
-        xCoordMap.put(Koma.Type.GKE, 0);
-        yCoordMap.put(Koma.Type.GKE, 2);
-        xOffsetMap.put(Koma.Type.GGI, 0);
-        yOffsetMap.put(Koma.Type.GGI, 0);
-        xCoordMap.put(Koma.Type.GGI, 0);
-        yCoordMap.put(Koma.Type.GGI, 3);
-        xOffsetMap.put(Koma.Type.GKI, 0);
-        yOffsetMap.put(Koma.Type.GKI, 0);
-        xCoordMap.put(Koma.Type.GKI, 0);
-        yCoordMap.put(Koma.Type.GKI, 4);
-        xOffsetMap.put(Koma.Type.GKA, 0);
-        yOffsetMap.put(Koma.Type.GKA, 0);
-        xCoordMap.put(Koma.Type.GKA, 0);
-        yCoordMap.put(Koma.Type.GKA, 5);
-        xOffsetMap.put(Koma.Type.GHI, 0);
-        yOffsetMap.put(Koma.Type.GHI, 0);
-        xCoordMap.put(Koma.Type.GHI, 0);
-        yCoordMap.put(Koma.Type.GHI, 6);
+        xOffsetMap.put(Koma.Type.GFU, 0L);
+        yOffsetMap.put(Koma.Type.GFU, 0L);
+        xCoordMap.put(Koma.Type.GFU, 0L);
+        yCoordMap.put(Koma.Type.GFU, 0L);
+        xOffsetMap.put(Koma.Type.GKY, 0L);
+        yOffsetMap.put(Koma.Type.GKY, 0L);
+        xCoordMap.put(Koma.Type.GKY, 0L);
+        yCoordMap.put(Koma.Type.GKY, 1L);
+        xOffsetMap.put(Koma.Type.GKE, 0L);
+        yOffsetMap.put(Koma.Type.GKE, 0L);
+        xCoordMap.put(Koma.Type.GKE, 0L);
+        yCoordMap.put(Koma.Type.GKE, 2L);
+        xOffsetMap.put(Koma.Type.GGI, 0L);
+        yOffsetMap.put(Koma.Type.GGI, 0L);
+        xCoordMap.put(Koma.Type.GGI, 0L);
+        yCoordMap.put(Koma.Type.GGI, 3L);
+        xOffsetMap.put(Koma.Type.GKI, 0L);
+        yOffsetMap.put(Koma.Type.GKI, 0L);
+        xCoordMap.put(Koma.Type.GKI, 0L);
+        yCoordMap.put(Koma.Type.GKI, 4L);
+        xOffsetMap.put(Koma.Type.GKA, 0L);
+        yOffsetMap.put(Koma.Type.GKA, 0L);
+        xCoordMap.put(Koma.Type.GKA, 0L);
+        yCoordMap.put(Koma.Type.GKA, 5L);
+        xOffsetMap.put(Koma.Type.GHI, 0L);
+        yOffsetMap.put(Koma.Type.GHI, 0L);
+        xCoordMap.put(Koma.Type.GHI, 0L);
+        yCoordMap.put(Koma.Type.GHI, 6L);
 
         xOffsetMap.put(Koma.Type.SFU, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SFU, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SFU, 0);
-        yCoordMap.put(Koma.Type.SFU, 6);
+        xCoordMap.put(Koma.Type.SFU, 0L);
+        yCoordMap.put(Koma.Type.SFU, 6L);
         xOffsetMap.put(Koma.Type.SKY, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKY, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SKY, 0);
-        yCoordMap.put(Koma.Type.SKY, 5);
+        xCoordMap.put(Koma.Type.SKY, 0L);
+        yCoordMap.put(Koma.Type.SKY, 5L);
         xOffsetMap.put(Koma.Type.SKE, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKE, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SKE, 0);
-        yCoordMap.put(Koma.Type.SKE, 4);
+        xCoordMap.put(Koma.Type.SKE, 0L);
+        yCoordMap.put(Koma.Type.SKE, 4L);
         xOffsetMap.put(Koma.Type.SGI, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SGI, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SGI, 0);
-        yCoordMap.put(Koma.Type.SGI, 3);
+        xCoordMap.put(Koma.Type.SGI, 0L);
+        yCoordMap.put(Koma.Type.SGI, 3L);
         xOffsetMap.put(Koma.Type.SKI, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKI, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SKI, 0);
-        yCoordMap.put(Koma.Type.SKI, 2);
+        xCoordMap.put(Koma.Type.SKI, 0L);
+        yCoordMap.put(Koma.Type.SKI, 2L);
         xOffsetMap.put(Koma.Type.SKA, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKA, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SKA, 0);
-        yCoordMap.put(Koma.Type.SKA, 1);
+        xCoordMap.put(Koma.Type.SKA, 0L);
+        yCoordMap.put(Koma.Type.SKA, 1L);
         xOffsetMap.put(Koma.Type.SHI, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SHI, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SHI, 0);
-        yCoordMap.put(Koma.Type.SHI, 0);
+        xCoordMap.put(Koma.Type.SHI, 0L);
+        yCoordMap.put(Koma.Type.SHI, 0L);
 
-        xOffsetMapRotated.put(Koma.Type.SFU, 0);
-        yOffsetMapRotated.put(Koma.Type.SFU, 0);
-        xCoordMapRotated.put(Koma.Type.SFU, 0);
-        yCoordMapRotated.put(Koma.Type.SFU, 0);
-        xOffsetMapRotated.put(Koma.Type.SKY, 0);
-        yOffsetMapRotated.put(Koma.Type.SKY, 0);
-        xCoordMapRotated.put(Koma.Type.SKY, 0);
-        yCoordMapRotated.put(Koma.Type.SKY, 1);
-        xOffsetMapRotated.put(Koma.Type.SKE, 0);
-        yOffsetMapRotated.put(Koma.Type.SKE, 0);
-        xCoordMapRotated.put(Koma.Type.SKE, 0);
-        yCoordMapRotated.put(Koma.Type.SKE, 2);
-        xOffsetMapRotated.put(Koma.Type.SGI, 0);
-        yOffsetMapRotated.put(Koma.Type.SGI, 0);
-        xCoordMapRotated.put(Koma.Type.SGI, 0);
-        yCoordMapRotated.put(Koma.Type.SGI, 3);
-        xOffsetMapRotated.put(Koma.Type.SKI, 0);
-        yOffsetMapRotated.put(Koma.Type.SKI, 0);
-        xCoordMapRotated.put(Koma.Type.SKI, 0);
-        yCoordMapRotated.put(Koma.Type.SKI, 4);
-        xOffsetMapRotated.put(Koma.Type.SKA, 0);
-        yOffsetMapRotated.put(Koma.Type.SKA, 0);
-        xCoordMapRotated.put(Koma.Type.SKA, 0);
-        yCoordMapRotated.put(Koma.Type.SKA, 5);
-        xOffsetMapRotated.put(Koma.Type.SHI, 0);
-        yOffsetMapRotated.put(Koma.Type.SHI, 0);
-        xCoordMapRotated.put(Koma.Type.SHI, 0);
-        yCoordMapRotated.put(Koma.Type.SHI, 6);
+        xOffsetMapRotated.put(Koma.Type.SFU, 0L);
+        yOffsetMapRotated.put(Koma.Type.SFU, 0L);
+        xCoordMapRotated.put(Koma.Type.SFU, 0L);
+        yCoordMapRotated.put(Koma.Type.SFU, 0L);
+        xOffsetMapRotated.put(Koma.Type.SKY, 0L);
+        yOffsetMapRotated.put(Koma.Type.SKY, 0L);
+        xCoordMapRotated.put(Koma.Type.SKY, 0L);
+        yCoordMapRotated.put(Koma.Type.SKY, 1L);
+        xOffsetMapRotated.put(Koma.Type.SKE, 0L);
+        yOffsetMapRotated.put(Koma.Type.SKE, 0L);
+        xCoordMapRotated.put(Koma.Type.SKE, 0L);
+        yCoordMapRotated.put(Koma.Type.SKE, 2L);
+        xOffsetMapRotated.put(Koma.Type.SGI, 0L);
+        yOffsetMapRotated.put(Koma.Type.SGI, 0L);
+        xCoordMapRotated.put(Koma.Type.SGI, 0L);
+        yCoordMapRotated.put(Koma.Type.SGI, 3L);
+        xOffsetMapRotated.put(Koma.Type.SKI, 0L);
+        yOffsetMapRotated.put(Koma.Type.SKI, 0L);
+        xCoordMapRotated.put(Koma.Type.SKI, 0L);
+        yCoordMapRotated.put(Koma.Type.SKI, 4L);
+        xOffsetMapRotated.put(Koma.Type.SKA, 0L);
+        yOffsetMapRotated.put(Koma.Type.SKA, 0L);
+        xCoordMapRotated.put(Koma.Type.SKA, 0L);
+        yCoordMapRotated.put(Koma.Type.SKA, 5L);
+        xOffsetMapRotated.put(Koma.Type.SHI, 0L);
+        yOffsetMapRotated.put(Koma.Type.SHI, 0L);
+        xCoordMapRotated.put(Koma.Type.SHI, 0L);
+        yCoordMapRotated.put(Koma.Type.SHI, 6L);
 
         xOffsetMapRotated.put(Koma.Type.GFU, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GFU, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GFU, 0);
-        yCoordMapRotated.put(Koma.Type.GFU, 6);
+        xCoordMapRotated.put(Koma.Type.GFU, 0L);
+        yCoordMapRotated.put(Koma.Type.GFU, 6L);
         xOffsetMapRotated.put(Koma.Type.GKY, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GKY, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GKY, 0);
-        yCoordMapRotated.put(Koma.Type.GKY, 5);
+        xCoordMapRotated.put(Koma.Type.GKY, 0L);
+        yCoordMapRotated.put(Koma.Type.GKY, 5L);
         xOffsetMapRotated.put(Koma.Type.GKE, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GKE, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GKE, 0);
-        yCoordMapRotated.put(Koma.Type.GKE, 4);
+        xCoordMapRotated.put(Koma.Type.GKE, 0L);
+        yCoordMapRotated.put(Koma.Type.GKE, 4L);
         xOffsetMapRotated.put(Koma.Type.GGI, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GGI, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GGI, 0);
-        yCoordMapRotated.put(Koma.Type.GGI, 3);
+        xCoordMapRotated.put(Koma.Type.GGI, 0L);
+        yCoordMapRotated.put(Koma.Type.GGI, 3L);
         xOffsetMapRotated.put(Koma.Type.GKI, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GKI, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GKI, 0);
-        yCoordMapRotated.put(Koma.Type.GKI, 2);
+        xCoordMapRotated.put(Koma.Type.GKI, 0L);
+        yCoordMapRotated.put(Koma.Type.GKI, 2L);
         xOffsetMapRotated.put(Koma.Type.GKA, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GKA, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GKA, 0);
-        yCoordMapRotated.put(Koma.Type.GKA, 1);
+        xCoordMapRotated.put(Koma.Type.GKA, 0L);
+        yCoordMapRotated.put(Koma.Type.GKA, 1L);
         xOffsetMapRotated.put(Koma.Type.GHI, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GHI, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GHI, 0);
-        yCoordMapRotated.put(Koma.Type.GHI, 0);
+        xCoordMapRotated.put(Koma.Type.GHI, 0L);
+        yCoordMapRotated.put(Koma.Type.GHI, 0L);
 
         //</editor-fold>
         for (Koma.Type komaType : Koma.Type.values()) {

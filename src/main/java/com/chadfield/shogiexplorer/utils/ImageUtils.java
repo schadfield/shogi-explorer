@@ -14,7 +14,7 @@ import com.chadfield.shogiexplorer.objects.ImageCache;
 
 public class ImageUtils {
 
-    public static JLabel getPieceLabelForKoma(Image image, int i, int j, long xOffset, long yOffset, long centerX, long centerY) {
+    public static JLabel getPieceLabelForKoma(Image image, long i, long j, long xOffset, long yOffset, long centerX, long centerY) {
         JLabel pieceLabel = new JLabel(new ImageIcon(image));
         pieceLabel.setBounds(
                 (int) (centerX + (i * MathUtils.KOMA_X + xOffset)),
@@ -24,7 +24,7 @@ public class ImageUtils {
         return pieceLabel;
     }
 
-    public static JLabel getTextLabelForBan(int i, int j, int xOffset, int yOffset, long centerX, long centerY, String text) {
+    public static JLabel getTextLabelForBan(long i, long j, long xOffset, long yOffset, long centerX, long centerY, String text) {
         JLabel numberLabel = new JLabel(text);
         numberLabel.setBounds(
                 (int) (centerX + (i * MathUtils.KOMA_X + xOffset)),
