@@ -48,6 +48,10 @@ public class KifParser {
     public static final String SENTE = "先手：";
     public static final String GOTE = "後手：";
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
+    
+    private KifParser() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static Game parseKif(DefaultListModel moveListModel, File kifFile) throws FileNotFoundException, IOException {
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");

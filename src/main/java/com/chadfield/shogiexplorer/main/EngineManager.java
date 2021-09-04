@@ -26,8 +26,12 @@ import javax.swing.JList;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class EngineManager {
+    
+    private EngineManager() {
+        throw new IllegalStateException("Utility class");
+    }
 
-    public static List<Engine> deleteSelectedEngine(DefaultListModel engineListModel, JList<String> jEngineList, List<Engine> engineList) {
+    public static List<Engine> deleteSelectedEngine(DefaultListModel<String> engineListModel, JList<String> jEngineList, List<Engine> engineList) {
         int index = jEngineList.getSelectedIndex();
         String name = (String) engineListModel.get(index);
         engineListModel.remove(index);
@@ -42,7 +46,7 @@ public class EngineManager {
             index = 0;
         }
         jEngineList.setSelectedIndex(index - 1);
-        SaveEngines(newEngineList);
+        saveEngines(newEngineList);
         return newEngineList;
     }
     
@@ -113,7 +117,7 @@ public class EngineManager {
         return engineOption;
     }
 
-    public static void addNewEngine(File engineFile, DefaultListModel engineListModel, JList<String> jEngineList, List<Engine> engineList) {
+    public static void addNewEngine(File engineFile, DefaultListModel<String> engineListModel, JList<String> jEngineList, List<Engine> engineList) {
         for (Engine thisEngine : engineList) {
             if (thisEngine.getPath().contentEquals(engineFile.getPath())) {
                 return;
@@ -160,10 +164,10 @@ public class EngineManager {
         engineList.add(newEngine);
         engineListModel.add(engineListModel.size(), newEngine.getName());
         jEngineList.setSelectedIndex(engineListModel.size() - 1);
-        SaveEngines(engineList);
+        saveEngines(engineList);
     }
 
-    public static List<Engine> loadEngines(DefaultListModel engineListModel) {
+    public static List<Engine> loadEngines(DefaultListModel<String> engineListModel) {
         String directoryName = System.getProperty("user.home") + File.separator + "Library" + File.separator + "ShogiExplorer";
         File directory = new File(directoryName);
         if (!directory.exists()) {
@@ -184,17 +188,13 @@ public class EngineManager {
                 index++;
             }
             return result;
-        } catch (FileNotFoundException ex) {
+        } catch (IOException | StreamException ex) {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (StreamException ex) {
-
-        }
-        return null;
+        } 
+        return new ArrayList<>();
     }
 
-    public static void SaveEngines(List<Engine> engineList) {
+    public static void saveEngines(List<Engine> engineList) {
         String directoryName = System.getProperty("user.home") + File.separator + "Library" + File.separator + "ShogiExplorer";
         File directory = new File(directoryName);
         if (!directory.exists()) {
@@ -208,7 +208,6 @@ public class EngineManager {
         String dataXml = xstream.toXML(engineList);
         try (FileWriter fileWriter = new FileWriter(engineFile, false)) {
             fileWriter.write(dataXml);
-            fileWriter.close();
         } catch (IOException ex) {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
         }

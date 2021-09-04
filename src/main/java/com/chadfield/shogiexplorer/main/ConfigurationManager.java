@@ -185,7 +185,7 @@ public class ConfigurationManager {
                     break;
                 default:  
             }
-            EngineManager.SaveEngines(engineList);
+            EngineManager.saveEngines(engineList);
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {

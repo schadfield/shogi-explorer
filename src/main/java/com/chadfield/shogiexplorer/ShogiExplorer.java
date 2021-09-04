@@ -637,7 +637,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
         prefs.put("engineOpenDir", newEngineFile.getParent());
         EngineManager.addNewEngine(newEngineFile, engineListModel, jEngineList, engineList);
-        EngineManager.SaveEngines(engineList);
+        EngineManager.saveEngines(engineList);
     }//GEN-LAST:event_addEngineButtonActionPerformed
 
     private void configureEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureEngineButtonActionPerformed
