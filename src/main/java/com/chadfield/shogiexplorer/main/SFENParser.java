@@ -36,11 +36,7 @@ public class SFENParser {
                 switch (state) {
                     case BOARD:
                         if (isNumber(thisChar)) {
-                            int numBlanks = thisChar - 48;
-                            for (int x = k; x < numBlanks; x++) {
-                                board.getMasu()[i + x][j] = null;
-                            }
-                            i += numBlanks;
+                            i += putBlanks(thisChar, board, i, j, k);
                         } else {
                             if (thisChar != '/') {
                                 if (thisChar == '+') {
@@ -61,11 +57,7 @@ public class SFENParser {
                         }
                         break;
                     case MOVE:
-                        if (thisChar == 'b') {
-                            board.setNextMove(Turn.SENTE);
-                        } else {
-                            board.setNextMove(Turn.GOTE);
-                        }
+                        board.setNextMove(getTurn(thisChar));
                         state = ParseState.INHAND;
                         k++;
                         break;
@@ -143,11 +135,7 @@ public class SFENParser {
                         }
                         break;
                     case COUNT:
-                        if (moveCount == 0) {
-                            moveCount = thisChar - 48;
-                        } else {
-                            moveCount = moveCount * 10 + thisChar - 48;
-                        }
+                        moveCount = calculateMoveCount(moveCount, thisChar);
                         break;
                 }
             }
@@ -155,6 +143,22 @@ public class SFENParser {
 
         board.setMoveCount(moveCount);
         return board;
+    }
+    
+    public static int calculateMoveCount(int moveCount, char thisChar) {
+        if (moveCount == 0) {
+            return thisChar - 48;
+        } else {
+            return moveCount * 10 + thisChar - 48;
+        }
+    }
+    
+    private static Board.Turn getTurn(char thisChar) {
+        if (thisChar == 'b') {
+            return Turn.SENTE;
+        } else {
+            return Turn.GOTE;
+        }
     }
 
     private static Koma getKoma(char thisChar, boolean isPromoted) {
@@ -200,6 +204,14 @@ public class SFENParser {
         } else {
             return new Koma(pieceMap.get(thisChar));
         }
+    }
+    
+    public static int putBlanks(char thisChar, Board board, int i, int j, int k) {
+        int numBlanks = thisChar - 48;
+        for (int x = k; x < numBlanks; x++) {
+            board.getMasu()[i + x][j] = null;
+        }
+        return numBlanks;
     }
 
     public static String getSFEN(Board board) {
