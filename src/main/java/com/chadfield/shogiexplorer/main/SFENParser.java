@@ -18,8 +18,9 @@ public class SFENParser {
         BOARD, MOVE, INHAND, COUNT
     }
 
-    public static Board parse(Board board, String sfen) {
-
+    public static Board parse(String sfen) {
+        
+        Board board = new Board();
         int sfenLength = sfen.length();
         ParseState state = ParseState.BOARD;
         int i = 0;

@@ -48,7 +48,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         this.kifFileFilter = new FileNameExtensionFilter(bundle.getString("label_kif_files"), "kif");
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         initComponents();
-        board = SFENParser.parse(new Board(), "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
+        board = SFENParser.parse("lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
         String rotated = (prefs.get(ROTATED, "false"));
         if (rotated.compareTo("true") == 0) {
@@ -572,7 +572,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
             moveList.ensureIndexIsVisible(moveNumber);
             Position position = game.getPositionList().get(moveNumber);
-            board = SFENParser.parse(new Board(), position.game);
+            board = SFENParser.parse(position.game);
             board.setSource(position.source);
             board.setDestination(position.destination);
             commentTextArea.setText(null);
