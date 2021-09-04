@@ -10,23 +10,24 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 import com.chadfield.shogiexplorer.objects.Board.Turn;
 import com.chadfield.shogiexplorer.objects.Coordinate;
+import com.chadfield.shogiexplorer.objects.Dimension;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaName;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaNameRotated;
 
 public class RenderBoard {
 
-    public static final HashMap<Koma.Type, Long> xOffsetMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Long> yOffsetMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Long> xOffsetMapRotated = new HashMap<>();
-    public static final HashMap<Koma.Type, Long> yOffsetMapRotated = new HashMap<>();
-    public static final HashMap<Koma.Type, Long> xCoordMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Long> yCoordMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Long> xCoordMapRotated = new HashMap<>();
-    public static final HashMap<Koma.Type, Long> yCoordMapRotated = new HashMap<>();
-    final static long SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
-    final static long SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
-    final static long CENTRE_X = 5;
-    final static long CENTRE_Y = 5;
+    public static final HashMap<Koma.Type, Integer> xOffsetMap = new HashMap<>();
+    public static final HashMap<Koma.Type, Integer> yOffsetMap = new HashMap<>();
+    public static final HashMap<Koma.Type, Integer> xOffsetMapRotated = new HashMap<>();
+    public static final HashMap<Koma.Type, Integer> yOffsetMapRotated = new HashMap<>();
+    public static final HashMap<Koma.Type, Integer> xCoordMap = new HashMap<>();
+    public static final HashMap<Koma.Type, Integer> yCoordMap = new HashMap<>();
+    public static final HashMap<Koma.Type, Integer> xCoordMapRotated = new HashMap<>();
+    public static final HashMap<Koma.Type, Integer> yCoordMapRotated = new HashMap<>();
+    final static int SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
+    final static int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
+    final static int CENTRE_X = 5;
+    final static int CENTRE_Y = 5;
 
     public static void loadBoard(Board board, javax.swing.JPanel boardPanel, boolean rotatedView) {
         // TODO: why is loadBoard() being called when the boardPanel has no width?
@@ -65,43 +66,46 @@ public class RenderBoard {
         if (rotatedView) {
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(ImageUtils.getTextLabelForBan(
-                        i,
-                        0,
-                        MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
-                        MathUtils.BOARD_XY * MathUtils.KOMA_Y + MathUtils.COORD_XY / 2 - 3,
-                        CENTRE_X,
-                        CENTRE_Y,
+                        new Coordinate(i,
+                        0),
+                        new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
+                        MathUtils.BOARD_XY * MathUtils.KOMA_Y + MathUtils.COORD_XY / 2 - 3),
+                        new Coordinate(CENTRE_X,
+                        CENTRE_Y),
                         Integer.toString(i + 1)
                 ));
             }
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(ImageUtils.getTextLabelForBan(0,
-                        i,
-                        MathUtils.COORD_XY * 4 + 7,
-                        MathUtils.COORD_XY / 2 + 7,
-                        CENTRE_X,
-                        CENTRE_Y,
+                boardPanel.add(ImageUtils.getTextLabelForBan(
+                        new Coordinate(0,
+                        i),
+                        new Dimension(MathUtils.COORD_XY * 4 + 7,
+                        MathUtils.COORD_XY / 2 + 7),
+                        new Coordinate(CENTRE_X,
+                        CENTRE_Y),
                         rank[8 - i]
                 ));
             }
         } else {
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(ImageUtils.getTextLabelForBan(i,
-                        0,
-                        MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
-                        -(MathUtils.COORD_XY / 2) - 3,
-                        CENTRE_X,
-                        CENTRE_Y,
+                boardPanel.add(ImageUtils.getTextLabelForBan(
+                        new Coordinate(i,
+                        0),
+                        new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
+                        -(MathUtils.COORD_XY / 2) - 3),
+                        new Coordinate(CENTRE_X,
+                        CENTRE_Y),
                         Integer.toString(9 - i)
                 ));
             }
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(ImageUtils.getTextLabelForBan(0,
-                        i,
-                        MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 3,
-                        MathUtils.COORD_XY / 2 + 7,
-                        CENTRE_X,
-                        CENTRE_Y,
+                boardPanel.add(ImageUtils.getTextLabelForBan(
+                        new Coordinate(0,
+                        i),
+                        new Dimension(MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 3,
+                        MathUtils.COORD_XY / 2 + 7),
+                        new Coordinate(CENTRE_X,
+                        CENTRE_Y),
                         rank[i]
                 ));
             }
@@ -115,22 +119,16 @@ public class RenderBoard {
             );
             if (rotatedView) {
                 boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
-                        0,
-                        8,
-                        MathUtils.COORD_XY,
-                        MathUtils.COORD_XY,
-                        CENTRE_X,
-                        CENTRE_Y
+                        new Coordinate(0, 8),
+                        new Dimension(MathUtils.COORD_XY, MathUtils.COORD_XY),
+                        new Coordinate(CENTRE_X, CENTRE_Y)
                 )
                 );
             } else {
                 boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
-                        0,
-                        -2,
-                        SBAN_XOFFSET,
-                        SBAN_YOFFSET - MathUtils.COORD_XY,
-                        CENTRE_X,
-                        CENTRE_Y
+                        new Coordinate(0, -2),
+                        new Dimension(SBAN_XOFFSET, SBAN_YOFFSET - MathUtils.COORD_XY),
+                        new Coordinate(CENTRE_X, CENTRE_Y)
                 )
                 );
             }
@@ -140,22 +138,17 @@ public class RenderBoard {
             );
             if (rotatedView) {
                 boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
-                        0,
-                        -2,
-                        SBAN_XOFFSET,
-                        SBAN_YOFFSET - MathUtils.COORD_XY,
-                        CENTRE_X,
-                        CENTRE_Y
+                        new Coordinate(0, -2),
+                        new Dimension(SBAN_XOFFSET, SBAN_YOFFSET - MathUtils.COORD_XY),
+                        new Coordinate(CENTRE_X, CENTRE_Y)
                 )
                 );
             } else {
-                boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
-                        0,
-                        8,
-                        MathUtils.COORD_XY,
-                        MathUtils.COORD_XY,
-                        CENTRE_X,
-                        CENTRE_Y
+                boardPanel.add(ImageUtils.getPieceLabelForKoma(
+                        image,
+                        new Coordinate(0, 8),
+                        new Dimension(MathUtils.COORD_XY, MathUtils.COORD_XY),
+                        new Coordinate(CENTRE_X, CENTRE_Y)
                 )
                 );
             }
@@ -165,121 +158,121 @@ public class RenderBoard {
     public static void drawPiecesInHand(Board board, JPanel boardPanel, boolean rotatedView) {
 
         //<editor-fold defaultstate="collapsed" desc="Map initialization">
-        xOffsetMap.put(Koma.Type.GFU, 0L);
-        yOffsetMap.put(Koma.Type.GFU, 0L);
-        xCoordMap.put(Koma.Type.GFU, 0L);
-        yCoordMap.put(Koma.Type.GFU, 0L);
-        xOffsetMap.put(Koma.Type.GKY, 0L);
-        yOffsetMap.put(Koma.Type.GKY, 0L);
-        xCoordMap.put(Koma.Type.GKY, 0L);
-        yCoordMap.put(Koma.Type.GKY, 1L);
-        xOffsetMap.put(Koma.Type.GKE, 0L);
-        yOffsetMap.put(Koma.Type.GKE, 0L);
-        xCoordMap.put(Koma.Type.GKE, 0L);
-        yCoordMap.put(Koma.Type.GKE, 2L);
-        xOffsetMap.put(Koma.Type.GGI, 0L);
-        yOffsetMap.put(Koma.Type.GGI, 0L);
-        xCoordMap.put(Koma.Type.GGI, 0L);
-        yCoordMap.put(Koma.Type.GGI, 3L);
-        xOffsetMap.put(Koma.Type.GKI, 0L);
-        yOffsetMap.put(Koma.Type.GKI, 0L);
-        xCoordMap.put(Koma.Type.GKI, 0L);
-        yCoordMap.put(Koma.Type.GKI, 4L);
-        xOffsetMap.put(Koma.Type.GKA, 0L);
-        yOffsetMap.put(Koma.Type.GKA, 0L);
-        xCoordMap.put(Koma.Type.GKA, 0L);
-        yCoordMap.put(Koma.Type.GKA, 5L);
-        xOffsetMap.put(Koma.Type.GHI, 0L);
-        yOffsetMap.put(Koma.Type.GHI, 0L);
-        xCoordMap.put(Koma.Type.GHI, 0L);
-        yCoordMap.put(Koma.Type.GHI, 6L);
+        xOffsetMap.put(Koma.Type.GFU, 0);
+        yOffsetMap.put(Koma.Type.GFU, 0);
+        xCoordMap.put(Koma.Type.GFU, 0);
+        yCoordMap.put(Koma.Type.GFU, 0);
+        xOffsetMap.put(Koma.Type.GKY, 0);
+        yOffsetMap.put(Koma.Type.GKY, 0);
+        xCoordMap.put(Koma.Type.GKY, 0);
+        yCoordMap.put(Koma.Type.GKY, 1);
+        xOffsetMap.put(Koma.Type.GKE, 0);
+        yOffsetMap.put(Koma.Type.GKE, 0);
+        xCoordMap.put(Koma.Type.GKE, 0);
+        yCoordMap.put(Koma.Type.GKE, 2);
+        xOffsetMap.put(Koma.Type.GGI, 0);
+        yOffsetMap.put(Koma.Type.GGI, 0);
+        xCoordMap.put(Koma.Type.GGI, 0);
+        yCoordMap.put(Koma.Type.GGI, 3);
+        xOffsetMap.put(Koma.Type.GKI, 0);
+        yOffsetMap.put(Koma.Type.GKI, 0);
+        xCoordMap.put(Koma.Type.GKI, 0);
+        yCoordMap.put(Koma.Type.GKI, 4);
+        xOffsetMap.put(Koma.Type.GKA, 0);
+        yOffsetMap.put(Koma.Type.GKA, 0);
+        xCoordMap.put(Koma.Type.GKA, 0);
+        yCoordMap.put(Koma.Type.GKA, 5);
+        xOffsetMap.put(Koma.Type.GHI, 0);
+        yOffsetMap.put(Koma.Type.GHI, 0);
+        xCoordMap.put(Koma.Type.GHI, 0);
+        yCoordMap.put(Koma.Type.GHI, 6);
 
         xOffsetMap.put(Koma.Type.SFU, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SFU, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SFU, 0L);
-        yCoordMap.put(Koma.Type.SFU, 6L);
+        xCoordMap.put(Koma.Type.SFU, 0);
+        yCoordMap.put(Koma.Type.SFU, 6);
         xOffsetMap.put(Koma.Type.SKY, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKY, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SKY, 0L);
-        yCoordMap.put(Koma.Type.SKY, 5L);
+        xCoordMap.put(Koma.Type.SKY, 0);
+        yCoordMap.put(Koma.Type.SKY, 5);
         xOffsetMap.put(Koma.Type.SKE, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKE, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SKE, 0L);
-        yCoordMap.put(Koma.Type.SKE, 4L);
+        xCoordMap.put(Koma.Type.SKE, 0);
+        yCoordMap.put(Koma.Type.SKE, 4);
         xOffsetMap.put(Koma.Type.SGI, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SGI, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SGI, 0L);
-        yCoordMap.put(Koma.Type.SGI, 3L);
+        xCoordMap.put(Koma.Type.SGI, 0);
+        yCoordMap.put(Koma.Type.SGI, 3);
         xOffsetMap.put(Koma.Type.SKI, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKI, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SKI, 0L);
-        yCoordMap.put(Koma.Type.SKI, 2L);
+        xCoordMap.put(Koma.Type.SKI, 0);
+        yCoordMap.put(Koma.Type.SKI, 2);
         xOffsetMap.put(Koma.Type.SKA, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SKA, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SKA, 0L);
-        yCoordMap.put(Koma.Type.SKA, 1L);
+        xCoordMap.put(Koma.Type.SKA, 0);
+        yCoordMap.put(Koma.Type.SKA, 1);
         xOffsetMap.put(Koma.Type.SHI, SBAN_XOFFSET);
         yOffsetMap.put(Koma.Type.SHI, SBAN_YOFFSET);
-        xCoordMap.put(Koma.Type.SHI, 0L);
-        yCoordMap.put(Koma.Type.SHI, 0L);
+        xCoordMap.put(Koma.Type.SHI, 0);
+        yCoordMap.put(Koma.Type.SHI, 0);
 
-        xOffsetMapRotated.put(Koma.Type.SFU, 0L);
-        yOffsetMapRotated.put(Koma.Type.SFU, 0L);
-        xCoordMapRotated.put(Koma.Type.SFU, 0L);
-        yCoordMapRotated.put(Koma.Type.SFU, 0L);
-        xOffsetMapRotated.put(Koma.Type.SKY, 0L);
-        yOffsetMapRotated.put(Koma.Type.SKY, 0L);
-        xCoordMapRotated.put(Koma.Type.SKY, 0L);
-        yCoordMapRotated.put(Koma.Type.SKY, 1L);
-        xOffsetMapRotated.put(Koma.Type.SKE, 0L);
-        yOffsetMapRotated.put(Koma.Type.SKE, 0L);
-        xCoordMapRotated.put(Koma.Type.SKE, 0L);
-        yCoordMapRotated.put(Koma.Type.SKE, 2L);
-        xOffsetMapRotated.put(Koma.Type.SGI, 0L);
-        yOffsetMapRotated.put(Koma.Type.SGI, 0L);
-        xCoordMapRotated.put(Koma.Type.SGI, 0L);
-        yCoordMapRotated.put(Koma.Type.SGI, 3L);
-        xOffsetMapRotated.put(Koma.Type.SKI, 0L);
-        yOffsetMapRotated.put(Koma.Type.SKI, 0L);
-        xCoordMapRotated.put(Koma.Type.SKI, 0L);
-        yCoordMapRotated.put(Koma.Type.SKI, 4L);
-        xOffsetMapRotated.put(Koma.Type.SKA, 0L);
-        yOffsetMapRotated.put(Koma.Type.SKA, 0L);
-        xCoordMapRotated.put(Koma.Type.SKA, 0L);
-        yCoordMapRotated.put(Koma.Type.SKA, 5L);
-        xOffsetMapRotated.put(Koma.Type.SHI, 0L);
-        yOffsetMapRotated.put(Koma.Type.SHI, 0L);
-        xCoordMapRotated.put(Koma.Type.SHI, 0L);
-        yCoordMapRotated.put(Koma.Type.SHI, 6L);
+        xOffsetMapRotated.put(Koma.Type.SFU, 0);
+        yOffsetMapRotated.put(Koma.Type.SFU, 0);
+        xCoordMapRotated.put(Koma.Type.SFU, 0);
+        yCoordMapRotated.put(Koma.Type.SFU, 0);
+        xOffsetMapRotated.put(Koma.Type.SKY, 0);
+        yOffsetMapRotated.put(Koma.Type.SKY, 0);
+        xCoordMapRotated.put(Koma.Type.SKY, 0);
+        yCoordMapRotated.put(Koma.Type.SKY, 1);
+        xOffsetMapRotated.put(Koma.Type.SKE, 0);
+        yOffsetMapRotated.put(Koma.Type.SKE, 0);
+        xCoordMapRotated.put(Koma.Type.SKE, 0);
+        yCoordMapRotated.put(Koma.Type.SKE, 2);
+        xOffsetMapRotated.put(Koma.Type.SGI, 0);
+        yOffsetMapRotated.put(Koma.Type.SGI, 0);
+        xCoordMapRotated.put(Koma.Type.SGI, 0);
+        yCoordMapRotated.put(Koma.Type.SGI, 3);
+        xOffsetMapRotated.put(Koma.Type.SKI, 0);
+        yOffsetMapRotated.put(Koma.Type.SKI, 0);
+        xCoordMapRotated.put(Koma.Type.SKI, 0);
+        yCoordMapRotated.put(Koma.Type.SKI, 4);
+        xOffsetMapRotated.put(Koma.Type.SKA, 0);
+        yOffsetMapRotated.put(Koma.Type.SKA, 0);
+        xCoordMapRotated.put(Koma.Type.SKA, 0);
+        yCoordMapRotated.put(Koma.Type.SKA, 5);
+        xOffsetMapRotated.put(Koma.Type.SHI, 0);
+        yOffsetMapRotated.put(Koma.Type.SHI, 0);
+        xCoordMapRotated.put(Koma.Type.SHI, 0);
+        yCoordMapRotated.put(Koma.Type.SHI, 6);
 
         xOffsetMapRotated.put(Koma.Type.GFU, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GFU, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GFU, 0L);
-        yCoordMapRotated.put(Koma.Type.GFU, 6L);
+        xCoordMapRotated.put(Koma.Type.GFU, 0);
+        yCoordMapRotated.put(Koma.Type.GFU, 6);
         xOffsetMapRotated.put(Koma.Type.GKY, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GKY, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GKY, 0L);
-        yCoordMapRotated.put(Koma.Type.GKY, 5L);
+        xCoordMapRotated.put(Koma.Type.GKY, 0);
+        yCoordMapRotated.put(Koma.Type.GKY, 5);
         xOffsetMapRotated.put(Koma.Type.GKE, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GKE, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GKE, 0L);
-        yCoordMapRotated.put(Koma.Type.GKE, 4L);
+        xCoordMapRotated.put(Koma.Type.GKE, 0);
+        yCoordMapRotated.put(Koma.Type.GKE, 4);
         xOffsetMapRotated.put(Koma.Type.GGI, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GGI, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GGI, 0L);
-        yCoordMapRotated.put(Koma.Type.GGI, 3L);
+        xCoordMapRotated.put(Koma.Type.GGI, 0);
+        yCoordMapRotated.put(Koma.Type.GGI, 3);
         xOffsetMapRotated.put(Koma.Type.GKI, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GKI, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GKI, 0L);
-        yCoordMapRotated.put(Koma.Type.GKI, 2L);
+        xCoordMapRotated.put(Koma.Type.GKI, 0);
+        yCoordMapRotated.put(Koma.Type.GKI, 2);
         xOffsetMapRotated.put(Koma.Type.GKA, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GKA, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GKA, 0L);
-        yCoordMapRotated.put(Koma.Type.GKA, 1L);
+        xCoordMapRotated.put(Koma.Type.GKA, 0);
+        yCoordMapRotated.put(Koma.Type.GKA, 1);
         xOffsetMapRotated.put(Koma.Type.GHI, SBAN_XOFFSET);
         yOffsetMapRotated.put(Koma.Type.GHI, SBAN_YOFFSET);
-        xCoordMapRotated.put(Koma.Type.GHI, 0L);
-        yCoordMapRotated.put(Koma.Type.GHI, 0L);
+        xCoordMapRotated.put(Koma.Type.GHI, 0);
+        yCoordMapRotated.put(Koma.Type.GHI, 0);
 
         //</editor-fold>
         for (Koma.Type komaType : Koma.Type.values()) {
@@ -297,36 +290,38 @@ public class RenderBoard {
                 }
                 if (rotatedView) {
                     boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                            xCoordMapRotated.get(komaType),
-                            yCoordMapRotated.get(komaType),
-                            xOffsetMapRotated.get(komaType),
-                            yOffsetMapRotated.get(komaType),
-                            CENTRE_X,
-                            CENTRE_Y
+                            new Coordinate(xCoordMapRotated.get(komaType),
+                                    yCoordMapRotated.get(komaType)),
+                            new Dimension(xOffsetMapRotated.get(komaType),
+                                    yOffsetMapRotated.get(komaType)),
+                            new Coordinate(CENTRE_X,
+                                    CENTRE_Y)
                     ));
-                    boardPanel.add(ImageUtils.getTextLabelForBan(xCoordMapRotated.get(komaType) + 1,
-                            yCoordMapRotated.get(komaType),
-                            xOffsetMapRotated.get(komaType),
-                            yOffsetMapRotated.get(komaType),
-                            CENTRE_X,
-                            CENTRE_Y,
+                    boardPanel.add(ImageUtils.getTextLabelForBan(
+                            new Coordinate(xCoordMapRotated.get(komaType) + 1,
+                            yCoordMapRotated.get(komaType)),
+                            new Dimension(xOffsetMapRotated.get(komaType),
+                            yOffsetMapRotated.get(komaType)),
+                            new Coordinate(CENTRE_X,
+                            CENTRE_Y),
                             numberHeld.toString()
                     ));
                 } else {
                     boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                            xCoordMap.get(komaType),
-                            yCoordMap.get(komaType),
-                            xOffsetMap.get(komaType),
-                            yOffsetMap.get(komaType),
-                            CENTRE_X,
-                            CENTRE_Y
+                            new Coordinate(xCoordMap.get(komaType),
+                                    yCoordMap.get(komaType)),
+                            new Dimension(xOffsetMap.get(komaType),
+                                    yOffsetMap.get(komaType)),
+                            new Coordinate(CENTRE_X,
+                                    CENTRE_Y)
                     ));
-                    boardPanel.add(ImageUtils.getTextLabelForBan(xCoordMap.get(komaType) + 1,
-                            yCoordMap.get(komaType),
-                            xOffsetMap.get(komaType),
-                            yOffsetMap.get(komaType),
-                            CENTRE_X,
-                            CENTRE_Y,
+                    boardPanel.add(ImageUtils.getTextLabelForBan(
+                            new Coordinate(xCoordMap.get(komaType) + 1,
+                            yCoordMap.get(komaType)),
+                            new Dimension(xOffsetMap.get(komaType),
+                            yOffsetMap.get(komaType)),
+                            new Coordinate(CENTRE_X,
+                            CENTRE_Y),
                             numberHeld.toString()
                     ));
                 }
@@ -345,7 +340,7 @@ public class RenderBoard {
             drawThisHighlight(rotatedView, boardPanel, thisCoord);
         }
     }
-    
+
     public static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord) {
         Image pieceImage = ImageUtils.loadImageFromResources(
                 "highlight"
@@ -360,12 +355,12 @@ public class RenderBoard {
             y = thisCoord.getY() - 1;
         }
         boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                x,
-                y,
-                MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                MathUtils.COORD_XY,
-                CENTRE_X,
-                CENTRE_Y
+                new Coordinate(x,
+                        y),
+                new Dimension(MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
+                        MathUtils.COORD_XY),
+                new Coordinate(CENTRE_X,
+                        CENTRE_Y)
         ));
     }
 
@@ -373,14 +368,14 @@ public class RenderBoard {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 Image pieceImage = getPieceImage(rotatedView, i, j, board);
-                
+
                 if (pieceImage != null) {
                     addPiece(boardPanel, pieceImage, i, j);
                 }
             }
         }
     }
-    
+
     public static Image getPieceImage(boolean rotatedView, int i, int j, Board board) {
         String name;
         Koma koma;
@@ -399,15 +394,15 @@ public class RenderBoard {
         }
         return ImageUtils.loadImageFromResources(name);
     }
-    
+
     public static void addPiece(JPanel boardPanel, Image pieceImage, int i, int j) {
         boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                i,
-                j,
-                MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                MathUtils.COORD_XY,
-                CENTRE_X,
-                CENTRE_Y
+                new Coordinate(i,
+                        j),
+                new Dimension(MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
+                        MathUtils.COORD_XY),
+                new Coordinate(CENTRE_X,
+                        CENTRE_Y)
         ));
     }
 
@@ -415,12 +410,12 @@ public class RenderBoard {
         ImageUtils.drawImage(board,
                 boardPanel,
                 "grid",
-                MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
-                0,
-                MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
-                MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
-                CENTRE_X,
-                CENTRE_Y
+                new Coordinate(MathUtils.KOMA_X + MathUtils.COORD_XY * 2, 0),
+                new Dimension(
+                        MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
+                        MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2
+                ),
+                new Coordinate(CENTRE_X, CENTRE_Y)
         );
     }
 
@@ -428,23 +423,26 @@ public class RenderBoard {
         ImageUtils.drawImage(board,
                 boardPanel,
                 "ban",
-                MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
-                MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2,
-                MathUtils.KOMA_X + MathUtils.COORD_XY,
-                MathUtils.KOMA_Y * 7,
-                CENTRE_X,
-                CENTRE_Y
+                new Coordinate(
+                        MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
+                        MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2
+                ),
+                new Dimension(
+                        MathUtils.KOMA_X + MathUtils.COORD_XY,
+                        MathUtils.KOMA_Y * 7
+                ),
+                new Coordinate(
+                        CENTRE_X,
+                        CENTRE_Y
+                )
         );
 
         ImageUtils.drawImage(board,
                 boardPanel,
                 "ban",
-                0,
-                0,
-                MathUtils.KOMA_X + MathUtils.COORD_XY,
-                MathUtils.KOMA_Y * 7,
-                CENTRE_X,
-                CENTRE_Y
+                new Coordinate(0, 0),
+                new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
+                new Coordinate(CENTRE_X, CENTRE_Y)
         );
     }
 
@@ -452,12 +450,12 @@ public class RenderBoard {
         ImageUtils.drawImage(board,
                 boardPanel,
                 "background",
-                MathUtils.KOMA_X + MathUtils.COORD_XY * 2,
-                0,
-                MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
-                MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
-                CENTRE_X,
-                CENTRE_Y
+                new Coordinate(MathUtils.KOMA_X + MathUtils.COORD_XY * 2, 0),
+                new Dimension(
+                        MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
+                        MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2
+                ),
+                new Coordinate(CENTRE_X, CENTRE_Y)
         );
     }
 

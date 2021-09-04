@@ -4,15 +4,15 @@ package com.chadfield.shogiexplorer.objects;
  *
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
-public class Coordinate {
+public class Dimension {
     private Integer x;
     private Integer y;
     
-    public Coordinate() {
+    public Dimension() {
         
     }
     
-    public Coordinate(Integer x, Integer y) {
+    public Dimension(Integer x, Integer y) {
         this.x = x;
         this.y = y;
     }

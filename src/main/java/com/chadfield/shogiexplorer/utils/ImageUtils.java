@@ -10,37 +10,39 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import com.chadfield.shogiexplorer.objects.Board;
+import com.chadfield.shogiexplorer.objects.Coordinate;
+import com.chadfield.shogiexplorer.objects.Dimension;
 import com.chadfield.shogiexplorer.objects.ImageCache;
 
 public class ImageUtils {
-    
+
     private ImageUtils() {
         throw new IllegalStateException("Utility class");
     }
 
-    public static JLabel getPieceLabelForKoma(Image image, long i, long j, long xOffset, long yOffset, long centerX, long centerY) {
+    public static JLabel getPieceLabelForKoma(Image image, Coordinate boardCoord, Dimension offset, Coordinate imageLocation) {
         JLabel pieceLabel = new JLabel(new ImageIcon(image));
         pieceLabel.setBounds(
-                (int) (centerX + (i * MathUtils.KOMA_X + xOffset)),
-                (int) (centerY + (j * MathUtils.KOMA_Y + yOffset)),
-                (int) MathUtils.KOMA_X,
-                (int) MathUtils.KOMA_Y);
+                imageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getX()),
+                imageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getY()),
+                MathUtils.KOMA_X,
+                MathUtils.KOMA_Y);
         return pieceLabel;
     }
 
-    public static JLabel getTextLabelForBan(long i, long j, long xOffset, long yOffset, long centerX, long centerY, String text) {
+    public static JLabel getTextLabelForBan(Coordinate boardCoord, Dimension offset, Coordinate ImageLocation, String text) {
         JLabel numberLabel = new JLabel(text);
         numberLabel.setBounds(
-                (int) (centerX + (i * MathUtils.KOMA_X + xOffset)),
-                (int) (centerY + (j * MathUtils.KOMA_Y + yOffset)),
-                (int) MathUtils.KOMA_X,
-                (int) MathUtils.KOMA_Y);
+                ImageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getX()),
+                ImageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getY()),
+                MathUtils.KOMA_X,
+                MathUtils.KOMA_Y);
         return numberLabel;
     }
 
     public static Image loadImageFromResources(String imageName) {
         Image image1 = null;
-        Image image2 =null;
+        Image image2 = null;
         Image image3 = null;
         try {
             image1 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + ".png"));
@@ -53,7 +55,7 @@ public class ImageUtils {
         return (mri);
     }
 
-    public static void drawImage(Board board, JPanel boardPanel, String imageName, long xCoord, long yCoord, long width, long height, long centerX, long centerY) {
+    public static void drawImage(Board board, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset) {
         ImageCache imageCache = board.getImageCache();
         Image imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
@@ -62,10 +64,10 @@ public class ImageUtils {
         }
         JLabel imageLable = new JLabel(new ImageIcon(imageFile));
         imageLable.setBounds(
-                (int) (centerX + xCoord),
-                (int) (centerY + yCoord),
-                (int) (width),
-                (int) (height));
+                offset.getX() + imageCoordinate.getX(),
+                offset.getY() + imageCoordinate.getY(),
+                imageDimension.getX(),
+                imageDimension.getY());
         boardPanel.add(imageLable);
     }
 }
