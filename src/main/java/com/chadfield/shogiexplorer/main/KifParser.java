@@ -61,110 +61,108 @@ public class KifParser {
         Coordinate lastDestination = null;
         String line;
         int count = 0;
-        boolean foundHeader = false;
-        String comment = "";
+        Boolean foundHeader = false;
         try (BufferedReader fileReader = Files.newBufferedReader(kifFile.toPath())) {
             while ((line = fileReader.readLine()) != null) {
-                if (isResigns(line)) {
-                    count++;
-                    if (board.getNextMove() == Board.Turn.SENTE) {
-                        board.setNextMove(Board.Turn.GOTE);
-                    } else {
-                        board.setNextMove(Board.Turn.SENTE);
-                    }
-
-                    String splitLine[] = line.trim().split("\\s+|\\u3000");
-                    String move;
-                    int gameNum = Integer.parseInt(splitLine[0]);
-                    move = splitLine[1];
-                    if (isSame(line)) {
-                        move += "\u3000" + splitLine[2];
-                    }
-
-                    if (board.getNextMove() == Board.Turn.GOTE) {
-                        moveListModel.addElement(gameNum + " ☗" + move + "\n");
-                    } else {
-                        moveListModel.addElement(gameNum + " ☖" + move + "\n");
-                    }
-                    Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination());
-                    positionList.add(position);
-                    continue;
-                }
-                if (isComment(line)) {
-                    if (!foundHeader) {
-                        continue;
-                    }
-                }
-                if (line.startsWith(SENTE)) {
-                    game.setSente(line.substring(SENTE.length()));
-                }
-                if (line.startsWith(GOTE)) {
-                    game.setGote(line.substring(GOTE.length()));
-                }
-                if (line.startsWith(PLACE)) {
-                    game.setPlace(line.substring(PLACE.length()));
-                }
-                if (line.startsWith(TIME_LIMIT)) {
-                    game.setTimeLimit(line.substring(TIME_LIMIT.length()).split("#")[0]);
-                }
-                if (line.startsWith(DATE)) {
-                    game.setDate(line.substring(DATE.length()));
-                }
                 if (!foundHeader) {
                     foundHeader = isHeader(line);
-                    if (foundHeader) {
+                    if (foundHeader || isComment(line)) {
                         continue;
                     }
-                }
-                if (foundHeader) {
+                    parseGameDetails(line, game);
+                } else {
                     if (isComment(line)) {
-                        comment += line.substring(1) + "\n";
+                        positionList.getLast().setComment(positionList.getLast().getComment()+line.substring(1) + "\n") ;
                         continue;
                     }
-                    if (comment.length() > 0) {
-                        positionList.getLast().setComment(comment);
-                        comment = "";
-                    }
+                    
                     count++;
-                    if (board.getNextMove() == Board.Turn.SENTE) {
-                        board.setNextMove(Board.Turn.GOTE);
-                    } else {
-                        board.setNextMove(Board.Turn.SENTE);
+                    
+                    if (isResigns(line)) {
+                        parseResignLine(board, line, moveListModel, positionList);
+                        continue;
                     }
+
+                    board.setNextMove(switchTurn(board.getNextMove()));
 
                     String splitLine[] = line.trim().split("\\s+|\\u3000");
-                    String move;
-                    int gameNum;
-                    try {
-                        gameNum = Integer.parseInt(splitLine[0]);
-                    } catch (NumberFormatException ex) {
-                        continue;
-                    }
-                    move = splitLine[1];
-                    if (isSame(line)) {
-                        move += "\u3000" + splitLine[2];
-                    }
+                            
+                    String move = parseRegularMove(splitLine, isSame(line));
 
-                    if (board.getNextMove() == Board.Turn.GOTE) {
-                        moveListModel.addElement(gameNum + " ☗" + move + "\n");
-                    } else {
-                        moveListModel.addElement(gameNum + " ☖" + move + "\n");
-                    }
+                    int gameNum = Integer.parseInt(splitLine[0]);
+                    
+                    addMoveToMoveList(board, moveListModel, gameNum, move);
+
                     Position position = executeMove(board, move, lastDestination);
                     if (position != null) {
                         lastDestination = position.getDestination();
                     }
                     positionList.add(position);
                 }
+
             }
         } catch (IOException ex) {
             Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (comment.length() > 0) {
-            positionList.getLast().setComment(comment);
-        }
         game.setPositionList(positionList);
         return game;
+    }
+    
+    
+    public static String parseRegularMove(String[] moveArray, boolean isSame) {
+        String move = moveArray[1];
+        if (isSame) {
+            move += "\u3000" + moveArray[2];
+        }
+        return move;
+    }
+        
+    public static void parseResignLine(Board board, String line, DefaultListModel moveListModel, LinkedList<Position> positionList) {
+        board.setNextMove(switchTurn(board.getNextMove()));
+
+        String splitLine[] = line.trim().split("\\s+|\\u3000");
+        String move;
+        int gameNum = Integer.parseInt(splitLine[0]);
+        move = splitLine[1];
+
+        addMoveToMoveList(board, moveListModel, gameNum, move);
+
+        Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination());
+        positionList.add(position);
+    }
+    
+    public static void parseGameDetails(String line, Game game) {
+        if (line.startsWith(SENTE)) {
+            game.setSente(line.substring(SENTE.length()));
+        }
+        if (line.startsWith(GOTE)) {
+            game.setGote(line.substring(GOTE.length()));
+        }
+        if (line.startsWith(PLACE)) {
+            game.setPlace(line.substring(PLACE.length()));
+        }
+        if (line.startsWith(TIME_LIMIT)) {
+            game.setTimeLimit(line.substring(TIME_LIMIT.length()).split("#")[0]);
+        }
+        if (line.startsWith(DATE)) {
+            game.setDate(line.substring(DATE.length()));
+        }
+    }
+    
+    public static void addMoveToMoveList(Board board, DefaultListModel moveListModel, int gameNum, String move) {
+        if (board.getNextMove() == Board.Turn.GOTE) {
+            moveListModel.addElement(gameNum + " ☗" + move + "\n");
+        } else {
+            moveListModel.addElement(gameNum + " ☖" + move + "\n");
+        }
+    }
+    
+    public static Board.Turn switchTurn(Board.Turn turn) {
+        if (turn == Board.Turn.GOTE) {
+            return Board.Turn.SENTE;
+        } else {
+            return Board.Turn.GOTE;
+        }
     }
 
     public static String getTimestamp(String line) {
