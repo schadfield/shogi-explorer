@@ -372,35 +372,43 @@ public class RenderBoard {
     public static void drawPieces(Board board, JPanel boardPanel, boolean rotatedView) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                Koma koma = null;
-                Image pieceImage = null;
-                if (rotatedView) {
-                    if (board.getMasu()[8 - i][8 - j] != null) {
-                        koma = board.getMasu()[8 - i][8 - j];
-                        pieceImage = ImageUtils.loadImageFromResources(
-                                substituteKomaNameRotated(koma.getType().toString())
-                        );
-                    }
-                } else {
-                    if (board.getMasu()[i][j] != null) {
-                        koma = board.getMasu()[i][j];
-                        pieceImage = ImageUtils.loadImageFromResources(
-                                substituteKomaName(koma.getType().toString())
-                        );
-                    }
-                }
-                if (koma != null && pieceImage != null) {
-                    boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                            i,
-                            j,
-                            MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                            MathUtils.COORD_XY,
-                            CENTRE_X,
-                            CENTRE_Y
-                    ));
+                Image pieceImage = getPieceImage(rotatedView, i, j, board);
+                
+                if (pieceImage != null) {
+                    addPiece(boardPanel, pieceImage, i, j);
                 }
             }
         }
+    }
+    
+    public static Image getPieceImage(boolean rotatedView, int i, int j, Board board) {
+        String name;
+        Koma koma;
+        if (rotatedView) {
+            koma = board.getMasu()[8 - i][8 - j];
+            if (koma == null) {
+                return null;
+            }
+            name = substituteKomaNameRotated(koma.getType().toString());
+        } else {
+            koma = board.getMasu()[i][j];
+            if (koma == null) {
+                return null;
+            }
+            name = substituteKomaName(koma.getType().toString());
+        }
+        return ImageUtils.loadImageFromResources(name);
+    }
+    
+    public static void addPiece(JPanel boardPanel, Image pieceImage, int i, int j) {
+        boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
+                i,
+                j,
+                MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
+                MathUtils.COORD_XY,
+                CENTRE_X,
+                CENTRE_Y
+        ));
     }
 
     public static void drawGrid(Board board, JPanel boardPanel) {
