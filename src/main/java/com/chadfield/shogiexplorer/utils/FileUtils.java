@@ -5,6 +5,10 @@ import com.chadfield.shogiexplorer.objects.Koma;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaName;
 
 public class FileUtils {
+    
+    private FileUtils() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static final String RESOURCE_PATH = "src/main/resources/";
 

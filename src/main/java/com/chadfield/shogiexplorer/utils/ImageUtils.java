@@ -13,6 +13,10 @@ import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.objects.ImageCache;
 
 public class ImageUtils {
+    
+    private ImageUtils() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static JLabel getPieceLabelForKoma(Image image, long i, long j, long xOffset, long yOffset, long centerX, long centerY) {
         JLabel pieceLabel = new JLabel(new ImageIcon(image));
