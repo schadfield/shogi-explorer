@@ -179,6 +179,40 @@ public class KifParser {
         }
         return line.substring(timeStartIndex);
     }
+    
+    public static void executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
+        if (getKoma(board, thisDestination) != null) {
+            Koma thisKoma = getKoma(board, thisDestination);
+            if (thisKoma != null) {
+                addPieceToInHand(getKoma(board, thisDestination), board);
+            }
+        }
+        Koma thisKoma = getKoma(board, thisSource);
+        if (thisKoma != null) {
+            putKoma(board, thisDestination, promCheck(thisKoma, move));
+        }
+        putKoma(board, thisSource, null);
+    }
+    
+    public static void executeSameMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
+        Koma thisKoma = getKoma(board, thisDestination);
+        if (thisKoma != null) {
+            addPieceToInHand(thisKoma, board);
+        }
+        Koma thisOtherKoma = getKoma(board, thisSource);
+        if (thisOtherKoma != null) {
+            putKoma(board, thisDestination, promCheck(thisOtherKoma, move));
+        }
+        putKoma(board, thisSource, null);
+    }
+    
+    public static void executeDropMove(Board board, Coordinate thisDestination, String move) {
+        Koma koma = getDropKoma(move, board.getNextMove());
+        if (koma != null) {
+            putKoma(board, thisDestination, koma);
+            removePieceInHand(koma.getType(), board);
+        }
+    }
 
     public static Position executeMove(Board board, String move, Coordinate lastDestination) {
         Coordinate thisDestination = new Coordinate();
@@ -198,38 +232,12 @@ public class KifParser {
         if (!isResigns(move)) {
             if (!isDrop(move)) {
                 if (!isSame(move)) {
-                    //regular
-                    if (getKoma(board, thisDestination) != null) {
-                        Koma thisKoma = getKoma(board, thisDestination);
-                        if (thisKoma != null) {
-                            addPieceToInHand(getKoma(board, thisDestination), board);
-                        }
-                    }
-                    Koma thisKoma = getKoma(board, thisSource);
-                    if (thisKoma != null) {
-                        putKoma(board, thisDestination, promCheck(thisKoma, move));
-                    }
-                    putKoma(board, thisSource, null);
+                    executeRegularMove(board, thisDestination, thisSource, move);
                 } else {
-                    //same
-                    Koma thisKoma = getKoma(board, thisDestination);
-                    if (thisKoma != null) {
-                        addPieceToInHand(thisKoma, board);
-                    }
-                    Koma thisOtherKoma = getKoma(board, thisSource);
-                    if (thisOtherKoma != null) {
-                        putKoma(board, thisDestination, promCheck(thisOtherKoma, move));
-                    }
-                    putKoma(board, thisSource, null);
-
+                    executeSameMove(board, thisDestination, thisSource, move);
                 }
             } else {
-                //drop
-                Koma koma = getDropKoma(move, board.getNextMove());
-                if (koma != null) {
-                    putKoma(board, thisDestination, koma);
-                    removePieceInHand(koma.getType(), board);
-                }
+                executeDropMove(board, thisDestination, move);
             }
         }
         return new Position(SFENParser.getSFEN(board), thisSource, thisDestination);
