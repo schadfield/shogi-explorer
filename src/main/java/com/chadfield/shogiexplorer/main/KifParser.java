@@ -100,14 +100,21 @@ public class KifParser {
         return game;
     }
     
-    public static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, List<Position> positionList) {
+    public static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
         board.setNextMove(switchTurn(board.getNextMove()));
 
         String[] splitLine = line.trim().split("\\s+|\\u3000");
 
+        int gameNum;
+        
+        try {
+            gameNum = Integer.parseInt(splitLine[0]);
+        } catch (NumberFormatException ex) {
+            positionList.getLast().setComment(positionList.getLast().getComment()+line + "\n") ;
+            return lastDestination;
+        }
+        
         String move = extractRegularMove(splitLine, isSame(line));
-
-        int gameNum = Integer.parseInt(splitLine[0]);
 
         addMoveToMoveList(board, moveListModel, gameNum, move);
 
