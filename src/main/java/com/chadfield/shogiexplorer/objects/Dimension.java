@@ -5,43 +5,43 @@ package com.chadfield.shogiexplorer.objects;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Dimension {
-    private Integer x;
-    private Integer y;
+    private Integer width;
+    private Integer height;
     
     public Dimension() {
         
     }
     
     public Dimension(Integer x, Integer y) {
-        this.x = x;
-        this.y = y;
+        this.width = x;
+        this.height = y;
     }
 
     /**
-     * @return the x
+     * @return the width
      */
-    public Integer getX() {
-        return x;
+    public Integer getWidth() {
+        return width;
     }
 
     /**
-     * @param x the x to set
+     * @param width the width to set
      */
-    public void setX(Integer x) {
-        this.x = x;
+    public void setWidth(Integer width) {
+        this.width = width;
     }
 
     /**
-     * @return the y
+     * @return the height
      */
-    public Integer getY() {
-        return y;
+    public Integer getHeight() {
+        return height;
     }
 
     /**
-     * @param y the y to set
+     * @param height the height to set
      */
-    public void setY(Integer y) {
-        this.y = y;
+    public void setHeight(Integer height) {
+        this.height = height;
     }
 }

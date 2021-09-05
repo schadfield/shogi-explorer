@@ -23,8 +23,8 @@ public class ImageUtils {
     public static JLabel getPieceLabelForKoma(Image image, Coordinate boardCoord, Dimension offset, Coordinate imageLocation) {
         JLabel pieceLabel = new JLabel(new ImageIcon(image));
         pieceLabel.setBounds(
-                imageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getX()),
-                imageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getY()),
+                imageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getWidth()),
+                imageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getHeight()),
                 MathUtils.KOMA_X,
                 MathUtils.KOMA_Y);
         return pieceLabel;
@@ -33,8 +33,8 @@ public class ImageUtils {
     public static JLabel getTextLabelForBan(Coordinate boardCoord, Dimension offset, Coordinate ImageLocation, String text) {
         JLabel numberLabel = new JLabel(text);
         numberLabel.setBounds(
-                ImageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getX()),
-                ImageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getY()),
+                ImageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getWidth()),
+                ImageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getHeight()),
                 MathUtils.KOMA_X,
                 MathUtils.KOMA_Y);
         return numberLabel;
@@ -66,8 +66,8 @@ public class ImageUtils {
         imageLable.setBounds(
                 offset.getX() + imageCoordinate.getX(),
                 offset.getY() + imageCoordinate.getY(),
-                imageDimension.getX(),
-                imageDimension.getY());
+                imageDimension.getWidth(),
+                imageDimension.getHeight());
         boardPanel.add(imageLable);
     }
 }
