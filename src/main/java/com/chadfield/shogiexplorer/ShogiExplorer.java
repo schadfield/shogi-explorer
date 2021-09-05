@@ -30,8 +30,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     transient Game game;
     int moveNumber;
     boolean play;
-    DefaultListModel moveListModel = new DefaultListModel();
-    DefaultListModel engineListModel = new DefaultListModel();
+    DefaultListModel <String>moveListModel = new DefaultListModel<String>();
+    DefaultListModel <String>engineListModel = new DefaultListModel<String>();
     boolean rotatedView;
     transient List<Engine> engineList = new ArrayList<>();
     transient FileNameExtensionFilter kifFileFilter;
@@ -476,7 +476,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         evt.getID();
-        // TODO: System.out.println("Save window size here?");
+        // TODO: "Save window size here?"
     }//GEN-LAST:event_formWindowClosing
 
     private void boardPanelComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_boardPanelComponentResized
