@@ -29,6 +29,10 @@ public class RenderBoard {
     final static int CENTRE_X = 5;
     final static int CENTRE_Y = 5;
 
+    private RenderBoard() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static void loadBoard(Board board, javax.swing.JPanel boardPanel, boolean rotatedView) {
         // TODO: why is loadBoard() being called when the boardPanel has no width?
         if (boardPanel.getWidth() == 0) {
@@ -67,22 +71,22 @@ public class RenderBoard {
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(ImageUtils.getTextLabelForBan(
                         new Coordinate(i,
-                        0),
+                                0),
                         new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
-                        MathUtils.BOARD_XY * MathUtils.KOMA_Y + MathUtils.COORD_XY / 2 - 3),
+                                MathUtils.BOARD_XY * MathUtils.KOMA_Y + MathUtils.COORD_XY / 2 - 3),
                         new Coordinate(CENTRE_X,
-                        CENTRE_Y),
+                                CENTRE_Y),
                         Integer.toString(i + 1)
                 ));
             }
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(ImageUtils.getTextLabelForBan(
                         new Coordinate(0,
-                        i),
+                                i),
                         new Dimension(MathUtils.COORD_XY * 4 + 7,
-                        MathUtils.COORD_XY / 2 + 7),
+                                MathUtils.COORD_XY / 2 + 7),
                         new Coordinate(CENTRE_X,
-                        CENTRE_Y),
+                                CENTRE_Y),
                         rank[8 - i]
                 ));
             }
@@ -90,22 +94,22 @@ public class RenderBoard {
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(ImageUtils.getTextLabelForBan(
                         new Coordinate(i,
-                        0),
+                                0),
                         new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
-                        -(MathUtils.COORD_XY / 2) - 3),
+                                -(MathUtils.COORD_XY / 2) - 3),
                         new Coordinate(CENTRE_X,
-                        CENTRE_Y),
+                                CENTRE_Y),
                         Integer.toString(9 - i)
                 ));
             }
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(ImageUtils.getTextLabelForBan(
                         new Coordinate(0,
-                        i),
+                                i),
                         new Dimension(MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 3,
-                        MathUtils.COORD_XY / 2 + 7),
+                                MathUtils.COORD_XY / 2 + 7),
                         new Coordinate(CENTRE_X,
-                        CENTRE_Y),
+                                CENTRE_Y),
                         rank[i]
                 ));
             }
@@ -299,11 +303,11 @@ public class RenderBoard {
                     ));
                     boardPanel.add(ImageUtils.getTextLabelForBan(
                             new Coordinate(xCoordMapRotated.get(komaType) + 1,
-                            yCoordMapRotated.get(komaType)),
+                                    yCoordMapRotated.get(komaType)),
                             new Dimension(xOffsetMapRotated.get(komaType),
-                            yOffsetMapRotated.get(komaType)),
+                                    yOffsetMapRotated.get(komaType)),
                             new Coordinate(CENTRE_X,
-                            CENTRE_Y),
+                                    CENTRE_Y),
                             numberHeld.toString()
                     ));
                 } else {
@@ -317,11 +321,11 @@ public class RenderBoard {
                     ));
                     boardPanel.add(ImageUtils.getTextLabelForBan(
                             new Coordinate(xCoordMap.get(komaType) + 1,
-                            yCoordMap.get(komaType)),
+                                    yCoordMap.get(komaType)),
                             new Dimension(xOffsetMap.get(komaType),
-                            yOffsetMap.get(komaType)),
+                                    yOffsetMap.get(komaType)),
                             new Coordinate(CENTRE_X,
-                            CENTRE_Y),
+                                    CENTRE_Y),
                             numberHeld.toString()
                     ));
                 }

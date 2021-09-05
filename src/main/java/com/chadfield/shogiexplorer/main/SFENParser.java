@@ -25,7 +25,7 @@ public class SFENParser {
         
         String[] splitSfen = sfen.split(" ");
      
-        board = parsePieces(board, splitSfen[0]);
+        parsePieces(board, splitSfen[0]);
         board.setNextMove(getTurn(splitSfen[1]));
         board = parseInHand(board, splitSfen[2]);
         board.setMoveCount(Integer.parseInt(splitSfen[3]));
