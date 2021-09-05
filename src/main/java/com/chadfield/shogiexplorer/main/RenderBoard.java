@@ -26,7 +26,6 @@ public class RenderBoard {
     }
 
     public static void loadBoard(Board board, javax.swing.JPanel boardPanel, boolean rotatedView) {
-        // TODO: why is loadBoard() being called when the boardPanel has no width?
         if (boardPanel.getWidth() == 0) {
             return;
         }
