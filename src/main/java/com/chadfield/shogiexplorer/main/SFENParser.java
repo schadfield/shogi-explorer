@@ -285,7 +285,7 @@ public class SFENParser {
     }
     
     public static String getSFENCode(Koma koma) {
-        HashMap<Koma.Type, String> pieceMap = new HashMap<>();
+        EnumMap<Koma.Type, String> pieceMap = new EnumMap<>(Koma.Type.class);
 
         //<editor-fold defaultstate="collapsed" desc="Map initialization">
         pieceMap.put(Koma.Type.GKY, "l");

@@ -6,28 +6,20 @@ import com.chadfield.shogiexplorer.objects.Koma;
 import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.utils.MathUtils;
 import com.chadfield.shogiexplorer.utils.ImageUtils;
-import java.util.HashMap;
 import javax.swing.JPanel;
 import com.chadfield.shogiexplorer.objects.Board.Turn;
 import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Dimension;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaName;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaNameRotated;
+import java.util.EnumMap;
 
 public class RenderBoard {
 
-    public static final HashMap<Koma.Type, Integer> xOffsetMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> yOffsetMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> xOffsetMapRotated = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> yOffsetMapRotated = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> xCoordMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> yCoordMap = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> xCoordMapRotated = new HashMap<>();
-    public static final HashMap<Koma.Type, Integer> yCoordMapRotated = new HashMap<>();
-    final static int SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
-    final static int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
-    final static int CENTRE_X = 5;
-    final static int CENTRE_Y = 5;
+    static final int SBAN_XOFFSET = (MathUtils.BOARD_XY + 1) * MathUtils.KOMA_X + MathUtils.COORD_XY * 5;
+    static final int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
+    static final int CENTRE_X = 5;
+    static final int CENTRE_Y = 5;
 
     private RenderBoard() {
         throw new IllegalStateException("Utility class");
@@ -55,6 +47,10 @@ public class RenderBoard {
         drawBackground(board, boardPanel);
         drawTurnNotification(board, boardPanel, rotatedView);
 
+        makeVisible(boardPanel);
+    }
+    
+    public static void makeVisible(JPanel boardPanel) {
         java.awt.EventQueue.invokeLater(()-> {
             {
                 boardPanel.setVisible(true);
@@ -160,6 +156,15 @@ public class RenderBoard {
 
     public static void drawPiecesInHand(Board board, JPanel boardPanel, boolean rotatedView) {
 
+        EnumMap<Koma.Type, Integer> xOffsetMap = new EnumMap<>(Koma.Type.class);
+        EnumMap<Koma.Type, Integer> yOffsetMap = new EnumMap<>(Koma.Type.class);
+        EnumMap<Koma.Type, Integer> xOffsetMapRotated = new EnumMap<>(Koma.Type.class);
+        EnumMap<Koma.Type, Integer> yOffsetMapRotated = new EnumMap<>(Koma.Type.class);
+        EnumMap<Koma.Type, Integer> xCoordMap = new EnumMap<>(Koma.Type.class);
+        EnumMap<Koma.Type, Integer> yCoordMap = new EnumMap<>(Koma.Type.class);
+        EnumMap<Koma.Type, Integer> xCoordMapRotated = new EnumMap<>(Koma.Type.class);
+        EnumMap<Koma.Type, Integer> yCoordMapRotated = new EnumMap<>(Koma.Type.class);
+    
         //<editor-fold defaultstate="collapsed" desc="Map initialization">
         xOffsetMap.put(Koma.Type.GFU, 0);
         yOffsetMap.put(Koma.Type.GFU, 0);
