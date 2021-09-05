@@ -21,7 +21,7 @@ public class ConfigurationItem {
     
     private JSpinner spinField;
     
-    private JComboBox comboBox;
+    private JComboBox<String> comboBox;
 
     public ConfigurationItem(String optionName) {
         this.optionName = optionName;
@@ -100,14 +100,14 @@ public class ConfigurationItem {
     /**
      * @return the comboBox
      */
-    public JComboBox getComboBox() {
+    public JComboBox<String> getComboBox() {
         return comboBox;
     }
 
     /**
      * @param comboBox the comboBox to set
      */
-    public void setComboBox(JComboBox comboBox) {
+    public void setComboBox(JComboBox<String> comboBox) {
         this.comboBox = comboBox;
     }
 
