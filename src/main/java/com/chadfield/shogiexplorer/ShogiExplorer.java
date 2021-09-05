@@ -459,6 +459,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jRadioButtonMenuItem1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ItemStateChanged
+        evt.getID();
         rotatedView = !rotatedView;
         if (rotatedView) {
             prefs.put(ROTATED, "true");
@@ -474,73 +475,79 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButtonMenuItem1ItemStateChanged
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // System.out.println("Save window size here?");
+        evt.getID();
+        // TODO: System.out.println("Save window size here?");
     }//GEN-LAST:event_formWindowClosing
 
     private void boardPanelComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_boardPanelComponentResized
+        evt.getID();
         RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }//GEN-LAST:event_boardPanelComponentResized
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        evt.getID();
         File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));
         jKifFileChooser.setCurrentDirectory(dirFile);
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                jKifFileChooser.showOpenDialog(mainFrame);
-                File kifFile = jKifFileChooser.getSelectedFile();
-                if (kifFile == null) {
-                    return;
-                }
-                prefs.put("fileOpenDir", kifFile.getParent());
-                try {
-                    game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
-                } catch (IOException ex) {
-                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
-                gameTextArea.setText(null);
-                gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
-                gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
-                gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
-                gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
-                gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
-                moveNumber = 0;
-                moveList.setSelectedIndex(0);
+        java.awt.EventQueue.invokeLater(() -> {
+            jKifFileChooser.showOpenDialog(mainFrame);
+            File kifFile = jKifFileChooser.getSelectedFile();
+            if (kifFile == null) {
+                return;
             }
+            prefs.put("fileOpenDir", kifFile.getParent());
+            try {
+                game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
+            } catch (IOException ex) {
+                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+            gameTextArea.setText(null);
+            gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
+            gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
+            gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
+            gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
+            gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
+            moveNumber = 0;
+            moveList.setSelectedIndex(0);
         });
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
+        evt.getID();
         if (!play && game != null && moveNumber < game.getPositionList().size() + 1) {
             moveList.setSelectedIndex(moveNumber + 1);
         }
     }//GEN-LAST:event_mediaForwardActionPerformed
 
     private void mediaBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaBackActionPerformed
+        evt.getID();
         if (!play && moveNumber > 0) {
             moveList.setSelectedIndex(moveNumber - 1);
         }
     }//GEN-LAST:event_mediaBackActionPerformed
 
     private void mediaStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaStartActionPerformed
+        evt.getID();
         if (!play) {
             moveList.setSelectedIndex(0);
         }
     }//GEN-LAST:event_mediaStartActionPerformed
 
     private void mediaEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaEndActionPerformed
+        evt.getID();
         if (!play && game != null) {
             moveList.setSelectedIndex(game.getPositionList().size() - 1);
         }
     }//GEN-LAST:event_mediaEndActionPerformed
 
     private void mediaStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaStopActionPerformed
+        evt.getID();
         play = false;
     }//GEN-LAST:event_mediaStopActionPerformed
 
     private void mediaPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaPlayActionPerformed
+        evt.getID();
         if (!play && game != null) {
             new Thread() {
                 @Override
@@ -582,6 +589,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_moveListValueChanged
 
     private void mediaReverseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaReverseActionPerformed
+        evt.getID();
         if (!play) {
             new Thread() {
                 @Override
@@ -589,11 +597,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     play = true;
                     while (play) {
                         if (moveNumber > 0) {
-                            java.awt.EventQueue.invokeLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    moveList.setSelectedIndex(moveNumber - 1);
-                                }
+                            java.awt.EventQueue.invokeLater(() -> {
+                                moveList.setSelectedIndex(moveNumber - 1);
                             });
                             try {
                                 Thread.sleep(500L);
@@ -611,22 +616,21 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_mediaReverseActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                jEngineManagerDialog.pack();
-                jEngineManagerDialog.setLocationRelativeTo(mainFrame);
-                jEngineManagerDialog.setVisible(true);
-            }
+            evt.getID();        
+            java.awt.EventQueue.invokeLater(() -> {
+            jEngineManagerDialog.pack();
+            jEngineManagerDialog.setLocationRelativeTo(mainFrame);
+            jEngineManagerDialog.setVisible(true);
         });
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void deleteEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteEngineButtonActionPerformed
+        evt.getID();
         engineList = EngineManager.deleteSelectedEngine(engineListModel, jEngineList, engineList);
     }//GEN-LAST:event_deleteEngineButtonActionPerformed
 
     private void addEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEngineButtonActionPerformed
+        evt.getID();
         File dirFile = new File(prefs.get("engineOpenDir", System.getProperty("user.home")));
         jEngineFileChooser1.setCurrentDirectory(dirFile);
         jEngineFileChooser1.showOpenDialog(jEngineManagerDialog);
@@ -641,12 +645,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_addEngineButtonActionPerformed
 
     private void configureEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureEngineButtonActionPerformed
+        evt.getID();
         if (engineList.size() > 0) {
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    ConfigurationManager.configureEngine(engineList, engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel);
-                }
+            java.awt.EventQueue.invokeLater(() -> {
+                ConfigurationManager.configureEngine(engineList, engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel);
             });
         }
     }//GEN-LAST:event_configureEngineButtonActionPerformed
@@ -667,12 +669,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                mainFrame = new ShogiExplorer();
-                mainFrame.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            mainFrame = new ShogiExplorer();
+            mainFrame.setVisible(true);
         });
     }
 
