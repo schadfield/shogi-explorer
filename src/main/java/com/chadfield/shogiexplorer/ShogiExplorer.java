@@ -30,14 +30,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
     transient Game game;
     int moveNumber;
     boolean play;
-    DefaultListModel <String>moveListModel = new DefaultListModel<String>();
-    DefaultListModel <String>engineListModel = new DefaultListModel<String>();
+    DefaultListModel <String>moveListModel = new DefaultListModel<>();
+    DefaultListModel <String>engineListModel = new DefaultListModel<>();
     boolean rotatedView;
     transient List<Engine> engineList = new ArrayList<>();
     transient FileNameExtensionFilter kifFileFilter;
     File newEngineFile;
     static JFrame mainFrame;
-    final static String ROTATED = "rotated";
+    static final String ROTATED = "rotated";
 
     /**
      * Creates new form NewJFrame
@@ -58,7 +58,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (engineList == null) {
             engineList = new ArrayList<>();
         }
-        if (engineList.size() > 0) {
+        if (!engineList.isEmpty()) {
             jEngineList.setSelectedIndex(0);
         }
     }
