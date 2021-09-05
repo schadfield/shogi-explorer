@@ -5,10 +5,10 @@ package com.chadfield.shogiexplorer.objects;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Position {
-    public String game;
-    public Coordinate source;
-    public Coordinate destination;
-    public String comment;
+    private String game;
+    private Coordinate source;
+    private Coordinate destination;
+    private String comment;
     
     public Position(String game, Coordinate source, Coordinate destination) {
         this.game = game;

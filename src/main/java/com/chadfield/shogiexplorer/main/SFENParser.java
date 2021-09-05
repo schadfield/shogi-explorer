@@ -197,36 +197,38 @@ public class SFENParser {
     }
 
     public static String getSFEN(Board board) {
-        String result = "";
+        StringBuilder bldResult = new StringBuilder();
         int spaceCount = 0;
         for (int j = 0; j < 9; j++) {
             for (int i = 0; i < 9; i++) {
                 if (board.getMasu()[i][j] != null) {
                     if (spaceCount > 0) {
-                        result += spaceCount;
+                        bldResult.append(spaceCount);
                         spaceCount = 0;
                     }
-                    result += getSFENCode(board.getMasu()[i][j]);
+                    bldResult.append(getSFENCode(board.getMasu()[i][j]));
                 } else {
                     spaceCount++;
                 }
             }
             if (spaceCount > 0) {
-                result += spaceCount;
+                bldResult.append(spaceCount);
                 spaceCount = 0;
             }
             if (j < 8) {
-                result += '/';
+                bldResult.append('/');
             }
         }
 
-        result += getNextTurnString(board.getNextMove());
+        bldResult.append(getNextTurnString(board.getNextMove()));
         
-        result += getInHandString(board);
+        bldResult.append(getInHandString(board));
 
-        result += " " + board.getMoveCount();
+        bldResult.append(" ");
         
-        return result;
+        bldResult.append(board.getMoveCount());
+        
+        return bldResult.toString();
     }
     
     public static String getNextTurnString(Turn nextMove) {
@@ -266,21 +268,20 @@ public class SFENParser {
         pieceMap.put(Koma.Type.GKY, "l");
         pieceMap.put(Koma.Type.GFU, "p");
         //</editor-fold>
-        
-        
-        String result = " ";
+                
+        StringBuilder bldResult = new StringBuilder(" ");
         
         Set<Koma.Type> keys = pieceMap.keySet();
         for(Koma.Type thisType: keys) {
             if (board.getInHandKomaMap().containsKey(thisType)) {
                 int number = board.getInHandKomaMap().get(thisType);
                 if (number > 1) {
-                    result += number;
+                    bldResult.append(number);
                 }
-                result += pieceMap.get(thisType);
+                bldResult.append(pieceMap.get(thisType));
             }            
         }
-        return result;
+        return bldResult.toString();
     }
     
     public static String getSFENCode(Koma koma) {

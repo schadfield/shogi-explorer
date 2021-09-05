@@ -30,11 +30,11 @@ public class ImageUtils {
         return pieceLabel;
     }
 
-    public static JLabel getTextLabelForBan(Coordinate boardCoord, Dimension offset, Coordinate ImageLocation, String text) {
+    public static JLabel getTextLabelForBan(Coordinate boardCoord, Dimension offset, Coordinate imageLocation, String text) {
         JLabel numberLabel = new JLabel(text);
         numberLabel.setBounds(
-                ImageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getWidth()),
-                ImageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getHeight()),
+                imageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getWidth()),
+                imageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getHeight()),
                 MathUtils.KOMA_X,
                 MathUtils.KOMA_Y);
         return numberLabel;
@@ -51,7 +51,7 @@ public class ImageUtils {
         } catch (IOException ex) {
             Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
-        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(new Image[]{image1, image2, image3});
+        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(image1, image2, image3);
         return (mri);
     }
 

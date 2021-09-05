@@ -579,11 +579,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
             moveList.ensureIndexIsVisible(moveNumber);
             Position position = game.getPositionList().get(moveNumber);
-            board = SFENParser.parse(position.game);
-            board.setSource(position.source);
-            board.setDestination(position.destination);
+            board = SFENParser.parse(position.getGame());
+            board.setSource(position.getSource());
+            board.setDestination(position.getDestination());
             commentTextArea.setText(null);
-            commentTextArea.append(position.comment);
+            commentTextArea.append(position.getComment());
             RenderBoard.loadBoard(board, boardPanel, rotatedView);
         }
     }//GEN-LAST:event_moveListValueChanged
