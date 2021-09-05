@@ -27,6 +27,10 @@ import javax.swing.SpinnerNumberModel;
  */
 public class ConfigurationManager {
     
+    private ConfigurationManager() {
+        throw new IllegalStateException("Utility class");
+    }
+    
     public static void configureEngine(List<Engine> engineList, Engine engine, JDialog engineConfDialog, JDialog jEngineManagerDialog, JPanel jEngineConfPanel) {
         List<ConfigurationItem> configurationItemList = new ArrayList<>();
 
@@ -68,12 +72,9 @@ public class ConfigurationManager {
                         thisConfigurationItem.setTextField(newTextField);
                         count++;
                         JButton chooseFileButton = new JButton("Choose File");
-                        chooseFileButton.addActionListener(new java.awt.event.ActionListener() {
-                            @Override
-                            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                chooseFile(engineConfDialog, new File(engine.getPath()), thisConfigurationItem.getTextField());
-                            }
-                        });
+                        chooseFileButton.addActionListener((java.awt.event.ActionEvent evt) -> {
+                            chooseFile(engineConfDialog, new File(engine.getPath()), thisConfigurationItem.getTextField());
+            });
                         jEngineConfPanel.add(chooseFileButton);
                         count++;
                         jEngineConfPanel.add(new JLabel(""));
@@ -128,28 +129,19 @@ public class ConfigurationManager {
             jEngineConfPanel.add(new JLabel(""));
         }
         JButton applyButton = new JButton("Apply");
-        applyButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                applyChanges(configurationItemList, engineList, engineConfDialog);
-            }
+        applyButton.addActionListener((java.awt.event.ActionEvent evt) -> {
+            applyChanges(configurationItemList, engineList, engineConfDialog);
         });
         jEngineConfPanel.add(applyButton);
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelChanges(engineConfDialog);
-            }
+        cancelButton.addActionListener((java.awt.event.ActionEvent evt) -> {
+            cancelChanges(engineConfDialog);
         });
         jEngineConfPanel.add(cancelButton);
         engineConfDialog.pack();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                engineConfDialog.setLocationRelativeTo(jEngineManagerDialog);
-                engineConfDialog.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            engineConfDialog.setLocationRelativeTo(jEngineManagerDialog);
+            engineConfDialog.setVisible(true);
         });
 
     }
@@ -186,34 +178,25 @@ public class ConfigurationManager {
                 default:  
             }
             EngineManager.saveEngines(engineList);
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    engineConfDialog.setVisible(false);
-                }
+            java.awt.EventQueue.invokeLater(() -> {
+                engineConfDialog.setVisible(false);
             });
         }
     }
     
     private static void cancelChanges(JDialog engineConfDialog) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                engineConfDialog.setVisible(false);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            engineConfDialog.setVisible(false);
         });
     }
     
     private static void chooseFile(JDialog dialog, File startDir, JTextField textField) {
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(startDir);
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    chooser.showOpenDialog(dialog);
-                    File thisFile = chooser.getSelectedFile();
-                    textField.setText(thisFile.getAbsoluteFile().toString());
-            }
+            java.awt.EventQueue.invokeLater(() -> {
+                chooser.showOpenDialog(dialog);
+                File thisFile = chooser.getSelectedFile();
+                textField.setText(thisFile.getAbsoluteFile().toString());
         });
     }
 }
