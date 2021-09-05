@@ -597,9 +597,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     play = true;
                     while (play) {
                         if (moveNumber > 0) {
-                            java.awt.EventQueue.invokeLater(() -> {
-                                moveList.setSelectedIndex(moveNumber - 1);
-                            });
+                            java.awt.EventQueue.invokeLater(() -> 
+                                moveList.setSelectedIndex(moveNumber - 1));
                             try {
                                 Thread.sleep(500L);
                             } catch (InterruptedException ex) {
@@ -646,17 +645,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void configureEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureEngineButtonActionPerformed
         evt.getID();
-        if (engineList.size() > 0) {
-            java.awt.EventQueue.invokeLater(() -> {
-                ConfigurationManager.configureEngine(engineList, engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel);
-            });
+        if (!engineList.isEmpty()) {
+            java.awt.EventQueue.invokeLater(() -> 
+                ConfigurationManager.configureEngine(engineList, engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel));
         }
     }//GEN-LAST:event_configureEngineButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
             /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
