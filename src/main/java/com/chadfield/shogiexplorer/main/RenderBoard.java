@@ -48,23 +48,22 @@ public class RenderBoard {
 
         drawPieces(board, boardPanel, rotatedView);
         drawPiecesInHand(board, boardPanel, rotatedView);
-        drawCoordinates(board, boardPanel, rotatedView);
+        drawCoordinates(boardPanel, rotatedView);
         drawGrid(board, boardPanel);
         drawHighlights(board, boardPanel, rotatedView);
         drawBans(board, boardPanel);
         drawBackground(board, boardPanel);
         drawTurnNotification(board, boardPanel, rotatedView);
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
+        java.awt.EventQueue.invokeLater(()-> {
+            {
                 boardPanel.setVisible(true);
                 boardPanel.repaint();
             }
         });
     }
 
-    public static void drawCoordinates(Board board, JPanel boardPanel, boolean rotatedView) {
+    public static void drawCoordinates(JPanel boardPanel, boolean rotatedView) {
         String[] rank = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
 
         if (rotatedView) {
