@@ -2,7 +2,6 @@ package com.chadfield.shogiexplorer.main;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.LinkedList;
@@ -15,6 +14,7 @@ import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Koma;
 import com.chadfield.shogiexplorer.objects.Position;
+import java.util.List;
 
 /**
  *
@@ -53,7 +53,7 @@ public class KifParser {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile) throws FileNotFoundException, IOException {
+    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile) throws  IOException {
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         moveListModel.clear();
         moveListModel.addElement(bundle.getString("label_start_position"));
@@ -62,7 +62,7 @@ public class KifParser {
         LinkedList<Position> positionList = new LinkedList<>();
         positionList.add(new Position(SFENParser.getSFEN(board), null, null));
 
-        Boolean foundHeader = false;
+        boolean foundHeader = false;
         try (BufferedReader fileReader = Files.newBufferedReader(kifFile.toPath())) {
             int count = 1;
             String line;
@@ -100,10 +100,10 @@ public class KifParser {
         return game;
     }
     
-    public static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
+    public static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, List<Position> positionList) {
         board.setNextMove(switchTurn(board.getNextMove()));
 
-        String splitLine[] = line.trim().split("\\s+|\\u3000");
+        String[] splitLine = line.trim().split("\\s+|\\u3000");
 
         String move = extractRegularMove(splitLine, isSame(line));
 
@@ -127,10 +127,10 @@ public class KifParser {
         return move;
     }
         
-    public static void parseResignLine(Board board, String line, DefaultListModel<String> moveListModel, LinkedList<Position> positionList) {
+    public static void parseResignLine(Board board, String line, DefaultListModel<String> moveListModel, List<Position> positionList) {
         board.setNextMove(switchTurn(board.getNextMove()));
 
-        String splitLine[] = line.trim().split("\\s+|\\u3000");
+        String[] splitLine = line.trim().split("\\s+|\\u3000");
         String move;
         int gameNum = Integer.parseInt(splitLine[0]);
         move = splitLine[1];

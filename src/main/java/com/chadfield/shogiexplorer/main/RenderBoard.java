@@ -47,15 +47,9 @@ public class RenderBoard {
         drawBackground(board, boardPanel);
         drawTurnNotification(board, boardPanel, rotatedView);
 
-        makeVisible(boardPanel);
-    }
-    
-    public static void makeVisible(JPanel boardPanel) {
-        java.awt.EventQueue.invokeLater(()-> {
-            {
-                boardPanel.setVisible(true);
-                boardPanel.repaint();
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            boardPanel.setVisible(true);
+            boardPanel.repaint();
         });
     }
 
@@ -164,7 +158,7 @@ public class RenderBoard {
         EnumMap<Koma.Type, Integer> yCoordMap = new EnumMap<>(Koma.Type.class);
         EnumMap<Koma.Type, Integer> xCoordMapRotated = new EnumMap<>(Koma.Type.class);
         EnumMap<Koma.Type, Integer> yCoordMapRotated = new EnumMap<>(Koma.Type.class);
-    
+
         //<editor-fold defaultstate="collapsed" desc="Map initialization">
         xOffsetMap.put(Koma.Type.GFU, 0);
         yOffsetMap.put(Koma.Type.GFU, 0);
