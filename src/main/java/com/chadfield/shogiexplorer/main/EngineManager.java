@@ -32,7 +32,7 @@ public class EngineManager {
 
     public static List<Engine> deleteSelectedEngine(DefaultListModel<String> engineListModel, JList<String> jEngineList, List<Engine> engineList) {
         int index = jEngineList.getSelectedIndex();
-        String name = (String) engineListModel.get(index);
+        String name = engineListModel.get(index);
         engineListModel.remove(index);
         List<Engine> newEngineList = new ArrayList<>();
         for (Engine thisEngine : engineList) {

@@ -42,11 +42,7 @@ public class ConfigurationManager {
                 switch(thisOption.getType()) {
                     case CHECK:
                         thisConfigurationItem.setCheckBox(new JCheckBox(thisOption.getName()));
-                        if (thisOption.getValue().contains("true")) {
-                            thisConfigurationItem.getCheckBox().setSelected(true);
-                        } else {
-                            thisConfigurationItem.getCheckBox().setSelected(false);
-                        }
+                        thisConfigurationItem.getCheckBox().setSelected(thisOption.getValue().contains("true"));
                         jEngineConfPanel.add(thisConfigurationItem.getCheckBox());
                         count++;
                         jEngineConfPanel.add(new JLabel(""));
@@ -72,9 +68,9 @@ public class ConfigurationManager {
                         thisConfigurationItem.setTextField(newTextField);
                         count++;
                         JButton chooseFileButton = new JButton("Choose File");
-                        chooseFileButton.addActionListener((java.awt.event.ActionEvent evt) -> {
-                            chooseFile(engineConfDialog, new File(engine.getPath()), thisConfigurationItem.getTextField());
-            });
+                        chooseFileButton.addActionListener((java.awt.event.ActionEvent evt) -> 
+                            chooseFile(engineConfDialog, new File(engine.getPath()), thisConfigurationItem.getTextField())
+                        );
                         jEngineConfPanel.add(chooseFileButton);
                         count++;
                         jEngineConfPanel.add(new JLabel(""));
@@ -129,14 +125,12 @@ public class ConfigurationManager {
             jEngineConfPanel.add(new JLabel(""));
         }
         JButton applyButton = new JButton("Apply");
-        applyButton.addActionListener((java.awt.event.ActionEvent evt) -> {
-            applyChanges(configurationItemList, engineList, engineConfDialog);
-        });
+        applyButton.addActionListener((java.awt.event.ActionEvent evt) -> 
+            applyChanges(configurationItemList, engineList, engineConfDialog));
         jEngineConfPanel.add(applyButton);
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener((java.awt.event.ActionEvent evt) -> {
-            cancelChanges(engineConfDialog);
-        });
+        cancelButton.addActionListener((java.awt.event.ActionEvent evt) -> 
+            cancelChanges(engineConfDialog));
         jEngineConfPanel.add(cancelButton);
         engineConfDialog.pack();
         java.awt.EventQueue.invokeLater(() -> {
@@ -160,12 +154,10 @@ public class ConfigurationManager {
                     thisItem.getEngineOption().setValue(thisItem.getTextField().getText());
                     break;
                 case SPIN:
-                    {
-                        try {
-                            thisItem.getSpinField().commitEdit();
-                        } catch (ParseException ex) {
-                            Logger.getLogger(ConfigurationManager.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                    try {
+                        thisItem.getSpinField().commitEdit();
+                    } catch (ParseException ex) {
+                        Logger.getLogger(ConfigurationManager.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     thisItem.getEngineOption().setValue(((Long) thisItem.getSpinField().getModel().getValue()).toString());
                     break;
@@ -178,16 +170,14 @@ public class ConfigurationManager {
                 default:  
             }
             EngineManager.saveEngines(engineList);
-            java.awt.EventQueue.invokeLater(() -> {
-                engineConfDialog.setVisible(false);
-            });
+            java.awt.EventQueue.invokeLater(() -> 
+                engineConfDialog.setVisible(false));
         }
     }
     
     private static void cancelChanges(JDialog engineConfDialog) {
-        java.awt.EventQueue.invokeLater(() -> {
-            engineConfDialog.setVisible(false);
-        });
+        java.awt.EventQueue.invokeLater(() -> 
+            engineConfDialog.setVisible(false));
     }
     
     private static void chooseFile(JDialog dialog, File startDir, JTextField textField) {
