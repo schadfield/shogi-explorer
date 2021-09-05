@@ -12,7 +12,7 @@ public class EngineOption {
 
     public enum Type {
         CHECK, SPIN, COMBO, BUTTON, STRING, FILENAME
-    };
+    }
     
     private Type type;
 

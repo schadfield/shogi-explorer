@@ -1,13 +1,13 @@
 package com.chadfield.shogiexplorer.objects;
 
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Game {
-    private LinkedList<Position> positionList;
+    private List<Position> positionList;
     private String date;
     private String place;
     private String timeLimit;
@@ -25,14 +25,14 @@ public class Game {
     /**
      * @return the positionList
      */
-    public LinkedList<Position> getPositionList() {
+    public List<Position> getPositionList() {
         return positionList;
     }
 
     /**
      * @param positionList the positionList to set
      */
-    public void setPositionList(LinkedList<Position> positionList) {
+    public void setPositionList(List<Position> positionList) {
         this.positionList = positionList;
     }
 

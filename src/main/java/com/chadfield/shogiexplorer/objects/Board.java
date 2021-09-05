@@ -1,13 +1,13 @@
 package com.chadfield.shogiexplorer.objects;
 
-import java.util.EnumMap;
+import java.util.Map;
 
 public class Board {
 
-    public Koma[][] masu = new Koma[9][9];
+    private Koma[][] masu = new Koma[9][9];
     private ImageCache scaledImageCache = null;
-    private EnumMap<Koma.Type, Integer> inHandKomaMap;
-    public enum Turn { SENTE, GOTE };
+    private Map<Koma.Type, Integer> inHandKomaMap;
+    public enum Turn { SENTE, GOTE }
     private Turn nextMove;
     private int moveCount;
     private Coordinate source = null;
@@ -41,27 +41,27 @@ public class Board {
      * @return the scaledImageCache
      */
     public ImageCache getImageCache() {
-        return scaledImageCache;
+        return getScaledImageCache();
     }
 
     /**
      * @param scaledImageCache the scaledImageCache to set
      */
     public void setImageCache(ImageCache scaledImageCache) {
-        this.scaledImageCache = scaledImageCache;
+        this.setScaledImageCache(scaledImageCache);
     }
 
     /**
      * @return the inHandKomaMap
      */
-    public EnumMap<Koma.Type, Integer> getInHandKomaMap() {
+    public Map<Koma.Type, Integer> getInHandKomaMap() {
         return inHandKomaMap;
     }
 
     /**
      * @param inHandKomaMap the inHandKomaMap to set
      */
-    public void setInHandKomaMap(EnumMap<Koma.Type, Integer> inHandKomaMap) {
+    public void setInHandKomaMap(Map<Koma.Type, Integer> inHandKomaMap) {
         this.inHandKomaMap = inHandKomaMap;
     }
 
@@ -119,6 +119,20 @@ public class Board {
      */
     public void setDestination(Coordinate destination) {
         this.destination = destination;
+    }
+
+    /**
+     * @return the scaledImageCache
+     */
+    public ImageCache getScaledImageCache() {
+        return scaledImageCache;
+    }
+
+    /**
+     * @param scaledImageCache the scaledImageCache to set
+     */
+    public void setScaledImageCache(ImageCache scaledImageCache) {
+        this.scaledImageCache = scaledImageCache;
     }
 
 }

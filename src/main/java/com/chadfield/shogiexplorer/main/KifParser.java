@@ -260,12 +260,12 @@ public class KifParser {
         if (coords == null) {
             return null;
         }
-        return board.masu[9 - coords.getX()][coords.getY() - 1];
+        return board.getMasu()[9 - coords.getX()][coords.getY() - 1];
     }
 
     public static void putKoma(Board board, Coordinate coords, Koma koma) {
         if (coords != null) {
-            board.masu[9 - coords.getX()][coords.getY() - 1] = koma;
+            board.getMasu()[9 - coords.getX()][coords.getY() - 1] = koma;
         }
     }
 

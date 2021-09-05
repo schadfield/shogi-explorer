@@ -2,10 +2,11 @@ package com.chadfield.shogiexplorer.objects;
 
 import java.awt.Image;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ImageCache {
 
-    private HashMap<String, Image> imageMap = new HashMap<>();
+    private Map<String, Image> imageMap = new HashMap<>();
     
     public void putImage(String identifier, Image image) {
         getImageMap().put(identifier, image);
@@ -22,14 +23,14 @@ public class ImageCache {
     /**
      * @return the imageMap
      */
-    public HashMap<String, Image> getImageMap() {
+    public Map<String, Image> getImageMap() {
         return imageMap;
     }
 
     /**
      * @param imageMap the imageMap to set
      */
-    public void setImageMap(HashMap<String, Image> imageMap) {
+    public void setImageMap(Map<String, Image> imageMap) {
         this.imageMap = imageMap;
     }
 }
