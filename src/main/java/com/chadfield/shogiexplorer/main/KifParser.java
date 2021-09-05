@@ -53,7 +53,7 @@ public class KifParser {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Game parseKif(DefaultListModel moveListModel, File kifFile) throws FileNotFoundException, IOException {
+    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile) throws FileNotFoundException, IOException {
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         moveListModel.clear();
         moveListModel.addElement(bundle.getString("label_start_position"));
@@ -100,7 +100,7 @@ public class KifParser {
         return game;
     }
     
-    public static Coordinate parseRegularMove(Board board, String line, DefaultListModel moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
+    public static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
         board.setNextMove(switchTurn(board.getNextMove()));
 
         String splitLine[] = line.trim().split("\\s+|\\u3000");
@@ -127,7 +127,7 @@ public class KifParser {
         return move;
     }
         
-    public static void parseResignLine(Board board, String line, DefaultListModel moveListModel, LinkedList<Position> positionList) {
+    public static void parseResignLine(Board board, String line, DefaultListModel<String> moveListModel, LinkedList<Position> positionList) {
         board.setNextMove(switchTurn(board.getNextMove()));
 
         String splitLine[] = line.trim().split("\\s+|\\u3000");
@@ -159,7 +159,7 @@ public class KifParser {
         }
     }
     
-    public static void addMoveToMoveList(Board board, DefaultListModel moveListModel, int gameNum, String move) {
+    public static void addMoveToMoveList(Board board, DefaultListModel<String> moveListModel, int gameNum, String move) {
         if (board.getNextMove() == Board.Turn.GOTE) {
             moveListModel.addElement(gameNum + " ☗" + move + "\n");
         } else {
