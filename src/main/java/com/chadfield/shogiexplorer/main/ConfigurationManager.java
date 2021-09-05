@@ -94,7 +94,7 @@ public class ConfigurationManager {
                         JLabel itemNameC = new JLabel(thisOption.getName());
                         jEngineConfPanel.add(itemNameC);
                         count++;
-                        JComboBox combo = new JComboBox();
+                        JComboBox<String> combo = new JComboBox<>();
                         for (String thisVar : thisOption.getVarList()) {
                             combo.addItem(thisVar);
                         }
