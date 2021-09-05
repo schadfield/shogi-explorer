@@ -100,7 +100,7 @@ public class KifParser {
         return game;
     }
     
-    public static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
+    private static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
         board.setNextMove(switchTurn(board.getNextMove()));
 
         String[] splitLine = line.trim().split("\\s+|\\u3000");
