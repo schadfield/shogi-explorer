@@ -116,12 +116,12 @@ public class KifParser {
         
         String move = extractRegularMove(splitLine, isSame(line));
 
-        addMoveToMoveList(board, moveListModel, gameNum, move);
-
         Position position = executeMove(board, move, lastDestination);
         if (position != null) {
             lastDestination = position.getDestination();
+            addEngineMoveToMoveList(board, moveListModel, gameNum, position.getEngineMove());
         }
+        
         
         positionList.add(position);
         return lastDestination;
@@ -143,9 +143,8 @@ public class KifParser {
         int gameNum = Integer.parseInt(splitLine[0]);
         move = splitLine[1];
 
-        addMoveToMoveList(board, moveListModel, gameNum, move);
-
-        Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), null);
+        Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), "Resigns");
+        addEngineMoveToMoveList(board, moveListModel, gameNum, position.getEngineMove());
         positionList.add(position);
     }
     
@@ -173,6 +172,10 @@ public class KifParser {
         } else {
             moveListModel.addElement(gameNum + " ☖" + move + "\n");
         }
+    }
+    
+    public static void addEngineMoveToMoveList(Board board, DefaultListModel<String> moveListModel, int gameNum, String move) {
+        moveListModel.addElement(gameNum + " " + move + "\n");
     }
     
     public static Board.Turn switchTurn(Board.Turn turn) {
@@ -322,7 +325,7 @@ public class KifParser {
                     engineMove = executeSameMove(board, thisDestination, thisSource, move);
                 }
             } else {
-                engineMove= executeDropMove(board, thisDestination, move);
+                engineMove = executeDropMove(board, thisDestination, move);
             }
         }
         return new Position(SFENParser.getSFEN(board), thisSource, thisDestination, engineMove);
