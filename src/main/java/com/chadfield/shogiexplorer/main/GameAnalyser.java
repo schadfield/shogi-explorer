@@ -28,7 +28,7 @@ public class GameAnalyser {
     InputStream stdout;
     BufferedReader bufferedReader;
 
-    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, DefaultTableModel analysisTableModel) throws IOException {
+    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable) throws IOException {
         initializeEngine(engine);
         initiateUSIProtocol();
         setOptions(engine);
@@ -37,12 +37,12 @@ public class GameAnalyser {
         String sfen = null;
         String lastSFEN = null;
         int count = 0;
-
+                
         for (Position position : game.getPositionList()) {
             if (engineMove != null) {
                 count++;
                 updateMoveList(moveList, count);
-                analysePosition(lastSFEN, engineMove, analysisTable, analysisTableModel, count);
+                analysePosition(lastSFEN, engineMove, analysisTable, count);
             }
             lastSFEN = sfen;
             sfen = position.getGameSFEN();
@@ -118,7 +118,7 @@ public class GameAnalyser {
         process.destroy();
     }
 
-    private void analysePosition(String sfen, String engineMove, JTable analysisTable, DefaultTableModel analysisTableModel, int moveNum) throws IOException {
+    private void analysePosition(String sfen, String engineMove, JTable analysisTable, int moveNum) throws IOException {
         stdin.write(("position sfen " + sfen + " " + engineMove + "\n").getBytes());
         stdin.write("go btime 0 wtime 0 byoyomi 3000\n".getBytes());
         stdin.flush();
@@ -126,7 +126,7 @@ public class GameAnalyser {
         String lastLine = "";
         while ((line = bufferedReader.readLine()) != null) {
             if (line.contains("bestmove")) {
-                updateTableModel(analysisTable, analysisTableModel, getTableInsert(lastLine, moveNum, engineMove));
+                updateTableModel(analysisTable, getTableInsert(lastLine, moveNum, engineMove));
                 return;
             }
             lastLine = line;
@@ -210,7 +210,8 @@ public class GameAnalyser {
         return "";
     }
 
-    private void updateTableModel(JTable analysisTable, DefaultTableModel analysisTableModel, Object[] newRow) {
+    private void updateTableModel(JTable analysisTable, Object[] newRow) {
+        DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
         try {
             java.awt.EventQueue.invokeAndWait(()
                     -> {

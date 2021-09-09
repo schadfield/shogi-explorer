@@ -522,6 +522,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 return;
             }
             prefs.put("fileOpenDir", kifFile.getParent());
+            DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
+            analysisTableModel.getDataVector().clear();
+
             try {
                 game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
             } catch (IOException ex) {
@@ -683,7 +686,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-                    new GameAnalyser().analyse(game, engineList.get(0), moveList, analysisTable, (DefaultTableModel) analysisTable.getModel());
+                    new GameAnalyser().analyse(game, engineList.get(0), moveList, analysisTable);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
