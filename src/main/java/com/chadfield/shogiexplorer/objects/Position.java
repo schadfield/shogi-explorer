@@ -5,30 +5,32 @@ package com.chadfield.shogiexplorer.objects;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Position {
-    private String game;
+    private String gameSFEN;
+    private String engineMove;
     private Coordinate source;
     private Coordinate destination;
     private String comment;
     
-    public Position(String game, Coordinate source, Coordinate destination) {
-        this.game = game;
+    public Position(String game, Coordinate source, Coordinate destination, String engineMove) {
+        this.gameSFEN = game;
+        this.engineMove = engineMove;
         this.source = source;
         this.destination = destination;
         this.comment = "";
     }
 
     /**
-     * @return the game
+     * @return the gameSFEN
      */
-    public String getGame() {
-        return game;
+    public String getGameSFEN() {
+        return gameSFEN;
     }
 
     /**
-     * @param game the game to set
+     * @param gameSFEN the gameSFEN to set
      */
-    public void setGame(String game) {
-        this.game = game;
+    public void setGameSFEN(String gameSFEN) {
+        this.gameSFEN = gameSFEN;
     }
 
     /**
@@ -71,5 +73,19 @@ public class Position {
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    /**
+     * @return the engineMove
+     */
+    public String getEngineMove() {
+        return engineMove;
+    }
+
+    /**
+     * @param engineMove the engineMove to set
+     */
+    public void setEngineMove(String engineMove) {
+        this.engineMove = engineMove;
     }
 }

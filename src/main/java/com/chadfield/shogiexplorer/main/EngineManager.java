@@ -126,7 +126,10 @@ public class EngineManager {
         Process process;
 
         try {
-            process = new ProcessBuilder(engineFile.getPath()).start();
+            ProcessBuilder processBuilder = new ProcessBuilder(engineFile.getPath());
+            processBuilder.directory((new File(engineFile.getPath())).getParentFile());
+            process = processBuilder.start();
+
         } catch (IOException ex) {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
             return;
@@ -141,18 +144,34 @@ public class EngineManager {
             stdin.write("usi\n".getBytes());
             stdin.flush();
             String line;
+            boolean foundPonder = false;
+            boolean foundHash = false;
+            EngineOption thisOption;
             try ( BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stdout))) {
                 while ((line = bufferedReader.readLine()) != null) {
                     if (line.startsWith("id name")) {
                         newEngine.setName(line.substring(7).trim());
                     } else if (line.startsWith("option")) {
-                        engineOptionList.add(parseOption(line));
+                        thisOption = parseOption(line);
+                        engineOptionList.add(thisOption);
+                        if (!foundPonder) {
+                            foundPonder = thisOption.getName().contentEquals("USI_Ponder");
+                        }
+                        if (!foundHash) {
+                            foundHash = thisOption.getName().contentEquals("USI_Hash");
+                        }
                     } else {
                         if (line.contains("usiok")) {
                             stdin.write("quit\n".getBytes());
                             stdin.flush();
                         }
                     }
+                }
+                if (!foundPonder) {
+                    engineOptionList.add(parseOption("option name USI_Ponder type check default false"));
+                }
+                if (!foundHash) {
+                    engineOptionList.add(parseOption("option name USI_Hash type spin default 16 min 8 max 1024"));
                 }
             }
         } catch (IOException ex) {

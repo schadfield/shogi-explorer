@@ -2,6 +2,7 @@ package com.chadfield.shogiexplorer;
 
 import com.chadfield.shogiexplorer.main.ConfigurationManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
+import com.chadfield.shogiexplorer.main.GameAnalyser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -22,6 +23,8 @@ import com.chadfield.shogiexplorer.objects.Position;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
@@ -30,8 +33,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     transient Game game;
     int moveNumber;
     boolean play;
-    DefaultListModel <String>moveListModel = new DefaultListModel<>();
-    DefaultListModel <String>engineListModel = new DefaultListModel<>();
+    DefaultListModel<String> moveListModel = new DefaultListModel<>();
+    DefaultListModel<String> engineListModel = new DefaultListModel<>();
     boolean rotatedView;
     transient List<Engine> engineList = new ArrayList<>();
     transient FileNameExtensionFilter kifFileFilter;
@@ -61,6 +64,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (!engineList.isEmpty()) {
             jEngineList.setSelectedIndex(0);
         }
+        analysisTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        analysisTable.getColumnModel().getColumn(0).setMinWidth(100);
+        analysisTable.getColumnModel().getColumn(1).setMinWidth(50);
+        analysisTable.getColumnModel().getColumn(2).setMinWidth(100);
+        analysisTable.getColumnModel().getColumn(3).setMinWidth(50);
+        analysisTable.getColumnModel().getColumn(4).setMinWidth(1000);
     }
 
     /**
@@ -82,6 +91,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jEngineFileChooser1 = new javax.swing.JFileChooser();
         jEngineConfDialog = new javax.swing.JDialog(jEngineManagerDialog);
         jEngineConfPanel = new javax.swing.JPanel();
+        jMenuItem3 = new javax.swing.JMenuItem();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         mediaReverse = new javax.swing.JButton();
@@ -97,15 +107,17 @@ public class ShogiExplorer extends javax.swing.JFrame {
         moveListScrollPane = new javax.swing.JScrollPane();
         moveList = new javax.swing.JList<>();
         boardPanel = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        analysisTable = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
-        jMenu4 = new javax.swing.JMenu();
+        gameMenu = new javax.swing.JMenu();
+        analyseGame = new javax.swing.JMenuItem();
+        enginesMenu = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        viewMenu = new javax.swing.JMenu();
+        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
 
         jKifFileChooser.setFileFilter(kifFileFilter);
 
@@ -195,6 +207,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jEngineConfDialog.getContentPane().add(jEngineConfPanel);
 
         jEngineConfDialog.getAccessibleContext().setAccessibleParent(null);
+
+        jMenuItem3.setText(bundle.getString("ShogiExplorer.jMenuItem3.text")); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -365,18 +379,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
             .addGap(0, 480, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 168, Short.MAX_VALUE)
-        );
+        analysisTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        jMenu1.setText(bundle.getString("ShogiExplorer.jMenu1.text_1")); // NOI18N
+            },
+            new String [] {
+                "Move", "?!", "Score", "+-", "Principal Variation"
+            }
+        ));
+        analysisTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        analysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        analysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(analysisTable);
+
+        fileMenu.setText(bundle.getString("ShogiExplorer.fileMenu.text_1")); // NOI18N
 
         jMenuItem1.setText(bundle.getString("ShogiExplorer.jMenuItem1.text_1")); // NOI18N
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -384,26 +400,23 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        fileMenu.add(jMenuItem1);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(fileMenu);
 
-        jMenu2.setText(bundle.getString("ShogiExplorer.jMenu2.text_1")); // NOI18N
-        jMenuBar1.add(jMenu2);
+        gameMenu.setText(bundle.getString("ShogiExplorer.gameMenu.text_1")); // NOI18N
 
-        jMenu3.setLabel(bundle.getString("ShogiExplorer.jMenu3.label_1")); // NOI18N
-
-        jRadioButtonMenuItem1.setLabel(bundle.getString("ShogiExplorer.jRadioButtonMenuItem1.label_1")); // NOI18N
-        jRadioButtonMenuItem1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jRadioButtonMenuItem1ItemStateChanged(evt);
+        analyseGame.setText(bundle.getString("ShogiExplorer.analyseGame.text")); // NOI18N
+        analyseGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyseGameActionPerformed(evt);
             }
         });
-        jMenu3.add(jRadioButtonMenuItem1);
+        gameMenu.add(analyseGame);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(gameMenu);
 
-        jMenu4.setText(bundle.getString("ShogiExplorer.jMenu4.text_1")); // NOI18N
+        enginesMenu.setText(bundle.getString("ShogiExplorer.enginesMenu.text_1")); // NOI18N
 
         jMenuItem2.setText(bundle.getString("ShogiExplorer.jMenuItem2.text_1")); // NOI18N
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -411,9 +424,21 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu4.add(jMenuItem2);
+        enginesMenu.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu4);
+        jMenuBar1.add(enginesMenu);
+
+        viewMenu.setLabel(bundle.getString("ShogiExplorer.viewMenu.label_1")); // NOI18N
+
+        jRadioButtonMenuItem1.setLabel(bundle.getString("ShogiExplorer.jRadioButtonMenuItem1.label_1")); // NOI18N
+        jRadioButtonMenuItem1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRadioButtonMenuItem1ItemStateChanged(evt);
+            }
+        });
+        viewMenu.add(jRadioButtonMenuItem1);
+
+        jMenuBar1.add(viewMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -424,7 +449,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(mainToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(boardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -433,8 +457,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(moveListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
-                            .addComponent(gameScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE))
+                            .addComponent(gameScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -452,7 +477,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                             .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(boardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -579,7 +605,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
             moveList.ensureIndexIsVisible(moveNumber);
             Position position = game.getPositionList().get(moveNumber);
-            board = SFENParser.parse(position.getGame());
+            board = SFENParser.parse(position.getGameSFEN());
             board.setSource(position.getSource());
             board.setDestination(position.getDestination());
             commentTextArea.setText(null);
@@ -597,8 +623,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     play = true;
                     while (play) {
                         if (moveNumber > 0) {
-                            java.awt.EventQueue.invokeLater(() -> 
-                                moveList.setSelectedIndex(moveNumber - 1));
+                            java.awt.EventQueue.invokeLater(()
+                                    -> moveList.setSelectedIndex(moveNumber - 1));
                             try {
                                 Thread.sleep(500L);
                             } catch (InterruptedException ex) {
@@ -615,8 +641,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_mediaReverseActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-            evt.getID();        
-            java.awt.EventQueue.invokeLater(() -> {
+        evt.getID();
+        java.awt.EventQueue.invokeLater(() -> {
             jEngineManagerDialog.pack();
             jEngineManagerDialog.setLocationRelativeTo(mainFrame);
             jEngineManagerDialog.setVisible(true);
@@ -646,10 +672,24 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void configureEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureEngineButtonActionPerformed
         evt.getID();
         if (!engineList.isEmpty()) {
-            java.awt.EventQueue.invokeLater(() -> 
-                ConfigurationManager.configureEngine(engineList, engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel));
+            java.awt.EventQueue.invokeLater(()
+                    -> ConfigurationManager.configureEngine(engineList, engineList.get(jEngineList.getSelectedIndex()), jEngineConfDialog, jEngineManagerDialog, jEngineConfPanel));
         }
     }//GEN-LAST:event_configureEngineButtonActionPerformed
+
+    private void analyseGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyseGameActionPerformed
+        evt.getID();
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    new GameAnalyser().analyse(game, engineList.get(0), moveList, analysisTable, (DefaultTableModel) analysisTable.getModel());
+                } catch (IOException ex) {
+                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }.start();
+    }//GEN-LAST:event_analyseGameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -675,11 +715,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEngineButton;
+    private javax.swing.JMenuItem analyseGame;
+    private javax.swing.JTable analysisTable;
     private javax.swing.JPanel boardPanel;
     private javax.swing.JScrollPane commentScrollPane;
     private javax.swing.JTextArea commentTextArea;
     private javax.swing.JButton configureEngineButton;
     private javax.swing.JButton deleteEngineButton;
+    private javax.swing.JMenu enginesMenu;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenu gameMenu;
     private javax.swing.JScrollPane gameScrollPanel;
     private javax.swing.JTextArea gameTextArea;
     private javax.swing.JDialog jEngineConfDialog;
@@ -688,17 +733,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JList<String> jEngineList;
     private javax.swing.JDialog jEngineManagerDialog;
     private javax.swing.JFileChooser jKifFileChooser;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar mainToolBar;
     private javax.swing.JButton mediaBack;
     private javax.swing.JButton mediaEnd;
@@ -709,5 +751,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton mediaStop;
     private javax.swing.JList<String> moveList;
     private javax.swing.JScrollPane moveListScrollPane;
+    private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 }
