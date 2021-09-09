@@ -53,7 +53,7 @@ public class RenderBoard {
     }
 
     public static void drawCoordinates(JPanel boardPanel, boolean rotatedView) {
-        String[] rank = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
+        String[] rank = {"a", "b", "c", "d", "e", "f", "g", "h", "i"};
 
         if (rotatedView) {
             for (int i = 0; i < 9; i++) {
