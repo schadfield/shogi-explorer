@@ -713,6 +713,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
+                    DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
+                    analysisTableModel.getDataVector().clear();
                     new GameAnalyser().analyse(game, engineList.get(0), moveList, analysisTable);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
