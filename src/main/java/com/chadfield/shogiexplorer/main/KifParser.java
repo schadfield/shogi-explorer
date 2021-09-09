@@ -209,10 +209,16 @@ public class KifParser {
         }
         putKoma(board, thisSource, null);
         
-        String engineMove = getEngineMoveCoordinate(thisSource) + getEngineMoveCoordinate(thisDestination);
-        if (isPromoted(move)) {
-            engineMove += "+";
+        String engineMove = "";
+        try {
+            engineMove = getEngineMoveCoordinate(thisSource) + getEngineMoveCoordinate(thisDestination);
+            if (isPromoted(move)) {
+                engineMove += "+";
+            } 
+        } catch (Exception ex) {
+            Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         return engineMove;
     }
     
@@ -227,20 +233,31 @@ public class KifParser {
         }
         putKoma(board, thisSource, null);
         
-        String engineMove = getEngineMoveCoordinate(thisSource) + getEngineMoveCoordinate(thisDestination);
-        if (isPromoted(move)) {
-            engineMove += "+";
+        String engineMove = "";
+        try {
+            engineMove = getEngineMoveCoordinate(thisSource) + getEngineMoveCoordinate(thisDestination);
+            if (isPromoted(move)) {
+                engineMove += "+";
+            } 
+        } catch (Exception ex) {
+            Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
         return engineMove;
     }
     
     public static String executeDropMove(Board board, Coordinate thisDestination, String move) {
         String engineMove = "";
-        Koma koma = getDropKoma(move, board.getNextMove());
-        if (koma != null) {
+        Koma koma;
+        try {
+            koma = getDropKoma(move, board.getNextMove());
+            if (koma == null) {
+                return "";
+            }
             putKoma(board, thisDestination, koma);
             removePieceInHand(koma.getType(), board);
             engineMove = getKomaLetter(koma.getType()) + "*" + getEngineMoveCoordinate(thisDestination);
+        } catch (Exception ex) {
+            Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
         return engineMove;
     }
@@ -308,12 +325,10 @@ public class KifParser {
                 engineMove= executeDropMove(board, thisDestination, move);
             }
         }
-        System.out.println("EngineMove: " + engineMove);
         return new Position(SFENParser.getSFEN(board), thisSource, thisDestination, engineMove);
     }
     
     private static String getEngineMoveCoordinate(Coordinate coordinate) {
-        System.out.println("x: " + coordinate.getX() + " y: " + coordinate.getY());
         return Integer.toString(coordinate.getX()) + (char) ('a' + coordinate.getY() - 1);
     }
 

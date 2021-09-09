@@ -28,7 +28,7 @@ public class GameAnalyser {
     InputStream stdout;
     BufferedReader bufferedReader;
 
-    public void analyse(Game game, Engine engine, JList moveList, JTable analysisTable, DefaultTableModel analysisTableModel) throws IOException {
+    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, DefaultTableModel analysisTableModel) throws IOException {
         initializeEngine(engine);
         initiateUSIProtocol();
         setOptions(engine);
@@ -42,9 +42,6 @@ public class GameAnalyser {
             if (engineMove != null) {
                 count++;
                 updateMoveList(moveList, count);
-                //if (count > 20) {
-                //    break;
-                //}
                 analysePosition(lastSFEN, engineMove, analysisTable, analysisTableModel, count);
             }
             lastSFEN = sfen;
@@ -55,11 +52,13 @@ public class GameAnalyser {
         quitEngine();
     }
 
-    private void updateMoveList(JList moveList, final int index) {
+    private void updateMoveList(JList<String> moveList, final int index) {
         try {
             java.awt.EventQueue.invokeAndWait(()
                     -> moveList.setSelectedIndex(index));
-        } catch (InterruptedException | InvocationTargetException ex) {
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        } catch (InvocationTargetException ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -81,12 +80,10 @@ public class GameAnalyser {
     }
 
     private void initiateUSIProtocol() throws IOException {
-        System.out.println("send: usi");
         stdin.write("usi\n".getBytes());
         stdin.flush();
         String line;
         while ((line = bufferedReader.readLine()) != null) {
-            System.out.println(line);
             if (line.contains("usiok")) {
                 return;
             }
@@ -96,7 +93,6 @@ public class GameAnalyser {
     private void setOptions(Engine engine) throws IOException {
         for (EngineOption option : engine.getEngineOptionList()) {
             if (!option.getDef().contentEquals(option.getValue())) {
-                System.out.println("send: setoption " + option.getName() + " value " + option.getValue());
                 stdin.write(("setoption " + option.getName() + " value " + option.getValue() + "\n").getBytes());
             }
         }
@@ -104,14 +100,11 @@ public class GameAnalyser {
     }
 
     private void getReady() throws IOException {
-        System.out.println("send: isready");
         stdin.write("isready\n".getBytes());
         stdin.flush();
         String line;
         while ((line = bufferedReader.readLine()) != null) {
-            System.out.println(line);
             if (line.contains("readyok")) {
-                System.out.println("send: usinewgame");
                 stdin.write("usinewgame\n".getBytes());
                 stdin.flush();
                 return;
@@ -120,22 +113,18 @@ public class GameAnalyser {
     }
 
     private void quitEngine() throws IOException {
-        System.out.println("send: quit");
         stdin.write("quit\n".getBytes());
         stdin.flush();
         process.destroy();
     }
 
     private void analysePosition(String sfen, String engineMove, JTable analysisTable, DefaultTableModel analysisTableModel, int moveNum) throws IOException {
-        System.out.println("send: " + "position sfen " + sfen + " " + engineMove);
         stdin.write(("position sfen " + sfen + " " + engineMove + "\n").getBytes());
-        System.out.println("send: go btime 0 wtime 0 byoyomi 3000");
         stdin.write("go btime 0 wtime 0 byoyomi 3000\n".getBytes());
         stdin.flush();
         String line;
         String lastLine = "";
         while ((line = bufferedReader.readLine()) != null) {
-            System.out.println(line);
             if (line.contains("bestmove")) {
                 updateTableModel(analysisTable, analysisTableModel, getTableInsert(lastLine, moveNum, engineMove));
                 return;
@@ -147,32 +136,38 @@ public class GameAnalyser {
     private Object[] getTableInsert(String line, int moveNum, String engineMove) {
         boolean lower = false;
         boolean upper = false;
+        boolean foundPV = false;
         String score = "";
         String pvStr = "";
 
         String[] splitLine = line.split(" ");
         for (int i = 0; i < splitLine.length; i++) {
-            switch (splitLine[i]) {
-                case "lowerbound":
-                    lower = true;
-                    break;
-                case "upperbound":
-                    upper = true;
-                    break;
-                case "cp":
-                    score = getScore(moveNum, splitLine[i+1]);
-                    break;
-                case "mate":
-                    score = getMateScore(moveNum, splitLine[i+1]);
-                    break;
-                case "pv":
-                    for (int j = i+1; j < splitLine.length; j++ ) {
-                        pvStr += splitLine[j] + " ";
-                    }
-                    i = splitLine.length;
-                    break;
-                default:
-            }            
+            if (!foundPV) {
+                switch (splitLine[i]) {
+                    case "lowerbound":
+                        lower = true;
+                        break;
+                    case "upperbound":
+                        upper = true;
+                        break;
+                    case "cp":
+                        score = getScore(moveNum, splitLine[i+1]);
+                        break;
+                    case "mate":
+                        score = getMateScore(moveNum, splitLine[i+1]);
+                        break;
+                    case "pv":
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (int j = i+1; j < splitLine.length; j++ ) {
+                            stringBuilder.append(splitLine[j]);
+                            stringBuilder.append(" ");
+                        }
+                        pvStr = stringBuilder.toString().trim();
+                        foundPV = true;
+                        break;
+                    default:
+                }       
+            }
         }
 
         String lowUp = getLowUpString(lower, upper);
@@ -223,7 +218,7 @@ public class GameAnalyser {
                 analysisTable.scrollRectToVisible(analysisTable.getCellRect(analysisTableModel.getRowCount() - 1, 0, true));
             });
         } catch (InterruptedException ex) {
-            Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
+            Thread.currentThread().interrupt();
         } catch (InvocationTargetException ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
