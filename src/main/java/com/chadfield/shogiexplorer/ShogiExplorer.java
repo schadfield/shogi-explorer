@@ -20,10 +20,13 @@ import com.chadfield.shogiexplorer.main.SFENParser;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Position;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 public class ShogiExplorer extends javax.swing.JFrame {
@@ -41,6 +44,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     File newEngineFile;
     static JFrame mainFrame;
     static final String ROTATED = "rotated";
+    boolean inSelectionChange = false;
 
     /**
      * Creates new form NewJFrame
@@ -70,6 +74,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.getColumnModel().getColumn(2).setMinWidth(100);
         analysisTable.getColumnModel().getColumn(3).setMinWidth(50);
         analysisTable.getColumnModel().getColumn(4).setMinWidth(1000);
+        analysisTable.getSelectionModel().addListSelectionListener(new AnalysisTableListener());
     }
 
     /**
@@ -600,8 +605,24 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mediaPlayActionPerformed
 
+    private class AnalysisTableListener implements ListSelectionListener {
+        @Override
+        public void valueChanged(ListSelectionEvent evt) {
+            if (!evt.getValueIsAdjusting()) {
+                if (!inSelectionChange) {
+                    if (evt.getFirstIndex()+1 == moveNumber) {
+                        moveList.setSelectedIndex(evt.getLastIndex()+1);
+                    } else {
+                        moveList.setSelectedIndex(evt.getFirstIndex()+1);
+                    }
+                }
+            }
+        }
+    }
+
     private void moveListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_moveListValueChanged
         if (!evt.getValueIsAdjusting()) {
+            inSelectionChange = true;
             moveNumber = moveList.getSelectedIndex();
             if (moveNumber < 0) {
                 return;
@@ -613,7 +634,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
             board.setDestination(position.getDestination());
             commentTextArea.setText(null);
             commentTextArea.append(position.getComment());
+            if (moveNumber > 0 && analysisTable.getRowCount() >= moveNumber) {
+                analysisTable.setRowSelectionInterval(moveNumber-1, moveNumber-1);
+                analysisTable.getSelectionModel().setSelectionInterval(moveNumber-1, moveNumber-1);
+                analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber-1, 0, true)));
+            }
             RenderBoard.loadBoard(board, boardPanel, rotatedView);
+            inSelectionChange = false;
         }
     }//GEN-LAST:event_moveListValueChanged
 
