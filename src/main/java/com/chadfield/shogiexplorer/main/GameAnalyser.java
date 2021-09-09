@@ -143,68 +143,76 @@ public class GameAnalyser {
             lastLine = line;
         }
     }
-    
+
     private Object[] getTableInsert(String line, int moveNum, String engineMove) {
         boolean lower = false;
         boolean upper = false;
-        boolean mate = false;
-        boolean cp = false;
         String score = "";
+        String pvStr = "";
+
         String[] splitLine = line.split(" ");
         for (int i = 0; i < splitLine.length; i++) {
-            if (splitLine[i].contentEquals("lowerbound")) {
-                lower = true;
-            }
-            if (splitLine[i].contentEquals("upperbound")) {
-                upper = true;
-            }
-            if (splitLine[i].contentEquals("cp")) {
-                cp = true;
-                if (moveNum % 2 != 0) {
-                    score = splitLine[i+1]; 
-                } else {
-                    score = Integer.toString(Integer.parseInt(splitLine[i+1])*-1); 
-                }
-            }
-            if (splitLine[i].contentEquals("mate")) {
-                mate = true;
-                int scoreVal = 0;
-                if (moveNum % 2 != 0) {
-                    scoreVal = Integer.parseInt(splitLine[i+1]); 
-                } else {
-                    scoreVal = Integer.parseInt(splitLine[i+1])*-1; 
-                }
-                if (scoreVal > 0) {
-                    score = "+Mate:";
-                } else {
-                    score = "+Mate:";
-                }
-                score += Math.abs(scoreVal);
-            }
+            switch (splitLine[i]) {
+                case "lowerbound":
+                    lower = true;
+                    break;
+                case "upperbound":
+                    upper = true;
+                    break;
+                case "cp":
+                    score = getScore(moveNum, splitLine[i+1]);
+                    break;
+                case "mate":
+                    score = getMateScore(moveNum, splitLine[i+1]);
+                    break;
+                case "pv":
+                    for (int j = i+1; j < splitLine.length; j++ ) {
+                        pvStr += splitLine[j] + " ";
+                    }
+                    i = splitLine.length;
+                    break;
+                default:
+            }            
         }
-        
-        
-        boolean pv = false;
-        String pvStr = "";
-        for (int i = 0; i < splitLine.length; i++) {
-            if (pv) {
-                pvStr += splitLine[i] + " ";
-            } else
-            if (splitLine[i].contentEquals("pv")) {
-                pv = true;
-            }         
-        }
-        
-        String lowUp = "";
-        if (lower) {
-            lowUp = "--";
-        }
-        
-        if (upper) {
-            lowUp = "++";
-        }
-        
+
+        String lowUp = getLowUpString(lower, upper);
+
         return new Object[]{moveNum + " " + engineMove, "", score, lowUp, pvStr};
+    }
+    
+    private String getMateScore(int moveNum, String value) {
+        int scoreVal;
+        String score;
+        if (moveNum % 2 != 0) {
+            scoreVal = Integer.parseInt(value);
+        } else {
+            scoreVal = Integer.parseInt(value) * -1;
+        }
+        if (scoreVal > 0) {
+            score = "+Mate:";
+        } else {
+            score = "-Mate:";
+        }
+        score += Math.abs(scoreVal);
+        return score;
+    }
+
+    private String getScore(int moveNum, String value) {
+        if (moveNum % 2 != 0) {
+            return value;
+        } else {
+            return Integer.toString(Integer.parseInt(value) * -1);
+        }
+    }
+
+    private String getLowUpString(boolean lower, boolean upper) {
+        if (lower) {
+            return "--";
+        }
+        if (upper) {
+            return "++";
+        }
+        return "";
     }
 
     private void updateTableModel(JTable analysisTable, DefaultTableModel analysisTableModel, Object[] newRow) {
@@ -212,7 +220,7 @@ public class GameAnalyser {
             java.awt.EventQueue.invokeAndWait(()
                     -> {
                 analysisTableModel.addRow(newRow);
-                analysisTable.scrollRectToVisible(analysisTable.getCellRect(analysisTableModel.getRowCount()-1, 0, true));
+                analysisTable.scrollRectToVisible(analysisTable.getCellRect(analysisTableModel.getRowCount() - 1, 0, true));
             });
         } catch (InterruptedException ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);

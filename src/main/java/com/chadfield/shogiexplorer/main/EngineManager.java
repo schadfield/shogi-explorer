@@ -139,13 +139,16 @@ public class EngineManager {
         InputStream stdout = process.getInputStream();
         Engine newEngine = new Engine("", engineFile.getPath());
         List<EngineOption> engineOptionList = new ArrayList<>();
+        
+        // These options are necessary.
+        // We may change default later.
+        engineOptionList.add(parseOption("option name USI_Ponder type check default false"));
+        engineOptionList.add(parseOption("option name USI_Hash type spin default 16 min 8 max 1024"));
 
         try {
             stdin.write("usi\n".getBytes());
             stdin.flush();
             String line;
-            boolean foundPonder = false;
-            boolean foundHash = false;
             EngineOption thisOption;
             try ( BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stdout))) {
                 while ((line = bufferedReader.readLine()) != null) {
@@ -153,25 +156,13 @@ public class EngineManager {
                         newEngine.setName(line.substring(7).trim());
                     } else if (line.startsWith("option")) {
                         thisOption = parseOption(line);
-                        engineOptionList.add(thisOption);
-                        if (!foundPonder) {
-                            foundPonder = thisOption.getName().contentEquals("USI_Ponder");
-                        }
-                        if (!foundHash) {
-                            foundHash = thisOption.getName().contentEquals("USI_Hash");
-                        }
+                        checkAndAddEngineOption(engineOptionList, thisOption);
                     } else {
                         if (line.contains("usiok")) {
                             stdin.write("quit\n".getBytes());
                             stdin.flush();
                         }
                     }
-                }
-                if (!foundPonder) {
-                    engineOptionList.add(parseOption("option name USI_Ponder type check default false"));
-                }
-                if (!foundHash) {
-                    engineOptionList.add(parseOption("option name USI_Hash type spin default 16 min 8 max 1024"));
                 }
             }
         } catch (IOException ex) {
@@ -183,6 +174,18 @@ public class EngineManager {
         engineListModel.add(engineListModel.size(), newEngine.getName());
         jEngineList.setSelectedIndex(engineListModel.size() - 1);
         saveEngines(engineList);
+    }
+    
+    public static void checkAndAddEngineOption(List<EngineOption> engineOptionList, EngineOption engineOption) {
+        for (EngineOption thisOption : engineOptionList) {
+            if (thisOption.getName().contentEquals(engineOption.getName())) {
+                thisOption.setDef(engineOption.getDef());
+                thisOption.setMin(engineOption.getMin());
+                thisOption.setMax(engineOption.getMax());
+                return;
+            } 
+        }
+        engineOptionList.add(engineOption);
     }
 
     public static List<Engine> loadEngines(DefaultListModel<String> engineListModel) {
