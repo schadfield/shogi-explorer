@@ -27,6 +27,8 @@ public class GameAnalyser {
     OutputStream stdin;
     InputStream stdout;
     BufferedReader bufferedReader;
+    String lastScore = "";
+    String opinion = "";
 
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable) throws IOException {
         initializeEngine(engine);
@@ -125,6 +127,7 @@ public class GameAnalyser {
         String line;
         String lastLine = "";
         while ((line = bufferedReader.readLine()) != null) {
+            //System.out.println(line);
             if (line.contains("bestmove")) {
                 updateTableModel(analysisTable, getTableInsert(lastLine, moveNum, engineMove));
                 return;
@@ -133,14 +136,13 @@ public class GameAnalyser {
         }
     }
 
-    private Object[] getTableInsert(String line, int moveNum, String engineMove) {
+    private Object[] getTableInsert(String lastLine, int moveNum, String engineMove) {
         boolean lower = false;
         boolean upper = false;
         boolean foundPV = false;
         String score = "";
         String pvStr = "";
-
-        String[] splitLine = line.split(" ");
+        String[] splitLine = lastLine.split(" ");
         for (int i = 0; i < splitLine.length; i++) {
             if (!foundPV) {
                 switch (splitLine[i]) {
@@ -152,6 +154,8 @@ public class GameAnalyser {
                         break;
                     case "cp":
                         score = getScore(moveNum, splitLine[i+1]);
+                        opinion = compareScore(moveNum, lastScore,  score);
+                        lastScore = String.copyValueOf(score.toCharArray());
                         break;
                     case "mate":
                         score = getMateScore(moveNum, splitLine[i+1]);
@@ -173,6 +177,70 @@ public class GameAnalyser {
         String lowUp = getLowUpString(lower, upper);
 
         return new Object[]{moveNum + " " + engineMove, "", score, lowUp, pvStr};
+    }
+    
+    private String compareScore(int moveNum, String lastScore, String score) {
+        int lastScoreVal;
+        int scoreVal;
+        
+        if (lastScore.isEmpty()) {
+            return "";
+        }
+        if (score.isEmpty()) {
+            return "";
+        }
+        
+        if (lastScore.contains("+Mate")) {
+            lastScoreVal = 31111;
+        } else if (lastScore.contains("-Mate")) {
+            lastScoreVal = -31111;
+        } else {
+            lastScoreVal = Integer.parseInt(lastScore);
+        }
+        
+        if (score.contains("+Mate")) {
+            scoreVal = -31111;
+        } else if (score.contains("-Mate")) {
+            scoreVal = 31111;
+        } else {
+            scoreVal = Integer.parseInt(score);
+        }
+        
+        System.out.println("move-1: " + (moveNum-1) + " LS: " + lastScore + " S: " + score);
+        
+        if (scoreVal > 1999 && lastScoreVal > 1999) {
+            return "";
+        }
+        
+        if (scoreVal < -1999 && lastScoreVal < -1999) {
+            return "";
+        }
+        
+        // We are finding the opinion for the PREVIOUS move.
+        if (moveNum % 2 != 0) {
+            // This move is for sente.
+            if (scoreVal - lastScoreVal > 500) {
+                System.out.println("gote score: ??");
+                return "??";
+            }
+            if (scoreVal - lastScoreVal > 250) {
+                System.out.println("gote score: ?");
+                return "?";
+            }
+        } else {
+            // This move is for gote.
+            if (scoreVal - lastScoreVal < -500) {
+                System.out.println("sente score: ??");
+                return "??";
+            }
+            if (scoreVal - lastScoreVal < -250) {
+                System.out.println("sente score: ?");
+                return "?";
+            }
+
+        }
+
+        return "";
     }
     
     private String getMateScore(int moveNum, String value) {
@@ -215,6 +283,10 @@ public class GameAnalyser {
         try {
             java.awt.EventQueue.invokeAndWait(()
                     -> {
+                if (!opinion.isEmpty()) {
+                    analysisTableModel.setValueAt(opinion, analysisTableModel.getRowCount()-1, 1);
+                    opinion = "";
+                }
                 analysisTableModel.addRow(newRow);
                 analysisTable.scrollRectToVisible(analysisTable.getCellRect(analysisTableModel.getRowCount() - 1, 0, true));
             });
