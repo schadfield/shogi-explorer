@@ -88,9 +88,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
         analysisTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         analysisTable.getColumnModel().getColumn(0).setMinWidth(100);
-        analysisTable.getColumnModel().getColumn(1).setMinWidth(50);
+        analysisTable.getColumnModel().getColumn(1).setMinWidth(40);
         analysisTable.getColumnModel().getColumn(2).setMinWidth(100);
-        analysisTable.getColumnModel().getColumn(3).setMinWidth(50);
+        analysisTable.getColumnModel().getColumn(3).setMinWidth(40);
         analysisTable.getColumnModel().getColumn(4).setMinWidth(1000);
         analysisTable.getSelectionModel().addListSelectionListener(new AnalysisTableListener());
     }

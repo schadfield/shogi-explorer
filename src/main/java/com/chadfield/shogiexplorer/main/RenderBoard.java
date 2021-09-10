@@ -71,7 +71,7 @@ public class RenderBoard {
                 boardPanel.add(ImageUtils.getTextLabelForBan(
                         new Coordinate(0,
                                 i),
-                        new Dimension(MathUtils.COORD_XY * 4 + 7,
+                        new Dimension(MathUtils.COORD_XY * 4 + 10,
                                 MathUtils.COORD_XY / 2 + 7),
                         new Coordinate(CENTRE_X,
                                 CENTRE_Y),
@@ -94,7 +94,7 @@ public class RenderBoard {
                 boardPanel.add(ImageUtils.getTextLabelForBan(
                         new Coordinate(0,
                                 i),
-                        new Dimension(MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 3,
+                        new Dimension(MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 5,
                                 MathUtils.COORD_XY / 2 + 7),
                         new Coordinate(CENTRE_X,
                                 CENTRE_Y),
