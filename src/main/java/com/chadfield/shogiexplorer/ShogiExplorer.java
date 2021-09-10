@@ -608,13 +608,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private class AnalysisTableListener implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent evt) {
-            if (!evt.getValueIsAdjusting()) {
-                if (!inSelectionChange) {
-                    if (evt.getFirstIndex()+1 == moveNumber) {
-                        moveList.setSelectedIndex(evt.getLastIndex()+1);
-                    } else {
-                        moveList.setSelectedIndex(evt.getFirstIndex()+1);
-                    }
+            if (!evt.getValueIsAdjusting() && !inSelectionChange) {
+                if (evt.getFirstIndex()+1 == moveNumber) {
+                    moveList.setSelectedIndex(evt.getLastIndex()+1);
+                } else {
+                    moveList.setSelectedIndex(evt.getFirstIndex()+1);
                 }
             }
         }

@@ -127,7 +127,6 @@ public class GameAnalyser {
         String line;
         String lastLine = "";
         while ((line = bufferedReader.readLine()) != null) {
-            //System.out.println(line);
             if (line.contains("bestmove")) {
                 updateTableModel(analysisTable, getTableInsert(lastLine, moveNum, engineMove));
                 return;
