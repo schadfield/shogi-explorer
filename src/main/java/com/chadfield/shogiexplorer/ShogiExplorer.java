@@ -20,11 +20,13 @@ import com.chadfield.shogiexplorer.main.SFENParser;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Position;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -43,8 +45,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
     transient FileNameExtensionFilter kifFileFilter;
     File newEngineFile;
     static JFrame mainFrame;
-    static final String ROTATED = "rotated";
     boolean inSelectionChange = false;
+    static final String PREF_ROTATED = "rotated";
+    static final String PREF_ANALYSIS_ENGINE_NAME = "analysisEngineName";
+    String analysisEngineName;
+    static final String PREF_ANALYSIS_TIME_PER_MOVE = "analysisTimePerMove";
+    int analysisTimePerMove;
+    static final String PREF_ANALYSIS_MISTAKE_THRESHOLD = "analysisMistakeThreshold";
+    int analysisMistakeThreshold;
+    static final String PREF_ANALYSIS_BLUNDER_THRESHOLD = "analysisBlunderThreshold";
+    int analysisBlunderThreshold;
+    static final String PREF_ANALYSIS_IGNORE_THRESHOLD = "analysisLosingThreshold";
+    int analysisIgnoreThreshold;
 
     /**
      * Creates new form NewJFrame
@@ -57,10 +69,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
         initComponents();
         board = SFENParser.parse("lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
-        String rotated = (prefs.get(ROTATED, "false"));
+        String rotated = prefs.get(PREF_ROTATED, "false");
         if (rotated.compareTo("true") == 0) {
             jRadioButtonMenuItem1.doClick();
         }
+        analysisEngineName = prefs.get(PREF_ANALYSIS_ENGINE_NAME, "");
+        analysisTimePerMove = prefs.getInt(PREF_ANALYSIS_TIME_PER_MOVE, 5);
+        analysisMistakeThreshold = prefs.getInt(PREF_ANALYSIS_MISTAKE_THRESHOLD, 250);
+        analysisBlunderThreshold = prefs.getInt(PREF_ANALYSIS_BLUNDER_THRESHOLD, 500);
+        analysisIgnoreThreshold = prefs.getInt(PREF_ANALYSIS_IGNORE_THRESHOLD, 2000);
         engineList = EngineManager.loadEngines(engineListModel);
         if (engineList == null) {
             engineList = new ArrayList<>();
@@ -97,6 +114,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jEngineConfDialog = new javax.swing.JDialog(jEngineManagerDialog);
         jEngineConfPanel = new javax.swing.JPanel();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jAnalysisDialog = new javax.swing.JDialog();
+        jEngineConfPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        analysisEngineComboBox = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        analysisTimePerMoveSpinner = new javax.swing.JSpinner();
+        jLabel2 = new javax.swing.JLabel();
+        analysisMistakeSpinner = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
+        analysisBlunderSpinner = new javax.swing.JSpinner();
+        jLabel5 = new javax.swing.JLabel();
+        analysisIgnoreSpinner = new javax.swing.JSpinner();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         mediaReverse = new javax.swing.JButton();
@@ -214,6 +245,53 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jEngineConfDialog.getAccessibleContext().setAccessibleParent(null);
 
         jMenuItem3.setText(bundle.getString("ShogiExplorer.jMenuItem3.text")); // NOI18N
+
+        jAnalysisDialog.setAlwaysOnTop(true);
+        jAnalysisDialog.setModal(true);
+        jAnalysisDialog.setResizable(false);
+        jAnalysisDialog.setSize(new java.awt.Dimension(500, 230));
+        jAnalysisDialog.getContentPane().setLayout(new java.awt.FlowLayout());
+
+        jEngineConfPanel1.setLayout(new java.awt.GridLayout(0, 2, 20, 0));
+
+        jLabel1.setText(bundle.getString("ShogiExplorer.jLabel1.text")); // NOI18N
+        jLabel1.setMinimumSize(new java.awt.Dimension(200, 16));
+        jEngineConfPanel1.add(jLabel1);
+        jEngineConfPanel1.add(analysisEngineComboBox);
+
+        jLabel3.setText(bundle.getString("ShogiExplorer.jLabel3.text")); // NOI18N
+        jEngineConfPanel1.add(jLabel3);
+        jEngineConfPanel1.add(analysisTimePerMoveSpinner);
+
+        jLabel2.setText(bundle.getString("ShogiExplorer.jLabel2.text")); // NOI18N
+        jEngineConfPanel1.add(jLabel2);
+        jEngineConfPanel1.add(analysisMistakeSpinner);
+
+        jLabel4.setText(bundle.getString("ShogiExplorer.jLabel4.text")); // NOI18N
+        jEngineConfPanel1.add(jLabel4);
+        jEngineConfPanel1.add(analysisBlunderSpinner);
+
+        jLabel5.setText(bundle.getString("ShogiExplorer.jLabel5.text")); // NOI18N
+        jEngineConfPanel1.add(jLabel5);
+        jEngineConfPanel1.add(analysisIgnoreSpinner);
+
+        jButton1.setText(bundle.getString("ShogiExplorer.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jEngineConfPanel1.add(jButton1);
+
+        jButton2.setText(bundle.getString("ShogiExplorer.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jEngineConfPanel1.add(jButton2);
+
+        jAnalysisDialog.getContentPane().add(jEngineConfPanel1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -414,7 +492,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analyseGame.setText(bundle.getString("ShogiExplorer.analyseGame.text")); // NOI18N
         analyseGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                analyseGameActionPerformed(evt);
+                openAnalyseGameDialog(evt);
             }
         });
         gameMenu.add(analyseGame);
@@ -493,9 +571,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         evt.getID();
         rotatedView = !rotatedView;
         if (rotatedView) {
-            prefs.put(ROTATED, "true");
+            prefs.put(PREF_ROTATED, "true");
         } else {
-            prefs.put(ROTATED, "false");
+            prefs.put(PREF_ROTATED, "false");
         }
         try {
             prefs.flush();
@@ -606,13 +684,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_mediaPlayActionPerformed
 
     private class AnalysisTableListener implements ListSelectionListener {
+
         @Override
         public void valueChanged(ListSelectionEvent evt) {
             if (!evt.getValueIsAdjusting() && !inSelectionChange) {
-                if (evt.getFirstIndex()+1 == moveNumber) {
-                    moveList.setSelectedIndex(evt.getLastIndex()+1);
+                if (evt.getFirstIndex() + 1 == moveNumber) {
+                    moveList.setSelectedIndex(evt.getLastIndex() + 1);
                 } else {
-                    moveList.setSelectedIndex(evt.getFirstIndex()+1);
+                    moveList.setSelectedIndex(evt.getFirstIndex() + 1);
                 }
             }
         }
@@ -633,9 +712,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
             commentTextArea.setText(null);
             commentTextArea.append(position.getComment());
             if (moveNumber > 0 && analysisTable.getRowCount() >= moveNumber) {
-                analysisTable.setRowSelectionInterval(moveNumber-1, moveNumber-1);
-                analysisTable.getSelectionModel().setSelectionInterval(moveNumber-1, moveNumber-1);
-                analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber-1, 0, true)));
+                analysisTable.setRowSelectionInterval(moveNumber - 1, moveNumber - 1);
+                analysisTable.getSelectionModel().setSelectionInterval(moveNumber - 1, moveNumber - 1);
+                analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber - 1, 0, true)));
             }
             RenderBoard.loadBoard(board, boardPanel, rotatedView);
             inSelectionChange = false;
@@ -705,21 +784,81 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_configureEngineButtonActionPerformed
 
-    private void analyseGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyseGameActionPerformed
-        evt.getID();
+    private void openAnalyseGameDialog(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openAnalyseGameDialog
+        Dimension comboSize = analysisEngineComboBox.getPreferredSize();
+        analysisEngineComboBox.removeAllItems();
+        for (Engine engine : engineList) {
+            analysisEngineComboBox.addItem(engine.getName());
+            if (engine.getName().contentEquals(analysisEngineName)) {
+                analysisEngineComboBox.setSelectedItem(analysisEngineName);
+            }
+        }
+        analysisEngineComboBox.setPreferredSize(new Dimension(220, comboSize.height));
+        analysisTimePerMoveSpinner.setModel(new SpinnerNumberModel(
+                analysisTimePerMove,
+                5,
+                60,
+                1
+        ));
+        analysisMistakeSpinner.setModel(new SpinnerNumberModel(
+                analysisMistakeThreshold,
+                100,
+                500,
+                1
+        ));
+        analysisBlunderSpinner.setModel(new SpinnerNumberModel(
+                analysisBlunderThreshold,
+                200,
+                1000,
+                1
+        ));
+        analysisIgnoreSpinner.setModel(new SpinnerNumberModel(
+                analysisIgnoreThreshold,
+                1000,
+                30000,
+                1
+        ));
+
+        jAnalysisDialog.setLocationRelativeTo(mainFrame);
+        jAnalysisDialog.setVisible(true);
+    }//GEN-LAST:event_openAnalyseGameDialog
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        jAnalysisDialog.setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        analysisEngineName = (String) analysisEngineComboBox.getSelectedItem();
+        analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
+        analysisMistakeThreshold = (int) analysisMistakeSpinner.getValue();
+        analysisBlunderThreshold = (int) analysisBlunderSpinner.getValue();
+        analysisIgnoreThreshold = (int) analysisIgnoreSpinner.getValue();
+        prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
+        prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
+        prefs.putInt(PREF_ANALYSIS_MISTAKE_THRESHOLD, analysisMistakeThreshold);
+        prefs.putInt(PREF_ANALYSIS_BLUNDER_THRESHOLD, analysisBlunderThreshold);
+        prefs.putInt(PREF_ANALYSIS_IGNORE_THRESHOLD, analysisIgnoreThreshold);
         new Thread() {
             @Override
             public void run() {
-                    DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
-                    analysisTableModel.getDataVector().clear();
+                Engine engine = null;
+                for (Engine thisEngine : engineList) {
+                    if (thisEngine.getName().contentEquals(analysisEngineName)) {
+                        engine = thisEngine;
+                        break;
+                    }
+                }
+                DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
+                analysisTableModel.getDataVector().clear();
                 try {
-                    new GameAnalyser().analyse(game, engineList.get(0), moveList, analysisTable);
+                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisTimePerMove, analysisMistakeThreshold, analysisBlunderThreshold, analysisIgnoreThreshold);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }.start();
-    }//GEN-LAST:event_analyseGameActionPerformed
+        jAnalysisDialog.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -746,7 +885,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEngineButton;
     private javax.swing.JMenuItem analyseGame;
+    private javax.swing.JSpinner analysisBlunderSpinner;
+    private javax.swing.JComboBox<String> analysisEngineComboBox;
+    private javax.swing.JSpinner analysisIgnoreSpinner;
+    private javax.swing.JSpinner analysisMistakeSpinner;
     private javax.swing.JTable analysisTable;
+    private javax.swing.JSpinner analysisTimePerMoveSpinner;
     private javax.swing.JPanel boardPanel;
     private javax.swing.JScrollPane commentScrollPane;
     private javax.swing.JTextArea commentTextArea;
@@ -757,12 +901,21 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenu gameMenu;
     private javax.swing.JScrollPane gameScrollPanel;
     private javax.swing.JTextArea gameTextArea;
+    private javax.swing.JDialog jAnalysisDialog;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
+    private javax.swing.JPanel jEngineConfPanel1;
     private javax.swing.JFileChooser jEngineFileChooser1;
     private javax.swing.JList<String> jEngineList;
     private javax.swing.JDialog jEngineManagerDialog;
     private javax.swing.JFileChooser jKifFileChooser;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;

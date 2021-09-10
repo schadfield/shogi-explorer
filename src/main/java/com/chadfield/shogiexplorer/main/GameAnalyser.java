@@ -1,5 +1,6 @@
 package com.chadfield.shogiexplorer.main;
 
+import com.chadfield.shogiexplorer.ShogiExplorer;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
 import com.chadfield.shogiexplorer.objects.Game;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -31,8 +33,17 @@ public class GameAnalyser {
     BufferedReader bufferedReader;
     String lastScore = "";
     String opinion = "";
+    int analysisTimePerMove;
+    int analysisMistakeThreshold;
+    int analysisBlunderThreshold;
+    int analysisIgnoreThreshold;
 
-    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable) throws IOException {
+
+    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, int analysisTimePerMove, int analysisMistakeThreshold, int analysisBlunderThreshold, int analysisIgnoreThreshold) throws IOException {
+        this.analysisTimePerMove = analysisTimePerMove;
+        this.analysisMistakeThreshold = analysisMistakeThreshold;
+        this.analysisBlunderThreshold = analysisBlunderThreshold;
+        this.analysisIgnoreThreshold = analysisIgnoreThreshold;
         initializeEngine(engine);
         initiateUSIProtocol();
         setOptions(engine);
@@ -124,7 +135,7 @@ public class GameAnalyser {
 
     private void analysePosition(String sfen, String engineMove, JTable analysisTable, int moveNum) throws IOException {
         stdin.write(("position sfen " + sfen + " " + engineMove + "\n").getBytes());
-        stdin.write("go btime 0 wtime 0 byoyomi 3000\n".getBytes());
+        stdin.write(("go btime 0 wtime 0 byoyomi " + analysisTimePerMove*1000 + "\n").getBytes());
         stdin.flush();
         String line;
         List<String> lineList = new ArrayList<>();
@@ -203,7 +214,7 @@ public class GameAnalyser {
                 
         scoreVal = getScoreVal(score);
                 
-        if ((scoreVal > 1999 && lastScoreVal > 1999) || (scoreVal < -1999 && lastScoreVal < -1999)) {
+        if ((scoreVal >= analysisIgnoreThreshold && lastScoreVal >= analysisIgnoreThreshold) || (scoreVal <= -analysisIgnoreThreshold && lastScoreVal <= -analysisIgnoreThreshold)) {
             return "";
         }
         
@@ -214,18 +225,18 @@ public class GameAnalyser {
         // We are finding the opinion for the PREVIOUS move.
         if (moveNum % 2 != 0) {
             // This move is for sente.
-            if (scoreVal - lastScoreVal > 500) {
+            if (scoreVal - lastScoreVal > analysisBlunderThreshold) {
                 return "??";
             }
-            if (scoreVal - lastScoreVal > 250) {
+            if (scoreVal - lastScoreVal > analysisMistakeThreshold) {
                 return "?";
             }
         } else {
             // This move is for gote.
-            if (scoreVal - lastScoreVal < -500) {
+            if (scoreVal - lastScoreVal < -analysisBlunderThreshold) {
                 return "??";
             }
-            if (scoreVal - lastScoreVal < -250) {
+            if (scoreVal - lastScoreVal < -analysisMistakeThreshold) {
                 return "?";
             }
         }
