@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JList;
@@ -125,14 +127,25 @@ public class GameAnalyser {
         stdin.write("go btime 0 wtime 0 byoyomi 3000\n".getBytes());
         stdin.flush();
         String line;
-        String lastLine = "";
+        List<String> lineList = new ArrayList<>();
         while ((line = bufferedReader.readLine()) != null) {
             if (line.contains("bestmove")) {
-                updateTableModel(analysisTable, getTableInsert(lastLine, moveNum, engineMove));
+                String bestLine = getBestLine(line, lineList);
+                updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, engineMove));
                 return;
             }
-            lastLine = line;
+            lineList.add(line);
         }
+    }
+    
+    private String getBestLine(String line, List<String> lineList) {
+        String bestMove = line.split(" ")[1];
+        for (int j = lineList.size() - 1; j >= 0; j--) {
+            if (lineList.get(j).contains("pv " + bestMove)) {
+                return lineList.get(j);
+            }
+        }
+        return "";
     }
 
     private Object[] getTableInsert(String lastLine, int moveNum, String engineMove) {
