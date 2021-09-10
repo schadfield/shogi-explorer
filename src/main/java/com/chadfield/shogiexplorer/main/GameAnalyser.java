@@ -183,64 +183,61 @@ public class GameAnalyser {
         int lastScoreVal;
         int scoreVal;
         
-        if (lastScore.isEmpty()) {
+        if (lastScore.isEmpty() || score.isEmpty()) {
             return "";
         }
-        if (score.isEmpty()) {
-            return "";
-        }
-        
-        if (lastScore.contains("+Mate")) {
-            lastScoreVal = 31111;
-        } else if (lastScore.contains("-Mate")) {
-            lastScoreVal = -31111;
-        } else {
-            lastScoreVal = Integer.parseInt(lastScore);
-        }
-        
-        if (score.contains("+Mate")) {
-            scoreVal = -31111;
-        } else if (score.contains("-Mate")) {
-            scoreVal = 31111;
-        } else {
-            scoreVal = Integer.parseInt(score);
-        }
-        
-        System.out.println("move-1: " + (moveNum-1) + " LS: " + lastScore + " S: " + score);
-        
-        if (scoreVal > 1999 && lastScoreVal > 1999) {
+                
+        lastScoreVal = getLastScoreVal();
+                
+        scoreVal = getScoreVal(score);
+                
+        if ((scoreVal > 1999 && lastScoreVal > 1999) || (scoreVal < -1999 && lastScoreVal < -1999)) {
             return "";
         }
         
-        if (scoreVal < -1999 && lastScoreVal < -1999) {
-            return "";
-        }
-        
+        return assessScores(moveNum, lastScoreVal, scoreVal);
+    }
+    
+    private String assessScores(int moveNum, int lastScoreVal, int scoreVal) {
         // We are finding the opinion for the PREVIOUS move.
         if (moveNum % 2 != 0) {
             // This move is for sente.
             if (scoreVal - lastScoreVal > 500) {
-                System.out.println("gote score: ??");
                 return "??";
             }
             if (scoreVal - lastScoreVal > 250) {
-                System.out.println("gote score: ?");
                 return "?";
             }
         } else {
             // This move is for gote.
             if (scoreVal - lastScoreVal < -500) {
-                System.out.println("sente score: ??");
                 return "??";
             }
             if (scoreVal - lastScoreVal < -250) {
-                System.out.println("sente score: ?");
                 return "?";
             }
-
         }
-
         return "";
+    }
+    
+    private int getScoreVal(String score) {
+        if (score.contains("+Mate")) {
+            return -31111;
+        } else if (score.contains("-Mate")) {
+            return 31111;
+        } else {
+            return Integer.parseInt(score);
+        }
+    }
+    
+    private int getLastScoreVal() {
+        if (lastScore.contains("+Mate")) {
+            return 31111;
+        } else if (lastScore.contains("-Mate")) {
+            return -31111;
+        } else {
+            return Integer.parseInt(lastScore);
+        }
     }
     
     private String getMateScore(int moveNum, String value) {
