@@ -1,6 +1,6 @@
 package com.chadfield.shogiexplorer.main;
 
-import com.chadfield.shogiexplorer.ShogiExplorer;
+import com.chadfield.shogiexplorer.objects.AnalysisParameter;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
 import com.chadfield.shogiexplorer.objects.Game;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.prefs.Preferences;
 import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -39,11 +38,11 @@ public class GameAnalyser {
     int analysisIgnoreThreshold;
 
 
-    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, int analysisTimePerMove, int analysisMistakeThreshold, int analysisBlunderThreshold, int analysisIgnoreThreshold) throws IOException {
-        this.analysisTimePerMove = analysisTimePerMove;
-        this.analysisMistakeThreshold = analysisMistakeThreshold;
-        this.analysisBlunderThreshold = analysisBlunderThreshold;
-        this.analysisIgnoreThreshold = analysisIgnoreThreshold;
+    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam) throws IOException {
+        this.analysisTimePerMove = analysisParam.getAnalysisTimePerMove();
+        this.analysisMistakeThreshold = analysisParam.getAnalysisMistakeThreshold();
+        this.analysisBlunderThreshold = analysisParam.getAnalysisBlunderThreshold();
+        this.analysisIgnoreThreshold = analysisParam.getAnalysisIgnoreThreshold();
         initializeEngine(engine);
         initiateUSIProtocol();
         setOptions(engine);
