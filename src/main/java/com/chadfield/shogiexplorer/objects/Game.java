@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Game {
     private List<Position> positionList;
-    private ArrayList<ArrayList<Position>> analysisPositionList;
+    private List<List<Position>> analysisPositionList;
     private String date;
     private String place;
     private String timeLimit;
@@ -22,7 +22,7 @@ public class Game {
         timeLimit = "";
         sente = "";
         gote = "";
-        analysisPositionList = new ArrayList<ArrayList<Position>>();
+        analysisPositionList = new ArrayList<>();
     }
 
     /**
@@ -112,14 +112,14 @@ public class Game {
     /**
      * @return the analysisPositionList
      */
-    public ArrayList<ArrayList<Position>> getAnalysisPositionList() {
+    public List<List<Position>> getAnalysisPositionList() {
         return analysisPositionList;
     }
 
     /**
      * @param analysisPositionList the analysisPositionList to set
      */
-    public void setAnalysisPositionList(ArrayList<ArrayList<Position>> analysisPositionList) {
+    public void setAnalysisPositionList(List<List<Position>> analysisPositionList) {
         this.analysisPositionList = analysisPositionList;
     }
     

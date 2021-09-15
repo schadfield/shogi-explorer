@@ -58,21 +58,16 @@ public class GameAnalyser {
                 
         for (Position position : game.getPositionList()) {
             if (engineMove != null) {
-                System.out.println("engineMove: " + engineMove);
                 count++;
-                System.out.println("count: " + count);
                 updateMoveList(moveList, count);
                 analysePosition(game, lastSFEN, engineMove, analysisTable, count);
-            } else {
-                System.out.println("engineMove: NULL");
-            }
+            } 
             lastSFEN = sfen;
             sfen = position.getGameSFEN();
             engineMove = position.getEngineMove();
         }
 
         count++;
-        System.out.println("count: " + count);
         updateMoveList(moveList, count);
         analysePosition(game, lastSFEN, engineMove, analysisTable, count);
         
@@ -165,10 +160,7 @@ public class GameAnalyser {
     private ArrayList<Position> getBestLineList(String sfen, String bestLine) {
         ArrayList<Position> result = new ArrayList<>();
         String currentSfen = sfen;
-        System.out.println("Position: " + sfen);
-        System.out.println("BestLine: " );
         for (String move : getBestLineMoveList(bestLine)) {
-            System.out.println(move);
             Position position = getPosition(currentSfen, move);
             result.add(position);
             currentSfen  = position.getGameSFEN();
@@ -177,16 +169,9 @@ public class GameAnalyser {
     }
     
     private Position getPosition(String sfen, String move) {
-        //System.out.println("getPosSFEN: " + sfen);
         Board board  = SFENParser.parse(sfen);
-        System.out.println("before exe : " + SFENParser.getSFEN(board));
-        board = executeMove(board, move);
-        System.out.println("after exe  : " + SFENParser.getSFEN(board));
-        System.out.println("");
-        
-        Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), "");
-        
-        return position;
+        executeMove(board, move);
+        return new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), "");
     } 
     
     private Board executeMove(Board board, String move) {
@@ -271,23 +256,17 @@ public class GameAnalyser {
     }
     
     public static void executeDropMove(Board board, Coordinate thisDestination, String move) {
-        //String engineMove = "";
-        System.out.println("dest: " + thisDestination.getX() + thisDestination.getY());
         Koma koma;
         try {
             koma = getDropKoma(move, board.getNextMove());
             if (koma == null) {
                 return;
             }
-            System.out.println("koma: " + koma.getType());
-
             putKoma(board, thisDestination, koma);
             removePieceInHand(koma.getType(), board);
-            //engineMove = getKomaLetter(koma.getType()) + "*" + getEngineMoveCoordinate(thisDestination);
         } catch (Exception ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return;
     }
         
     private void executeRegularMove(Board board, Coordinate thisSource, Coordinate thisDestination, String move) {
@@ -297,25 +276,11 @@ public class GameAnalyser {
                 addPieceToInHand(getKoma(board, thisDestination), board);
             }
         }
-        System.out.println("src: " + thisSource.getX() + thisSource.getY());
         Koma thisKoma = getKoma(board, thisSource);
-        System.out.println("koma: " + thisKoma.getType());
         if (thisKoma != null) {
             putKoma(board, thisDestination, promCheck(thisKoma, move));
         }
-        putKoma(board, thisSource, null);
-        
-        //String engineMove = "";
-        //try {
-        //    engineMove = getEngineMoveCoordinate(thisSource) + getEngineMoveCoordinate(thisDestination);
-        //    if (isPromoted(move)) {
-        //        engineMove += "+";
-        //    } 
-        //} catch (Exception ex) {
-        //    Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
-        //}
-        
-        //return engineMove;
+        putKoma(board, thisSource, null); 
     }
     
     public static Koma promCheck(Koma koma, String move) {
@@ -514,21 +479,15 @@ public class GameAnalyser {
         boolean foundPV = false;
         String[] splitLine = line.split(" ");
         for (int i = 0; i < splitLine.length; i++) {
-            if (!foundPV) {
-                switch (splitLine[i]) {
-                    case "pv":
-                        for (int j = i+1; j < splitLine.length; j++ ) {
-                            if (!splitLine[j].contains("%")) {
-                                result.add(splitLine[j]);
-                            }
-                        }
-                        foundPV = true;
-                        break;
-                    default:
-                }       
+            if (!foundPV && splitLine[i].contentEquals("pv")) {
+                for (int j = i+1; j < splitLine.length; j++ ) {
+                    if (!splitLine[j].contains("%")) {
+                        result.add(splitLine[j]);
+                    }
+                }
+                foundPV = true;
             }
         }
-
         return result;
     }
     

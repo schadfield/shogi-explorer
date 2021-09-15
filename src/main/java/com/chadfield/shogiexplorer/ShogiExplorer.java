@@ -882,11 +882,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
             case 37:
                 if (browse) {
                     browsePos--;
-                    System.out.println("browsePos: " + browsePos);
                     if (browsePos < 0) {
                         browse = false;
                         browsePos = 0;
-                        System.out.println("browsePos: " + browsePos);
                         position = game.getPositionList().get(moveNumber);
                         board = SFENParser.parse(position.getGameSFEN());
                         board.setSource(position.getSource());
@@ -910,12 +908,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 if (browse) {
                     if (browsePos < game.getAnalysisPositionList().get(moveNumber-1).size()-1) {
                         browsePos++;
-                        System.out.println("browsePos: " + browsePos);
                     }
                 } else {
                     browse = true;
                     browsePos = 0;
-                    System.out.println("browsePos: " + browsePos);
                 }
                 
                 position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
@@ -925,8 +921,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 commentTextArea.setText(null);
                 RenderBoard.loadBoard(board, boardPanel, rotatedView);
 
-                int selectedRow = analysisTable.getSelectedRow();
-                System.out.println(analysisTable.getValueAt(selectedRow, 4));
                 break;
             default:
                 browse = false;
