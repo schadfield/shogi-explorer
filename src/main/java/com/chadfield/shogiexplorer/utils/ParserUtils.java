@@ -9,6 +9,10 @@ import com.chadfield.shogiexplorer.objects.Koma;
  */
 public class ParserUtils {
     
+        private ParserUtils() {
+            throw new IllegalStateException("Utility class");
+        }
+    
         public static Koma promoteKoma(Koma.Type komaType) {
         switch (komaType) {
             case SFU:
