@@ -280,19 +280,19 @@ public class KifParser {
             case SKY:
                 return "L";
             case GFU:
-                return "p";
+                return "P";
             case GGI:
-                return "s";
+                return "S";
             case GHI:
-                return "r";
+                return "R";
             case GKA:
-                return "b";
+                return "B";
             case GKE:
-                return "n";
+                return "N";
             case GKI:
-                return "g";
+                return "G";
             case GKY:
-                return "l";
+                return "L";
             default:
                 return null;
         }
@@ -304,7 +304,7 @@ public class KifParser {
         String engineMove = "";
         
         if (isSame(move)) {
-            thisSource = getFromCoordinate(move);
+            thisSource = getSourceCoordinate(move);
             copyCoords(lastDestination, thisDestination);
         } else if (isResigns(move)) {
             return null;
@@ -312,7 +312,7 @@ public class KifParser {
             thisDestination = getDestinationCoordinate(move);
             thisSource = null;
         } else {
-            thisSource = getFromCoordinate(move);
+            thisSource = getSourceCoordinate(move);
             thisDestination = getDestinationCoordinate(move);
         }
         if (!isResigns(move)) {
@@ -569,7 +569,7 @@ public class KifParser {
         }
     }
 
-    public static Coordinate getFromCoordinate(String move) {
+    public static Coordinate getSourceCoordinate(String move) {
         Coordinate result = new Coordinate();
         result.setX(Integer.parseInt(move.substring(move.indexOf("(") + 1, move.indexOf("(") + 2)));
         result.setY(Integer.parseInt(move.substring(move.indexOf("(") + 1, move.indexOf(")"))) - result.getX() * 10);

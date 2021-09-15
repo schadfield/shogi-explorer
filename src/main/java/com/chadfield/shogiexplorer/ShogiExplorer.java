@@ -39,6 +39,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     transient Game game;
     int moveNumber;
     boolean play;
+    boolean browse;
+    int browsePos;
     DefaultListModel<String> moveListModel = new DefaultListModel<>();
     DefaultListModel<String> engineListModel = new DefaultListModel<>();
     boolean rotatedView;
@@ -486,6 +488,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         analysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         analysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        analysisTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                analysisTableKeyReleased(evt);
+            }
+        });
         jScrollPane2.setViewportView(analysisTable);
 
         fileMenu.setText(bundle.getString("ShogiExplorer.fileMenu.text_1")); // NOI18N
@@ -690,6 +697,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         @Override
         public void valueChanged(ListSelectionEvent evt) {
             if (!evt.getValueIsAdjusting() && !inSelectionChange) {
+                browse = false;
                 if (evt.getFirstIndex() + 1 == moveNumber) {
                     moveList.setSelectedIndex(evt.getLastIndex() + 1);
                 } else {
@@ -825,6 +833,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        browse = false;
         analysisEngineName = (String) analysisEngineComboBox.getSelectedItem();
         analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
         analysisMistakeThreshold = (int) analysisMistakeSpinner.getValue();
@@ -865,6 +874,64 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         jEngineManagerDialog.setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void analysisTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_analysisTableKeyReleased
+        int keyCode = evt.getKeyCode();
+        Position position;
+        switch(keyCode) {
+            case 37:
+                if (browse) {
+                    browsePos--;
+                    System.out.println("browsePos: " + browsePos);
+                    if (browsePos < 0) {
+                        browse = false;
+                        browsePos = 0;
+                        System.out.println("browsePos: " + browsePos);
+                        position = game.getPositionList().get(moveNumber);
+                        board = SFENParser.parse(position.getGameSFEN());
+                        board.setSource(position.getSource());
+                        board.setDestination(position.getDestination());
+                        commentTextArea.setText(null);
+                        commentTextArea.append(position.getComment());
+                        RenderBoard.loadBoard(board, boardPanel, rotatedView);
+                        break;
+                    }
+                
+                
+                position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
+                board = SFENParser.parse(position.getGameSFEN());
+                board.setSource(position.getSource());
+                board.setDestination(position.getDestination());
+                commentTextArea.setText(null);
+                RenderBoard.loadBoard(board, boardPanel, rotatedView);
+                }
+                break;
+            case 39:
+                if (browse) {
+                    if (browsePos < game.getAnalysisPositionList().get(moveNumber-1).size()-1) {
+                        browsePos++;
+                        System.out.println("browsePos: " + browsePos);
+                    }
+                } else {
+                    browse = true;
+                    browsePos = 0;
+                    System.out.println("browsePos: " + browsePos);
+                }
+                
+                position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
+                board = SFENParser.parse(position.getGameSFEN());
+                board.setSource(position.getSource());
+                board.setDestination(position.getDestination());
+                commentTextArea.setText(null);
+                RenderBoard.loadBoard(board, boardPanel, rotatedView);
+
+                int selectedRow = analysisTable.getSelectedRow();
+                System.out.println(analysisTable.getValueAt(selectedRow, 4));
+                break;
+            default:
+                browse = false;
+        }
+    }//GEN-LAST:event_analysisTableKeyReleased
 
     /**
      * @param args the command line arguments

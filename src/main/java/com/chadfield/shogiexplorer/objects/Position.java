@@ -11,8 +11,8 @@ public class Position {
     private Coordinate destination;
     private String comment;
     
-    public Position(String game, Coordinate source, Coordinate destination, String engineMove) {
-        this.gameSFEN = game;
+    public Position(String gameSFEN, Coordinate source, Coordinate destination, String engineMove) {
+        this.gameSFEN = gameSFEN;
         this.engineMove = engineMove;
         this.source = source;
         this.destination = destination;
