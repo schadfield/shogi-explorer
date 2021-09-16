@@ -1,5 +1,6 @@
 package com.chadfield.shogiexplorer.main;
 
+import com.chadfield.shogiexplorer.objects.GameAnalyser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -119,7 +120,7 @@ public class KifParser {
         return lastDestination;
     }
     
-    public static String extractRegularMove(String[] moveArray, boolean isSame) {
+    private static String extractRegularMove(String[] moveArray, boolean isSame) {
         String move = moveArray[1];
         if (isSame) {
             move += "\u3000" + moveArray[2];
@@ -127,7 +128,7 @@ public class KifParser {
         return move;
     }
         
-    public static void parseResignLine(Board board, String line, DefaultListModel<String> moveListModel, List<Position> positionList) {
+    private static void parseResignLine(Board board, String line, DefaultListModel<String> moveListModel, List<Position> positionList) {
         String[] splitLine = line.trim().split("\\s+|\\u3000");
         int gameNum = Integer.parseInt(splitLine[0]);
 
@@ -136,7 +137,7 @@ public class KifParser {
         positionList.add(position);
     }
     
-    public static void parseGameDetails(String line, Game game) {
+    private static void parseGameDetails(String line, Game game) {
         if (line.startsWith(SENTE)) {
             game.setSente(line.substring(SENTE.length()));
         }
@@ -153,33 +154,12 @@ public class KifParser {
             game.setDate(line.substring(DATE.length()));
         }
     }
-    
-    public static void addMoveToMoveList(Board board, DefaultListModel<String> moveListModel, int gameNum, String move) {
-        if (board.getNextTurn() == Board.Turn.GOTE) {
-            moveListModel.addElement(gameNum + " ☗" + move + "\n");
-        } else {
-            moveListModel.addElement(gameNum + " ☖" + move + "\n");
-        }
-    }
-    
-    public static void addEngineMoveToMoveList(DefaultListModel<String> moveListModel, int gameNum, String move) {
+        
+    private static void addEngineMoveToMoveList(DefaultListModel<String> moveListModel, int gameNum, String move) {
         moveListModel.addElement(gameNum + " " + move + "\n");
     }
 
-    public static String getTimestamp(String line) {
-        long parenCount = line.chars().filter(ch -> ch == '(').count();
-        Integer timeStartIndex = null;
-        if (parenCount == 2) {
-            timeStartIndex = line.indexOf("(", line.indexOf("(") + 1);
-        } else {
-            if (parenCount == 1) {
-                timeStartIndex = line.indexOf("(");
-            }
-        }
-        return line.substring(timeStartIndex);
-    }
-    
-    public static String executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
+    private static String executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
         if (getKoma(board, thisDestination) != null) {
             Koma thisKoma = getKoma(board, thisDestination);
             if (thisKoma != null) {
@@ -205,7 +185,7 @@ public class KifParser {
         return engineMove;
     }
     
-    public static String executeSameMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
+    private static String executeSameMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
         Koma thisKoma = getKoma(board, thisDestination);
         if (thisKoma != null) {
             ParserUtils.addPieceToInHand(thisKoma, board);
@@ -228,7 +208,7 @@ public class KifParser {
         return engineMove;
     }
     
-    public static String executeDropMove(Board board, Coordinate thisDestination, String move) {
+    private static String executeDropMove(Board board, Coordinate thisDestination, String move) {
         String engineMove = "";
         Koma koma;
         try {
@@ -245,7 +225,7 @@ public class KifParser {
         return engineMove;
     }
     
-    public static String getKomaLetter(Koma.Type type) {
+    private static String getKomaLetter(Koma.Type type) {
         switch(type) {
             case SFU:
                 return "P";
@@ -280,7 +260,7 @@ public class KifParser {
         }
     }
  
-    public static Position executeMove(Board board, String move, Coordinate lastDestination) {
+    private static Position executeMove(Board board, String move, Coordinate lastDestination) {
         Coordinate thisDestination = new Coordinate();
         Coordinate thisSource;
         String engineMove = "";
@@ -316,25 +296,25 @@ public class KifParser {
         return Integer.toString(coordinate.getX()) + (char) ('a' + coordinate.getY() - 1);
     }
 
-    public static void copyCoords(Coordinate from, Coordinate to) {
+    private static void copyCoords(Coordinate from, Coordinate to) {
         to.setX(from.getX());
         to.setY(from.getY());
     }
 
-    public static Koma getKoma(Board board, Coordinate coords) {
+    private static Koma getKoma(Board board, Coordinate coords) {
         if (coords == null) {
             return null;
         }
         return board.getMasu()[9 - coords.getX()][coords.getY() - 1];
     }
 
-    public static void putKoma(Board board, Coordinate coords, Koma koma) {
+    private static void putKoma(Board board, Coordinate coords, Koma koma) {
         if (coords != null) {
             board.getMasu()[9 - coords.getX()][coords.getY() - 1] = koma;
         }
     }
 
-    public static void removePieceInHand(Koma.Type komaType, Board board) {
+    private static void removePieceInHand(Koma.Type komaType, Board board) {
         if (board.getInHandKomaMap().get(komaType) == 1) {
             board.getInHandKomaMap().remove(komaType);
         } else {
@@ -342,7 +322,7 @@ public class KifParser {
         }
     }
     
-    public static Koma promCheck(Koma koma, String move) {
+    private static Koma promCheck(Koma koma, String move) {
         if (!isPromoted(move)) {
             return koma;
         } else {
@@ -350,45 +330,41 @@ public class KifParser {
         }
     }
 
-    public static boolean usesTimestamp(String line) {
-        return line.contains(" (");
-    }
-
-    public static boolean isComment(String line) {
+    private static boolean isComment(String line) {
         return line.startsWith("*");
     }
 
-    public static boolean isHeader(String line) {
+    private static boolean isHeader(String line) {
         return line.startsWith(MOVE_HEADER);
     }
 
-    public static boolean isPromoted(String move) {
+    private static boolean isPromoted(String move) {
         if (isDrop(move)) {
             return false;
         }
         return move.charAt(move.indexOf('(') - 1) == PROMOTED.charAt(0);
     }
 
-    public static boolean isResigns(String move) {
+    private static boolean isResigns(String move) {
         return move.contains(RESIGNS);
     }
 
-    public static boolean isDrop(String move) {
+    private static boolean isDrop(String move) {
         return move.contains(DROP);
     }
 
-    public static boolean isSame(String move) {
+    private static boolean isSame(String move) {
         return move.contains(SAME);
     }
 
-    public static Coordinate getDestinationCoordinate(String move) {
+    private static Coordinate getDestinationCoordinate(String move) {
         Coordinate result = new Coordinate();
         result.setX(Integer.parseInt(move.substring(0, 1)));
         result.setY(parseJapaneseNumber(move.substring(1, 2)));
         return result;
     }
 
-    public static Integer parseJapaneseNumber(String thisChar) {
+    private static Integer parseJapaneseNumber(String thisChar) {
         switch (thisChar) {
             case ICHI:
                 return 1;
@@ -413,15 +389,11 @@ public class KifParser {
         }
     }
 
-    public static Coordinate getSourceCoordinate(String move) {
+    private static Coordinate getSourceCoordinate(String move) {
         Coordinate result = new Coordinate();
         result.setX(Integer.parseInt(move.substring(move.indexOf("(") + 1, move.indexOf("(") + 2)));
         result.setY(Integer.parseInt(move.substring(move.indexOf("(") + 1, move.indexOf(")"))) - result.getX() * 10);
         return result;
-    }
-
-    public static File openFile(String path) {
-        return new File(path);
     }
 
 }

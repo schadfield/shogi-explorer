@@ -52,7 +52,7 @@ public class RenderBoard {
         });
     }
 
-    public static void drawCoordinates(JPanel boardPanel, boolean rotatedView) {
+    private static void drawCoordinates(JPanel boardPanel, boolean rotatedView) {
         String[] rank = {"a", "b", "c", "d", "e", "f", "g", "h", "i"};
 
         if (rotatedView) {
@@ -104,7 +104,7 @@ public class RenderBoard {
         }
     }
 
-    public static void drawTurnNotification(Board board, JPanel boardPanel, boolean rotatedView) {
+    private static void drawTurnNotification(Board board, JPanel boardPanel, boolean rotatedView) {
         if (board.getNextTurn() == Turn.SENTE) {
             Image image = ImageUtils.loadImageFromResources(
                     "sente"
@@ -147,7 +147,7 @@ public class RenderBoard {
         }
     }
 
-    public static void drawPiecesInHand(Board board, JPanel boardPanel, boolean rotatedView) {
+    private static void drawPiecesInHand(Board board, JPanel boardPanel, boolean rotatedView) {
 
         EnumMap<Koma.Type, Integer> xOffsetMap = new EnumMap<>(Koma.Type.class);
         EnumMap<Koma.Type, Integer> yOffsetMap = new EnumMap<>(Koma.Type.class);
@@ -331,7 +331,7 @@ public class RenderBoard {
 
     }
 
-    public static void drawHighlights(Board board, JPanel boardPanel, boolean rotatedView) {
+    private static void drawHighlights(Board board, JPanel boardPanel, boolean rotatedView) {
         Coordinate thisCoord = board.getSource();
         if (thisCoord != null) {
             drawThisHighlight(rotatedView, boardPanel, thisCoord);
@@ -342,7 +342,7 @@ public class RenderBoard {
         }
     }
 
-    public static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord) {
+    private static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord) {
         Image pieceImage = ImageUtils.loadImageFromResources(
                 "highlight"
         );
@@ -365,7 +365,7 @@ public class RenderBoard {
         ));
     }
 
-    public static void drawPieces(Board board, JPanel boardPanel, boolean rotatedView) {
+    private static void drawPieces(Board board, JPanel boardPanel, boolean rotatedView) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 Image pieceImage = getPieceImage(rotatedView, i, j, board);
@@ -377,7 +377,7 @@ public class RenderBoard {
         }
     }
 
-    public static Image getPieceImage(boolean rotatedView, int i, int j, Board board) {
+    private static Image getPieceImage(boolean rotatedView, int i, int j, Board board) {
         String name;
         Koma koma;
         if (rotatedView) {
@@ -396,7 +396,7 @@ public class RenderBoard {
         return ImageUtils.loadImageFromResources(name);
     }
 
-    public static void addPiece(JPanel boardPanel, Image pieceImage, int i, int j) {
+    private static void addPiece(JPanel boardPanel, Image pieceImage, int i, int j) {
         boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
                 new Coordinate(i,
                         j),
@@ -407,7 +407,7 @@ public class RenderBoard {
         ));
     }
 
-    public static void drawGrid(Board board, JPanel boardPanel) {
+    private static void drawGrid(Board board, JPanel boardPanel) {
         ImageUtils.drawImage(board,
                 boardPanel,
                 "grid",
@@ -420,7 +420,7 @@ public class RenderBoard {
         );
     }
 
-    public static void drawBans(Board board, JPanel boardPanel) {
+    private static void drawBans(Board board, JPanel boardPanel) {
         ImageUtils.drawImage(board,
                 boardPanel,
                 "ban",
@@ -447,7 +447,7 @@ public class RenderBoard {
         );
     }
 
-    public static void drawBackground(Board board, JPanel boardPanel) {
+    private static void drawBackground(Board board, JPanel boardPanel) {
         ImageUtils.drawImage(board,
                 boardPanel,
                 "background",

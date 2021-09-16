@@ -188,7 +188,7 @@ public class SFENParser {
         }
     }
     
-    public static int putBlanks(char thisChar, Board board, int i, int j, int k) {
+    private static int putBlanks(char thisChar, Board board, int i, int j, int k) {
         int numBlanks = thisChar - 48;
         for (int x = k; x < numBlanks; x++) {
             board.getMasu()[i + x][j] = null;
@@ -231,7 +231,7 @@ public class SFENParser {
         return bldResult.toString();
     }
     
-    public static String getNextTurnString(Turn nextMove) {
+    private static String getNextTurnString(Turn nextMove) {
         if (nextMove == Board.Turn.SENTE) {
             return " b";
         } else {
@@ -239,7 +239,7 @@ public class SFENParser {
         }
     }
 
-    public static String getInHandString(Board board) {
+    private static String getInHandString(Board board) {
         if (board.getInHandKomaMap().isEmpty()) {
             return " -";
         } else {
@@ -248,7 +248,7 @@ public class SFENParser {
 
     }
 
-    public static String getNonEmptyInHandString(Board board) {
+    private static String getNonEmptyInHandString(Board board) {
         LinkedHashMap<Koma.Type, String> pieceMap = new LinkedHashMap<>();
 
         //<editor-fold defaultstate="collapsed" desc="Map initialization">
@@ -284,7 +284,7 @@ public class SFENParser {
         return bldResult.toString();
     }
     
-    public static String getSFENCode(Koma koma) {
+    private static String getSFENCode(Koma koma) {
         EnumMap<Koma.Type, String> pieceMap = new EnumMap<>(Koma.Type.class);
 
         //<editor-fold defaultstate="collapsed" desc="Map initialization">

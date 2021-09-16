@@ -49,7 +49,7 @@ public class EngineManager {
         return newEngineList;
     }
     
-    public static EngineOption parseOption(String optionLine) {
+    private static EngineOption parseOption(String optionLine) {
         EngineOption engineOption = new EngineOption();
         String[] optionArray = optionLine.trim().split(" ");
         int index = 0;
@@ -176,7 +176,7 @@ public class EngineManager {
         saveEngines(engineList);
     }
     
-    public static void checkAndAddEngineOption(List<EngineOption> engineOptionList, EngineOption engineOption) {
+    private static void checkAndAddEngineOption(List<EngineOption> engineOptionList, EngineOption engineOption) {
         for (EngineOption thisOption : engineOptionList) {
             if (thisOption.getName().contentEquals(engineOption.getName())) {
                 thisOption.setDef(engineOption.getDef());

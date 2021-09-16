@@ -2,7 +2,7 @@ package com.chadfield.shogiexplorer;
 
 import com.chadfield.shogiexplorer.main.ConfigurationManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
-import com.chadfield.shogiexplorer.main.GameAnalyser;
+import com.chadfield.shogiexplorer.objects.GameAnalyser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;

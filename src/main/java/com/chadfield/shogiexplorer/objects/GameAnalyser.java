@@ -1,13 +1,7 @@
-package com.chadfield.shogiexplorer.main;
+package com.chadfield.shogiexplorer.objects;
 
-import com.chadfield.shogiexplorer.objects.AnalysisParameter;
-import com.chadfield.shogiexplorer.objects.Board;
-import com.chadfield.shogiexplorer.objects.Coordinate;
-import com.chadfield.shogiexplorer.objects.Engine;
-import com.chadfield.shogiexplorer.objects.EngineOption;
-import com.chadfield.shogiexplorer.objects.Game;
-import com.chadfield.shogiexplorer.objects.Koma;
-import com.chadfield.shogiexplorer.objects.Position;
+import com.chadfield.shogiexplorer.main.EngineManager;
+import com.chadfield.shogiexplorer.main.SFENParser;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import java.io.BufferedReader;
 import java.io.File;
@@ -198,7 +192,7 @@ public class GameAnalyser {
         return board;
     }
     
-    public static void removePieceInHand(Koma.Type komaType, Board board) {
+    private static void removePieceInHand(Koma.Type komaType, Board board) {
         if (board.getInHandKomaMap().get(komaType) == 1) {
             board.getInHandKomaMap().remove(komaType);
         } else {
@@ -206,7 +200,7 @@ public class GameAnalyser {
         }
     }
         
-    public static void executeDropMove(Board board, Coordinate thisDestination, String move) {
+    private static void executeDropMove(Board board, Coordinate thisDestination, String move) {
         Koma koma;
         try {
             koma = ParserUtils.getDropKoma(move.substring(0, 1), board.getNextTurn());
@@ -234,7 +228,7 @@ public class GameAnalyser {
         putKoma(board, thisSource, null); 
     }
     
-    public static Koma promCheck(Koma koma, String move) {
+    private static Koma promCheck(Koma koma, String move) {
         if (!isPromoted(move)) {
             return koma;
         } else {
