@@ -6,14 +6,14 @@ package com.chadfield.shogiexplorer.objects;
  */
 public class Position {
     private String gameSFEN;
-    private String engineMove;
+    private Notation notation;
     private Coordinate source;
     private Coordinate destination;
     private String comment;
     
-    public Position(String gameSFEN, Coordinate source, Coordinate destination, String engineMove) {
+    public Position(String gameSFEN, Coordinate source, Coordinate destination, Notation notation) {
         this.gameSFEN = gameSFEN;
-        this.engineMove = engineMove;
+        this.notation = notation;
         this.source = source;
         this.destination = destination;
         this.comment = "";
@@ -76,16 +76,16 @@ public class Position {
     }
 
     /**
-     * @return the engineMove
+     * @return the notation
      */
-    public String getEngineMove() {
-        return engineMove;
+    public Notation getNotation() {
+        return notation;
     }
 
     /**
-     * @param engineMove the engineMove to set
+     * @param notation the notation to set
      */
-    public void setEngineMove(String engineMove) {
-        this.engineMove = engineMove;
+    public void setNotation(Notation notation) {
+        this.notation = notation;
     }
 }

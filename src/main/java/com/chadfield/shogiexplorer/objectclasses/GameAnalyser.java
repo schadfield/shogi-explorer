@@ -9,6 +9,7 @@ import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Koma;
+import com.chadfield.shogiexplorer.objects.Notation;
 import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import java.io.BufferedReader;
@@ -63,7 +64,7 @@ public class GameAnalyser {
             } 
             lastSFEN = sfen;
             sfen = position.getGameSFEN();
-            engineMove = position.getEngineMove();
+            engineMove = position.getNotation().getEngineMove();
         }
 
         count++;
@@ -169,7 +170,8 @@ public class GameAnalyser {
     private Position getPosition(String sfen, String move) {
         Board board  = SFENParser.parse(sfen);
         executeMove(board, move);
-        return new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), "");
+        Notation notation = new Notation();
+        return new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), notation);
     } 
     
     private Board executeMove(Board board, String move) {

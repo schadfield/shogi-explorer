@@ -14,6 +14,7 @@ import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Koma;
+import com.chadfield.shogiexplorer.objects.Notation;
 import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import java.util.List;
@@ -55,7 +56,7 @@ public class KifParser {
         Board board = SFENParser.parse("lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         Game game = new Game();
         LinkedList<Position> positionList = new LinkedList<>();
-        positionList.add(new Position(SFENParser.getSFEN(board), null, null, null));
+        positionList.add(new Position(SFENParser.getSFEN(board), null, null, new Notation()));
 
         boolean foundHeader = false;
         try (BufferedReader fileReader = Files.newBufferedReader(kifFile.toPath())) {
@@ -112,7 +113,7 @@ public class KifParser {
         Position position = executeMove(board, move, lastDestination);
         if (position != null) {
             lastDestination = position.getDestination();
-            addEngineMoveToMoveList(moveListModel, gameNum, position.getEngineMove());
+            addEngineMoveToMoveList(moveListModel, gameNum, position.getNotation().getEngineMove());
         }
         
         
@@ -131,9 +132,12 @@ public class KifParser {
     private static void parseResignLine(Board board, String line, DefaultListModel<String> moveListModel, List<Position> positionList) {
         String[] splitLine = line.trim().split("\\s+|\\u3000");
         int gameNum = Integer.parseInt(splitLine[0]);
-
-        Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), "Resigns");
-        addEngineMoveToMoveList(moveListModel, gameNum, position.getEngineMove());
+        
+        Notation  notation = new Notation();
+        notation.setEngineMove("Resigns");
+        notation.setJapanese("Resigns");
+        Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), notation);
+        addEngineMoveToMoveList(moveListModel, gameNum, position.getNotation().getEngineMove());
         positionList.add(position);
     }
     
@@ -158,8 +162,25 @@ public class KifParser {
     private static void addEngineMoveToMoveList(DefaultListModel<String> moveListModel, int gameNum, String move) {
         moveListModel.addElement(gameNum + " " + move + "\n");
     }
+    
+    private static Notation getNotation(Coordinate thisSource, Coordinate thisDestination, String move) {
+        String engineMove = "";
+        try {
+            engineMove = getEngineMoveCoordinate(thisSource) + getEngineMoveCoordinate(thisDestination);
+            if (isPromoted(move)) {
+                engineMove += "+";
+            } 
+        } catch (Exception ex) {
+            Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Notation notation = new Notation();
+        notation.setEngineMove(engineMove);
+        
+        return notation;
+    }
 
-    private static String executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
+    private static Notation executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
         if (getKoma(board, thisDestination) != null) {
             Koma thisKoma = getKoma(board, thisDestination);
             if (thisKoma != null) {
@@ -171,21 +192,11 @@ public class KifParser {
             putKoma(board, thisDestination, promCheck(thisKoma, move));
         }
         putKoma(board, thisSource, null);
-        
-        String engineMove = "";
-        try {
-            engineMove = getEngineMoveCoordinate(thisSource) + getEngineMoveCoordinate(thisDestination);
-            if (isPromoted(move)) {
-                engineMove += "+";
-            } 
-        } catch (Exception ex) {
-            Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return engineMove;
+              
+        return getNotation(thisSource, thisDestination, move);
     }
     
-    private static String executeSameMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
+    private static Notation executeSameMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
         Koma thisKoma = getKoma(board, thisDestination);
         if (thisKoma != null) {
             ParserUtils.addPieceToInHand(thisKoma, board);
@@ -196,25 +207,16 @@ public class KifParser {
         }
         putKoma(board, thisSource, null);
         
-        String engineMove = "";
-        try {
-            engineMove = getEngineMoveCoordinate(thisSource) + getEngineMoveCoordinate(thisDestination);
-            if (isPromoted(move)) {
-                engineMove += "+";
-            } 
-        } catch (Exception ex) {
-            Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return engineMove;
+        return getNotation(thisSource, thisDestination, move);
     }
     
-    private static String executeDropMove(Board board, Coordinate thisDestination, String move) {
+    private static Notation executeDropMove(Board board, Coordinate thisDestination, String move) {
         String engineMove = "";
         Koma koma;
         try {
             koma = ParserUtils.getDropKoma(move.substring(2, 3), board.getNextTurn());
             if (koma == null) {
-                return "";
+                return null;
             }
             putKoma(board, thisDestination, koma);
             removePieceInHand(koma.getType(), board);
@@ -222,7 +224,10 @@ public class KifParser {
         } catch (Exception ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return engineMove;
+        Notation notation = new Notation();
+        notation.setEngineMove(engineMove);
+        
+        return notation;
     }
     
     private static String getKomaLetter(Koma.Type type) {
@@ -263,7 +268,6 @@ public class KifParser {
     private static Position executeMove(Board board, String move, Coordinate lastDestination) {
         Coordinate thisDestination = new Coordinate();
         Coordinate thisSource;
-        String engineMove = "";
         
         if (isSame(move)) {
             thisSource = getSourceCoordinate(move);
@@ -277,19 +281,20 @@ public class KifParser {
             thisSource = getSourceCoordinate(move);
             thisDestination = getDestinationCoordinate(move);
         }
+        Notation notation = new Notation();
         if (!isResigns(move)) {
             if (!isDrop(move)) {
                 if (!isSame(move)) {
-                    engineMove = executeRegularMove(board, thisDestination, thisSource, move);
+                    notation = executeRegularMove(board, thisDestination, thisSource, move);
                 } else {
-                    engineMove = executeSameMove(board, thisDestination, thisSource, move);
+                    notation = executeSameMove(board, thisDestination, thisSource, move);
                 }
             } else {
-                engineMove = executeDropMove(board, thisDestination, move);
+                notation = executeDropMove(board, thisDestination, move);
             }
         }
         board.setNextTurn(ParserUtils.switchTurn(board.getNextTurn()));
-        return new Position(SFENParser.getSFEN(board), thisSource, thisDestination, engineMove);
+        return new Position(SFENParser.getSFEN(board), thisSource, thisDestination, notation);
     }
     
     private static String getEngineMoveCoordinate(Coordinate coordinate) {
