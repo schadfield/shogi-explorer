@@ -53,7 +53,7 @@ public class RenderBoard {
     }
 
     private static void drawCoordinates(JPanel boardPanel, boolean rotatedView) {
-        String[] rank = {"a", "b", "c", "d", "e", "f", "g", "h", "i"};
+        String[] rank = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
 
         if (rotatedView) {
             for (int i = 0; i < 9; i++) {
@@ -71,7 +71,7 @@ public class RenderBoard {
                 boardPanel.add(ImageUtils.getTextLabelForBan(
                         new Coordinate(0,
                                 i),
-                        new Dimension(MathUtils.COORD_XY * 4 + 10,
+                        new Dimension(MathUtils.COORD_XY * 4 + 7,
                                 MathUtils.COORD_XY / 2 + 7),
                         new Coordinate(CENTRE_X,
                                 CENTRE_Y),
@@ -94,7 +94,7 @@ public class RenderBoard {
                 boardPanel.add(ImageUtils.getTextLabelForBan(
                         new Coordinate(0,
                                 i),
-                        new Dimension(MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 5,
+                        new Dimension(MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 3,
                                 MathUtils.COORD_XY / 2 + 7),
                         new Coordinate(CENTRE_X,
                                 CENTRE_Y),

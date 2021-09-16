@@ -17,6 +17,8 @@ import com.chadfield.shogiexplorer.objects.Koma;
 import com.chadfield.shogiexplorer.objects.Notation;
 import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
+import com.ibm.icu.text.Transliterator;
+import java.util.Formatter;
 import java.util.List;
 
 /**
@@ -113,7 +115,7 @@ public class KifParser {
         Position position = executeMove(board, move, lastDestination);
         if (position != null) {
             lastDestination = position.getDestination();
-            addEngineMoveToMoveList(moveListModel, gameNum, position.getNotation().getEngineMove());
+            addMoveToMoveList(moveListModel, gameNum, position.getNotation().getJapanese());
         }
         
         
@@ -135,9 +137,9 @@ public class KifParser {
         
         Notation  notation = new Notation();
         notation.setEngineMove("Resigns");
-        notation.setJapanese("Resigns");
+        notation.setJapanese(RESIGNS);
         Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), notation);
-        addEngineMoveToMoveList(moveListModel, gameNum, position.getNotation().getEngineMove());
+        addMoveToMoveList(moveListModel, gameNum, position.getNotation().getJapanese());
         positionList.add(position);
     }
     
@@ -159,11 +161,17 @@ public class KifParser {
         }
     }
         
-    private static void addEngineMoveToMoveList(DefaultListModel<String> moveListModel, int gameNum, String move) {
-        moveListModel.addElement(gameNum + " " + move + "\n");
+    private static void addMoveToMoveList(DefaultListModel<String> moveListModel, int gameNum, String move) {
+        Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
+        Formatter fmt = new Formatter();
+        if (gameNum % 2 == 0) {
+            moveListModel.addElement(gameNum + trans.transliterate("\u3000☖" + move + "\n"));
+        } else {
+            moveListModel.addElement(gameNum + trans.transliterate("\u3000☗" + move + "\n"));
+        }
     }
     
-    private static Notation getNotation(Coordinate thisSource, Coordinate thisDestination, String move) {
+    private static Notation getNotation(Coordinate thisSource, Coordinate thisDestination, boolean same, String move, String piece, String disambiguation) {
         String engineMove = "";
         try {
             engineMove = getEngineMoveCoordinate(thisSource) + getEngineMoveCoordinate(thisDestination);
@@ -177,41 +185,68 @@ public class KifParser {
         Notation notation = new Notation();
         notation.setEngineMove(engineMove);
         
+        String japanese = "";
+        
+        if (same) {
+            japanese += SAME + piece;
+        } else {
+            japanese += getJapaneseCoordinate(thisDestination) + piece + disambiguation;
+        }
+        
+        if (isPromoted(move)) {
+            japanese += PROMOTED;
+        }
+        
+        notation.setJapanese(japanese);
+        
         return notation;
+    }
+    
+    private static String getJapaneseCoordinate(Coordinate thisCoordinate) {
+        return thisCoordinate.getX() + convertJapaneseNumber(thisCoordinate.getY());
     }
 
     private static Notation executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
         if (getKoma(board, thisDestination) != null) {
-            Koma thisKoma = getKoma(board, thisDestination);
-            if (thisKoma != null) {
+            Koma destinationKoma = getKoma(board, thisDestination);
+            if (destinationKoma != null) {
                 ParserUtils.addPieceToInHand(getKoma(board, thisDestination), board);
             }
         }
-        Koma thisKoma = getKoma(board, thisSource);
-        if (thisKoma != null) {
-            putKoma(board, thisDestination, promCheck(thisKoma, move));
+        Koma sourceKoma = getKoma(board, thisSource);
+        String disambiguation = "";     
+        if (sourceKoma != null) {
+            disambiguation = getDisambiguation(board, thisSource, thisDestination, sourceKoma.getType());
+            putKoma(board, thisDestination, promCheck(sourceKoma, move));
         }
         putKoma(board, thisSource, null);
               
-        return getNotation(thisSource, thisDestination, move);
+        return getNotation(thisSource, thisDestination, false, move, getKomaKanji(sourceKoma.getType()), disambiguation);
     }
-    
+        
     private static Notation executeSameMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
-        Koma thisKoma = getKoma(board, thisDestination);
-        if (thisKoma != null) {
-            ParserUtils.addPieceToInHand(thisKoma, board);
+        Koma destinationKoma = getKoma(board, thisDestination);
+        if (destinationKoma != null) {
+            ParserUtils.addPieceToInHand(destinationKoma, board);
         }
-        Koma thisOtherKoma = getKoma(board, thisSource);
-        if (thisOtherKoma != null) {
-            putKoma(board, thisDestination, promCheck(thisOtherKoma, move));
+        Koma sourceKoma = getKoma(board, thisSource);
+        String disambiguation = "";
+        if (sourceKoma != null) {
+        disambiguation = getDisambiguation(board, thisSource, thisDestination, sourceKoma.getType());
+            putKoma(board, thisDestination, promCheck(sourceKoma, move));
         }
         putKoma(board, thisSource, null);
         
-        return getNotation(thisSource, thisDestination, move);
+        return getNotation(thisSource, thisDestination, true, move, getKomaKanji(sourceKoma.getType()), disambiguation);
+    }
+    
+    private static String getDisambiguation(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        
+        return "";
     }
     
     private static Notation executeDropMove(Board board, Coordinate thisDestination, String move) {
-        String engineMove = "";
+        String engineMove;
         Koma koma;
         try {
             koma = ParserUtils.getDropKoma(move.substring(2, 3), board.getNextTurn());
@@ -221,45 +256,90 @@ public class KifParser {
             putKoma(board, thisDestination, koma);
             removePieceInHand(koma.getType(), board);
             engineMove = getKomaLetter(koma.getType()) + "*" + getEngineMoveCoordinate(thisDestination);
+            Notation notation = new Notation();
+            notation.setEngineMove(engineMove);
+            notation.setJapanese(getJapaneseCoordinate(thisDestination) + getKomaKanji(koma.getType()));
+            return notation;
         } catch (Exception ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Notation notation = new Notation();
-        notation.setEngineMove(engineMove);
-        
-        return notation;
+        return null;      
     }
     
     private static String getKomaLetter(Koma.Type type) {
         switch(type) {
             case SFU:
-                return "P";
-            case SGI:
-                return "S";
-            case SHI:
-                return "R";
-            case SKA:
-                return "B";
-            case SKE:
-                return "N";
-            case SKI:
-                return "G";
-            case SKY:
-                return "L";
             case GFU:
                 return "P";
+            case SGI:
             case GGI:
                 return "S";
+            case SHI:
             case GHI:
                 return "R";
+            case SKA:
             case GKA:
                 return "B";
+            case SKE:
             case GKE:
                 return "N";
+            case SKI:
             case GKI:
                 return "G";
+            case SKY:
             case GKY:
                 return "L";
+            default:
+                return null;
+        }
+    }
+    
+    private static String getKomaKanji(Koma.Type type) {
+        switch(type) {
+            case SFU:
+            case GFU:
+                return "歩";
+            case SGI:
+            case GGI:
+                return "銀";
+            case SHI:
+            case GHI:
+                return "飛";
+            case SKA:
+            case GKA:
+                return "角";
+            case SKE:
+            case GKE:
+                return "桂";
+            case SKI:
+            case GKI:
+                return "金";
+            case SKY:
+            case GKY:
+                return "香";
+            case STO:
+            case GTO:
+                return "と";
+            case SNY:
+            case GNY:
+                return "成香";
+            case SNK:
+            case GNK:
+                return "成桂";
+            case SNG:
+            case GNG:
+                return "成銀";
+            case SUM:
+            case GUM:
+                return "馬";
+            case SRY:
+            case GRY:
+                return "竜";
+            case SGY:
+            case SOU:
+            case GGY:
+            case GOU:
+                return "玉";
             default:
                 return null;
         }
@@ -389,6 +469,31 @@ public class KifParser {
                 return 8;
             case KYUU:
                 return 9;
+            default:
+                return null;
+        }
+    }
+
+    private static String convertJapaneseNumber(int number) {
+        switch (number) {
+            case 1:
+                return ICHI;
+            case 2:
+                return NI;
+            case 3:
+                return SAN;
+            case 4:
+                return SHI;
+            case 5:
+                return GO;
+            case 6:
+                return ROKU;
+            case 7:
+                return NANA;
+            case 8:
+                return HACHI;
+            case 9:
+                return KYUU;
             default:
                 return null;
         }
