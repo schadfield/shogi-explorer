@@ -14,7 +14,6 @@ import com.chadfield.shogiexplorer.utils.ParserUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -34,7 +33,6 @@ public class GameAnalyser {
     
     private Process process;
     private OutputStream stdin;
-    private InputStream stdout;
     private BufferedReader bufferedReader;
     private String lastScore = "";
     private String opinion = "";
@@ -97,9 +95,8 @@ public class GameAnalyser {
         }
 
         stdin = process.getOutputStream();
-        stdout = process.getInputStream();
 
-        bufferedReader = new BufferedReader(new InputStreamReader(stdout));
+        bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
     }
 
     private void initiateUSIProtocol() throws IOException {
