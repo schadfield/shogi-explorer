@@ -187,11 +187,7 @@ public class GameAnalyser {
             thisSource = getSourceCoordinate(move);
             executeRegularMove(board, thisSource, thisDestination, move);
         }
-        if (board.getNextMove() == Board.Turn.SENTE) {
-            board.setNextMove(Board.Turn.GOTE);
-        } else {
-            board.setNextMove(Board.Turn.SENTE);
-        }
+        board.setNextMove(ParserUtils.switchTurn(board.getNextMove()));
         board.setSource(thisSource);
         board.setDestination(thisDestination);
         board.setMoveCount(board.getMoveCount()+1);
@@ -205,61 +201,17 @@ public class GameAnalyser {
             board.getInHandKomaMap().put(komaType, board.getInHandKomaMap().get(komaType) - 1);
         }
     }
-    
-    public static Koma getDropKoma(String move, Board.Turn turn) {
-        if (turn == Board.Turn.GOTE) {
-            return getGoteTurnDropKoma(move);
-        } else {
-            return getSenteTurnDropKoma(move);
-        }
-    }    
-    
-    public static Koma getSenteTurnDropKoma(String move) {
-        switch (move.substring(0, 1)) {
-            case "R":
-                return new Koma(Koma.Type.SHI);
-            case "B":
-                return new Koma(Koma.Type.SKA);
-            case "G":
-                return new Koma(Koma.Type.SKI);
-            case "S":
-                return new Koma(Koma.Type.SGI);
-            case "N":
-                return new Koma(Koma.Type.SKE);
-            case "L":
-                return new Koma(Koma.Type.SKY);
-            case "P":
-                return new Koma(Koma.Type.SFU);
-            default:
-                return null;
-        }
-    }
-
-    public static Koma getGoteTurnDropKoma(String move) {
-        switch (move.substring(0, 1)) {
-            case "R":
-                return new Koma(Koma.Type.GHI);
-            case "B":
-                return new Koma(Koma.Type.GKA);
-            case "G":
-                return new Koma(Koma.Type.GKI);
-            case "S":
-                return new Koma(Koma.Type.GGI);
-            case "N":
-                return new Koma(Koma.Type.GKE);
-            case "L":
-                return new Koma(Koma.Type.GKY);
-            case "P":
-                return new Koma(Koma.Type.GFU);
-            default:
-                return null;
-        }
-    }
-    
+        
     public static void executeDropMove(Board board, Coordinate thisDestination, String move) {
         Koma koma;
+        Board.Turn turn;
+        if (board.getNextMove() == Board.Turn.GOTE) {
+            turn = Board.Turn.SENTE;
+        } else {
+            turn = Board.Turn.GOTE;
+        }
         try {
-            koma = getDropKoma(move, board.getNextMove());
+            koma = ParserUtils.getDropKoma(move.substring(0, 1), turn);
             if (koma == null) {
                 return;
             }

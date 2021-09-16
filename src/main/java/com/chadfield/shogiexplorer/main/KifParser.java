@@ -36,13 +36,6 @@ public class KifParser {
     public static final String NANA = "七";
     public static final String HACHI = "八";
     public static final String KYUU = "九";
-    public static final String KOMA_HI = "飛";
-    public static final String KOMA_KA = "角";
-    public static final String KOMA_KI = "金";
-    public static final String KOMA_GI = "銀";
-    public static final String KOMA_KE = "桂";
-    public static final String KOMA_KY = "香";
-    public static final String KOMA_FU = "歩";
     public static final String DATE = "開始日時：";
     public static final String PLACE = "場所：";
     public static final String TIME_LIMIT = "持ち時間：";
@@ -102,7 +95,7 @@ public class KifParser {
     }
     
     private static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
-        board.setNextMove(switchTurn(board.getNextMove()));
+        board.setNextMove(ParserUtils.switchTurn(board.getNextMove()));
 
         String[] splitLine = line.trim().split("\\s+|\\u3000");
 
@@ -137,7 +130,7 @@ public class KifParser {
     }
         
     public static void parseResignLine(Board board, String line, DefaultListModel<String> moveListModel, List<Position> positionList) {
-        board.setNextMove(switchTurn(board.getNextMove()));
+        board.setNextMove(ParserUtils.switchTurn(board.getNextMove()));
 
         String[] splitLine = line.trim().split("\\s+|\\u3000");
         int gameNum = Integer.parseInt(splitLine[0]);
@@ -175,14 +168,6 @@ public class KifParser {
     
     public static void addEngineMoveToMoveList(DefaultListModel<String> moveListModel, int gameNum, String move) {
         moveListModel.addElement(gameNum + " " + move + "\n");
-    }
-    
-    public static Board.Turn switchTurn(Board.Turn turn) {
-        if (turn == Board.Turn.GOTE) {
-            return Board.Turn.SENTE;
-        } else {
-            return Board.Turn.GOTE;
-        }
     }
 
     public static String getTimestamp(String line) {
@@ -251,7 +236,7 @@ public class KifParser {
         String engineMove = "";
         Koma koma;
         try {
-            koma = getDropKoma(move, board.getNextMove());
+            koma = ParserUtils.getDropKoma(move.substring(2, 3), board.getNextMove());
             if (koma == null) {
                 return "";
             }
@@ -360,56 +345,6 @@ public class KifParser {
         }
     }
     
-    public static Koma getGoteTurnDropKoma(String move) {
-        switch (move.substring(2, 3)) {
-            case KOMA_HI:
-                return new Koma(Koma.Type.SHI);
-            case KOMA_KA:
-                return new Koma(Koma.Type.SKA);
-            case KOMA_KI:
-                return new Koma(Koma.Type.SKI);
-            case KOMA_GI:
-                return new Koma(Koma.Type.SGI);
-            case KOMA_KE:
-                return new Koma(Koma.Type.SKE);
-            case KOMA_KY:
-                return new Koma(Koma.Type.SKY);
-            case KOMA_FU:
-                return new Koma(Koma.Type.SFU);
-            default:
-                return null;
-        }
-    }
-
-    public static Koma getSenteTurnDropKoma(String move) {
-        switch (move.substring(2, 3)) {
-            case KOMA_HI:
-                return new Koma(Koma.Type.GHI);
-            case KOMA_KA:
-                return new Koma(Koma.Type.GKA);
-            case KOMA_KI:
-                return new Koma(Koma.Type.GKI);
-            case KOMA_GI:
-                return new Koma(Koma.Type.GGI);
-            case KOMA_KE:
-                return new Koma(Koma.Type.GKE);
-            case KOMA_KY:
-                return new Koma(Koma.Type.GKY);
-            case KOMA_FU:
-                return new Koma(Koma.Type.GFU);
-            default:
-                return null;
-        }
-    }
-
-    public static Koma getDropKoma(String move, Board.Turn turn) {
-        if (turn == Board.Turn.GOTE) {
-            return getGoteTurnDropKoma(move);
-        } else {
-            return getSenteTurnDropKoma(move);
-        }
-    }
-
     public static Koma promCheck(Koma koma, String move) {
         if (!isPromoted(move)) {
             return koma;

@@ -9,6 +9,14 @@ import com.chadfield.shogiexplorer.objects.Koma;
  */
 public class ParserUtils {
     
+    public static final String KOMA_HI = "飛";
+    public static final String KOMA_KA = "角";
+    public static final String KOMA_KI = "金";
+    public static final String KOMA_GI = "銀";
+    public static final String KOMA_KE = "桂";
+    public static final String KOMA_KY = "香";
+    public static final String KOMA_FU = "歩";
+    
         private ParserUtils() {
             throw new IllegalStateException("Utility class");
         }
@@ -102,4 +110,53 @@ public class ParserUtils {
         }
     }
     
+    public static Koma getDropKoma(String locationString, Board.Turn turn) {
+        Koma.Type komaType;
+        switch (locationString) {
+            case KOMA_HI:
+            case "R":
+                komaType = Koma.Type.SHI;
+                break;
+            case KOMA_KA:
+            case "B":
+                komaType = Koma.Type.SKA;
+                break;
+            case KOMA_KI:
+            case "G":
+                komaType = Koma.Type.SKI;
+                break;
+            case KOMA_GI:
+            case "S":
+                komaType = Koma.Type.SGI;
+                break;
+            case KOMA_KE:
+            case "N":
+                komaType = Koma.Type.SKE;
+                break;
+            case KOMA_KY:
+            case "L":
+                komaType = Koma.Type.SKY;
+                break;
+            case KOMA_FU:
+            case "P":
+                komaType = Koma.Type.SFU;
+                break;
+            default:
+                return null;
+        }
+        if (turn == Board.Turn.GOTE) {
+            return new Koma(komaType);
+        } else {
+            return invertKoma(komaType);
+        }
+    }
+    
+    public static Board.Turn switchTurn(Board.Turn turn) {
+        if (turn == Board.Turn.GOTE) {
+            return Board.Turn.SENTE;
+        } else {
+            return Board.Turn.GOTE;
+        }
+    }
+
 }
