@@ -9,13 +9,13 @@ import com.chadfield.shogiexplorer.objects.Koma;
  */
 public class ParserUtils {
     
-    public static final String KOMA_HI = "飛";
-    public static final String KOMA_KA = "角";
-    public static final String KOMA_KI = "金";
-    public static final String KOMA_GI = "銀";
-    public static final String KOMA_KE = "桂";
-    public static final String KOMA_KY = "香";
-    public static final String KOMA_FU = "歩";
+    private static final String KOMA_HI = "飛";
+    private static final String KOMA_KA = "角";
+    private static final String KOMA_KI = "金";
+    private static final String KOMA_GI = "銀";
+    private static final String KOMA_KE = "桂";
+    private static final String KOMA_KY = "香";
+    private static final String KOMA_FU = "歩";
     
         private ParserUtils() {
             throw new IllegalStateException("Utility class");
