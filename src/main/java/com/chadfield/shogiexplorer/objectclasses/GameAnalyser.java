@@ -1,7 +1,15 @@
-package com.chadfield.shogiexplorer.objects;
+package com.chadfield.shogiexplorer.objectclasses;
 
 import com.chadfield.shogiexplorer.main.EngineManager;
 import com.chadfield.shogiexplorer.main.SFENParser;
+import com.chadfield.shogiexplorer.objects.AnalysisParameter;
+import com.chadfield.shogiexplorer.objects.Board;
+import com.chadfield.shogiexplorer.objects.Coordinate;
+import com.chadfield.shogiexplorer.objects.Engine;
+import com.chadfield.shogiexplorer.objects.EngineOption;
+import com.chadfield.shogiexplorer.objects.Game;
+import com.chadfield.shogiexplorer.objects.Koma;
+import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,18 +32,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GameAnalyser {
     
-    Process process;
-    OutputStream stdin;
-    InputStream stdout;
-    BufferedReader bufferedReader;
-    String lastScore = "";
-    String opinion = "";
-    int analysisTimePerMove;
-    int analysisMistakeThreshold;
-    int analysisBlunderThreshold;
-    int analysisIgnoreThreshold;
-    List<Position> positionList = new ArrayList<>();
-
+    private Process process;
+    private OutputStream stdin;
+    private InputStream stdout;
+    private BufferedReader bufferedReader;
+    private String lastScore = "";
+    private String opinion = "";
+    private int analysisTimePerMove;
+    private int analysisMistakeThreshold;
+    private int analysisBlunderThreshold;
+    private int analysisIgnoreThreshold;
 
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam) throws IOException {
         this.analysisTimePerMove = analysisParam.getAnalysisTimePerMove();

@@ -4,10 +4,11 @@ import java.util.Map;
 
 public class Board {
 
+    public enum Turn { SENTE, GOTE }
+    
     private Koma[][] masu = new Koma[9][9];
     private ImageCache scaledImageCache = null;
     private Map<Koma.Type, Integer> inHandKomaMap;
-    public enum Turn { SENTE, GOTE }
     private Turn nextTurn;
     private int moveCount;
     private Coordinate source = null;

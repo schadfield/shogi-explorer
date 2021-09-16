@@ -55,10 +55,10 @@ public class ParserUtils {
     public static void addPieceToInHand(Koma koma, Board board) {
         Koma invertedKoma = invertKoma(koma.getType());
         if (invertedKoma != null) {
-            if (board.getInHandKomaMap().containsKey(invertedKoma.type)) {
-                board.getInHandKomaMap().put(invertedKoma.type, 1 + board.getInHandKomaMap().get(invertedKoma.type));
+            if (board.getInHandKomaMap().containsKey(invertedKoma.getType())) {
+                board.getInHandKomaMap().put(invertedKoma.getType(), 1 + board.getInHandKomaMap().get(invertedKoma.getType()));
             } else {
-                board.getInHandKomaMap().put(invertedKoma.type, 1);
+                board.getInHandKomaMap().put(invertedKoma.getType(), 1);
             }
         }
     }
