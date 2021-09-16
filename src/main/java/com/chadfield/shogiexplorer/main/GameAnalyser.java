@@ -182,10 +182,14 @@ public class GameAnalyser {
         thisDestination = getDestinationCoordinate(move);
         if (isDrop(move)) {
             thisSource = null;
-            executeDropMove(board, thisDestination, move);
+            if (thisDestination != null) {
+                executeDropMove(board, thisDestination, move);
+            }
         } else {
             thisSource = getSourceCoordinate(move);
-            executeRegularMove(board, thisSource, thisDestination, move);
+            if (thisSource != null && thisDestination != null) {
+                executeRegularMove(board, thisSource, thisDestination, move);
+            }
         }
         board.setNextTurn(ParserUtils.switchTurn(board.getNextTurn()));
         board.setSource(thisSource);
@@ -270,13 +274,20 @@ public class GameAnalyser {
             result.setX(move.charAt(2)-49+1);
             result.setY(move.charAt(3)-97+1);   
         }
+        if (result.getX() > 9 || result.getX() < 1 || result.getY() > 9 || result.getY() < 1) {
+            return null;
+        }
         return result;
     }
     
     private Coordinate getSourceCoordinate(String move) {
         Coordinate result = new Coordinate();
         result.setX(move.charAt(0)-49+1);
-        result.setY(move.charAt(1)-97+1);   
+        result.setY(move.charAt(1)-97+1);  
+        if (result.getX() > 9 || result.getX() < 1 || result.getY() > 9 || result.getY() < 1) {
+            return null;
+        }
+
         return result;
     }
     
