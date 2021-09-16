@@ -8,7 +8,7 @@ public class Board {
     private ImageCache scaledImageCache = null;
     private Map<Koma.Type, Integer> inHandKomaMap;
     public enum Turn { SENTE, GOTE }
-    private Turn nextMove;
+    private Turn nextTurn;
     private int moveCount;
     private Coordinate source = null;
     private Coordinate destination = null;
@@ -66,17 +66,17 @@ public class Board {
     }
 
     /**
-     * @return the nextMove
+     * @return the nextTurn
      */
-    public Turn getNextMove() {
-        return nextMove;
+    public Turn getNextTurn() {
+        return nextTurn;
     }
 
     /**
-     * @param nextMove the nextMove to set
+     * @param nextTurn the nextTurn to set
      */
-    public void setNextMove(Turn nextMove) {
-        this.nextMove = nextMove;
+    public void setNextTurn(Turn nextTurn) {
+        this.nextTurn = nextTurn;
     }
 
     /**

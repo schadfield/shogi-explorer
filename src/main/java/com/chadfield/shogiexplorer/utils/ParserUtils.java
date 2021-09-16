@@ -144,7 +144,7 @@ public class ParserUtils {
             default:
                 return null;
         }
-        if (turn == Board.Turn.GOTE) {
+        if (turn == Board.Turn.SENTE) {
             return new Koma(komaType);
         } else {
             return invertKoma(komaType);

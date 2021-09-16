@@ -187,7 +187,7 @@ public class GameAnalyser {
             thisSource = getSourceCoordinate(move);
             executeRegularMove(board, thisSource, thisDestination, move);
         }
-        board.setNextMove(ParserUtils.switchTurn(board.getNextMove()));
+        board.setNextTurn(ParserUtils.switchTurn(board.getNextTurn()));
         board.setSource(thisSource);
         board.setDestination(thisDestination);
         board.setMoveCount(board.getMoveCount()+1);
@@ -204,14 +204,8 @@ public class GameAnalyser {
         
     public static void executeDropMove(Board board, Coordinate thisDestination, String move) {
         Koma koma;
-        Board.Turn turn;
-        if (board.getNextMove() == Board.Turn.GOTE) {
-            turn = Board.Turn.SENTE;
-        } else {
-            turn = Board.Turn.GOTE;
-        }
         try {
-            koma = ParserUtils.getDropKoma(move.substring(0, 1), turn);
+            koma = ParserUtils.getDropKoma(move.substring(0, 1), board.getNextTurn());
             if (koma == null) {
                 return;
             }

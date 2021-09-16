@@ -95,8 +95,6 @@ public class KifParser {
     }
     
     private static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
-        board.setNextMove(ParserUtils.switchTurn(board.getNextMove()));
-
         String[] splitLine = line.trim().split("\\s+|\\u3000");
 
         int gameNum;
@@ -130,8 +128,6 @@ public class KifParser {
     }
         
     public static void parseResignLine(Board board, String line, DefaultListModel<String> moveListModel, List<Position> positionList) {
-        board.setNextMove(ParserUtils.switchTurn(board.getNextMove()));
-
         String[] splitLine = line.trim().split("\\s+|\\u3000");
         int gameNum = Integer.parseInt(splitLine[0]);
 
@@ -159,7 +155,7 @@ public class KifParser {
     }
     
     public static void addMoveToMoveList(Board board, DefaultListModel<String> moveListModel, int gameNum, String move) {
-        if (board.getNextMove() == Board.Turn.GOTE) {
+        if (board.getNextTurn() == Board.Turn.GOTE) {
             moveListModel.addElement(gameNum + " ☗" + move + "\n");
         } else {
             moveListModel.addElement(gameNum + " ☖" + move + "\n");
@@ -236,7 +232,7 @@ public class KifParser {
         String engineMove = "";
         Koma koma;
         try {
-            koma = ParserUtils.getDropKoma(move.substring(2, 3), board.getNextMove());
+            koma = ParserUtils.getDropKoma(move.substring(2, 3), board.getNextTurn());
             if (koma == null) {
                 return "";
             }
@@ -312,6 +308,7 @@ public class KifParser {
                 engineMove = executeDropMove(board, thisDestination, move);
             }
         }
+        board.setNextTurn(ParserUtils.switchTurn(board.getNextTurn()));
         return new Position(SFENParser.getSFEN(board), thisSource, thisDestination, engineMove);
     }
     

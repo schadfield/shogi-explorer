@@ -105,7 +105,7 @@ public class RenderBoard {
     }
 
     public static void drawTurnNotification(Board board, JPanel boardPanel, boolean rotatedView) {
-        if (board.getNextMove() == Turn.SENTE) {
+        if (board.getNextTurn() == Turn.SENTE) {
             Image image = ImageUtils.loadImageFromResources(
                     "sente"
             );

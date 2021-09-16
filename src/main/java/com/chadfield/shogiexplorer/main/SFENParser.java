@@ -26,7 +26,7 @@ public class SFENParser {
         String[] splitSfen = sfen.split(" ");
      
         parsePieces(board, splitSfen[0]);
-        board.setNextMove(getTurn(splitSfen[1]));
+        board.setNextTurn(getTurn(splitSfen[1]));
         board = parseInHand(board, splitSfen[2]);
         board.setMoveCount(Integer.parseInt(splitSfen[3]));
         return board;
@@ -220,7 +220,7 @@ public class SFENParser {
             }
         }
 
-        bldResult.append(getNextTurnString(board.getNextMove()));
+        bldResult.append(getNextTurnString(board.getNextTurn()));
         
         bldResult.append(getInHandString(board));
 
