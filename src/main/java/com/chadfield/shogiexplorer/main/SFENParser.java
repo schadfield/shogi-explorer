@@ -32,6 +32,41 @@ public class SFENParser {
         return board;
     }
     
+    public static String getSFEN(Board board) {
+        StringBuilder bldResult = new StringBuilder();
+        int spaceCount = 0;
+        for (int j = 0; j < 9; j++) {
+            for (int i = 0; i < 9; i++) {
+                if (board.getMasu()[i][j] != null) {
+                    if (spaceCount > 0) {
+                        bldResult.append(spaceCount);
+                        spaceCount = 0;
+                    }
+                    bldResult.append(getSFENCode(board.getMasu()[i][j]));
+                } else {
+                    spaceCount++;
+                }
+            }
+            if (spaceCount > 0) {
+                bldResult.append(spaceCount);
+                spaceCount = 0;
+            }
+            if (j < 8) {
+                bldResult.append('/');
+            }
+        }
+
+        bldResult.append(getNextTurnString(board.getNextTurn()));
+        
+        bldResult.append(getInHandString(board));
+
+        bldResult.append(" ");
+        
+        bldResult.append(board.getMoveCount());
+        
+        return bldResult.toString();
+    }
+    
     private static Board parseInHand(Board board, String pieceStr) {
         int inHandCount = 1;
         for (int k = 0; k < pieceStr.length(); k++) {
@@ -196,41 +231,6 @@ public class SFENParser {
         return numBlanks;
     }
 
-    public static String getSFEN(Board board) {
-        StringBuilder bldResult = new StringBuilder();
-        int spaceCount = 0;
-        for (int j = 0; j < 9; j++) {
-            for (int i = 0; i < 9; i++) {
-                if (board.getMasu()[i][j] != null) {
-                    if (spaceCount > 0) {
-                        bldResult.append(spaceCount);
-                        spaceCount = 0;
-                    }
-                    bldResult.append(getSFENCode(board.getMasu()[i][j]));
-                } else {
-                    spaceCount++;
-                }
-            }
-            if (spaceCount > 0) {
-                bldResult.append(spaceCount);
-                spaceCount = 0;
-            }
-            if (j < 8) {
-                bldResult.append('/');
-            }
-        }
-
-        bldResult.append(getNextTurnString(board.getNextTurn()));
-        
-        bldResult.append(getInHandString(board));
-
-        bldResult.append(" ");
-        
-        bldResult.append(board.getMoveCount());
-        
-        return bldResult.toString();
-    }
-    
     private static String getNextTurnString(Turn nextMove) {
         if (nextMove == Board.Turn.SENTE) {
             return " b";
