@@ -30,7 +30,6 @@ public class KifParser {
     public static final String RESIGNS = "投了";
     public static final String SUSPENDED = "中断";
     public static final String  MADE = "まで";
-    public static final String DROP = "打";
     public static final String SAME = "同";
     public static final String ICHI = "一";
     public static final String NI = "二";
@@ -48,6 +47,14 @@ public class KifParser {
     public static final String GOTE = "後手：";
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
     public static final String MULTI_WHITESPACE = "\\s+|\\u3000";
+    public static final String DROPPED = "打";
+    public static final String DOWNWARD = "引";
+    public static final String HORIZONTALLY = "寄";
+    public static final String UPWARD = "上";
+    public static final String FROM_RIGHT = "右";
+    public static final String FROM_LEFT = "左";
+    public static final String VERTICAL = "直";
+    public static final String UPWARD_UD = "行";
     
     private KifParser() {
         throw new IllegalStateException("Utility class");
@@ -274,7 +281,7 @@ public class KifParser {
         if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
             Koma koma = getKoma(board, testCoordinate);
             if (koma != null && koma.getType().equals(Koma.Type.SKE))
-                return "右";
+                return FROM_LEFT;
         }
         testCoordinate = new Coordinate(
             destinationCoordinate.getX()+1,
@@ -282,7 +289,7 @@ public class KifParser {
         if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
             Koma koma = getKoma(board, testCoordinate);
             if (koma != null && koma.getType().equals(Koma.Type.SKE))
-                return "左";
+                return FROM_RIGHT;
         }        
         return "";
     }
@@ -294,7 +301,7 @@ public class KifParser {
         if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
             Koma koma = getKoma(board, testCoordinate);
             if (koma != null && koma.getType().equals(Koma.Type.GKE))
-                return "左";
+                return FROM_RIGHT;
         }
         testCoordinate = new Coordinate(
             destinationCoordinate.getX()+1,
@@ -302,7 +309,7 @@ public class KifParser {
         if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
             Koma koma = getKoma(board, testCoordinate);
             if (koma != null && koma.getType().equals(Koma.Type.GKE))
-                return "右";
+                return FROM_LEFT;
         }        
         return "";
     }
@@ -500,7 +507,7 @@ public class KifParser {
     }
 
     private static boolean isDrop(String move) {
-        return move.contains(DROP);
+        return move.contains(DROPPED);
     }
 
     private static boolean isSame(String move) {
