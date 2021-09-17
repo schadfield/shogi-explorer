@@ -256,6 +256,8 @@ public class KifParser {
         switch (komaType) {
             case SKE:
                 return disSKE(board, sourceCoordinate, destinationCoordinate);
+            case GKE:
+                return disGKE(board, sourceCoordinate, destinationCoordinate);
             default:
                 return "";
         }
@@ -270,7 +272,7 @@ public class KifParser {
             destinationCoordinate.getX()-1,
             destinationCoordinate.getY()+2);
         if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
-            Koma koma = board.getMasu()[testCoordinate.getX()-1][testCoordinate.getY()-1];
+            Koma koma = getKoma(board, testCoordinate);
             if (koma != null && koma.getType().equals(Koma.Type.SKE))
                 return "右";
         }
@@ -278,9 +280,29 @@ public class KifParser {
             destinationCoordinate.getX()+1,
             destinationCoordinate.getY()+2);
         if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
-            Koma koma = board.getMasu()[testCoordinate.getX()-1][testCoordinate.getY()-1];
+            Koma koma = getKoma(board, testCoordinate);
             if (koma != null && koma.getType().equals(Koma.Type.SKE))
                 return "左";
+        }        
+        return "";
+    }
+    
+    private static String disGKE(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
+        Coordinate testCoordinate = new Coordinate(
+            destinationCoordinate.getX()-1,
+            destinationCoordinate.getY()-2);
+        if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
+            Koma koma = getKoma(board, testCoordinate);
+            if (koma != null && koma.getType().equals(Koma.Type.GKE))
+                return "左";
+        }
+        testCoordinate = new Coordinate(
+            destinationCoordinate.getX()+1,
+            destinationCoordinate.getY()-2);
+        if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
+            Koma koma = getKoma(board, testCoordinate);
+            if (koma != null && koma.getType().equals(Koma.Type.GKE))
+                return "右";
         }        
         return "";
     }
