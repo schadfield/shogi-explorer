@@ -18,7 +18,6 @@ import com.chadfield.shogiexplorer.objects.Notation;
 import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
-import java.util.Formatter;
 import java.util.List;
 
 /**
@@ -182,7 +181,6 @@ public class KifParser {
         
     private static void addMoveToMoveList(DefaultListModel<String> moveListModel, int gameNum, String move) {
         Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
-        Formatter fmt = new Formatter();
         if (gameNum % 2 == 0) {
             moveListModel.addElement(gameNum + trans.transliterate("\u3000☖" + move + "\n"));
         } else {
@@ -233,11 +231,8 @@ public class KifParser {
             }
         }
         Koma sourceKoma = getKoma(board, thisSource);
-        String disambiguation = "";     
-        if (sourceKoma != null) {
-            disambiguation = getDisambiguation(board, thisSource, thisDestination, sourceKoma.getType());
-            putKoma(board, thisDestination, promCheck(sourceKoma, move));
-        }
+        String disambiguation = getDisambiguation(board, thisSource, thisDestination, sourceKoma.getType());
+        putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null);
               
         return getNotation(thisSource, thisDestination, false, move, getKomaKanji(sourceKoma.getType()), disambiguation);
@@ -249,11 +244,8 @@ public class KifParser {
             ParserUtils.addPieceToInHand(destinationKoma, board);
         }
         Koma sourceKoma = getKoma(board, thisSource);
-        String disambiguation = "";
-        if (sourceKoma != null) {
-        disambiguation = getDisambiguation(board, thisSource, thisDestination, sourceKoma.getType());
-            putKoma(board, thisDestination, promCheck(sourceKoma, move));
-        }
+        String disambiguation = getDisambiguation(board, thisSource, thisDestination, sourceKoma.getType());
+        putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null);
         
         return getNotation(thisSource, thisDestination, true, move, getKomaKanji(sourceKoma.getType()), disambiguation);
@@ -261,10 +253,35 @@ public class KifParser {
     
     private static String getDisambiguation(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
         switch (komaType) {
-            
+            case SKE:
+                return disSKE(board, sourceCoordinate, destinationCoordinate);
             default:
                 return "";
         }
+    }
+    
+    private static boolean onBoard(Coordinate coordinate) {
+        return coordinate.getX() > 0  && coordinate.getX() < 10 &&  coordinate.getY() > 0 && coordinate.getY() < 10;
+    }
+    
+    private static String disSKE(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
+        Coordinate testCoordinate = new Coordinate(
+            destinationCoordinate.getX()-1,
+            destinationCoordinate.getY()+2);
+        if (onBoard(testCoordinate) && !testCoordinate.equals(sourceCoordinate)) {
+            Koma koma = board.getMasu()[testCoordinate.getX()-1][testCoordinate.getY()-1];
+            if (koma != null && koma.getType().equals(Koma.Type.SKE))
+                return "右";
+        }
+        testCoordinate = new Coordinate(
+            destinationCoordinate.getX()+1,
+            destinationCoordinate.getY()+2);
+        if (onBoard(testCoordinate) && !testCoordinate.equals(sourceCoordinate)) {
+            Koma koma = board.getMasu()[testCoordinate.getX()-1][testCoordinate.getY()-1];
+            if (koma != null && koma.getType().equals(Koma.Type.SKE))
+                return "左";
+        }        
+        return "";
     }
     
     private static Notation executeDropMove(Board board, Coordinate thisDestination, String move) {
@@ -411,9 +428,6 @@ public class KifParser {
     }
 
     private static Koma getKoma(Board board, Coordinate coords) {
-        if (coords == null) {
-            return null;
-        }
         return board.getMasu()[9 - coords.getX()][coords.getY() - 1];
     }
 

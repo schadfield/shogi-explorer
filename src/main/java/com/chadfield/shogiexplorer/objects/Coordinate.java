@@ -1,5 +1,7 @@
 package com.chadfield.shogiexplorer.objects;
 
+import java.util.Objects;
+
 /**
  *
  * @author Stephen Chadfield <stephen@chadfield.com>
@@ -43,5 +45,9 @@ public class Coordinate {
      */
     public void setY(Integer y) {
         this.y = y;
+    }
+    
+    public boolean equals(Coordinate otherCoordinate) {
+        return (Objects.equals(this.x, otherCoordinate.getX())) && (Objects.equals(this.y, otherCoordinate.getY()));
     }
 }
