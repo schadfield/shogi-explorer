@@ -47,6 +47,7 @@ public class KifParser {
     public static final String SENTE = "先手：";
     public static final String GOTE = "後手：";
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
+    public static final String MULTI_WHITESPACE = "\\s+|\\u3000";
     
     private KifParser() {
         throw new IllegalStateException("Utility class");
@@ -105,7 +106,7 @@ public class KifParser {
     }
     
     private static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
-        String[] splitLine = line.trim().split("\\s+|\\u3000");
+        String[] splitLine = line.trim().split(MULTI_WHITESPACE);
 
         int gameNum;
         
@@ -138,7 +139,7 @@ public class KifParser {
     }
         
     private static void parseResignLine(Board board, String line, DefaultListModel<String> moveListModel, List<Position> positionList) {
-        String[] splitLine = line.trim().split("\\s+|\\u3000");
+        String[] splitLine = line.trim().split(MULTI_WHITESPACE);
         int gameNum = Integer.parseInt(splitLine[0]);
         
         Notation  notation = new Notation();
@@ -150,7 +151,7 @@ public class KifParser {
     }
     
     private static void parseSuspendedLine(Board board, String line, DefaultListModel<String> moveListModel, List<Position> positionList) {
-        String[] splitLine = line.trim().split("\\s+|\\u3000");
+        String[] splitLine = line.trim().split(MULTI_WHITESPACE);
         int gameNum = Integer.parseInt(splitLine[0]);
         
         Notation  notation = new Notation();
@@ -268,7 +269,7 @@ public class KifParser {
         Coordinate testCoordinate = new Coordinate(
             destinationCoordinate.getX()-1,
             destinationCoordinate.getY()+2);
-        if (onBoard(testCoordinate) && !testCoordinate.equals(sourceCoordinate)) {
+        if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
             Koma koma = board.getMasu()[testCoordinate.getX()-1][testCoordinate.getY()-1];
             if (koma != null && koma.getType().equals(Koma.Type.SKE))
                 return "右";
@@ -276,7 +277,7 @@ public class KifParser {
         testCoordinate = new Coordinate(
             destinationCoordinate.getX()+1,
             destinationCoordinate.getY()+2);
-        if (onBoard(testCoordinate) && !testCoordinate.equals(sourceCoordinate)) {
+        if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
             Koma koma = board.getMasu()[testCoordinate.getX()-1][testCoordinate.getY()-1];
             if (koma != null && koma.getType().equals(Koma.Type.SKE))
                 return "左";

@@ -47,7 +47,7 @@ public class Coordinate {
         this.y = y;
     }
     
-    public boolean equals(Coordinate otherCoordinate) {
+    public boolean sameValue(Coordinate otherCoordinate) {
         return (Objects.equals(this.x, otherCoordinate.getX())) && (Objects.equals(this.y, otherCoordinate.getY()));
     }
 }
