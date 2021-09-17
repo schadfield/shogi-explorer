@@ -20,6 +20,7 @@ import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -264,6 +265,10 @@ public class KifParser {
                 return disSKE(board, sourceCoordinate, destinationCoordinate);
             case GKE:
                 return disGKE(board, sourceCoordinate, destinationCoordinate);
+            case SGI:
+                return disSGI(board, sourceCoordinate, destinationCoordinate);
+            case GGI:
+                return disGGI(board, sourceCoordinate, destinationCoordinate);
             default:
                 return "";
         }
@@ -276,13 +281,6 @@ public class KifParser {
     private static List<Coordinate> getPossibleSources(Board board, Coordinate destination, Koma.Type komaType) {
         List<Coordinate> result = new ArrayList<>();
         switch (komaType) {
-            case SGI:
-                return getSourcesForKoma(
-                        board, 
-                        destination, 
-                        new int[] {1, 1, 0, -1, -1},
-                        new int[] {-1, 1, 1, -1, 1}, 
-                        komaType);
             case SKE:
                 return getSourcesForKoma(
                         board, 
@@ -296,6 +294,20 @@ public class KifParser {
                         destination, 
                         new int[] {1, -1},
                         new int[] {-2, -2}, 
+                        komaType);
+            case SGI:
+                return getSourcesForKoma(
+                        board, 
+                        destination, 
+                        new int[] {1, 1, 0, -1, -1},
+                        new int[] {-1, 1, 1, -1, 1}, 
+                        komaType);
+            case GGI:
+                return getSourcesForKoma(
+                        board, 
+                        destination, 
+                        new int[] {1, 1, 0, -1, -1},
+                        new int[] {1, -1, -1, 1, -1}, 
                         komaType);
             default:
         }
@@ -321,7 +333,6 @@ public class KifParser {
     
     private static String disSKE(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.SKE);
-        System.out.println("size: " + sourceList.size());
         if (sourceList.size() > 1) {
             for (Coordinate thisCoordinate : sourceList) {
                 if (!thisCoordinate.sameValue(sourceCoordinate)) {
@@ -338,7 +349,6 @@ public class KifParser {
     
     private static String disGKE(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.GKE);
-        System.out.println("size: " + sourceList.size());
         if (sourceList.size() > 1) {
             for (Coordinate thisCoordinate : sourceList) {
                 if (!thisCoordinate.sameValue(sourceCoordinate)) {
@@ -351,6 +361,134 @@ public class KifParser {
             }
         }
         return "";
+    }
+    
+    private static String disSGI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
+        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.SGI);
+        if (sourceList.size() > 1) {
+            // There is ambiguity.
+            if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
+                // The bottom row.
+                if (haveSameX(sourceCoordinate, destinationCoordinate)) {
+                    // Source is directly below the destination.
+                    if (numWithSameY(sourceCoordinate, sourceList) == 3) {
+                        return VERTICAL;
+                    } else {
+                        return UPWARD;
+                    }
+                } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                    // Left.
+                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
+                        return FROM_LEFT+UPWARD;
+                    } else {
+                        return FROM_LEFT;
+                    }
+                } else {
+                    // Right.
+                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
+                        return FROM_RIGHT+UPWARD;
+                    } else {
+                        return FROM_RIGHT;
+                    }
+                }
+            } else {
+                // Source is above destination.
+                if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                    // Left.
+                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
+                        return FROM_LEFT+DOWNWARD;
+                    } else {
+                        return FROM_LEFT;
+                    }
+                } else {
+                    // Right.
+                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
+                        return FROM_RIGHT+DOWNWARD;
+                    } else {
+                        return FROM_RIGHT;
+                    }
+                }
+            }
+        }
+        return "";
+    }
+    
+    private static String disGGI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
+        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.GGI);
+        if (sourceList.size() > 1) {
+            // There is ambiguity.
+            if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
+                // The bottom row.
+                if (haveSameX(sourceCoordinate, destinationCoordinate)) {
+                    // Source is directly below the destination.
+                    if (numWithSameY(sourceCoordinate, sourceList) == 3) {
+                        return VERTICAL;
+                    } else {
+                        return UPWARD;
+                    }
+                } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                    // Left.
+                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
+                        return FROM_LEFT+UPWARD;
+                    } else {
+                        return FROM_LEFT;
+                    }
+                } else {
+                    // Right.
+                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
+                        return FROM_RIGHT+UPWARD;
+                    } else {
+                        return FROM_RIGHT;
+                    }
+                }
+            } else {
+                // Source is above destination.
+                if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                    // Left.
+                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
+                        return FROM_LEFT+DOWNWARD;
+                    } else {
+                        return FROM_LEFT;
+                    }
+                } else {
+                    // Right.
+                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
+                        return FROM_RIGHT+DOWNWARD;
+                    } else {
+                        return FROM_RIGHT;
+                    }
+                }
+            }
+        }
+        return "";
+    }
+    
+    private static int numWithSameY(Coordinate coordinate, List<Coordinate> coordinateList) {
+        int count = 0;
+        for (Coordinate thisCoordinate : coordinateList) {
+            if (haveSameY(coordinate, thisCoordinate)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static int numWithSameX(Coordinate coordinate, List<Coordinate> coordinateList) {
+        int count = 0;
+        for (Coordinate thisCoordinate : coordinateList) {
+            if (haveSameX(coordinate, thisCoordinate)) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    private static boolean haveSameX(Coordinate first, Coordinate second) {
+        return Objects.equals(first.getX(), second.getX());
+    }
+    
+    private static boolean haveSameY(Coordinate first, Coordinate second) {
+        return Objects.equals(first.getY(), second.getY());
     }
     
     private static Notation executeDropMove(Board board, Coordinate thisDestination, String move) {
@@ -373,7 +511,7 @@ public class KifParser {
     }
     
     private static String getDropNotation(Board board, Coordinate thisDestination, Koma.Type komaType) {
-        if (getPossibleSources(board, thisDestination, komaType).size() > 0) {
+        if (!getPossibleSources(board, thisDestination, komaType).isEmpty()) {
             return DROPPED;
         }
         return "";
