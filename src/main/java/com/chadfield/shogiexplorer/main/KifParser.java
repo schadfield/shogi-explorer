@@ -18,6 +18,7 @@ import com.chadfield.shogiexplorer.objects.Notation;
 import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -232,12 +233,10 @@ public class KifParser {
     }
 
     private static Notation executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
-        if (getKoma(board, thisDestination) != null) {
-            Koma destinationKoma = getKoma(board, thisDestination);
-            if (destinationKoma != null) {
-                ParserUtils.addPieceToInHand(getKoma(board, thisDestination), board);
-            }
-        }
+        Koma destinationKoma = getKoma(board, thisDestination);
+        if (destinationKoma != null) {
+            ParserUtils.addPieceToInHand(getKoma(board, thisDestination), board);
+        }        
         Koma sourceKoma = getKoma(board, thisSource);
         String disambiguation = getDisambiguation(board, thisSource, thisDestination, sourceKoma.getType());
         putKoma(board, thisDestination, promCheck(sourceKoma, move));
@@ -274,43 +273,83 @@ public class KifParser {
         return coordinate.getX() > 0  && coordinate.getX() < 10 &&  coordinate.getY() > 0 && coordinate.getY() < 10;
     }
     
-    private static String disSKE(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        Coordinate testCoordinate = new Coordinate(
-            destinationCoordinate.getX()-1,
-            destinationCoordinate.getY()+2);
-        if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
-            Koma koma = getKoma(board, testCoordinate);
-            if (koma != null && koma.getType().equals(Koma.Type.SKE))
-                return FROM_LEFT;
+    private static List<Coordinate> getPossibleSources(Board board, Coordinate destination, Koma.Type komaType) {
+        List<Coordinate> result = new ArrayList<>();
+        switch (komaType) {
+            case SGI:
+                return getSourcesForKoma(
+                        board, 
+                        destination, 
+                        new int[] {1, 1, 0, -1, -1},
+                        new int[] {-1, 1, 1, -1, 1}, 
+                        komaType);
+            case SKE:
+                return getSourcesForKoma(
+                        board, 
+                        destination, 
+                        new int[] {1, -1},
+                        new int[] {2, 2}, 
+                        komaType);
+            case GKE:
+                return getSourcesForKoma(
+                        board, 
+                        destination, 
+                        new int[] {1, -1},
+                        new int[] {-2, -2}, 
+                        komaType);
+            default:
         }
-        testCoordinate = new Coordinate(
-            destinationCoordinate.getX()+1,
-            destinationCoordinate.getY()+2);
-        if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
-            Koma koma = getKoma(board, testCoordinate);
-            if (koma != null && koma.getType().equals(Koma.Type.SKE))
-                return FROM_RIGHT;
-        }        
+        return result;
+    }
+    
+    private static List<Coordinate> getSourcesForKoma(Board board, Coordinate destination, int[] offsetX, int[] offsetY, Koma.Type komaType) {
+        List<Coordinate> result = new ArrayList<>();
+        for (int k = 0; k < offsetX.length; k++) {
+            Coordinate testCoordinate = new Coordinate(
+                    destination.getX() + offsetX[k],
+                    destination.getY() + offsetY[k]
+            );
+            if (onBoard(testCoordinate)) {
+                Koma koma = getKoma(board, testCoordinate);
+                if (koma != null && koma.getType().equals(komaType)) {
+                    result.add(testCoordinate);
+                }
+            }
+        }
+        return result;
+    }
+    
+    private static String disSKE(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
+        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.SKE);
+        System.out.println("size: " + sourceList.size());
+        if (sourceList.size() > 1) {
+            for (Coordinate thisCoordinate : sourceList) {
+                if (!thisCoordinate.sameValue(sourceCoordinate)) {
+                    if (thisCoordinate.getX() > sourceCoordinate.getX()) {
+                        return FROM_RIGHT;
+                    } else {
+                        return FROM_LEFT;
+                    }
+                }
+            }
+        }
         return "";
     }
     
     private static String disGKE(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        Coordinate testCoordinate = new Coordinate(
-            destinationCoordinate.getX()-1,
-            destinationCoordinate.getY()-2);
-        if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
-            Koma koma = getKoma(board, testCoordinate);
-            if (koma != null && koma.getType().equals(Koma.Type.GKE))
-                return FROM_RIGHT;
+        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.GKE);
+        System.out.println("size: " + sourceList.size());
+        if (sourceList.size() > 1) {
+            for (Coordinate thisCoordinate : sourceList) {
+                if (!thisCoordinate.sameValue(sourceCoordinate)) {
+                    if (thisCoordinate.getX() > sourceCoordinate.getX()) {
+                        return FROM_LEFT;
+                    } else {
+                        return FROM_RIGHT;
+                    }
+                }
+            }
         }
-        testCoordinate = new Coordinate(
-            destinationCoordinate.getX()+1,
-            destinationCoordinate.getY()-2);
-        if (onBoard(testCoordinate) && !testCoordinate.sameValue(sourceCoordinate)) {
-            Koma koma = getKoma(board, testCoordinate);
-            if (koma != null && koma.getType().equals(Koma.Type.GKE))
-                return FROM_LEFT;
-        }        
         return "";
     }
     
@@ -319,20 +358,25 @@ public class KifParser {
         Koma koma;
         try {
             koma = ParserUtils.getDropKoma(move.substring(2, 3), board.getNextTurn());
-            if (koma == null) {
-                return null;
-            }
+            String dropNotation = getDropNotation(board, thisDestination, koma.getType());
             putKoma(board, thisDestination, koma);
             removePieceInHand(koma.getType(), board);
             engineMove = getKomaLetter(koma.getType()) + "*" + getEngineMoveCoordinate(thisDestination);
             Notation notation = new Notation();
             notation.setEngineMove(engineMove);
-            notation.setJapanese(getJapaneseCoordinate(thisDestination) + getKomaKanji(koma.getType()));
+            notation.setJapanese(getJapaneseCoordinate(thisDestination) + getKomaKanji(koma.getType()) + dropNotation);
             return notation;
         } catch (Exception ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;      
+    }
+    
+    private static String getDropNotation(Board board, Coordinate thisDestination, Koma.Type komaType) {
+        if (getPossibleSources(board, thisDestination, komaType).size() > 0) {
+            return DROPPED;
+        }
+        return "";
     }
     
     private static String getKomaLetter(Koma.Type type) {
