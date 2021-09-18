@@ -269,6 +269,18 @@ public class KifParser {
                 return disSGI(board, sourceCoordinate, destinationCoordinate);
             case GGI:
                 return disGGI(board, sourceCoordinate, destinationCoordinate);
+            case SKI:
+            case STO:
+            case SNK:
+            case SNY:
+            case SNG:
+                return disSKXI(board, sourceCoordinate, destinationCoordinate, komaType);
+            case GKI:
+            case GTO:
+            case GNK:
+            case GNY:
+            case GNG:
+                return disGKXI(board, sourceCoordinate, destinationCoordinate, komaType);
             default:
                 return "";
         }
@@ -452,6 +464,84 @@ public class KifParser {
                     // Directly below destination.
                     return VERTICAL;
                 }
+            }
+        }
+        return "";
+    }
+    
+    private static String disSKXI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
+        if (sourceList.size() > 1) {
+            // There is ambiguity.
+            if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
+                // The source is in the single location above the destination.
+                return DOWNWARD;
+            } else if (Objects.equals(sourceCoordinate.getY(), destinationCoordinate.getY())) {
+                // The source is next to the destination.
+                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
+                    // Simple horizontal case.
+                    return HORIZONTALLY;
+                } else  if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                    // Above-left.
+                    return FROM_LEFT+HORIZONTALLY;
+                } else {
+                    // Above-right.
+                    return FROM_RIGHT+HORIZONTALLY;
+                }
+            } else {
+                // The source is one of three locations below the destination.
+                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
+                    // Simple up case.
+                    return UPWARD;
+                } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                    // Below-left.
+                    return FROM_LEFT+UPWARD;
+                } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                    // Below-right.
+                    return FROM_RIGHT+UPWARD;
+                } else {
+                    // Directly below destination.
+                    return VERTICAL;
+                }       
+            }
+        }
+        return "";
+    }
+    
+    private static String disGKXI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
+        if (sourceList.size() > 1) {
+            // There is ambiguity.
+            if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
+                // The source is in the single location above the destination.
+                return DOWNWARD;
+            } else if (Objects.equals(sourceCoordinate.getY(), destinationCoordinate.getY())) {
+                // The source is next to the destination.
+                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
+                    // Simple horizontal case.
+                    return HORIZONTALLY;
+                } else  if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                    // Above-left.
+                    return FROM_LEFT+HORIZONTALLY;
+                } else {
+                    // Above-right.
+                    return FROM_RIGHT+HORIZONTALLY;
+                }
+            } else {
+                // The source is one of three locations below the destination.
+                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
+                    // Simple up case.
+                    return UPWARD;
+                } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                    // Below-left.
+                    return FROM_LEFT+UPWARD;
+                } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                    // Below-right.
+                    return FROM_RIGHT+UPWARD;
+                } else {
+                    // Directly below destination.
+                    return VERTICAL;
+                }       
             }
         }
         return "";
