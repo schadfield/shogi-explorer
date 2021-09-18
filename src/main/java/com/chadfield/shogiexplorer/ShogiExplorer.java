@@ -134,11 +134,17 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         mediaReverse = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         mediaBack = new javax.swing.JButton();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         mediaStop = new javax.swing.JButton();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         mediaForward = new javax.swing.JButton();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         mediaPlay = new javax.swing.JButton();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         mediaEnd = new javax.swing.JButton();
         gameScrollPanel = new javax.swing.JScrollPane();
         gameTextArea = new javax.swing.JTextArea();
@@ -335,6 +341,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         mainToolBar.add(mediaStart);
+        mainToolBar.add(filler1);
 
         mediaReverse.setFocusable(false);
         mediaReverse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -349,6 +356,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         mainToolBar.add(mediaReverse);
+        mainToolBar.add(filler2);
 
         mediaBack.setFocusable(false);
         mediaBack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -363,6 +371,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         mainToolBar.add(mediaBack);
+        mainToolBar.add(filler3);
 
         mediaStop.setFocusable(false);
         mediaStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -377,6 +386,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         mainToolBar.add(mediaStop);
+        mainToolBar.add(filler4);
 
         mediaForward.setFocusable(false);
         mediaForward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -391,6 +401,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         mainToolBar.add(mediaForward);
+        mainToolBar.add(filler5);
 
         mediaPlay.setFocusable(false);
         mediaPlay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -405,6 +416,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         mainToolBar.add(mediaPlay);
+        mainToolBar.add(filler6);
 
         mediaEnd.setFocusable(false);
         mediaEnd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -446,6 +458,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         commentTextArea.setFocusable(false);
         commentScrollPane.setViewportView(commentTextArea);
 
+        moveList.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         moveList.setModel(moveListModel);
         moveList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         moveList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -965,6 +978,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton deleteEngineButton;
     private javax.swing.JMenu enginesMenu;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
     private javax.swing.JMenu gameMenu;
     private javax.swing.JScrollPane gameScrollPanel;
     private javax.swing.JTextArea gameTextArea;
