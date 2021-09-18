@@ -299,15 +299,37 @@ public class KifParser {
                 return getSourcesForKoma(
                         board, 
                         destination, 
-                        new int[] {1, 1, 0, -1, -1},
-                        new int[] {-1, 1, 1, -1, 1}, 
+                        new int[] {1, 0, -1, 1, -1},
+                        new int[] {1, 1, 1, -1, -1}, 
                         komaType);
             case GGI:
                 return getSourcesForKoma(
                         board, 
                         destination, 
-                        new int[] {1, 1, 0, -1, -1},
-                        new int[] {1, -1, -1, 1, -1}, 
+                        new int[] {1, 0, -1, 1, -1},
+                        new int[] {-1, -1,-1, 1, 1}, 
+                        komaType);
+            case SKI:
+            case STO:
+            case SNK:
+            case SNY:
+            case SNG:
+                return getSourcesForKoma(
+                        board, 
+                        destination, 
+                        new int[] {1, 0, -1, 1, -1, 0},
+                        new int[] {1, 1, 1, 0, 0, -1}, 
+                        komaType);
+            case GKI:
+            case GTO:
+            case GNK:
+            case GNY:
+            case GNG:
+                return getSourcesForKoma(
+                        board, 
+                        destination, 
+                        new int[] {1, 0, -1, 1, -1, 0},
+                        new int[] {-1, -1, -1, 0, 0, 1}, 
                         komaType);
             default:
         }
@@ -367,46 +389,32 @@ public class KifParser {
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.SGI);
         if (sourceList.size() > 1) {
             // There is ambiguity.
-            if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
-                // The bottom row.
-                if (haveSameX(sourceCoordinate, destinationCoordinate)) {
-                    // Source is directly below the destination.
-                    if (numWithSameY(sourceCoordinate, sourceList) == 3) {
-                        return VERTICAL;
-                    } else {
-                        return UPWARD;
-                    }
-                } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
-                    // Left.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
-                        return FROM_LEFT+UPWARD;
-                    } else {
-                        return FROM_LEFT;
-                    }
+            if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
+                // The source is one of two locations above the destination.
+                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
+                    // Simple down case.
+                    return DOWNWARD;
+                } else  if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                    // Above-left.
+                    return FROM_LEFT+DOWNWARD;
                 } else {
-                    // Right.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
-                        return FROM_RIGHT+UPWARD;
-                    } else {
-                        return FROM_RIGHT;
-                    }
+                    // Above-right.
+                    return FROM_RIGHT+DOWNWARD;
                 }
             } else {
-                // Source is above destination.
-                if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
-                    // Left.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
-                        return FROM_LEFT+DOWNWARD;
-                    } else {
-                        return FROM_LEFT;
-                    }
+                // The source is one of three locations below the destination.
+                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
+                    // Simple up case.
+                    return UPWARD;
+                } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                    // Below-left.
+                    return FROM_LEFT+UPWARD;
+                } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                    // Below-right.
+                    return FROM_RIGHT+UPWARD;
                 } else {
-                    // Right.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
-                        return FROM_RIGHT+DOWNWARD;
-                    } else {
-                        return FROM_RIGHT;
-                    }
+                    // Directly below destination.
+                    return VERTICAL;
                 }
             }
         }
@@ -417,46 +425,32 @@ public class KifParser {
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.GGI);
         if (sourceList.size() > 1) {
             // There is ambiguity.
-            if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
-                // The bottom row.
-                if (haveSameX(sourceCoordinate, destinationCoordinate)) {
-                    // Source is directly below the destination.
-                    if (numWithSameY(sourceCoordinate, sourceList) == 3) {
-                        return VERTICAL;
-                    } else {
-                        return UPWARD;
-                    }
-                } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
-                    // Left.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
-                        return FROM_LEFT+UPWARD;
-                    } else {
-                        return FROM_LEFT;
-                    }
+            if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
+                // The source is one of two locations above the destination.
+                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
+                    // Simple down case.
+                    return DOWNWARD;
+                } else  if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                    // Above-left.
+                    return FROM_LEFT+DOWNWARD;
                 } else {
-                    // Right.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
-                        return FROM_RIGHT+UPWARD;
-                    } else {
-                        return FROM_RIGHT;
-                    }
+                    // Above-right.
+                    return FROM_RIGHT+DOWNWARD;
                 }
             } else {
-                // Source is above destination.
-                if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
-                    // Left.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
-                        return FROM_LEFT+DOWNWARD;
-                    } else {
-                        return FROM_LEFT;
-                    }
+                // The source is one of three locations below the destination.
+                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
+                    // Simple up case.
+                    return UPWARD;
+                } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                    // Below-left.
+                    return FROM_LEFT+UPWARD;
+                } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                    // Below-right.
+                    return FROM_RIGHT+UPWARD;
                 } else {
-                    // Right.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 2) {
-                        return FROM_RIGHT+DOWNWARD;
-                    } else {
-                        return FROM_RIGHT;
-                    }
+                    // Directly below destination.
+                    return VERTICAL;
                 }
             }
         }
