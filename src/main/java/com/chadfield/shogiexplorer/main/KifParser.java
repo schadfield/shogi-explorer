@@ -408,10 +408,18 @@ public class KifParser {
                     return DOWNWARD;
                 } else  if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
                     // Above-left.
-                    return FROM_LEFT+DOWNWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_LEFT;
+                    } else {
+                        return FROM_LEFT+DOWNWARD;
+                    }
                 } else {
                     // Above-right.
-                    return FROM_RIGHT+DOWNWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_RIGHT;
+                    } else {
+                        return FROM_RIGHT+DOWNWARD;
+                    }
                 }
             } else {
                 // The source is one of three locations below the destination.
@@ -420,10 +428,18 @@ public class KifParser {
                     return UPWARD;
                 } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
                     // Below-left.
-                    return FROM_LEFT+UPWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_LEFT;
+                    } else {
+                        return FROM_LEFT+UPWARD;
+                    }
                 } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
                     // Below-right.
-                    return FROM_RIGHT+UPWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_RIGHT;
+                    } else {
+                        return FROM_RIGHT+UPWARD;
+                    }
                 } else {
                     // Directly below destination.
                     return VERTICAL;
@@ -444,10 +460,18 @@ public class KifParser {
                     return DOWNWARD;
                 } else  if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
                     // Above-left.
-                    return FROM_LEFT+DOWNWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_LEFT;
+                    } else {
+                        return FROM_LEFT+DOWNWARD;
+                    }
                 } else {
                     // Above-right.
-                    return FROM_RIGHT+DOWNWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_RIGHT;
+                    } else {
+                        return FROM_RIGHT+DOWNWARD;
+                    }
                 }
             } else {
                 // The source is one of three locations below the destination.
@@ -456,10 +480,18 @@ public class KifParser {
                     return UPWARD;
                 } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
                     // Below-left.
-                    return FROM_LEFT+UPWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_LEFT;
+                    } else {
+                        return FROM_LEFT+UPWARD;
+                    }
                 } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
                     // Below-right.
-                    return FROM_RIGHT+UPWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_RIGHT;
+                    } else {
+                        return FROM_RIGHT+UPWARD;
+                    }
                 } else {
                     // Directly below destination.
                     return VERTICAL;
@@ -483,10 +515,18 @@ public class KifParser {
                     return HORIZONTALLY;
                 } else  if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
                     // Above-left.
-                    return FROM_LEFT+HORIZONTALLY;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_LEFT;
+                    } else {
+                        return FROM_LEFT+HORIZONTALLY;
+                    }
                 } else {
                     // Above-right.
-                    return FROM_RIGHT+HORIZONTALLY;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_RIGHT;
+                    } else {
+                        return FROM_RIGHT+HORIZONTALLY;
+                    }
                 }
             } else {
                 // The source is one of three locations below the destination.
@@ -495,10 +535,18 @@ public class KifParser {
                     return UPWARD;
                 } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
                     // Below-left.
-                    return FROM_LEFT+UPWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_LEFT;
+                    } else {
+                        return FROM_LEFT+UPWARD;
+                    }
                 } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
                     // Below-right.
-                    return FROM_RIGHT+UPWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_RIGHT;
+                    } else {
+                        return FROM_RIGHT+UPWARD;
+                    }
                 } else {
                     // Directly below destination.
                     return VERTICAL;
@@ -522,10 +570,18 @@ public class KifParser {
                     return HORIZONTALLY;
                 } else  if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
                     // Above-left.
-                    return FROM_LEFT+HORIZONTALLY;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_LEFT;
+                    } else {
+                        return FROM_LEFT+HORIZONTALLY;
+                    }
                 } else {
                     // Above-right.
-                    return FROM_RIGHT+HORIZONTALLY;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_RIGHT;
+                    } else {
+                        return FROM_RIGHT+HORIZONTALLY;
+                    }
                 }
             } else {
                 // The source is one of three locations below the destination.
@@ -534,10 +590,18 @@ public class KifParser {
                     return UPWARD;
                 } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
                     // Below-left.
-                    return FROM_LEFT+UPWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_LEFT;
+                    } else {
+                        return FROM_LEFT+UPWARD;
+                    }
                 } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
                     // Below-right.
-                    return FROM_RIGHT+UPWARD;
+                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                        return FROM_RIGHT;
+                    } else {
+                        return FROM_RIGHT+UPWARD;
+                    }
                 } else {
                     // Directly below destination.
                     return VERTICAL;
