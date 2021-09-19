@@ -272,13 +272,12 @@ public class KifParser {
             case SNK:
             case SNY:
             case SNG:
-                return disSKXI(board, sourceCoordinate, destinationCoordinate, komaType);
             case GKI:
             case GTO:
             case GNK:
             case GNY:
             case GNG:
-                return disGKXI(board, sourceCoordinate, destinationCoordinate, komaType);
+                return disXKXI(board, sourceCoordinate, destinationCoordinate, komaType);
             case SKA:
             case GKA:
                 return disXKA(board, sourceCoordinate, destinationCoordinate, komaType);
@@ -582,8 +581,8 @@ public class KifParser {
         }
     }
         
-    private static String disSKXI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
-        boolean isSente = true;
+    private static String disXKXI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        boolean isSente = (komaType == Koma.Type.SKI || komaType == Koma.Type.STO || komaType == Koma.Type.SNK || komaType == Koma.Type.SNY || komaType == Koma.Type.SNG); 
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
@@ -637,63 +636,7 @@ public class KifParser {
         }
         return "";
     }
-    
-    private static String disGKXI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
-        boolean isSente = false;
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
-        if (sourceList.size() > 1) {
-            // There is ambiguity.
-            if (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
-                // The source is in the single location above the destination.
-                return DOWNWARD;
-            } else if (Objects.equals(sourceCoordinate.getY(), destinationCoordinate.getY())) {
-                // The source is next to the destination.
-                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
-                    // Simple horizontal case.
-                    return HORIZONTALLY;
-                } else  if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
-                    // Above-left.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_LEFT+HORIZONTALLY;
-                    }
-                } else {
-                    // Above-right.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return FROM_RIGHT;
-                    } else {
-                        return FROM_RIGHT+HORIZONTALLY;
-                    }
-                }
-            } else {
-                // The source is one of three locations below the destination.
-                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
-                    // Simple up case.
-                    return UPWARD;
-                } else if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
-                    // Below-left.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_LEFT+UPWARD;
-                    }
-                } else if (onRight(sourceCoordinate, destinationCoordinate, isSente)) {
-                    // Below-right.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return FROM_RIGHT;
-                    } else {
-                        return FROM_RIGHT+UPWARD;
-                    }
-                } else {
-                    // Directly below destination.
-                    return VERTICAL;
-                }       
-            }
-        }
-        return "";
-    }
-    
+        
     private static String disXKA(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
         boolean isSente = komaType == Koma.Type.SKA;
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
