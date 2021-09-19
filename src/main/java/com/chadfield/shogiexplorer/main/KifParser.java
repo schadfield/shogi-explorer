@@ -290,13 +290,11 @@ public class KifParser {
             case GHI:
                 return disGHI(board, sourceCoordinate, destinationCoordinate);
             case SUM:
-                return disSUM(board, sourceCoordinate, destinationCoordinate);
-            case GUM:
-                return disGUM(board, sourceCoordinate, destinationCoordinate);
             case SRY:
-                return disSRY(board, sourceCoordinate, destinationCoordinate);
+                return disSUMRY(board, sourceCoordinate, destinationCoordinate, komaType);
+            case GUM:
             case GRY:
-                return disGRY(board, sourceCoordinate, destinationCoordinate);
+                return disGUMRY(board, sourceCoordinate, destinationCoordinate, komaType);
             default:
                 return "";
         }
@@ -857,8 +855,8 @@ public class KifParser {
         return "";
     }
     
-    private static String disSUM(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.SUM);
+    private static String disSUMRY(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
             Coordinate otherCoordinate = getOtherCoordinate(sourceCoordinate, sourceList);
@@ -908,112 +906,9 @@ public class KifParser {
         }
         return "";
     }
-    
-    private static String disGUM(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.GUM);
-        if (sourceList.size() > 1) {
-            // There is ambiguity.
-            Coordinate otherCoordinate = getOtherCoordinate(sourceCoordinate, sourceList);
-            if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
-                // The source is below the destination.
-                if (otherCoordinate.getY() < destinationCoordinate.getY()) {
-                    // The other piece is also below the destination.
-                    if (sourceCoordinate.getX() < otherCoordinate.getX()) {
-                        // The source is to left of the other.
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                } else {
-                    // Simple upwards.
-                    return UPWARD;
-                }
-            } else if  (sourceCoordinate.getY() > destinationCoordinate.getY()) {
-                // The source is above the destination.
-                if (otherCoordinate.getY() > destinationCoordinate.getY()) {
-                    // The other piece is also above the destination.
-                    if (sourceCoordinate.getX() < otherCoordinate.getX()) {
-                        // The source is to left of the other.
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                } else {
-                    // Simple downwards.
-                    return DOWNWARD;
-                } 
-            } else {
-                // The source is level with the destination.
-                if (numWithSameY(sourceCoordinate, sourceList) > 1) {
-                    // Both possible pieces are level with the destination.
-                    if (sourceCoordinate.getX() < otherCoordinate.getX()) {
-                        // The source is to left of the other.
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                } else {
-                    // Simple horizontal.
-                    return HORIZONTALLY;
-                }
-            }
-        }
-        return "";
-    }
-    private static String disSRY(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.SRY);
-        if (sourceList.size() > 1) {
-            // There is ambiguity.
-            Coordinate otherCoordinate = getOtherCoordinate(sourceCoordinate, sourceList);
-            if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
-                // The source is below the destination.
-                if (otherCoordinate.getY() > destinationCoordinate.getY()) {
-                    // The other piece is also below the destination.
-                    if (sourceCoordinate.getX() > otherCoordinate.getX()) {
-                        // The source is to left of the other.
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                } else {
-                    // Simple upward.
-                    return UPWARD;
-                }           
-            } else if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
-                // The source is above the destination.
-                if (otherCoordinate.getY() < destinationCoordinate.getY()) {
-                    // The other piece is also above the destination.
-                    if (sourceCoordinate.getX() > otherCoordinate.getX()) {
-                        // The source is to left of the other.
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                } else {
-                    // Simple downwards.
-                    return DOWNWARD;
-                } 
-            } else {
-                // The source is level with the destination.
-                if (numWithSameY(sourceCoordinate, sourceList) > 1) {
-                    // Both possible pieces are level with the destination.
-                    if (sourceCoordinate.getX() > otherCoordinate.getX()) {
-                        // The source is to left of the other.
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                } else {
-                    // Simple horizontal.
-                    return HORIZONTALLY;
-                }
-            }
-        }
-        return "";
-    }
-    
-    private static String disGRY(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.GRY);
+        
+    private static String disGUMRY(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
             Coordinate otherCoordinate = getOtherCoordinate(sourceCoordinate, sourceList);
