@@ -75,6 +75,10 @@ public class KifParser {
                     }
                     parseGameDetails(line, game);
                 } else {
+                    if (line.isEmpty()) {
+                        break;
+                    }
+                                        
                     if (isComment(line)) {
                         positionList.getLast().setComment(positionList.getLast().getComment()+line.substring(1) + "\n") ;
                         continue;
