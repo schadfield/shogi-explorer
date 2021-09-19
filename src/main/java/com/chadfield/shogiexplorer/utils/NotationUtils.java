@@ -14,14 +14,14 @@ import java.util.Objects;
  */
 public class NotationUtils {
 
-    public static final String DOWNWARD = "\u5f15";
-    public static final String UPWARD = "\u4e0a";
-    public static final String HORIZONTALLY = "\u5bc4";
-    public static final String FROM_LEFT = "\u5de6";
-    public static final String FROM_RIGHT = "\u53f3";
-    public static final String DROPPED = "\u6253";
-    public static final String VERTICAL = "\u76f4";
-    public static final String UPWARD_UD = "\u884c";
+    public static final String DROPPED = "打";
+    public static final String DOWNWARD = "引";
+    public static final String HORIZONTALLY = "寄";
+    public static final String UPWARD = "上";
+    public static final String FROM_RIGHT = "右";
+    public static final String FROM_LEFT = "左";
+    public static final String VERTICAL = "直";
+    public static final String UPWARD_UD = "行";
 
     private static boolean onBoard(Coordinate coordinate) {
         return coordinate.getX() > 0 && coordinate.getX() < 10 && coordinate.getY() > 0 && coordinate.getY() < 10;
