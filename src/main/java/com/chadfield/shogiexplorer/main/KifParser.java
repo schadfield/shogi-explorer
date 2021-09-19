@@ -523,30 +523,34 @@ public class KifParser {
                 }
             } else {
                 // The source is one of three locations below the destination.
-                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
-                    // Simple up case.
-                    return UPWARD;
-                } else if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
-                    // Below-left.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_LEFT+UPWARD;
-                    }
-                } else if (onRight(sourceCoordinate, destinationCoordinate, isSente)) {
-                    // Below-right.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return FROM_RIGHT;
-                    } else {
-                        return FROM_RIGHT+UPWARD;
-                    }
-                } else {
-                    // Directly below destination.
-                    return VERTICAL;
-                }
+                return bottomThree(sourceCoordinate, destinationCoordinate, sourceList, isSente);
             }
         }
         return "";
+    }
+    
+    private static String bottomThree(Coordinate sourceCoordinate, Coordinate destinationCoordinate, List<Coordinate> sourceList, boolean isSente) {
+        if (numWithSameY(sourceCoordinate, sourceList) == 1) {
+            // Simple up case.
+            return UPWARD;
+        } else if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
+            // Below-left.
+            if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                return FROM_LEFT;
+            } else {
+                return FROM_LEFT+UPWARD;
+            }
+        } else if (onRight(sourceCoordinate, destinationCoordinate, isSente)) {
+            // Below-right.
+            if (numWithSameX(sourceCoordinate, sourceList) == 1) {
+                return FROM_RIGHT;
+            } else {
+                return FROM_RIGHT+UPWARD;
+            }
+        } else {
+            // Directly below destination.
+            return VERTICAL;
+        }
     }
     
     static boolean onLeft(Coordinate firstCoordinate, Coordinate secondCoordinate, boolean isSente) {
@@ -611,27 +615,7 @@ public class KifParser {
                 }
             } else {
                 // The source is one of three locations below the destination.
-                if (numWithSameY(sourceCoordinate, sourceList) == 1) {
-                    // Simple up case.
-                    return UPWARD;
-                } else if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
-                    // Below-left.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_LEFT+UPWARD;
-                    }
-                } else if (onRight(sourceCoordinate, destinationCoordinate, isSente)) {
-                    // Below-right.
-                    if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return FROM_RIGHT;
-                    } else {
-                        return FROM_RIGHT+UPWARD;
-                    }
-                } else {
-                    // Directly below destination.
-                    return VERTICAL;
-                }       
+                return bottomThree(sourceCoordinate, destinationCoordinate, sourceList, isSente);
             }
         }
         return "";
@@ -656,7 +640,7 @@ public class KifParser {
                     // Simple upward.
                     return UPWARD;
                 }
-            } else if  (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
+            } else 
                 // The source is above the destination.
                 if (isAbove(otherCoordinate, destinationCoordinate, isSente)) {
                     // The other piece is also above the destination.
@@ -669,11 +653,10 @@ public class KifParser {
                     // Simple downward.
                     return DOWNWARD;
                 }
-            } 
         }
         return "";
     }
-    
+        
     private static String disXHI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
         boolean isSente = komaType == Koma.Type.SHI;
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
