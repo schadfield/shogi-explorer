@@ -14,6 +14,15 @@ import java.util.Objects;
  */
 public class NotationUtils {
 
+    public static final String DOWNWARD = "\u5f15";
+    public static final String UPWARD = "\u4e0a";
+    public static final String HORIZONTALLY = "\u5bc4";
+    public static final String FROM_LEFT = "\u5de6";
+    public static final String FROM_RIGHT = "\u53f3";
+    public static final String DROPPED = "\u6253";
+    public static final String VERTICAL = "\u76f4";
+    public static final String UPWARD_UD = "\u884c";
+
     private static boolean onBoard(Coordinate coordinate) {
         return coordinate.getX() > 0 && coordinate.getX() < 10 && coordinate.getY() > 0 && coordinate.getY() < 10;
     }
@@ -70,20 +79,20 @@ public class NotationUtils {
             // There is ambiguity.
             if (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is above the destination.
-                return KifParser.DOWNWARD;
+                return DOWNWARD;
             } else if (isBelow(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is below the destination.
-                return KifParser.UPWARD;
+                return UPWARD;
             } else {
                 if (numWithSameY(sourceCoordinate, sourceList) > 1) {
                     if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
                         // The source is left of the destination.
-                        return KifParser.FROM_LEFT;
+                        return FROM_LEFT;
                     } else {
-                        return KifParser.FROM_RIGHT;
+                        return FROM_RIGHT;
                     }
                 } else {
-                    return KifParser.HORIZONTALLY;
+                    return HORIZONTALLY;
                 }
             }
         }
@@ -99,20 +108,20 @@ public class NotationUtils {
                 // The source is one of two locations above the destination.
                 if (numWithSameY(sourceCoordinate, sourceList) == 1) {
                     // Simple down case.
-                    return KifParser.DOWNWARD;
+                    return DOWNWARD;
                 } else if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
                     // Above-left.
                     if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return KifParser.FROM_LEFT;
+                        return FROM_LEFT;
                     } else {
-                        return KifParser.FROM_LEFT + KifParser.DOWNWARD;
+                        return FROM_LEFT + DOWNWARD;
                     }
                 } else {
                     // Above-right.
                     if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return KifParser.FROM_RIGHT;
+                        return FROM_RIGHT;
                     } else {
-                        return KifParser.FROM_RIGHT + KifParser.DOWNWARD;
+                        return FROM_RIGHT + DOWNWARD;
                     }
                 }
             } else {
@@ -130,25 +139,25 @@ public class NotationUtils {
             // There is ambiguity.
             if (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is in the single location above the destination.
-                return KifParser.DOWNWARD;
+                return DOWNWARD;
             } else if (Objects.equals(sourceCoordinate.getY(), destinationCoordinate.getY())) {
                 // The source is next to the destination.
                 if (numWithSameY(sourceCoordinate, sourceList) == 1) {
                     // Simple horizontal case.
-                    return KifParser.HORIZONTALLY;
+                    return HORIZONTALLY;
                 } else if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
                     // Above-left.
                     if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return KifParser.FROM_LEFT;
+                        return FROM_LEFT;
                     } else {
-                        return KifParser.FROM_LEFT + KifParser.HORIZONTALLY;
+                        return FROM_LEFT + HORIZONTALLY;
                     }
                 } else {
                     // Above-right.
                     if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                        return KifParser.FROM_RIGHT;
+                        return FROM_RIGHT;
                     } else {
-                        return KifParser.FROM_RIGHT + KifParser.HORIZONTALLY;
+                        return FROM_RIGHT + HORIZONTALLY;
                     }
                 }
             } else {
@@ -168,9 +177,9 @@ public class NotationUtils {
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
-                return KifParser.FROM_LEFT;
+                return FROM_LEFT;
             } else {
-                return KifParser.FROM_RIGHT;
+                return FROM_RIGHT;
             }
         }
         return "";
@@ -197,13 +206,13 @@ public class NotationUtils {
                     // The other piece is also below the destination.
                     if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
                         // The source is to left of the other.
-                        return KifParser.FROM_LEFT;
+                        return FROM_LEFT;
                     } else {
-                        return KifParser.FROM_RIGHT;
+                        return FROM_RIGHT;
                     }
                 } else {
                     // Simple upwards.
-                    return KifParser.UPWARD;
+                    return UPWARD;
                 }
             } else if (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is above the destination.
@@ -211,13 +220,13 @@ public class NotationUtils {
                     // The other piece is also above the destination.
                     if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
                         // The source is to left of the other.
-                        return KifParser.FROM_LEFT;
+                        return FROM_LEFT;
                     } else {
-                        return KifParser.FROM_RIGHT;
+                        return FROM_RIGHT;
                     }
                 } else {
                     // Simple downwards.
-                    return KifParser.DOWNWARD;
+                    return DOWNWARD;
                 }
             } else {
                 // The source is level with the destination.
@@ -225,13 +234,13 @@ public class NotationUtils {
                     // Both possible pieces are level with the destination.
                     if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
                         // The source is to left of the other.
-                        return KifParser.FROM_LEFT;
+                        return FROM_LEFT;
                     } else {
-                        return KifParser.FROM_RIGHT;
+                        return FROM_RIGHT;
                     }
                 } else {
                     // Simple horizontal.
-                    return KifParser.HORIZONTALLY;
+                    return HORIZONTALLY;
                 }
             }
         }
@@ -257,25 +266,25 @@ public class NotationUtils {
                 if (isBelow(otherCoordinate, destinationCoordinate, isSente)) {
                     // The other piece is also below the destination.
                     if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
-                        return KifParser.FROM_LEFT;
+                        return FROM_LEFT;
                     } else {
-                        return KifParser.FROM_RIGHT;
+                        return FROM_RIGHT;
                     }
                 } else {
                     // Simple upward.
-                    return KifParser.UPWARD;
+                    return UPWARD;
                 }
             } else // The source is above the destination.
             if (isAbove(otherCoordinate, destinationCoordinate, isSente)) {
                 // The other piece is also above the destination.
                 if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
-                    return KifParser.FROM_LEFT;
+                    return FROM_LEFT;
                 } else {
-                    return KifParser.FROM_RIGHT;
+                    return FROM_RIGHT;
                 }
             } else {
                 // Simple downward.
-                return KifParser.DOWNWARD;
+                return DOWNWARD;
             }
         }
         return "";
@@ -431,24 +440,24 @@ public class NotationUtils {
     private static String bottomThree(Coordinate sourceCoordinate, Coordinate destinationCoordinate, List<Coordinate> sourceList, boolean isSente) {
         if (numWithSameY(sourceCoordinate, sourceList) == 1) {
             // Simple up case.
-            return KifParser.UPWARD;
+            return UPWARD;
         } else if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
             // Below-left.
             if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                return KifParser.FROM_LEFT;
+                return FROM_LEFT;
             } else {
-                return KifParser.FROM_LEFT + KifParser.UPWARD;
+                return FROM_LEFT + UPWARD;
             }
         } else if (onRight(sourceCoordinate, destinationCoordinate, isSente)) {
             // Below-right.
             if (numWithSameX(sourceCoordinate, sourceList) == 1) {
-                return KifParser.FROM_RIGHT;
+                return FROM_RIGHT;
             } else {
-                return KifParser.FROM_RIGHT + KifParser.UPWARD;
+                return FROM_RIGHT + UPWARD;
             }
         } else {
             // Directly below destination.
-            return KifParser.VERTICAL;
+            return VERTICAL;
         }
     }
 
@@ -490,7 +499,7 @@ public class NotationUtils {
 
     public static String getDropNotation(Board board, Coordinate thisDestination, Koma.Type komaType) {
         if (!NotationUtils.getPossibleSources(board, thisDestination, komaType).isEmpty()) {
-            return KifParser.DROPPED;
+            return DROPPED;
         }
         return "";
     }
