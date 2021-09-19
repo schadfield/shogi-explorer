@@ -262,9 +262,8 @@ public class KifParser {
     private static String getDisambiguation(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
         switch (komaType) {
             case SKE:
-                return disSKE(board, sourceCoordinate, destinationCoordinate);
             case GKE:
-                return disGKE(board, sourceCoordinate, destinationCoordinate);
+                return disXKE(board, sourceCoordinate, destinationCoordinate, komaType);
             case SGI:
             case GGI:
                 return disXGI(board, sourceCoordinate, destinationCoordinate, komaType);
@@ -284,9 +283,8 @@ public class KifParser {
             case GKA:
                 return disXKA(board, sourceCoordinate, destinationCoordinate, komaType);
             case SHI:
-                return disSHI(board, sourceCoordinate, destinationCoordinate);
             case GHI:
-                return disGHI(board, sourceCoordinate, destinationCoordinate);
+                return disXHI(board, sourceCoordinate, destinationCoordinate, komaType);
             case SUM:
             case SRY:
                 return disSUMRY(board, sourceCoordinate, destinationCoordinate, komaType);
@@ -482,29 +480,14 @@ public class KifParser {
         }
         return result;
     }
-    
-    private static String disSKE(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.SKE);
-        if (sourceList.size() > 1) {
-            for (Coordinate thisCoordinate : sourceList) {
-                if (!thisCoordinate.sameValue(sourceCoordinate)) {
-                    if (thisCoordinate.getX() > sourceCoordinate.getX()) {
-                        return FROM_RIGHT;
-                    } else {
-                        return FROM_LEFT;
-                    }
-                }
-            }
-        }
-        return "";
-    }
-    
-    private static String disGKE(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
+        
+    private static String disXKE(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        boolean isSente = komaType == Koma.Type.SKE;
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.GKE);
         if (sourceList.size() > 1) {
             for (Coordinate thisCoordinate : sourceList) {
                 if (!thisCoordinate.sameValue(sourceCoordinate)) {
-                    if (thisCoordinate.getX() > sourceCoordinate.getX()) {
+                    if (onLeft(thisCoordinate, sourceCoordinate, isSente)) {
                         return FROM_LEFT;
                     } else {
                         return FROM_RIGHT;
@@ -520,7 +503,7 @@ public class KifParser {
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
-            if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
+            if (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is one of two locations above the destination.
                 if (numWithSameY(sourceCoordinate, sourceList) == 1) {
                     // Simple down case.
@@ -601,10 +584,11 @@ public class KifParser {
     }
         
     private static String disSKXI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        boolean isSente = true;
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
-            if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
+            if (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is in the single location above the destination.
                 return DOWNWARD;
             } else if (Objects.equals(sourceCoordinate.getY(), destinationCoordinate.getY())) {
@@ -612,7 +596,7 @@ public class KifParser {
                 if (numWithSameY(sourceCoordinate, sourceList) == 1) {
                     // Simple horizontal case.
                     return HORIZONTALLY;
-                } else  if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                } else  if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
                     // Above-left.
                     if (numWithSameX(sourceCoordinate, sourceList) == 1) {
                         return FROM_LEFT;
@@ -632,14 +616,14 @@ public class KifParser {
                 if (numWithSameY(sourceCoordinate, sourceList) == 1) {
                     // Simple up case.
                     return UPWARD;
-                } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                } else if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
                     // Below-left.
                     if (numWithSameX(sourceCoordinate, sourceList) == 1) {
                         return FROM_LEFT;
                     } else {
                         return FROM_LEFT+UPWARD;
                     }
-                } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                } else if (onRight(sourceCoordinate, destinationCoordinate, isSente)) {
                     // Below-right.
                     if (numWithSameX(sourceCoordinate, sourceList) == 1) {
                         return FROM_RIGHT;
@@ -656,10 +640,11 @@ public class KifParser {
     }
     
     private static String disGKXI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        boolean isSente = false;
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
-            if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
+            if (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is in the single location above the destination.
                 return DOWNWARD;
             } else if (Objects.equals(sourceCoordinate.getY(), destinationCoordinate.getY())) {
@@ -667,7 +652,7 @@ public class KifParser {
                 if (numWithSameY(sourceCoordinate, sourceList) == 1) {
                     // Simple horizontal case.
                     return HORIZONTALLY;
-                } else  if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                } else  if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
                     // Above-left.
                     if (numWithSameX(sourceCoordinate, sourceList) == 1) {
                         return FROM_LEFT;
@@ -687,14 +672,14 @@ public class KifParser {
                 if (numWithSameY(sourceCoordinate, sourceList) == 1) {
                     // Simple up case.
                     return UPWARD;
-                } else if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
+                } else if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
                     // Below-left.
                     if (numWithSameX(sourceCoordinate, sourceList) == 1) {
                         return FROM_LEFT;
                     } else {
                         return FROM_LEFT+UPWARD;
                     }
-                } else if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                } else if (onRight(sourceCoordinate, destinationCoordinate, isSente)) {
                     // Below-right.
                     if (numWithSameX(sourceCoordinate, sourceList) == 1) {
                         return FROM_RIGHT;
@@ -747,19 +732,20 @@ public class KifParser {
         return "";
     }
     
-    private static String disSHI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.SHI);
+    private static String disXHI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        boolean isSente = komaType == Koma.Type.SHI;
+        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
-            if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
+            if (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is above the destination.
                 return DOWNWARD;
-            } else if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
+            } else if (isBelow(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is below the destination.
                 return UPWARD;
             } else {
                 if (numWithSameY(sourceCoordinate, sourceList) > 1) {
-                    if (sourceCoordinate.getX() > destinationCoordinate.getX()) {
+                    if (onLeft(sourceCoordinate, destinationCoordinate, isSente)) {
                         // The source is left of the destination.
                         return FROM_LEFT;
                     } else {
@@ -772,43 +758,18 @@ public class KifParser {
         }
         return "";
     }
-    
-    private static String disGHI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.GHI);
-        if (sourceList.size() > 1) {
-            // There is ambiguity.
-            if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
-                // The source is above the destination.
-                return DOWNWARD;
-            } else if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
-                // The source is below the destination.
-                return UPWARD;
-            } else {
-                if (numWithSameY(sourceCoordinate, sourceList) > 1) {
-                    if (sourceCoordinate.getX() < destinationCoordinate.getX()) {
-                        // The source is left of the destination.
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                } else {
-                    return HORIZONTALLY;
-                }
-            }
-        }
-        return "";
-    }
-    
+        
     private static String disSUMRY(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        boolean isSente = true;
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
             Coordinate otherCoordinate = getOtherCoordinate(sourceCoordinate, sourceList);
-            if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
+            if (isBelow(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is below the destination.
-                if (otherCoordinate.getY() > destinationCoordinate.getY()) {
+                if (isBelow(otherCoordinate, destinationCoordinate, isSente)) {
                     // The other piece is also below the destination.
-                    if (sourceCoordinate.getX() > otherCoordinate.getX()) {
+                    if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
                         // The source is to left of the other.
                         return FROM_LEFT;
                     } else {
@@ -818,11 +779,11 @@ public class KifParser {
                     // Simple upwards.
                     return UPWARD;
                 }
-            } else if  (sourceCoordinate.getY() < destinationCoordinate.getY()) {
+            } else if  (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is above the destination.
-                if (otherCoordinate.getY() < destinationCoordinate.getY()) {
+                if (isAbove(otherCoordinate, destinationCoordinate, isSente)) {
                     // The other piece is also above the destination.
-                    if (sourceCoordinate.getX() > otherCoordinate.getX()) {
+                    if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
                         // The source is to left of the other.
                         return FROM_LEFT;
                     } else {
@@ -836,7 +797,7 @@ public class KifParser {
                 // The source is level with the destination.
                 if (numWithSameY(sourceCoordinate, sourceList) > 1) {
                     // Both possible pieces are level with the destination.
-                    if (sourceCoordinate.getX() > otherCoordinate.getX()) {
+                    if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
                         // The source is to left of the other.
                         return FROM_LEFT;
                     } else {
@@ -852,15 +813,16 @@ public class KifParser {
     }
         
     private static String disGUMRY(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        boolean isSente = false;
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
             Coordinate otherCoordinate = getOtherCoordinate(sourceCoordinate, sourceList);
-            if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
+            if (isBelow(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is below the destination.
-                if (otherCoordinate.getY() < destinationCoordinate.getY()) {
+                if (isBelow(otherCoordinate, destinationCoordinate, isSente)) {
                     // The other piece is also below the destination.
-                    if (sourceCoordinate.getX() < otherCoordinate.getX()) {
+                    if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
                         // The source is to left of the other.
                         return FROM_LEFT;
                     } else {
@@ -870,11 +832,11 @@ public class KifParser {
                     // Simple upward.
                     return UPWARD;
                 }           
-            } else if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
+            } else if (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is above the destination.
-                if (otherCoordinate.getY() > destinationCoordinate.getY()) {
+                if (isAbove(otherCoordinate, destinationCoordinate, isSente)) {
                     // The other piece is also above the destination.
-                    if (sourceCoordinate.getX() < otherCoordinate.getX()) {
+                    if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
                         // The source is to left of the other.
                         return FROM_LEFT;
                     } else {
@@ -888,7 +850,7 @@ public class KifParser {
                 // The source is level with the destination.
                 if (numWithSameY(sourceCoordinate, sourceList) > 1) {
                     // Both possible pieces are level with the destination.
-                    if (sourceCoordinate.getX() < otherCoordinate.getX()) {
+                    if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
                         // The source is to left of the other.
                         return FROM_LEFT;
                     } else {
