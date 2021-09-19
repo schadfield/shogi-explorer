@@ -281,9 +281,8 @@ public class KifParser {
             case GNG:
                 return disGKXI(board, sourceCoordinate, destinationCoordinate, komaType);
             case SKA:
-                return disSKA(board, sourceCoordinate, destinationCoordinate);
             case GKA:
-                return disGKA(board, sourceCoordinate, destinationCoordinate);
+                return disXKA(board, sourceCoordinate, destinationCoordinate, komaType);
             case SHI:
                 return disSHI(board, sourceCoordinate, destinationCoordinate);
             case GHI:
@@ -584,6 +583,22 @@ public class KifParser {
             return firstCoordinate.getX() > secondCoordinate.getX();
         }
     }
+    
+    static boolean isBelow(Coordinate firstCoordinate, Coordinate secondCoordinate, boolean isSente) {
+        if (isSente) {
+            return firstCoordinate.getY() > secondCoordinate.getY();
+        } else {
+            return firstCoordinate.getY() < secondCoordinate.getY();
+        }
+    }
+        
+    static boolean isAbove(Coordinate firstCoordinate, Coordinate secondCoordinate, boolean isSente) {
+        if (isSente) {
+            return firstCoordinate.getY() < secondCoordinate.getY();
+        } else {
+            return firstCoordinate.getY() > secondCoordinate.getY();
+        }
+    }
         
     private static String disSKXI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
@@ -695,16 +710,17 @@ public class KifParser {
         return "";
     }
     
-    private static String disSKA(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.SKA);
+    private static String disXKA(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        boolean isSente = komaType == Koma.Type.SKA;
+        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
             Coordinate otherCoordinate = getOtherCoordinate(sourceCoordinate, sourceList);
-            if (sourceCoordinate.getY() > destinationCoordinate.getY()) {
+            if (isBelow(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is below the destination.
-                if (otherCoordinate.getY() > destinationCoordinate.getY()) {
+                if (isBelow(otherCoordinate, destinationCoordinate, isSente)) {
                     // The other piece is also below the destination.
-                    if (sourceCoordinate.getX() > otherCoordinate.getX()) {
+                    if (onLeft(sourceCoordinate,otherCoordinate, isSente)) {
                         return FROM_LEFT;
                     } else {
                         return FROM_RIGHT;
@@ -713,11 +729,11 @@ public class KifParser {
                     // Simple upward.
                     return UPWARD;
                 }
-            } else if  (sourceCoordinate.getY() < destinationCoordinate.getY()) {
+            } else if  (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
                 // The source is above the destination.
-                if (otherCoordinate.getY() < destinationCoordinate.getY()) {
+                if (isAbove(otherCoordinate, destinationCoordinate, isSente)) {
                     // The other piece is also above the destination.
-                    if (sourceCoordinate.getX() > otherCoordinate.getX()) {
+                    if (onLeft(sourceCoordinate,otherCoordinate, isSente)) {
                         return FROM_LEFT;
                     } else {
                         return FROM_RIGHT;
@@ -731,42 +747,6 @@ public class KifParser {
         return "";
     }
     
-    private static String disGKA(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.GKA);
-        if (sourceList.size() > 1) {
-            // There is ambiguity.
-            Coordinate otherCoordinate = getOtherCoordinate(sourceCoordinate, sourceList);
-            if (sourceCoordinate.getY() < destinationCoordinate.getY()) {
-                // The source is below the destination.
-                if (otherCoordinate.getY() < destinationCoordinate.getY()) {
-                    // The other piece is also below the destination.
-                    if (sourceCoordinate.getX() < otherCoordinate.getX()) {
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                }  else {
-                    // Simple upward.
-                    return UPWARD;
-                }
-            } else if  (sourceCoordinate.getY() > destinationCoordinate.getY()) {
-                // The source is above the destination.
-                if (otherCoordinate.getY() > destinationCoordinate.getY()) {
-                    // The other piece is also above the destination.
-                    if (sourceCoordinate.getX() < otherCoordinate.getX()) {
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                }  else {
-                    // Simple downward.
-                    return DOWNWARD;
-                }
-            } 
-        }
-        return "";
-    }
-
     private static String disSHI(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate) {
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, Koma.Type.SHI);
         if (sourceList.size() > 1) {
