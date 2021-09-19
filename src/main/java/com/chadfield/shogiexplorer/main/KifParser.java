@@ -287,10 +287,9 @@ public class KifParser {
                 return disXHI(board, sourceCoordinate, destinationCoordinate, komaType);
             case SUM:
             case SRY:
-                return disSUMRY(board, sourceCoordinate, destinationCoordinate, komaType);
             case GUM:
             case GRY:
-                return disGUMRY(board, sourceCoordinate, destinationCoordinate, komaType);
+                return disXUMRY(board, sourceCoordinate, destinationCoordinate, komaType);
             default:
                 return "";
         }
@@ -759,8 +758,8 @@ public class KifParser {
         return "";
     }
         
-    private static String disSUMRY(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
-        boolean isSente = true;
+    private static String disXUMRY(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
+        boolean isSente = (komaType == Koma.Type.SUM || komaType == Koma.Type.SRY);
         List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
         if (sourceList.size() > 1) {
             // There is ambiguity.
@@ -811,60 +810,7 @@ public class KifParser {
         }
         return "";
     }
-        
-    private static String disGUMRY(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
-        boolean isSente = false;
-        List<Coordinate> sourceList = getPossibleSources(board, destinationCoordinate, komaType);
-        if (sourceList.size() > 1) {
-            // There is ambiguity.
-            Coordinate otherCoordinate = getOtherCoordinate(sourceCoordinate, sourceList);
-            if (isBelow(sourceCoordinate, destinationCoordinate, isSente)) {
-                // The source is below the destination.
-                if (isBelow(otherCoordinate, destinationCoordinate, isSente)) {
-                    // The other piece is also below the destination.
-                    if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
-                        // The source is to left of the other.
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                } else {
-                    // Simple upward.
-                    return UPWARD;
-                }           
-            } else if (isAbove(sourceCoordinate, destinationCoordinate, isSente)) {
-                // The source is above the destination.
-                if (isAbove(otherCoordinate, destinationCoordinate, isSente)) {
-                    // The other piece is also above the destination.
-                    if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
-                        // The source is to left of the other.
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                } else {
-                    // Simple downwards.
-                    return DOWNWARD;
-                } 
-            } else {
-                // The source is level with the destination.
-                if (numWithSameY(sourceCoordinate, sourceList) > 1) {
-                    // Both possible pieces are level with the destination.
-                    if (onLeft(sourceCoordinate, otherCoordinate, isSente)) {
-                        // The source is to left of the other.
-                        return FROM_LEFT;
-                    } else {
-                        return FROM_RIGHT;
-                    }
-                } else {
-                    // Simple horizontal.
-                    return HORIZONTALLY;
-                }
-            }
-        }
-        return "";
-    }
-    
+            
     private static Coordinate getOtherCoordinate(Coordinate sourceCoordinate, List<Coordinate> sourceList) {
         if (!sourceCoordinate.sameValue(sourceList.get(0))) {
             return sourceList.get(0);
