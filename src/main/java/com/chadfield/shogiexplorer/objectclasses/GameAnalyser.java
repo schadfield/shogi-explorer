@@ -329,12 +329,13 @@ public class GameAnalyser {
     
     private String getBestLine(String line, List<String> lineList) {
         String bestMove = line.split(" ")[1];
-        for (int j = lineList.size() - 1; j >= 0; j--) {
+        int lineListSize = lineList.size();
+        for (int j = lineListSize - 1; j >= 0; j--) {
             if (lineList.get(j).contains("pv " + bestMove)) {
                 return lineList.get(j);
             }
         }
-        return "";
+        return lineList.get(lineListSize - 1);
     }
 
     private Object[] getTableInsert(String lastLine, int moveNum, String japaneseMove, ArrayList<Position> pvPositionList) {
