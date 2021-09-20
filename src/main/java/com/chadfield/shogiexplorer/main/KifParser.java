@@ -27,20 +27,6 @@ import java.util.List;
  */
 public class KifParser {
 
-    public static final String PROMOTED = "成";
-    public static final String RESIGNS = "投了";
-    public static final String SUSPENDED = "中断";
-    public static final String  MADE = "まで";
-    public static final String SAME = "同";
-    public static final String ICHI = "一";
-    public static final String NI = "二";
-    public static final String SAN = "三";
-    public static final String SHI = "四";
-    public static final String GO = "五";
-    public static final String ROKU = "六";
-    public static final String NANA = "七";
-    public static final String HACHI = "八";
-    public static final String KYUU = "九";
     public static final String DATE = "開始日時：";
     public static final String PLACE = "場所：";
     public static final String TIME_LIMIT = "持ち時間：";
@@ -148,7 +134,7 @@ public class KifParser {
         
         Notation  notation = new Notation();
         notation.setEngineMove("Resigns");
-        notation.setJapanese(RESIGNS);
+        notation.setJapanese(NotationUtils.RESIGNS);
         Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), notation);
         addMoveToMoveList(moveListModel, gameNum, position.getNotation().getJapanese());
         positionList.add(position);
@@ -160,7 +146,7 @@ public class KifParser {
         
         Notation  notation = new Notation();
         notation.setEngineMove("Suspended");
-        notation.setJapanese(SUSPENDED);
+        notation.setJapanese(NotationUtils.SUSPENDED);
         Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), notation);
         addMoveToMoveList(moveListModel, gameNum, position.getNotation().getJapanese());
         positionList.add(position);
@@ -187,9 +173,9 @@ public class KifParser {
     private static void addMoveToMoveList(DefaultListModel<String> moveListModel, int gameNum, String move) {
         Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
         if (gameNum % 2 == 0) {
-            moveListModel.addElement(gameNum + trans.transliterate("\u3000☖" + move + "\n"));
+            moveListModel.addElement(gameNum + trans.transliterate(" ☖" + move + "\n"));
         } else {
-            moveListModel.addElement(gameNum + trans.transliterate("\u3000☗" + move + "\n"));
+            moveListModel.addElement(gameNum + trans.transliterate(" ☗" + move + "\n"));
         }
     }
     
@@ -210,13 +196,13 @@ public class KifParser {
         String japanese = "";
         
         if (same) {
-            japanese += SAME + piece;
+            japanese += NotationUtils.SAME + piece;
         } else {
-            japanese += getJapaneseCoordinate(thisDestination) + piece + disambiguation;
+            japanese += NotationUtils.getJapaneseCoordinate(thisDestination) + piece + disambiguation;
         }
         
         if (isPromoted(move)) {
-            japanese += PROMOTED;
+            japanese += NotationUtils.PROMOTED;
         }
         
         notation.setJapanese(japanese);
@@ -224,9 +210,6 @@ public class KifParser {
         return notation;
     }
     
-    private static String getJapaneseCoordinate(Coordinate thisCoordinate) {
-        return thisCoordinate.getX() + convertJapaneseNumber(thisCoordinate.getY());
-    }
 
     private static Notation executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
         Koma destinationKoma = getKoma(board, thisDestination);
@@ -238,7 +221,7 @@ public class KifParser {
         putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null);
               
-        return getNotation(thisSource, thisDestination, false, move, getKomaKanji(sourceKoma.getType()), disambiguation);
+        return getNotation(thisSource, thisDestination, false, move, NotationUtils.getKomaKanji(sourceKoma.getType()), disambiguation);
     }
         
     private static Notation executeSameMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
@@ -251,7 +234,7 @@ public class KifParser {
         putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null);
         
-        return getNotation(thisSource, thisDestination, true, move, getKomaKanji(sourceKoma.getType()), disambiguation);
+        return getNotation(thisSource, thisDestination, true, move, NotationUtils.getKomaKanji(sourceKoma.getType()), disambiguation);
     }
         
     private static Notation executeDropMove(Board board, Coordinate thisDestination, String move) {
@@ -265,7 +248,7 @@ public class KifParser {
             engineMove = getKomaLetter(koma.getType()) + "*" + getEngineMoveCoordinate(thisDestination);
             Notation notation = new Notation();
             notation.setEngineMove(engineMove);
-            notation.setJapanese(getJapaneseCoordinate(thisDestination) + getKomaKanji(koma.getType()) + dropNotation);
+            notation.setJapanese(NotationUtils.getJapaneseCoordinate(thisDestination) + NotationUtils.getKomaKanji(koma.getType()) + dropNotation);
             return notation;
         } catch (Exception ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
@@ -301,58 +284,7 @@ public class KifParser {
                 return null;
         }
     }
-    
-    private static String getKomaKanji(Koma.Type type) {
-        switch(type) {
-            case SFU:
-            case GFU:
-                return "歩";
-            case SGI:
-            case GGI:
-                return "銀";
-            case SHI:
-            case GHI:
-                return "飛";
-            case SKA:
-            case GKA:
-                return "角";
-            case SKE:
-            case GKE:
-                return "桂";
-            case SKI:
-            case GKI:
-                return "金";
-            case SKY:
-            case GKY:
-                return "香";
-            case STO:
-            case GTO:
-                return "と";
-            case SNY:
-            case GNY:
-                return "成香";
-            case SNK:
-            case GNK:
-                return "成桂";
-            case SNG:
-            case GNG:
-                return "成銀";
-            case SUM:
-            case GUM:
-                return "馬";
-            case SRY:
-            case GRY:
-                return "竜";
-            case SGY:
-            case SOU:
-            case GGY:
-            case GOU:
-                return "玉";
-            default:
-                return null;
-        }
-    }
- 
+     
     private static Position executeMove(Board board, String move, Coordinate lastDestination) {
         Coordinate thisDestination = new Coordinate();
         Coordinate thisSource;
@@ -434,15 +366,15 @@ public class KifParser {
         if (isDrop(move)) {
             return false;
         }
-        return move.charAt(move.indexOf('(') - 1) == PROMOTED.charAt(0);
+        return move.charAt(move.indexOf('(') - 1) == NotationUtils.PROMOTED.charAt(0);
     }
 
     private static boolean isResigns(String move) {
-        return (move.contains(RESIGNS) && !move.contains(MADE));
+        return (move.contains(NotationUtils.RESIGNS) && !move.contains(NotationUtils.MADE));
     }
 
     private static boolean isSuspended(String move) {
-        return (move.contains(SUSPENDED) && !move.contains(MADE));
+        return (move.contains(NotationUtils.SUSPENDED) && !move.contains(NotationUtils.MADE));
     }
 
     private static boolean isDrop(String move) {
@@ -450,7 +382,7 @@ public class KifParser {
     }
 
     private static boolean isSame(String move) {
-        return move.contains(SAME);
+        return move.contains(NotationUtils.SAME);
     }
 
     private static Coordinate getDestinationCoordinate(String move) {
@@ -462,53 +394,29 @@ public class KifParser {
 
     private static Integer parseJapaneseNumber(String thisChar) {
         switch (thisChar) {
-            case ICHI:
+            case NotationUtils.ICHI:
                 return 1;
-            case NI:
+            case NotationUtils.NI:
                 return 2;
-            case SAN:
+            case NotationUtils.SAN:
                 return 3;
-            case SHI:
+            case NotationUtils.SHI:
                 return 4;
-            case GO:
+            case NotationUtils.GO:
                 return 5;
-            case ROKU:
+            case NotationUtils.ROKU:
                 return 6;
-            case NANA:
+            case NotationUtils.NANA:
                 return 7;
-            case HACHI:
+            case NotationUtils.HACHI:
                 return 8;
-            case KYUU:
+            case NotationUtils.KYUU:
                 return 9;
             default:
                 return null;
         }
     }
 
-    private static String convertJapaneseNumber(int number) {
-        switch (number) {
-            case 1:
-                return ICHI;
-            case 2:
-                return NI;
-            case 3:
-                return SAN;
-            case 4:
-                return SHI;
-            case 5:
-                return GO;
-            case 6:
-                return ROKU;
-            case 7:
-                return NANA;
-            case 8:
-                return HACHI;
-            case 9:
-                return KYUU;
-            default:
-                return null;
-        }
-    }
 
 
 }

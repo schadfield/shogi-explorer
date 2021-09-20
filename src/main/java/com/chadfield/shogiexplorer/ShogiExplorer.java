@@ -77,7 +77,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             jRadioButtonMenuItem1.doClick();
         }
         analysisEngineName = prefs.get(PREF_ANALYSIS_ENGINE_NAME, "");
-        analysisTimePerMove = prefs.getInt(PREF_ANALYSIS_TIME_PER_MOVE, 5);
+        analysisTimePerMove = prefs.getInt(PREF_ANALYSIS_TIME_PER_MOVE, 3);
         analysisMistakeThreshold = prefs.getInt(PREF_ANALYSIS_MISTAKE_THRESHOLD, 250);
         analysisBlunderThreshold = prefs.getInt(PREF_ANALYSIS_BLUNDER_THRESHOLD, 500);
         analysisIgnoreThreshold = prefs.getInt(PREF_ANALYSIS_IGNORE_THRESHOLD, 2000);
@@ -89,7 +89,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             jEngineList.setSelectedIndex(0);
         }
         analysisTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-        analysisTable.getColumnModel().getColumn(0).setMinWidth(100);
+        analysisTable.getColumnModel().getColumn(0).setMinWidth(130);
         analysisTable.getColumnModel().getColumn(1).setMinWidth(40);
         analysisTable.getColumnModel().getColumn(2).setMinWidth(100);
         analysisTable.getColumnModel().getColumn(3).setMinWidth(40);
@@ -458,7 +458,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         commentTextArea.setFocusable(false);
         commentScrollPane.setViewportView(commentTextArea);
 
-        moveList.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         moveList.setModel(moveListModel);
         moveList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         moveList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -814,7 +813,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisEngineComboBox.setPreferredSize(new Dimension(220, comboSize.height));
         analysisTimePerMoveSpinner.setModel(new SpinnerNumberModel(
                 analysisTimePerMove,
-                5,
+                3,
                 60,
                 1
         ));

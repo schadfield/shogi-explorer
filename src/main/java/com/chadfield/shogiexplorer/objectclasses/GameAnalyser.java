@@ -11,7 +11,9 @@ import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Koma;
 import com.chadfield.shogiexplorer.objects.Notation;
 import com.chadfield.shogiexplorer.objects.Position;
+import com.chadfield.shogiexplorer.utils.NotationUtils;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
+import com.ibm.icu.text.Transliterator;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +54,7 @@ public class GameAnalyser {
         setOptions(engine);
         getReady();
         String engineMove = null;
+        String japaneseMove = null;
         String sfen = null;
         String lastSFEN = null;
         int count = 0;
@@ -60,16 +63,23 @@ public class GameAnalyser {
             if (engineMove != null) {
                 count++;
                 updateMoveList(moveList, count);
-                analysePosition(game, lastSFEN, engineMove, analysisTable, count);
+                analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, count);
             } 
             lastSFEN = sfen;
             sfen = position.getGameSFEN();
             engineMove = position.getNotation().getEngineMove();
+            Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
+
+            if (count % 2 == 0) {
+                japaneseMove = trans.transliterate(" ☗" + position.getNotation().getJapanese());
+            } else {
+                japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
+            }
         }
 
         count++;
         updateMoveList(moveList, count);
-        analysePosition(game, lastSFEN, engineMove, analysisTable, count);
+        analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, count);
         
         quitEngine();
     }
@@ -139,7 +149,7 @@ public class GameAnalyser {
         process.destroy();
     }
 
-    private void analysePosition(Game game, String sfen, String engineMove, JTable analysisTable, int moveNum) throws IOException {
+    private void analysePosition(Game game, String sfen, String engineMove, String japaneseMove, JTable analysisTable, int moveNum) throws IOException {
         stdin.write(("position sfen " + sfen + " " + engineMove + "\n").getBytes());
         stdin.write(("go btime 0 wtime 0 byoyomi " + analysisTimePerMove*1000 + "\n").getBytes());
         stdin.flush();
@@ -148,53 +158,96 @@ public class GameAnalyser {
         while ((line = bufferedReader.readLine()) != null) {
             if (line.contains("bestmove")) {
                 String bestLine = getBestLine(line, lineList);
-                updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, engineMove));
-                game.getAnalysisPositionList().add(getBestLineList(sfen, bestLine));
+                ArrayList<Position> pvPositionList = getPVPositionList(sfen, bestLine);
+                updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, japaneseMove, pvPositionList));
+                game.getAnalysisPositionList().add(pvPositionList);
                 return;
             }
             lineList.add(line);
         }
     }
     
-    private ArrayList<Position> getBestLineList(String sfen, String bestLine) {
+    private ArrayList<Position> getPVPositionList(String sfen, String bestLine) {
         ArrayList<Position> result = new ArrayList<>();
         String currentSfen = sfen;
+        Coordinate lastDestination = null;
         for (String move : getBestLineMoveList(bestLine)) {
-            Position position = getPosition(currentSfen, move);
+            Position position = getPosition(currentSfen, move, lastDestination);
             result.add(position);
             currentSfen  = position.getGameSFEN();
+            lastDestination = position.getDestination();
         }
         return result;
     }
     
-    private Position getPosition(String sfen, String move) {
+    private Position getPosition(String sfen, String move, Coordinate lastDestination) {
         Board board  = SFENParser.parse(sfen);
-        executeMove(board, move);
-        Notation notation = new Notation();
+        Notation notation = executeMove(board, move, lastDestination);
         return new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), notation);
     } 
     
-    private Board executeMove(Board board, String move) {
+    private Notation executeMove(Board board, String move, Coordinate lastDestination) {
         Coordinate thisDestination;
         Coordinate thisSource;
+        Koma.Type sourceKomaType;
+        boolean isDrop = isDrop(move);
+        String disambiguation;
         
         thisDestination = getDestinationCoordinate(move);
-        if (isDrop(move)) {
+        if (thisDestination == null) {
+            Notation notation = new Notation();
+            notation.setJapanese(move);
+            return notation;
+        }
+        if (isDrop) {
             thisSource = null;
-            if (thisDestination != null) {
-                executeDropMove(board, thisDestination, move);
-            }
+            Koma sourceKoma = ParserUtils.getDropKoma(move.substring(0, 1), board.getNextTurn());
+            sourceKomaType = sourceKoma.getType();
+            disambiguation = NotationUtils.getDropNotation(board, thisDestination, sourceKomaType);
+            executeDropMove(board, thisDestination, move, sourceKoma);
+            
         } else {
             thisSource = getSourceCoordinate(move);
-            if (thisSource != null && thisDestination != null) {
-                executeRegularMove(board, thisSource, thisDestination, move);
-            }
+            Koma sourceKoma = getKoma(board, thisSource);
+            sourceKomaType = sourceKoma.getType();
+            disambiguation = NotationUtils.getDisambiguation(board, thisSource, thisDestination, sourceKomaType);
+            executeRegularMove(board, thisSource, thisDestination, sourceKoma, move);
         }
+        
         board.setNextTurn(ParserUtils.switchTurn(board.getNextTurn()));
         board.setSource(thisSource);
         board.setDestination(thisDestination);
         board.setMoveCount(board.getMoveCount()+1);
-        return board;
+        
+        Notation notation = new Notation();
+        notation.setJapanese(getNotation(board, lastDestination, sourceKomaType, isDrop, move, disambiguation));
+
+        return notation;
+    }
+    
+    private static String getNotation(Board board, Coordinate lastDestination, Koma.Type sourceKomaType, boolean isDrop, String move, String disambiguation) {
+        String result;
+        if (board.getNextTurn() == Board.Turn.GOTE) {
+            result = "☗";
+        } else {
+            result = "☖";
+        }  
+        
+        Coordinate destination = board.getDestination();
+        if (lastDestination != null && destination.sameValue(lastDestination)) {
+            result += NotationUtils.SAME;
+        } else {
+            result +=  NotationUtils.getJapaneseCoordinate(destination);
+        }
+        
+        result += NotationUtils.getKomaKanji(sourceKomaType);
+        result += disambiguation;
+        if (!isDrop) {
+            if (isPromoted(move)) {
+                result += NotationUtils.PROMOTED;
+            }
+        }
+        return result;
     }
     
     private static void removePieceInHand(Koma.Type komaType, Board board) {
@@ -205,31 +258,23 @@ public class GameAnalyser {
         }
     }
         
-    private static void executeDropMove(Board board, Coordinate thisDestination, String move) {
-        Koma koma;
+    private static void executeDropMove(Board board, Coordinate thisDestination, String move, Koma sourceKoma) {
         try {
-            koma = ParserUtils.getDropKoma(move.substring(0, 1), board.getNextTurn());
-            if (koma == null) {
-                return;
-            }
-            putKoma(board, thisDestination, koma);
-            removePieceInHand(koma.getType(), board);
+            putKoma(board, thisDestination, sourceKoma);
+            removePieceInHand(sourceKoma.getType(), board);
         } catch (Exception ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
         
-    private void executeRegularMove(Board board, Coordinate thisSource, Coordinate thisDestination, String move) {
+    private void executeRegularMove(Board board, Coordinate thisSource, Coordinate thisDestination, Koma sourceKoma, String move) {
         if (getKoma(board, thisDestination) != null) {
             Koma thisKoma = getKoma(board, thisDestination);
             if (thisKoma != null) {
                 ParserUtils.addPieceToInHand(getKoma(board, thisDestination), board);
             }
         }
-        Koma thisKoma = getKoma(board, thisSource);
-        if (thisKoma != null) {
-            putKoma(board, thisDestination, promCheck(thisKoma, move));
-        }
+        putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null); 
     }
     
@@ -241,7 +286,6 @@ public class GameAnalyser {
         }
     }
     
-
     private static boolean isPromoted(String move) {
         return move.charAt(move.length()-1) == '+';
     }
@@ -300,12 +344,11 @@ public class GameAnalyser {
         return "";
     }
 
-    private Object[] getTableInsert(String lastLine, int moveNum, String engineMove) {
+    private Object[] getTableInsert(String lastLine, int moveNum, String japaneseMove, ArrayList<Position> pvPositionList) {
         boolean lower = false;
         boolean upper = false;
         boolean foundPV = false;
         String score = "";
-        String pvStr = "";
         String[] splitLine = lastLine.split(" ");
         for (int i = 0; i < splitLine.length; i++) {
             if (!foundPV) {
@@ -325,24 +368,27 @@ public class GameAnalyser {
                         score = getMateScore(moveNum, splitLine[i+1]);
                         break;
                     case "pv":
-                        StringBuilder stringBuilder = new StringBuilder();
-                        for (int j = i+1; j < splitLine.length; j++ ) {
-                            stringBuilder.append(splitLine[j]);
-                            stringBuilder.append(" ");
-                        }
-                        pvStr = stringBuilder.toString().trim();
                         foundPV = true;
                         break;
                     default:
                 }       
             }
         }
+        
+        String pvStr = "";
+        for (Position position: pvPositionList) {
+            pvStr += position.getNotation().getJapanese() + " ";
+        }
 
         String lowUp = getLowUpString(lower, upper);
+        Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
+        
+        pvStr = trans.transliterate(pvStr);
 
-        return new Object[]{moveNum + " " + engineMove, "", score, lowUp, pvStr};
+
+        return new Object[]{moveNum + japaneseMove, "", score, lowUp, pvStr};
     }
-    
+        
     private List<String> getBestLineMoveList(String line) {
         List<String> result = new ArrayList<>();
         boolean foundPV = false;

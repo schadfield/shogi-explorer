@@ -13,7 +13,11 @@ import java.util.Objects;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class NotationUtils {
-
+    
+    public static final String PROMOTED = "成";
+    public static final String RESIGNS = "投了";
+    public static final String SUSPENDED = "中断";
+    public static final String MADE = "まで";
     public static final String DROPPED = "打";
     public static final String DOWNWARD = "引";
     public static final String HORIZONTALLY = "寄";
@@ -22,6 +26,16 @@ public class NotationUtils {
     public static final String FROM_LEFT = "左";
     public static final String VERTICAL = "直";
     public static final String UPWARD_UD = "行";
+    public static final String ICHI = "一";
+    public static final String NI = "二";
+    public static final String SAN = "三";
+    public static final String SHI = "四";
+    public static final String GO = "五";
+    public static final String ROKU = "六";
+    public static final String NANA = "七";
+    public static final String HACHI = "八";
+    public static final String KYUU = "九";
+    public static final String SAME = "同";
 
     private static boolean onBoard(Coordinate coordinate) {
         return coordinate.getX() > 0 && coordinate.getX() < 10 && coordinate.getY() > 0 && coordinate.getY() < 10;
@@ -502,6 +516,86 @@ public class NotationUtils {
             return DROPPED;
         }
         return "";
+    }
+
+    private static String convertJapaneseNumber(int number) {
+        switch (number) {
+            case 1:
+                return ICHI;
+            case 2:
+                return NI;
+            case 3:
+                return SAN;
+            case 4:
+                return SHI;
+            case 5:
+                return GO;
+            case 6:
+                return ROKU;
+            case 7:
+                return NANA;
+            case 8:
+                return HACHI;
+            case 9:
+                return KYUU;
+            default:
+                return null;
+        }
+    }
+    
+    public static String getKomaKanji(Koma.Type type) {
+        switch(type) {
+            case SFU:
+            case GFU:
+                return "歩";
+            case SGI:
+            case GGI:
+                return "銀";
+            case SHI:
+            case GHI:
+                return "飛";
+            case SKA:
+            case GKA:
+                return "角";
+            case SKE:
+            case GKE:
+                return "桂";
+            case SKI:
+            case GKI:
+                return "金";
+            case SKY:
+            case GKY:
+                return "香";
+            case STO:
+            case GTO:
+                return "と";
+            case SNY:
+            case GNY:
+                return "成香";
+            case SNK:
+            case GNK:
+                return "成桂";
+            case SNG:
+            case GNG:
+                return "成銀";
+            case SUM:
+            case GUM:
+                return "馬";
+            case SRY:
+            case GRY:
+                return "竜";
+            case SGY:
+            case SOU:
+            case GGY:
+            case GOU:
+                return "玉";
+            default:
+                return null;
+        }
+    }
+
+    public static String getJapaneseCoordinate(Coordinate thisCoordinate) {
+        return thisCoordinate.getX() + convertJapaneseNumber(thisCoordinate.getY());
     }
     
     private NotationUtils() {
