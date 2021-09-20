@@ -204,7 +204,7 @@ public class GameAnalyser {
             Koma sourceKoma = ParserUtils.getDropKoma(move.substring(0, 1), board.getNextTurn());
             sourceKomaType = sourceKoma.getType();
             disambiguation = NotationUtils.getDropNotation(board, thisDestination, sourceKomaType);
-            executeDropMove(board, thisDestination, move, sourceKoma);
+            executeDropMove(board, thisDestination, sourceKoma);
             
         } else {
             thisSource = getSourceCoordinate(move);
@@ -242,10 +242,8 @@ public class GameAnalyser {
         
         result += NotationUtils.getKomaKanji(sourceKomaType);
         result += disambiguation;
-        if (!isDrop) {
-            if (isPromoted(move)) {
-                result += NotationUtils.PROMOTED;
-            }
+        if (!isDrop && isPromoted(move)) {
+            result += NotationUtils.PROMOTED;
         }
         return result;
     }
@@ -258,7 +256,7 @@ public class GameAnalyser {
         }
     }
         
-    private static void executeDropMove(Board board, Coordinate thisDestination, String move, Koma sourceKoma) {
+    private static void executeDropMove(Board board, Coordinate thisDestination, Koma sourceKoma) {
         try {
             putKoma(board, thisDestination, sourceKoma);
             removePieceInHand(sourceKoma.getType(), board);
@@ -291,15 +289,10 @@ public class GameAnalyser {
     }
     
     public static void putKoma(Board board, Coordinate coords, Koma koma) {
-        if (coords != null) {
             board.getMasu()[9 - coords.getX()][coords.getY() - 1] = koma;
-        }
     }
     
     public static Koma getKoma(Board board, Coordinate coords) {
-        if (coords == null) {
-            return null;
-        }
         return board.getMasu()[9 - coords.getX()][coords.getY() - 1];
     }
     
@@ -375,16 +368,18 @@ public class GameAnalyser {
             }
         }
         
-        String pvStr = "";
-        for (Position position: pvPositionList) {
-            pvStr += position.getNotation().getJapanese() + " ";
-        }
-
-        String lowUp = getLowUpString(lower, upper);
-        Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
+        StringBuilder pvBuilder = new StringBuilder("");
         
-        pvStr = trans.transliterate(pvStr);
+        for (Position position: pvPositionList) {
+            pvBuilder.append(position.getNotation().getJapanese());
+            pvBuilder.append(" ");
+        }
+        
 
+        Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
+        String pvStr = trans.transliterate(pvBuilder.toString().trim());
+        
+        String lowUp = getLowUpString(lower, upper);
 
         return new Object[]{moveNum + japaneseMove, "", score, lowUp, pvStr};
     }
