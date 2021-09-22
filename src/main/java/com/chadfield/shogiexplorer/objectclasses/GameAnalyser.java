@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JList;
@@ -44,7 +45,8 @@ public class GameAnalyser {
     private int analysisBlunderThreshold;
     private int analysisIgnoreThreshold;
 
-    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam) throws IOException {
+    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing) throws IOException {
+        analysing.set(true);
         this.analysisTimePerMove = analysisParam.getAnalysisTimePerMove();
         this.analysisMistakeThreshold = analysisParam.getAnalysisMistakeThreshold();
         this.analysisBlunderThreshold = analysisParam.getAnalysisBlunderThreshold();
@@ -82,6 +84,7 @@ public class GameAnalyser {
         analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, count);
         
         quitEngine();
+        analysing.set(false);
     }
 
     private void updateMoveList(JList<String> moveList, final int index) {

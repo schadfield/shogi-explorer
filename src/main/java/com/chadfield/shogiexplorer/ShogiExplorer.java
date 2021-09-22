@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
@@ -41,6 +42,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     boolean play;
     boolean browse;
     int browsePos;
+    AtomicBoolean analysing = new AtomicBoolean(false);
     DefaultListModel<String> moveListModel = new DefaultListModel<>();
     DefaultListModel<String> engineListModel = new DefaultListModel<>();
     boolean rotatedView;
@@ -654,25 +656,25 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
-        if (!play && game != null && moveNumber < game.getPositionList().size() + 1) {
+        if (!play && game != null  && !analysing.get() && moveNumber < game.getPositionList().size() + 1) {
             moveList.setSelectedIndex(moveNumber + 1);
         }
     }//GEN-LAST:event_mediaForwardActionPerformed
 
     private void mediaBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaBackActionPerformed
-        if (!play && moveNumber > 0) {
+        if (!play && moveNumber > 0 && !analysing.get()) {
             moveList.setSelectedIndex(moveNumber - 1);
         }
     }//GEN-LAST:event_mediaBackActionPerformed
 
     private void mediaStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaStartActionPerformed
-        if (!play) {
+        if (!play && !analysing.get()) {
             moveList.setSelectedIndex(0);
         }
     }//GEN-LAST:event_mediaStartActionPerformed
 
     private void mediaEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaEndActionPerformed
-        if (!play && game != null) {
+        if (!play && game != null && !analysing.get()) {
             moveList.setSelectedIndex(game.getPositionList().size() - 1);
         }
     }//GEN-LAST:event_mediaEndActionPerformed
@@ -682,7 +684,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_mediaStopActionPerformed
 
     private void mediaPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaPlayActionPerformed
-        if (!play && game != null) {
+        if (!play && game != null && !analysing.get()) {
             new Thread() {
                 @Override
                 public void run() {
@@ -708,7 +710,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private class AnalysisTableListener implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent evt) {
-            if (!evt.getValueIsAdjusting() && !inSelectionChange) {
+            if (!evt.getValueIsAdjusting() && !inSelectionChange && !analysing.get()) {
                 browse = false;
                 if (evt.getFirstIndex() + 1 == moveNumber) {
                     moveList.setSelectedIndex(evt.getLastIndex() + 1);
@@ -744,7 +746,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_moveListValueChanged
 
     private void mediaReverseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaReverseActionPerformed
-        if (!play) {
+        if (!play && !analysing.get()) {
             new Thread() {
                 @Override
                 public void run() {
@@ -845,6 +847,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (analysing.get()) {
+            return;
+        }
         browse = false;
         analysisEngineName = (String) analysisEngineComboBox.getSelectedItem();
         analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
@@ -874,7 +879,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
                 analysisTableModel.getDataVector().clear();
                 try {
-                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam);
+                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -888,6 +893,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void analysisTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_analysisTableKeyReleased
+        if (analysing.get()) {
+            return;
+        }
         int keyCode = evt.getKeyCode();
         Position position;
         switch(keyCode) {
@@ -906,8 +914,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         RenderBoard.loadBoard(board, boardPanel, rotatedView);
                         break;
                     }
-                
-                
+
+
                 position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
                 board = SFENParser.parse(position.getGameSFEN());
                 board.setSource(position.getSource());
@@ -925,7 +933,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     browse = true;
                     browsePos = 0;
                 }
-                
+
                 position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
                 board = SFENParser.parse(position.getGameSFEN());
                 board.setSource(position.getSource());
