@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JFrame;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ListSelectionEvent;
@@ -84,7 +85,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         this.kifFileFilter = new FileNameExtensionFilter(bundle.getString("label_kif_files"), "kif");
         System.setProperty("apple.laf.useScreenMenuBar", "true");
+
         initComponents();
+
         jTabbedPane1.setForeground(Color.BLACK);
         board = SFENParser.parse("lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
@@ -149,6 +152,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisIgnoreSpinner = new javax.swing.JSpinner();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        JRadioButton graph1000Button = new JRadioButton("1000");
+        buttonGroup1.add(graph1000Button);
+        JRadioButton graph2000Button = new JRadioButton("2000");
+        buttonGroup1.add(graph2000Button);
+        JRadioButton graph3000Button = new JRadioButton("3000");
+        buttonGroup1.add(graph3000Button);
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
@@ -173,6 +183,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         analysisTable = new javax.swing.JTable();
+        jRadioButton1 = new javax.swing.JRadioButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -182,6 +193,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
         jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem3 = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem4 = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem5 = new javax.swing.JRadioButtonMenuItem();
 
         jKifFileChooser.setFileFilter(kifFileFilter);
 
@@ -530,6 +544,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jScrollPane2.TabConstraints.tabTitle"), jScrollPane2); // NOI18N
 
+        jRadioButton1.setText(bundle.getString("ShogiExplorer.jRadioButton1.text")); // NOI18N
+
         fileMenu.setText(bundle.getString("ShogiExplorer.fileMenu.text_1")); // NOI18N
 
         jMenuItem1.setText(bundle.getString("ShogiExplorer.jMenuItem1.text_1")); // NOI18N
@@ -575,6 +591,34 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         viewMenu.add(jRadioButtonMenuItem1);
+
+        buttonGroup1.add(jRadioButtonMenuItem3);
+        jRadioButtonMenuItem3.setSelected(true);
+        jRadioButtonMenuItem3.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem3.text")); // NOI18N
+        jRadioButtonMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMenuItem3ActionPerformed(evt);
+            }
+        });
+        viewMenu.add(jRadioButtonMenuItem3);
+
+        buttonGroup1.add(jRadioButtonMenuItem4);
+        jRadioButtonMenuItem4.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem4.text")); // NOI18N
+        jRadioButtonMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMenuItem4ActionPerformed(evt);
+            }
+        });
+        viewMenu.add(jRadioButtonMenuItem4);
+
+        buttonGroup1.add(jRadioButtonMenuItem5);
+        jRadioButtonMenuItem5.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem5.text")); // NOI18N
+        jRadioButtonMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMenuItem5ActionPerformed(evt);
+            }
+        });
+        viewMenu.add(jRadioButtonMenuItem5);
 
         jMenuBar1.add(viewMenu);
 
@@ -994,6 +1038,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_analysisTableKeyReleased
 
+    private void jRadioButtonMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem3ActionPerformed
+        chart.getCategoryPlot().getRangeAxis().setRange(-1000, 1000);
+    }//GEN-LAST:event_jRadioButtonMenuItem3ActionPerformed
+
+    private void jRadioButtonMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem4ActionPerformed
+        chart.getCategoryPlot().getRangeAxis().setRange(-2000, 2000);
+    }//GEN-LAST:event_jRadioButtonMenuItem4ActionPerformed
+
+    private void jRadioButtonMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem5ActionPerformed
+        chart.getCategoryPlot().getRangeAxis().setRange(-3000, 3000);
+    }//GEN-LAST:event_jRadioButtonMenuItem5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1026,6 +1082,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JTable analysisTable;
     private javax.swing.JSpinner analysisTimePerMoveSpinner;
     private javax.swing.JPanel boardPanel;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JScrollPane commentScrollPane;
     private javax.swing.JTextArea commentTextArea;
     private javax.swing.JButton configureEngineButton;
@@ -1062,7 +1119,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem3;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem4;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
