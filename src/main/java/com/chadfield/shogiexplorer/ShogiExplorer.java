@@ -21,6 +21,7 @@ import com.chadfield.shogiexplorer.objects.AnalysisParameter;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Position;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -32,6 +33,15 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
@@ -62,6 +72,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
     int analysisBlunderThreshold;
     static final String PREF_ANALYSIS_IGNORE_THRESHOLD = "analysisLosingThreshold";
     int analysisIgnoreThreshold;
+    CategoryDataset plotDataset;
+    JFreeChart chart;
+    ChartPanel chartPanel;
 
     /**
      * Creates new form NewJFrame
@@ -72,6 +85,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         this.kifFileFilter = new FileNameExtensionFilter(bundle.getString("label_kif_files"), "kif");
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         initComponents();
+        jTabbedPane1.setForeground(Color.BLACK);
         board = SFENParser.parse("lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
         String rotated = prefs.get(PREF_ROTATED, "false");
@@ -97,6 +111,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.getColumnModel().getColumn(3).setMinWidth(40);
         analysisTable.getColumnModel().getColumn(4).setMinWidth(1000);
         analysisTable.getSelectionModel().addListSelectionListener(new AnalysisTableListener());
+        UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
     }
 
     /**
@@ -155,6 +170,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         moveListScrollPane = new javax.swing.JScrollPane();
         moveList = new javax.swing.JList<>();
         boardPanel = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         analysisTable = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -491,6 +507,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
             .addGap(0, 480, Short.MAX_VALUE)
         );
 
+        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
+
         analysisTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -508,6 +527,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(analysisTable);
+
+        jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jScrollPane2.TabConstraints.tabTitle"), jScrollPane2); // NOI18N
 
         fileMenu.setText(bundle.getString("ShogiExplorer.fileMenu.text_1")); // NOI18N
 
@@ -566,6 +587,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTabbedPane1)
                     .addComponent(mainToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(boardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -575,8 +597,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                                 .addComponent(moveListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE))
-                            .addComponent(gameScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(gameScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -594,7 +615,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                             .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(boardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -866,6 +887,32 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setAnalysisMistakeThreshold(analysisMistakeThreshold);
         analysisParam.setAnalysisBlunderThreshold(analysisBlunderThreshold);
         analysisParam.setAnalysisIgnoreThreshold(analysisIgnoreThreshold);
+        plotDataset = new DefaultCategoryDataset();  
+        chart = ChartFactory.createBarChart(  
+            null, //Chart Title  
+            null, // Category axis  
+            null, // Value axis  
+            plotDataset,  
+            PlotOrientation.VERTICAL,  
+            false,true,false  
+        );   
+        
+        CategoryPlot plot = chart.getCategoryPlot();
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+
+        Color color = new Color(56, 170, 191);
+        renderer.setSeriesPaint(0, color);        
+        plot.getDomainAxis().setVisible(false);
+        plot.getDomainAxis().setLowerMargin(0.001);
+        plot.getDomainAxis().setUpperMargin(0.001);
+        plot.getRangeAxis().setRange(-1000, 1000);
+        ((BarRenderer) plot.getRenderer()).setBarPainter(new StandardBarPainter());
+        chartPanel = new ChartPanel(chart); 
+        if (jTabbedPane1.getTabCount() < 2) {
+            jTabbedPane1.add(chartPanel, "");
+        } else {
+            jTabbedPane1.setComponentAt(1, chartPanel);
+        }
         new Thread() {
             @Override
             public void run() {
@@ -879,7 +926,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
                 analysisTableModel.getDataVector().clear();
                 try {
-                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing);
+                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, (DefaultCategoryDataset) plotDataset);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -956,7 +1003,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
             * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
              */
-            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());            
             //</editor-fold>
         } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
@@ -1018,6 +1065,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar mainToolBar;
     private javax.swing.JButton mediaBack;
     private javax.swing.JButton mediaEnd;

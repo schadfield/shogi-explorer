@@ -28,6 +28,8 @@ import java.util.logging.Logger;
 import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
@@ -45,7 +47,7 @@ public class GameAnalyser {
     private int analysisBlunderThreshold;
     private int analysisIgnoreThreshold;
 
-    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing) throws IOException {
+    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, DefaultCategoryDataset plotDataset) throws IOException {
         analysing.set(true);
         this.analysisTimePerMove = analysisParam.getAnalysisTimePerMove();
         this.analysisMistakeThreshold = analysisParam.getAnalysisMistakeThreshold();
@@ -65,7 +67,7 @@ public class GameAnalyser {
             if (engineMove != null) {
                 count++;
                 updateMoveList(moveList, count);
-                analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, count);
+                analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count);
             } 
             lastSFEN = sfen;
             sfen = position.getGameSFEN();
@@ -81,7 +83,7 @@ public class GameAnalyser {
 
         count++;
         updateMoveList(moveList, count);
-        analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, count);
+        analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count);
         
         quitEngine();
         analysing.set(false);
@@ -152,7 +154,7 @@ public class GameAnalyser {
         process.destroy();
     }
 
-    private void analysePosition(Game game, String sfen, String engineMove, String japaneseMove, JTable analysisTable, int moveNum) throws IOException {
+    private void analysePosition(Game game, String sfen, String engineMove, String japaneseMove, JTable analysisTable, DefaultCategoryDataset plotDataset, int moveNum) throws IOException {
         stdin.write(("position sfen " + sfen + " " + engineMove + "\n").getBytes());
         stdin.write(("go btime 0 wtime 0 byoyomi " + analysisTimePerMove*1000 + "\n").getBytes());
         stdin.flush();
@@ -162,7 +164,7 @@ public class GameAnalyser {
             if (line.contains("bestmove")) {
                 String bestLine = getBestLine(line, lineList);
                 ArrayList<Position> pvPositionList = getPVPositionList(sfen, bestLine);
-                updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, japaneseMove, pvPositionList));
+                updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, japaneseMove, pvPositionList, plotDataset));
                 game.getAnalysisPositionList().add(pvPositionList);
                 return;
             }
@@ -341,11 +343,12 @@ public class GameAnalyser {
         return lineList.get(lineListSize - 1);
     }
 
-    private Object[] getTableInsert(String lastLine, int moveNum, String japaneseMove, ArrayList<Position> pvPositionList) {
+    private Object[] getTableInsert(String lastLine, int moveNum, String japaneseMove, ArrayList<Position> pvPositionList, DefaultCategoryDataset plotDataset) {
         boolean lower = false;
         boolean upper = false;
         boolean foundPV = false;
-        String score = "";
+        int score = 0;
+        String scoreStr = "";
         String[] splitLine = lastLine.split(" ");
         for (int i = 0; i < splitLine.length; i++) {
             if (!foundPV) {
@@ -358,11 +361,19 @@ public class GameAnalyser {
                         break;
                     case "cp":
                         score = getScore(moveNum, splitLine[i+1]);
-                        opinion = compareScore(moveNum, lastScore,  score);
-                        lastScore = String.copyValueOf(score.toCharArray());
+                        scoreStr = Integer.toString(score);
+                        opinion = compareScore(moveNum, lastScore,  scoreStr);
+                        lastScore = String.copyValueOf(scoreStr.toCharArray());
+                        String moveStr;
+                        if (moveNum % 2 == 0) {
+                            moveStr = "s";
+                        } else {
+                            moveStr = "b";
+                        }
+                        plotDataset.addValue(score,  "B", moveNum + "");
                         break;
                     case "mate":
-                        score = getMateScore(moveNum, splitLine[i+1]);
+                        scoreStr = getMateScore(moveNum, splitLine[i+1]);
                         break;
                     case "pv":
                         foundPV = true;
@@ -385,7 +396,7 @@ public class GameAnalyser {
         
         String lowUp = getLowUpString(lower, upper);
 
-        return new Object[]{moveNum + japaneseMove, "", score, lowUp, pvStr};
+        return new Object[]{moveNum + japaneseMove, "", scoreStr, lowUp, pvStr};
     }
         
     private List<String> getBestLineMoveList(String line) {
@@ -483,11 +494,11 @@ public class GameAnalyser {
         return score;
     }
 
-    private String getScore(int moveNum, String value) {
+    private int getScore(int moveNum, String value) {
         if (moveNum % 2 != 0) {
-            return value;
+            return Integer.parseInt(value);
         } else {
-            return Integer.toString(Integer.parseInt(value) * -1);
+            return Integer.parseInt(value) * -1;
         }
     }
 
