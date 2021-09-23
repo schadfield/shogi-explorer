@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JList;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.plot.XYPlot;
@@ -64,6 +65,9 @@ public class GameAnalyser {
     XYPlot plot;
     int range;
     String scoreStr;
+    JRadioButtonMenuItem graphView1;
+    JRadioButtonMenuItem graphView2;
+    JRadioButtonMenuItem graphView3;
 
     
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot) throws IOException {
@@ -74,6 +78,9 @@ public class GameAnalyser {
         this.analysisMistakeThreshold = analysisParam.getAnalysisMistakeThreshold();
         this.analysisBlunderThreshold = analysisParam.getAnalysisBlunderThreshold();
         this.analysisIgnoreThreshold = analysisParam.getAnalysisIgnoreThreshold();
+        this.graphView1 = analysisParam.getGraphView1();
+        this.graphView2 = analysisParam.getGraphView2();
+        this.graphView3 = analysisParam.getGraphView3();
         initializeEngine(engine);
         initiateUSIProtocol();
         setOptions(engine);
@@ -415,15 +422,20 @@ public class GameAnalyser {
     private void processScore(int score, int moveNum, DefaultIntervalXYDataset plotDataset) {
         int testRange = Math.abs(score);
         int newRange;
+        JRadioButtonMenuItem thisItem;
         if (testRange > 2000) {
             newRange = 3000;
+            thisItem = graphView3;
         } else if (testRange > 1000) {
             newRange = 2000;
+            thisItem = graphView3;
         } else {
             newRange = 1000;
+            thisItem = graphView3;
         }
         if (newRange > range) {
             range = newRange;
+            thisItem.setSelected(true);
             plot.getRangeAxis().setRange(-range, range);
         }
 
