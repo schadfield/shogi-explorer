@@ -30,7 +30,6 @@ import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.DefaultIntervalXYDataset;
 
 /**
@@ -64,6 +63,8 @@ public class GameAnalyser {
     double[][] data2 = new double[][] {x2, x2Start, x2End, y2, y2Start, y2End};
     XYPlot plot;
     int range;
+    String scoreStr;
+
     
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, DefaultIntervalXYDataset plotDataset) throws IOException {
         analysing.set(true);
@@ -366,8 +367,7 @@ public class GameAnalyser {
         boolean lower = false;
         boolean upper = false;
         boolean foundPV = false;
-        int score = 0;
-        String scoreStr = "";
+        int score;
         String[] splitLine = lastLine.split(" ");
         for (int i = 0; i < splitLine.length; i++) {
             if (!foundPV) {
@@ -380,95 +380,11 @@ public class GameAnalyser {
                         break;
                     case "cp":
                         score = getScore(moveNum, splitLine[i+1]);
-                        int testRange = Math.abs(score);
-                        int newRange;
-                        if (testRange > 2000) {
-                            newRange = 3000;
-                        } else if (testRange > 1000) {
-                            newRange = 2000;
-                        } else {
-                            newRange = 1000;
-                        }
-                        if (newRange > range) {
-                            range = newRange;
-                            plot.getRangeAxis().setRange(-range, range);
-                        }
-                        
-                        scoreStr = Integer.toString(score);
-                        opinion = compareScore(moveNum, lastScore,  scoreStr);
-                        lastScore = String.copyValueOf(scoreStr.toCharArray());
-                        System.out.println("moveNum: " + moveNum);
-                        
-                        if (moveNum < 50) {
-                            plot.getDomainAxis().setRange(0, 49);
-                        } else if (moveNum == 50) {
-                            plot.getDomainAxis().setAutoRange(true);
-                        }
-                        if (moveNum % 2 == 0) {
-                            x1Start = arrayAppend(x1Start, moveNum-1);
-                            x1 = arrayAppend(x1, moveNum-0.5);
-                            x1End = arrayAppend(x1End, moveNum);
-                            y1Start = arrayAppend(y1Start, 0);
-                            y1 = arrayAppend(y1, score);
-                            y1End = arrayAppend(y1End, 0);
-                            data1 = new double[][] {x1, x1Start, x1End, y1, y1Start, y1End};
-                            plotDataset.addSeries("S", data1);
-                        } else {
-                            x2Start = arrayAppend(x2Start, moveNum-1);
-                            x2 = arrayAppend(x2, moveNum-0.5);
-                            x2End = arrayAppend(x2End, moveNum);
-                            y2Start = arrayAppend(y2Start, 0);
-                            y2 = arrayAppend(y2, score);
-                            y2End = arrayAppend(y2End, 0);
-                            data2 = new double[][] {x2, x2Start, x2End, y2, y2Start, y2End};
-                            plotDataset.addSeries("G", data2);
-                        }
+                        processScore(score, moveNum, plotDataset);
                         break;
                     case "mate":
-                        score = 31111;
-                        int testRange2 = Math.abs(score);
-                        int newRange2;
-                        if (testRange2 > 2000) {
-                            newRange2 = 3000;
-                        } else if (testRange2 > 1000) {
-                            newRange2 = 2000;
-                        } else {
-                            newRange2 = 1000;
-                        }
-                        if (newRange2 > range) {
-                            range = newRange2;
-                            plot.getRangeAxis().setRange(-range, range);
-                        }
-                        
-                        scoreStr = Integer.toString(score);
-                        opinion = compareScore(moveNum, lastScore,  scoreStr);
-                        lastScore = String.copyValueOf(scoreStr.toCharArray());
-                        System.out.println("moveNum: " + moveNum);
-                        
-                        if (moveNum < 50) {
-                            plot.getDomainAxis().setRange(0, 49);
-                        } else if (moveNum == 50) {
-                            plot.getDomainAxis().setAutoRange(true);
-                        }
-                        if (moveNum % 2 == 0) {
-                            x1Start = arrayAppend(x1Start, moveNum-1);
-                            x1 = arrayAppend(x1, moveNum-0.5);
-                            x1End = arrayAppend(x1End, moveNum);
-                            y1Start = arrayAppend(y1Start, 0);
-                            y1 = arrayAppend(y1, score);
-                            y1End = arrayAppend(y1End, 0);
-                            data1 = new double[][] {x1, x1Start, x1End, y1, y1Start, y1End};
-                            plotDataset.addSeries("S", data1);
-                        } else {
-                            x2Start = arrayAppend(x2Start, moveNum-1);
-                            x2 = arrayAppend(x2, moveNum-0.5);
-                            x2End = arrayAppend(x2End, moveNum);
-                            y2Start = arrayAppend(y2Start, 0);
-                            y2 = arrayAppend(y2, score);
-                            y2End = arrayAppend(y2End, 0);
-                            data2 = new double[][] {x2, x2Start, x2End, y2, y2Start, y2End};
-                            plotDataset.addSeries("G", data2);
-                        }
+                        score = 31111;                      
+                        processScore(score, moveNum, plotDataset);
                         scoreStr = getMateScore(moveNum, splitLine[i+1]);
                         break;
                     case "pv":
@@ -493,6 +409,51 @@ public class GameAnalyser {
         String lowUp = getLowUpString(lower, upper);
 
         return new Object[]{moveNum + japaneseMove, "", scoreStr, lowUp, pvStr};
+    }
+    
+    private void processScore(int score, int moveNum, DefaultIntervalXYDataset plotDataset) {
+        int testRange = Math.abs(score);
+        int newRange;
+        if (testRange > 2000) {
+            newRange = 3000;
+        } else if (testRange > 1000) {
+            newRange = 2000;
+        } else {
+            newRange = 1000;
+        }
+        if (newRange > range) {
+            range = newRange;
+            plot.getRangeAxis().setRange(-range, range);
+        }
+
+        scoreStr = Integer.toString(score);
+        opinion = compareScore(moveNum, lastScore,  scoreStr);
+        lastScore = String.copyValueOf(scoreStr.toCharArray());
+
+        if (moveNum < 50) {
+            plot.getDomainAxis().setRange(0, 49);
+        } else if (moveNum == 50) {
+            plot.getDomainAxis().setAutoRange(true);
+        }
+        if (moveNum % 2 == 0) {
+            x1Start = arrayAppend(x1Start, moveNum-1);
+            x1 = arrayAppend(x1, moveNum-0.5);
+            x1End = arrayAppend(x1End, moveNum);
+            y1Start = arrayAppend(y1Start, 0);
+            y1 = arrayAppend(y1, score);
+            y1End = arrayAppend(y1End, 0);
+            data1 = new double[][] {x1, x1Start, x1End, y1, y1Start, y1End};
+            plotDataset.addSeries("S", data1);
+        } else {
+            x2Start = arrayAppend(x2Start, moveNum-1);
+            x2 = arrayAppend(x2, moveNum-0.5);
+            x2End = arrayAppend(x2End, moveNum);
+            y2Start = arrayAppend(y2Start, 0);
+            y2 = arrayAppend(y2, score);
+            y2End = arrayAppend(y2End, 0);
+            data2 = new double[][] {x2, x2Start, x2End, y2, y2Start, y2End};
+            plotDataset.addSeries("G", data2);
+        }
     }
     
     private double[] arrayAppend(double[] array, double value) {
