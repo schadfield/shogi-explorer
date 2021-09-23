@@ -66,9 +66,10 @@ public class GameAnalyser {
     String scoreStr;
 
     
-    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, DefaultIntervalXYDataset plotDataset) throws IOException {
+    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot) throws IOException {
         analysing.set(true);
         this.plot = plot;
+        DefaultIntervalXYDataset plotDataset = (DefaultIntervalXYDataset ) plot.getDataset();
         this.analysisTimePerMove = analysisParam.getAnalysisTimePerMove();
         this.analysisMistakeThreshold = analysisParam.getAnalysisMistakeThreshold();
         this.analysisBlunderThreshold = analysisParam.getAnalysisBlunderThreshold();
@@ -436,7 +437,7 @@ public class GameAnalyser {
             plot.getDomainAxis().setAutoRange(true);
         }
         if (moveNum % 2 == 0) {
-            x1Start = arrayAppend(x1Start, moveNum-1);
+            x1Start = arrayAppend(x1Start, moveNum-1.0);
             x1 = arrayAppend(x1, moveNum-0.5);
             x1End = arrayAppend(x1End, moveNum);
             y1Start = arrayAppend(y1Start, 0);
@@ -445,7 +446,7 @@ public class GameAnalyser {
             data1 = new double[][] {x1, x1Start, x1End, y1, y1Start, y1End};
             plotDataset.addSeries("S", data1);
         } else {
-            x2Start = arrayAppend(x2Start, moveNum-1);
+            x2Start = arrayAppend(x2Start, moveNum-1.0);
             x2 = arrayAppend(x2, moveNum-0.5);
             x2End = arrayAppend(x2End, moveNum);
             y2Start = arrayAppend(y2Start, 0);
