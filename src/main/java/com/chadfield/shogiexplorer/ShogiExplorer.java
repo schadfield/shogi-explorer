@@ -39,10 +39,18 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
+import org.jfree.chart.renderer.xy.XYBlockRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.DefaultIntervalXYDataset;
+import org.jfree.data.xy.IntervalXYDataset;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
@@ -73,7 +81,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     int analysisBlunderThreshold;
     static final String PREF_ANALYSIS_IGNORE_THRESHOLD = "analysisLosingThreshold";
     int analysisIgnoreThreshold;
-    CategoryDataset plotDataset;
+    DefaultIntervalXYDataset plotDataset;
     JFreeChart chart;
     ChartPanel chartPanel;
 
@@ -931,26 +939,22 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setAnalysisMistakeThreshold(analysisMistakeThreshold);
         analysisParam.setAnalysisBlunderThreshold(analysisBlunderThreshold);
         analysisParam.setAnalysisIgnoreThreshold(analysisIgnoreThreshold);
-        plotDataset = new DefaultCategoryDataset();  
-        chart = ChartFactory.createBarChart(  
-            null, //Chart Title  
-            null, // Category axis  
-            null, // Value axis  
-            plotDataset,  
-            PlotOrientation.VERTICAL,  
-            false,true,false  
-        );   
+        plotDataset = new DefaultIntervalXYDataset();  
+        chart = ChartFactory.createXYBarChart("", "", false, "", plotDataset);
         
-        CategoryPlot plot = chart.getCategoryPlot();
-        BarRenderer renderer = (BarRenderer) plot.getRenderer();
-
-        Color color = new Color(56, 170, 191);
-        renderer.setSeriesPaint(0, color);        
+        XYPlot plot = chart.getXYPlot();
+        plot.setRenderer(0, new XYBarRenderer());
+        XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
+        renderer.setBarPainter(new StandardXYBarPainter());
+        renderer.setShadowVisible(false);
+        renderer.setSeriesPaint(0, Color.BLACK);  
+        renderer.setSeriesPaint(1, Color.WHITE); 
+        renderer.setSeriesVisibleInLegend(0, false);
+        renderer.setSeriesVisibleInLegend(1, false);
         plot.getDomainAxis().setVisible(false);
-        plot.getDomainAxis().setLowerMargin(0.001);
-        plot.getDomainAxis().setUpperMargin(0.001);
         plot.getRangeAxis().setRange(-1000, 1000);
-        ((BarRenderer) plot.getRenderer()).setBarPainter(new StandardBarPainter());
+        
+        
         chartPanel = new ChartPanel(chart); 
         if (jTabbedPane1.getTabCount() < 2) {
             jTabbedPane1.add(chartPanel, "");
@@ -970,7 +974,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
                 analysisTableModel.getDataVector().clear();
                 try {
-                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, (DefaultCategoryDataset) plotDataset);
+                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, plot, (DefaultIntervalXYDataset) plotDataset);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -1039,15 +1043,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_analysisTableKeyReleased
 
     private void jRadioButtonMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem3ActionPerformed
-        chart.getCategoryPlot().getRangeAxis().setRange(-1000, 1000);
+        chart.getXYPlot().getRangeAxis().setRange(-1000, 1000);
     }//GEN-LAST:event_jRadioButtonMenuItem3ActionPerformed
 
     private void jRadioButtonMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem4ActionPerformed
-        chart.getCategoryPlot().getRangeAxis().setRange(-2000, 2000);
+        chart.getXYPlot().getRangeAxis().setRange(-2000, 2000);
     }//GEN-LAST:event_jRadioButtonMenuItem4ActionPerformed
 
     private void jRadioButtonMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem5ActionPerformed
-        chart.getCategoryPlot().getRangeAxis().setRange(-3000, 3000);
+        chart.getXYPlot().getRangeAxis().setRange(-3000, 3000);
     }//GEN-LAST:event_jRadioButtonMenuItem5ActionPerformed
 
     /**
