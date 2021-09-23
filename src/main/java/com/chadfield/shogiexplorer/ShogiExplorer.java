@@ -23,7 +23,10 @@ import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Position;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -35,12 +38,19 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.data.xy.DefaultIntervalXYDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.ui.RectangleEdge;
 
 public class ShogiExplorer extends javax.swing.JFrame {
 
@@ -114,6 +124,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.getSelectionModel().addListSelectionListener(new AnalysisTableListener());
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -803,6 +814,28 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 analysisTable.getSelectionModel().setSelectionInterval(moveNumber - 1, moveNumber - 1);
                 analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber - 1, 0, true)));
             }
+            if (plotDataset != null && plotDataset.getSeriesCount() > 0) {
+                double[] x3Start = new double[2];
+                double[] x3 = new double[2];
+                double[] x3End = new double[2];
+                double[] y3Start = new double[2];
+                double[] y3 = new double[2];
+                double[] y3End = new double[2];
+                x3Start[0] = moveNumber-0.02;
+                x3[0] = 0;
+                x3End[0] = moveNumber+0.02;
+                y3Start[0] = 0;
+                y3[0] = 3000;
+                y3End[0] = 0;
+                x3Start[1] = moveNumber-0.02;
+                x3[1] = 0;
+                x3End[1] = moveNumber+0.02;
+                y3Start[1] = 0;
+                y3[1] = -3000;
+                y3End[1] = 0;
+                double[][] data3 = new double[][] {x3, x3Start, x3End, y3, y3Start, y3End};
+                plotDataset.addSeries("M", data3); 
+            }
             RenderBoard.loadBoard(board, boardPanel, rotatedView);
             inSelectionChange = false;
         }
@@ -938,12 +971,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
         renderer.setBarPainter(new StandardXYBarPainter());
         renderer.setShadowVisible(false);
         renderer.setSeriesPaint(0, Color.BLACK);  
-        renderer.setSeriesPaint(1, Color.WHITE); 
+        renderer.setSeriesPaint(2, Color.WHITE); 
+        renderer.setSeriesPaint(1, Color.RED); 
         renderer.setSeriesVisibleInLegend(0, false);
         renderer.setSeriesVisibleInLegend(1, false);
+        renderer.setSeriesVisibleInLegend(2, false);
         plot.getDomainAxis().setVisible(false);
         plot.getRangeAxis().setRange(-1000, 1000);
-        
         
         chartPanel = new ChartPanel(chart); 
         if (jTabbedPane1.getTabCount() < 2) {
@@ -951,6 +985,27 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } else {
             jTabbedPane1.setComponentAt(1, chartPanel);
         }
+        chartPanel.addChartMouseListener(new ChartMouseListener() {
+            @Override
+            public void chartMouseMoved(ChartMouseEvent evt) {
+                //deleteEngineButtonActionPerformed(evt);
+            }
+            @Override
+            public void chartMouseClicked(ChartMouseEvent evt) {
+                int mouseX = evt.getTrigger().getX();
+                int mouseY = evt.getTrigger().getY();
+                Point2D p = chartPanel.translateScreenToJava2D(
+                        new Point(mouseX, mouseY));
+                XYPlot plot = (XYPlot) chart.getPlot();
+                ChartRenderingInfo info = chartPanel.getChartRenderingInfo();
+                Rectangle2D dataArea = info.getPlotInfo().getDataArea();
+                ValueAxis domainAxis = plot.getDomainAxis();
+                RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
+                double chartX = domainAxis.java2DToValue(p.getX(), dataArea,
+                        domainAxisEdge);
+                moveList.setSelectedIndex((int) Math.round(chartX + 0.5));            
+            }
+        });
         new Thread() {
             @Override
             public void run() {
