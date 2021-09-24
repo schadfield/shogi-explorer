@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
@@ -708,6 +709,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             prefs.put("fileOpenDir", kifFile.getParent());
             DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
             analysisTableModel.getDataVector().clear();
+            jTabbedPane1.setComponentAt(1, new JPanel());
 
             try {
                 game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
@@ -1026,9 +1028,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         RenderBoard.loadBoard(board, boardPanel, rotatedView);
                         break;
                     }
-
-
                 position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
+                    if (browsePos == 0) {
+                        if (position.isSkipInAnalysis()) {
+                            browse = false;
+                            position = game.getPositionList().get(moveNumber);
+                            board = SFENParser.parse(position.getGameSFEN());
+                            board.setSource(position.getSource());
+                            board.setDestination(position.getDestination());
+                            commentTextArea.setText(null);
+                            commentTextArea.append(position.getComment());
+                            RenderBoard.loadBoard(board, boardPanel, rotatedView);
+                            break;
+                        }
+                    }
                 board = SFENParser.parse(position.getGameSFEN());
                 board.setSource(position.getSource());
                 board.setDestination(position.getDestination());
@@ -1047,6 +1060,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
 
                 position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
+                if (position.isSkipInAnalysis() && game.getAnalysisPositionList().size() > 1) {
+                    browsePos++;
+                    position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
+                }
                 board = SFENParser.parse(position.getGameSFEN());
                 board.setSource(position.getSource());
                 board.setDestination(position.getDestination());

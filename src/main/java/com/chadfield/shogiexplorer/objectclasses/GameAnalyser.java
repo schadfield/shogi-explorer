@@ -191,7 +191,7 @@ public class GameAnalyser {
         while ((line = bufferedReader.readLine()) != null) {
             if (line.contains("bestmove")) {
                 String bestLine = getBestLine(line, lineList);
-                ArrayList<Position> pvPositionList = getPVPositionList(sfen, bestLine);
+                ArrayList<Position> pvPositionList = getPVPositionList(sfen, bestLine, engineMove);
                 updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, japaneseMove, pvPositionList, plotDataset));
                 game.getAnalysisPositionList().add(pvPositionList);
                 return;
@@ -200,12 +200,17 @@ public class GameAnalyser {
         }
     }
     
-    private ArrayList<Position> getPVPositionList(String sfen, String bestLine) {
+    private ArrayList<Position> getPVPositionList(String sfen, String bestLine, String engineMove) {
         ArrayList<Position> result = new ArrayList<>();
         String currentSfen = sfen;
         Coordinate lastDestination = null;
         for (String move : getBestLineMoveList(bestLine)) {
             Position position = getPosition(currentSfen, move, lastDestination);
+            if (result.isEmpty() && engineMove.contentEquals(move)) {
+                position.setSkipInAnalysis(true);
+            } else {
+                position.setSkipInAnalysis(false);
+            }
             result.add(position);
             currentSfen  = position.getGameSFEN();
             lastDestination = position.getDestination();
