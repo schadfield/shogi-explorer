@@ -152,12 +152,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisEngineComboBox = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         analysisTimePerMoveSpinner = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
-        analysisMistakeSpinner = new javax.swing.JSpinner();
-        jLabel4 = new javax.swing.JLabel();
-        analysisBlunderSpinner = new javax.swing.JSpinner();
-        jLabel5 = new javax.swing.JLabel();
-        analysisIgnoreSpinner = new javax.swing.JSpinner();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -311,7 +305,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jAnalysisDialog.setAlwaysOnTop(true);
         jAnalysisDialog.setModal(true);
         jAnalysisDialog.setResizable(false);
-        jAnalysisDialog.setSize(new java.awt.Dimension(500, 230));
+        jAnalysisDialog.setSize(new java.awt.Dimension(480, 130));
         jAnalysisDialog.getContentPane().setLayout(new java.awt.FlowLayout());
 
         jEngineConfPanel1.setLayout(new java.awt.GridLayout(0, 2, 20, 0));
@@ -324,18 +318,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jLabel3.setText(bundle.getString("ShogiExplorer.jLabel3.text")); // NOI18N
         jEngineConfPanel1.add(jLabel3);
         jEngineConfPanel1.add(analysisTimePerMoveSpinner);
-
-        jLabel2.setText(bundle.getString("ShogiExplorer.jLabel2.text")); // NOI18N
-        jEngineConfPanel1.add(jLabel2);
-        jEngineConfPanel1.add(analysisMistakeSpinner);
-
-        jLabel4.setText(bundle.getString("ShogiExplorer.jLabel4.text")); // NOI18N
-        jEngineConfPanel1.add(jLabel4);
-        jEngineConfPanel1.add(analysisBlunderSpinner);
-
-        jLabel5.setText(bundle.getString("ShogiExplorer.jLabel5.text")); // NOI18N
-        jEngineConfPanel1.add(jLabel5);
-        jEngineConfPanel1.add(analysisIgnoreSpinner);
 
         jButton1.setText(bundle.getString("ShogiExplorer.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -930,24 +912,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 60,
                 1
         ));
-        analysisMistakeSpinner.setModel(new SpinnerNumberModel(
-                analysisMistakeThreshold,
-                100,
-                500,
-                1
-        ));
-        analysisBlunderSpinner.setModel(new SpinnerNumberModel(
-                analysisBlunderThreshold,
-                200,
-                1000,
-                1
-        ));
-        analysisIgnoreSpinner.setModel(new SpinnerNumberModel(
-                analysisIgnoreThreshold,
-                1000,
-                30000,
-                1
-        ));
 
         jAnalysisDialog.setLocationRelativeTo(mainFrame);
         jAnalysisDialog.setVisible(true);
@@ -964,19 +928,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         browse = false;
         analysisEngineName = (String) analysisEngineComboBox.getSelectedItem();
         analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
-        analysisMistakeThreshold = (int) analysisMistakeSpinner.getValue();
-        analysisBlunderThreshold = (int) analysisBlunderSpinner.getValue();
-        analysisIgnoreThreshold = (int) analysisIgnoreSpinner.getValue();
         prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
         prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
-        prefs.putInt(PREF_ANALYSIS_MISTAKE_THRESHOLD, analysisMistakeThreshold);
-        prefs.putInt(PREF_ANALYSIS_BLUNDER_THRESHOLD, analysisBlunderThreshold);
-        prefs.putInt(PREF_ANALYSIS_IGNORE_THRESHOLD, analysisIgnoreThreshold);
         AnalysisParameter analysisParam = new AnalysisParameter();
         analysisParam.setAnalysisTimePerMove(analysisTimePerMove);
-        analysisParam.setAnalysisMistakeThreshold(analysisMistakeThreshold);
-        analysisParam.setAnalysisBlunderThreshold(analysisBlunderThreshold);
-        analysisParam.setAnalysisIgnoreThreshold(analysisIgnoreThreshold);
         analysisParam.setGraphView1(jRadioButtonMenuItem3);
         analysisParam.setGraphView2(jRadioButtonMenuItem4);
         analysisParam.setGraphView3(jRadioButtonMenuItem5);
@@ -1149,10 +1104,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEngineButton;
     private javax.swing.JMenuItem analyseGame;
-    private javax.swing.JSpinner analysisBlunderSpinner;
     private javax.swing.JComboBox<String> analysisEngineComboBox;
-    private javax.swing.JSpinner analysisIgnoreSpinner;
-    private javax.swing.JSpinner analysisMistakeSpinner;
     private javax.swing.JTable analysisTable;
     private javax.swing.JSpinner analysisTimePerMoveSpinner;
     private javax.swing.JPanel boardPanel;
@@ -1184,10 +1136,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JDialog jEngineManagerDialog;
     private javax.swing.JFileChooser jKifFileChooser;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;

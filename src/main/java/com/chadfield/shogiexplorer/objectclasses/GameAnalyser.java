@@ -75,9 +75,9 @@ public class GameAnalyser {
         this.plot = plot;
         DefaultIntervalXYDataset plotDataset = (DefaultIntervalXYDataset ) plot.getDataset();
         this.analysisTimePerMove = analysisParam.getAnalysisTimePerMove();
-        this.analysisMistakeThreshold = analysisParam.getAnalysisMistakeThreshold();
-        this.analysisBlunderThreshold = analysisParam.getAnalysisBlunderThreshold();
-        this.analysisIgnoreThreshold = analysisParam.getAnalysisIgnoreThreshold();
+        this.analysisMistakeThreshold = 250;
+        this.analysisBlunderThreshold = 500;
+        this.analysisIgnoreThreshold = 2000;
         this.graphView1 = analysisParam.getGraphView1();
         this.graphView2 = analysisParam.getGraphView2();
         this.graphView3 = analysisParam.getGraphView3();
