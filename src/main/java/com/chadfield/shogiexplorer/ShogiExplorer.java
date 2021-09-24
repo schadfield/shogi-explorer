@@ -1029,18 +1029,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         break;
                     }
                 position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
-                    if (browsePos == 0) {
-                        if (position.isSkipInAnalysis()) {
-                            browse = false;
-                            position = game.getPositionList().get(moveNumber);
-                            board = SFENParser.parse(position.getGameSFEN());
-                            board.setSource(position.getSource());
-                            board.setDestination(position.getDestination());
-                            commentTextArea.setText(null);
-                            commentTextArea.append(position.getComment());
-                            RenderBoard.loadBoard(board, boardPanel, rotatedView);
-                            break;
-                        }
+                    if (browsePos == 0 && position.isSkipInAnalysis()) {
+                        browse = false;
+                        position = game.getPositionList().get(moveNumber);
+                        board = SFENParser.parse(position.getGameSFEN());
+                        board.setSource(position.getSource());
+                        board.setDestination(position.getDestination());
+                        commentTextArea.setText(null);
+                        commentTextArea.append(position.getComment());
+                        RenderBoard.loadBoard(board, boardPanel, rotatedView);
+                        break;
                     }
                 board = SFENParser.parse(position.getGameSFEN());
                 board.setSource(position.getSource());

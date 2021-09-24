@@ -206,11 +206,7 @@ public class GameAnalyser {
         Coordinate lastDestination = null;
         for (String move : getBestLineMoveList(bestLine)) {
             Position position = getPosition(currentSfen, move, lastDestination);
-            if (result.isEmpty() && engineMove.contentEquals(move)) {
-                position.setSkipInAnalysis(true);
-            } else {
-                position.setSkipInAnalysis(false);
-            }
+            position.setSkipInAnalysis(result.isEmpty() && engineMove.contentEquals(move));
             result.add(position);
             currentSfen  = position.getGameSFEN();
             lastDestination = position.getDestination();
