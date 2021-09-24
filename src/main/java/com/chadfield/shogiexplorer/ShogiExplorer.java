@@ -939,7 +939,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setGraphView3(jRadioButtonMenuItem5);
         plotDataset = new DefaultIntervalXYDataset();  
         chart = ChartFactory.createXYBarChart("", "", false, "", plotDataset);
-        
+       
         XYPlot plot = chart.getXYPlot();
         plot.setRenderer(0, new XYBarRenderer());
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
@@ -955,6 +955,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         plot.getRangeAxis().setRange(-1000, 1000);
         
         chartPanel = new ChartPanel(chart); 
+        chartPanel.setPopupMenu(null);
+        chartPanel.setMouseZoomable(false);
         jTabbedPane1.setComponentAt(1, chartPanel);
         chartPanel.addChartMouseListener(new ChartMouseListener() {
             @Override
@@ -1103,7 +1105,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
             * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
              */
-            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());            
+            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());  
             //</editor-fold>
         } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
