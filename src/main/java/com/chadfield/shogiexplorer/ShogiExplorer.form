@@ -431,7 +431,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="moveListScrollPane" min="-2" pref="161" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="commentScrollPane" pref="252" max="32767" attributes="0"/>
+                              <Component id="commentScrollPane" max="32767" attributes="0"/>
                           </Group>
                           <Component id="gameScrollPanel" alignment="0" max="32767" attributes="0"/>
                       </Group>

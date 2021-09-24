@@ -445,7 +445,7 @@ public class GameAnalyser {
         lastScore = String.copyValueOf(scoreStr.toCharArray());
 
         if (moveNum < 50) {
-            plot.getDomainAxis().setRange(0, 49);
+            plot.getDomainAxis().setRange(0, 50);
         } else if (moveNum == 50) {
             plot.getDomainAxis().setAutoRange(true);
         }
