@@ -68,6 +68,7 @@ public class GameAnalyser {
     JRadioButtonMenuItem graphView1;
     JRadioButtonMenuItem graphView2;
     JRadioButtonMenuItem graphView3;
+    Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
 
     
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot) throws IOException {
@@ -100,7 +101,6 @@ public class GameAnalyser {
             lastSFEN = sfen;
             sfen = position.getGameSFEN();
             engineMove = position.getNotation().getEngineMove();
-            Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
 
             if (count % 2 == 0) {
                 japaneseMove = trans.transliterate(" ☗" + position.getNotation().getJapanese());
@@ -254,7 +254,7 @@ public class GameAnalyser {
         board.setMoveCount(board.getMoveCount()+1);
         
         Notation notation = new Notation();
-        notation.setJapanese(getNotation(board, lastDestination, sourceKomaType, isDrop, move, disambiguation));
+        notation.setJapanese(trans.transliterate(getNotation(board, lastDestination, sourceKomaType, isDrop, move, disambiguation)));
 
         return notation;
     }
@@ -408,12 +408,11 @@ public class GameAnalyser {
         
         for (Position position: pvPositionList) {
             pvBuilder.append(position.getNotation().getJapanese());
-            pvBuilder.append(" ");
+            pvBuilder.append("\u3000");
         }
         
 
-        Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
-        String pvStr = trans.transliterate(pvBuilder.toString().trim());
+        String pvStr = pvBuilder.toString().trim();
         
         String lowUp = getLowUpString(lower, upper);
 
