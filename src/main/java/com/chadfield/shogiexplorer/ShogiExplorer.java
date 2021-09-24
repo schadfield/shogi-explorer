@@ -95,6 +95,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         initComponents();
 
         jTabbedPane1.setForeground(Color.BLACK);
+
         board = SFENParser.parse("lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
         String rotated = prefs.get(PREF_ROTATED, "false");
@@ -190,6 +191,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         analysisTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -412,9 +414,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(mediaBack);
         mainToolBar.add(filler3);
 
+        mediaStop.setText(bundle.getString("ShogiExplorer.mediaStop.text")); // NOI18N
+        mediaStop.setToolTipText(bundle.getString("ShogiExplorer.mediaStop.toolTipText")); // NOI18N
         mediaStop.setFocusable(false);
         mediaStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        mediaStop.setLabel(bundle.getString("ShogiExplorer.mediaStop.label_1")); // NOI18N
         mediaStop.setMaximumSize(new java.awt.Dimension(24, 24));
         mediaStop.setMinimumSize(new java.awt.Dimension(24, 24));
         mediaStop.setPreferredSize(new java.awt.Dimension(40, 24));
@@ -530,6 +533,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
+        jTabbedPane1.setName(""); // NOI18N
 
         analysisTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -550,6 +554,19 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jScrollPane2.setViewportView(analysisTable);
 
         jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jScrollPane2.TabConstraints.tabTitle"), jScrollPane2); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 982, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 117, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
 
         jRadioButton1.setText(bundle.getString("ShogiExplorer.jRadioButton1.text")); // NOI18N
 
@@ -981,11 +998,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         plot.getRangeAxis().setRange(-1000, 1000);
         
         chartPanel = new ChartPanel(chart); 
-        if (jTabbedPane1.getTabCount() < 2) {
-            jTabbedPane1.add(chartPanel, "");
-        } else {
-            jTabbedPane1.setComponentAt(1, chartPanel);
-        }
+        jTabbedPane1.setComponentAt(1, chartPanel);
         chartPanel.addChartMouseListener(new ChartMouseListener() {
             @Override
             public void chartMouseMoved(ChartMouseEvent evt) {
@@ -1179,6 +1192,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
