@@ -91,12 +91,15 @@ public class GameAnalyser {
         String sfen = null;
         String lastSFEN = null;
         int count = 0;
+        Coordinate lastDestination = null;
+        Coordinate previousMoveDestination = null;
                 
         for (Position position : game.getPositionList()) {
             if (engineMove != null) {
                 count++;
                 updateMoveList(moveList, count);
-                analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count);
+                analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, previousMoveDestination);
+                previousMoveDestination = lastDestination;
             } 
             lastSFEN = sfen;
             sfen = position.getGameSFEN();
@@ -107,11 +110,12 @@ public class GameAnalyser {
             } else {
                 japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
             }
+            lastDestination = position.getDestination();
         }
 
         count++;
         updateMoveList(moveList, count);
-        analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count);
+        analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, lastDestination);
         
         quitEngine();
         analysing.set(false);
@@ -182,7 +186,7 @@ public class GameAnalyser {
         process.destroy();
     }
 
-    private void analysePosition(Game game, String sfen, String engineMove, String japaneseMove, JTable analysisTable, DefaultIntervalXYDataset plotDataset, int moveNum) throws IOException {
+    private void analysePosition(Game game, String sfen, String engineMove, String japaneseMove, JTable analysisTable, DefaultIntervalXYDataset plotDataset, int moveNum, Coordinate previousMoveDestination) throws IOException {
         stdin.write(("position sfen " + sfen + " " + engineMove + "\n").getBytes());
         stdin.write(("go btime 0 wtime 0 byoyomi " + analysisTimePerMove*1000 + "\n").getBytes());
         stdin.flush();
@@ -191,7 +195,7 @@ public class GameAnalyser {
         while ((line = bufferedReader.readLine()) != null) {
             if (line.contains("bestmove")) {
                 String bestLine = getBestLine(line, lineList);
-                ArrayList<Position> pvPositionList = getPVPositionList(sfen, bestLine, engineMove);
+                ArrayList<Position> pvPositionList = getPVPositionList(sfen, bestLine, engineMove, previousMoveDestination);
                 updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, japaneseMove, pvPositionList, plotDataset));
                 game.getAnalysisPositionList().add(pvPositionList);
                 return;
@@ -200,16 +204,16 @@ public class GameAnalyser {
         }
     }
     
-    private ArrayList<Position> getPVPositionList(String sfen, String bestLine, String engineMove) {
+    private ArrayList<Position> getPVPositionList(String sfen, String bestLine, String engineMove, Coordinate previousMoveDestination) {
         ArrayList<Position> result = new ArrayList<>();
         String currentSfen = sfen;
-        Coordinate lastDestination = null;
+        Coordinate thisPreviousMoveDestination = previousMoveDestination;
         for (String move : getBestLineMoveList(bestLine)) {
-            Position position = getPosition(currentSfen, move, lastDestination);
+            Position position = getPosition(currentSfen, move, thisPreviousMoveDestination);
             position.setSkipInAnalysis(result.isEmpty() && engineMove.contentEquals(move));
             result.add(position);
             currentSfen  = position.getGameSFEN();
-            lastDestination = position.getDestination();
+            thisPreviousMoveDestination = position.getDestination();
         }
         return result;
     }
@@ -238,8 +242,7 @@ public class GameAnalyser {
             Koma sourceKoma = ParserUtils.getDropKoma(move.substring(0, 1), board.getNextTurn());
             sourceKomaType = sourceKoma.getType();
             disambiguation = NotationUtils.getDropNotation(board, thisDestination, sourceKomaType);
-            executeDropMove(board, thisDestination, sourceKoma);
-            
+            executeDropMove(board, thisDestination, sourceKoma);   
         } else {
             thisSource = getSourceCoordinate(move);
             Koma sourceKoma = getKoma(board, thisSource);
