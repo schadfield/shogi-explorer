@@ -953,7 +953,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         renderer.setSeriesVisibleInLegend(2, false);
         plot.getDomainAxis().setVisible(false);
         plot.getRangeAxis().setRange(-1000, 1000);
-        
         chartPanel = new ChartPanel(chart); 
         chartPanel.setPopupMenu(null);
         chartPanel.setMouseZoomable(false);
@@ -1092,20 +1091,27 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (analysing.get()) {
             return;
         }
-        chart.getXYPlot().getRangeAxis().setRange(-1000, 1000);
+        if (chart != null) {
+            chart.getXYPlot().getRangeAxis().setRange(-1000, 1000);
+        }
     }//GEN-LAST:event_jRadioButtonMenuItem3ActionPerformed
 
     private void jRadioButtonMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem4ActionPerformed
         if (analysing.get()) {
             return;
-        }        chart.getXYPlot().getRangeAxis().setRange(-2000, 2000);
+        }     
+        if (chart != null) {
+            chart.getXYPlot().getRangeAxis().setRange(-2000, 2000);
+        }
     }//GEN-LAST:event_jRadioButtonMenuItem4ActionPerformed
 
     private void jRadioButtonMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem5ActionPerformed
         if (analysing.get()) {
             return;
         }
-        chart.getXYPlot().getRangeAxis().setRange(-3000, 3000);
+        if (chart != null) {
+            chart.getXYPlot().getRangeAxis().setRange(-3000, 3000);
+        }
     }//GEN-LAST:event_jRadioButtonMenuItem5ActionPerformed
 
     /**

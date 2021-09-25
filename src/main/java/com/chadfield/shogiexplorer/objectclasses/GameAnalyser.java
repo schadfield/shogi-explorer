@@ -431,10 +431,10 @@ public class GameAnalyser {
             thisItem = graphView3;
         } else if (testRange > 1000) {
             newRange = 2000;
-            thisItem = graphView3;
+            thisItem = graphView2;
         } else {
             newRange = 1000;
-            thisItem = graphView3;
+            thisItem = graphView1;
         }
         if (newRange > range) {
             range = newRange;
