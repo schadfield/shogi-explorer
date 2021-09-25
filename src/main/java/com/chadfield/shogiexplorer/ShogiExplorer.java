@@ -1013,43 +1013,55 @@ public class ShogiExplorer extends javax.swing.JFrame {
             return;
         }
         int keyCode = evt.getKeyCode();
-        Position position;
         switch(keyCode) {
             case 37:
-                if (browse) {
-                    browsePos--;
-                    if (browsePos < 0) {
-                        browse = false;
-                        browsePos = 0;
-                        position = game.getPositionList().get(moveNumber);
-                        board = SFENParser.parse(position.getGameSFEN());
-                        board.setSource(position.getSource());
-                        board.setDestination(position.getDestination());
-                        commentTextArea.setText(null);
-                        commentTextArea.append(position.getComment());
-                        RenderBoard.loadBoard(board, boardPanel, rotatedView);
-                        break;
-                    }
-                position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
-                    if (browsePos == 0 && position.isSkipInAnalysis()) {
-                        browse = false;
-                        position = game.getPositionList().get(moveNumber);
-                        board = SFENParser.parse(position.getGameSFEN());
-                        board.setSource(position.getSource());
-                        board.setDestination(position.getDestination());
-                        commentTextArea.setText(null);
-                        commentTextArea.append(position.getComment());
-                        RenderBoard.loadBoard(board, boardPanel, rotatedView);
-                        break;
-                    }
+                leftButtonAnalysis();
+                break;
+            case 39:
+                rightButtonAnalysis();
+                break;
+            default:
+                browse = false;
+        }
+    }//GEN-LAST:event_analysisTableKeyReleased
+
+    private void leftButtonAnalysis() {
+        Position position;
+        if (browse) {
+            browsePos--;
+            if (browsePos < 0) {
+                browse = false;
+                browsePos = 0;
+                position = game.getPositionList().get(moveNumber);
                 board = SFENParser.parse(position.getGameSFEN());
                 board.setSource(position.getSource());
                 board.setDestination(position.getDestination());
                 commentTextArea.setText(null);
+                commentTextArea.append(position.getComment());
                 RenderBoard.loadBoard(board, boardPanel, rotatedView);
+                return;
+            }
+            position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
+                if (browsePos == 0 && position.isSkipInAnalysis()) {
+                    browse = false;
+                    position = game.getPositionList().get(moveNumber);
+                    board = SFENParser.parse(position.getGameSFEN());
+                    board.setSource(position.getSource());
+                    board.setDestination(position.getDestination());
+                    commentTextArea.setText(null);
+                    commentTextArea.append(position.getComment());
+                    RenderBoard.loadBoard(board, boardPanel, rotatedView);
+                    return;
                 }
-                break;
-            case 39:
+            board = SFENParser.parse(position.getGameSFEN());
+            board.setSource(position.getSource());
+            board.setDestination(position.getDestination());
+            commentTextArea.setText(null);
+            RenderBoard.loadBoard(board, boardPanel, rotatedView);
+        }
+    }
+    
+    private void rightButtonAnalysis() {
                 if (browse) {
                     if (browsePos < game.getAnalysisPositionList().get(moveNumber-1).size()-1) {
                         browsePos++;
@@ -1059,9 +1071,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     browsePos = 0;
                 }
 
-                position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
+                Position position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
                 if (position.isSkipInAnalysis()) {
-                    if (game.getAnalysisPositionList().size() > 1) {
+                    if (game.getAnalysisPositionList().get(moveNumber-1).size() > 1) {
                         browsePos++;
                         position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
                     } else {
@@ -1074,13 +1086,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 board.setDestination(position.getDestination());
                 commentTextArea.setText(null);
                 RenderBoard.loadBoard(board, boardPanel, rotatedView);
-
-                break;
-            default:
-                browse = false;
-        }
-    }//GEN-LAST:event_analysisTableKeyReleased
-
+    }
+    
     private void jRadioButtonMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem3ActionPerformed
         if (analysing.get()) {
             return;
