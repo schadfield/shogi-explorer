@@ -1060,9 +1060,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
 
                 position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
-                if (position.isSkipInAnalysis() && game.getAnalysisPositionList().size() > 1) {
-                    browsePos++;
-                    position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
+                if (position.isSkipInAnalysis()) {
+                    if (game.getAnalysisPositionList().size() > 1) {
+                        browsePos++;
+                        position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
+                    } else {
+                        browse = false;
+                        browsePos = 0;                    
+                    }
                 }
                 board = SFENParser.parse(position.getGameSFEN());
                 board.setSource(position.getSource());
