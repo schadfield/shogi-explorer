@@ -22,6 +22,7 @@ import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Position;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -30,14 +31,20 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.text.BadLocationException;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
@@ -122,6 +129,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.getColumnModel().getColumn(3).setMinWidth(35);
         analysisTable.getColumnModel().getColumn(4).setMinWidth(1000);
         analysisTable.getSelectionModel().addListSelectionListener(new AnalysisTableListener());
+        analysisTable.getColumnModel().getColumn(4).setCellRenderer(analysisMoveRenderer);
+
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
     }
     
@@ -693,6 +702,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void boardPanelComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_boardPanelComponentResized
+        analysisTable.repaint();
         RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }//GEN-LAST:event_boardPanelComponentResized
 
@@ -797,6 +807,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void moveListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_moveListValueChanged
         if (!evt.getValueIsAdjusting()) {
             inSelectionChange = true;
+            browse = false;
             moveNumber = moveList.getSelectedIndex();
             if (moveNumber < 0) {
                 return;
@@ -835,6 +846,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 double[][] data3 = new double[][] {x3, x3Start, x3End, y3, y3Start, y3End};
                 plotDataset.addSeries("M", data3); 
             }
+            analysisTable.repaint();
             RenderBoard.loadBoard(board, boardPanel, rotatedView);
             inSelectionChange = false;
         }
@@ -1037,6 +1049,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 board.setDestination(position.getDestination());
                 commentTextArea.setText(null);
                 commentTextArea.append(position.getComment());
+                analysisTable.repaint();
                 RenderBoard.loadBoard(board, boardPanel, rotatedView);
                 return;
             }
@@ -1049,6 +1062,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     board.setDestination(position.getDestination());
                     commentTextArea.setText(null);
                     commentTextArea.append(position.getComment());
+                    analysisTable.repaint();
                     RenderBoard.loadBoard(board, boardPanel, rotatedView);
                     return;
                 }
@@ -1056,11 +1070,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
             board.setSource(position.getSource());
             board.setDestination(position.getDestination());
             commentTextArea.setText(null);
+            analysisTable.repaint();
             RenderBoard.loadBoard(board, boardPanel, rotatedView);
         }
     }
     
-    private void rightButtonAnalysis() {
+    private void rightButtonAnalysis() {    
                 if (browse) {
                     if (browsePos < game.getAnalysisPositionList().get(moveNumber-1).size()-1) {
                         browsePos++;
@@ -1084,9 +1099,65 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 board.setSource(position.getSource());
                 board.setDestination(position.getDestination());
                 commentTextArea.setText(null);
+                analysisTable.repaint();
                 RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }
     
+    TableCellRenderer analysisMoveRenderer = new TableCellRenderer() {
+        JLabel cellLabel = new JLabel();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable arg0, Object arg1, boolean arg2, boolean arg3, int arg4, int arg5) {
+            if (arg1 != null) {
+                if (browse && arg4 == moveNumber-1) {
+                    // We are in browse mode and rendering the PV for the active line.
+                    StringBuilder cellStrBld = new StringBuilder("<html>");
+                    int spaceCount = 0;
+                    boolean foundStart = false;
+                    boolean foundEnd = false;
+                    if (browsePos == 0) {
+                        // In this case we insert at the begining.
+                        cellStrBld.append("<span style=\"background:#0148e2;color:white;\">");
+                        foundStart = true;
+                    }
+                    for (int i = 0; i < arg1.toString().length(); i++) {
+                        if (!foundEnd && arg1.toString().charAt(i) == '\u3000') {
+                            spaceCount++;
+                            if (foundStart) {
+                                //　This is the end, my friend.
+                                cellStrBld.append("</span>\u3000");
+                                foundEnd = true;
+                            } else {
+                                // Is this the start?
+                                if (spaceCount == browsePos) {
+                                    cellStrBld.append("\u3000<span style=\"background:#0148e2;color:white;\">");
+                                    foundStart = true;
+                                } else {
+                                    // Keep looking.
+                                    cellStrBld.append("\u3000");
+                                }
+                            }
+                        } else {
+                            // Just a regular char.
+                            cellStrBld.append(arg1.toString().charAt(i));
+                        }
+                    }
+                    if (foundStart && !foundEnd) {
+                        cellStrBld.append("</span>");
+                    }
+                    cellStrBld.append("</html>");
+                    cellLabel.setText(cellStrBld.toString());
+                } else {
+                    // Either we are not browsing or we are rendering PV for a non-active line.
+                    cellLabel.setText(arg1.toString());
+                }
+            } else {
+                cellLabel.setText("");
+            }
+            return cellLabel;
+        }
+    };
+        
     private void jRadioButtonMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem3ActionPerformed
         if (analysing.get()) {
             return;
