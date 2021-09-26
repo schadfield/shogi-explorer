@@ -10,7 +10,6 @@ public class Position {
     private Coordinate source;
     private Coordinate destination;
     private String comment;
-    private boolean skipInAnalysis;
     
     public Position(String gameSFEN, Coordinate source, Coordinate destination, Notation notation) {
         this.gameSFEN = gameSFEN;
@@ -18,7 +17,6 @@ public class Position {
         this.source = source;
         this.destination = destination;
         this.comment = "";
-        skipInAnalysis = false;
     }
 
     /**
@@ -89,19 +87,5 @@ public class Position {
      */
     public void setNotation(Notation notation) {
         this.notation = notation;
-    }
-
-    /**
-     * @return the skipInAnalysis
-     */
-    public boolean isSkipInAnalysis() {
-        return skipInAnalysis;
-    }
-
-    /**
-     * @param skipInAnalysis the skipInAnalysis to set
-     */
-    public void setSkipInAnalysis(boolean skipInAnalysis) {
-        this.skipInAnalysis = skipInAnalysis;
     }
 }

@@ -1050,18 +1050,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 return;
             }
             position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
-                if (browsePos == 0 && position.isSkipInAnalysis()) {
-                    browse = false;
-                    position = game.getPositionList().get(moveNumber);
-                    board = SFENParser.parse(position.getGameSFEN());
-                    board.setSource(position.getSource());
-                    board.setDestination(position.getDestination());
-                    commentTextArea.setText(null);
-                    commentTextArea.append(position.getComment());
-                    analysisTable.repaint();
-                    RenderBoard.loadBoard(board, boardPanel, rotatedView);
-                    return;
-                }
             board = SFENParser.parse(position.getGameSFEN());
             board.setSource(position.getSource());
             board.setDestination(position.getDestination());
@@ -1082,15 +1070,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
 
                 Position position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
-                if (position.isSkipInAnalysis()) {
-                    if (game.getAnalysisPositionList().get(moveNumber-1).size() > 1) {
-                        browsePos++;
-                        position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
-                    } else {
-                        browse = false;
-                        browsePos = 0;                    
-                    }
-                }
                 board = SFENParser.parse(position.getGameSFEN());
                 board.setSource(position.getSource());
                 board.setDestination(position.getDestination());
