@@ -31,20 +31,16 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.text.BadLocationException;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
@@ -1103,7 +1099,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 RenderBoard.loadBoard(board, boardPanel, rotatedView);
     }
     
-    TableCellRenderer analysisMoveRenderer = new TableCellRenderer() {
+    transient TableCellRenderer analysisMoveRenderer = new TableCellRenderer() {
         JLabel cellLabel = new JLabel();
 
         @Override
