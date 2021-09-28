@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
@@ -68,6 +69,7 @@ public class GameAnalyser {
     JRadioButtonMenuItem graphView1;
     JRadioButtonMenuItem graphView2;
     JRadioButtonMenuItem graphView3;
+    JButton haltAnalysisButton;
     Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
 
     
@@ -82,6 +84,7 @@ public class GameAnalyser {
         this.graphView1 = analysisParam.getGraphView1();
         this.graphView2 = analysisParam.getGraphView2();
         this.graphView3 = analysisParam.getGraphView3();
+        this.haltAnalysisButton = analysisParam.getHaltAnalysisButton();
         initializeEngine(engine);
         initiateUSIProtocol();
         setOptions(engine);
@@ -111,6 +114,10 @@ public class GameAnalyser {
                 japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
             }
             lastDestination = position.getDestination();
+            
+            if (Thread.interrupted()) {
+                break;
+            }
         }
 
         count++;
@@ -118,6 +125,7 @@ public class GameAnalyser {
         analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, lastDestination);
         
         quitEngine();
+        haltAnalysisButton.setEnabled(false);
         analysing.set(false);
     }
 

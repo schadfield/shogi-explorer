@@ -1,5 +1,6 @@
 package com.chadfield.shogiexplorer.objects;
 
+import javax.swing.JButton;
 import javax.swing.JRadioButtonMenuItem;
 
 /**
@@ -11,6 +12,7 @@ public class AnalysisParameter {
     private JRadioButtonMenuItem graphView1;
     private JRadioButtonMenuItem graphView2;
     private JRadioButtonMenuItem graphView3;
+    private JButton haltAnalysisButton;
 
     /**
      * @return the analysisTimePerMove
@@ -66,5 +68,19 @@ public class AnalysisParameter {
      */
     public void setGraphView3(JRadioButtonMenuItem graphView3) {
         this.graphView3 = graphView3;
+    }
+
+    /**
+     * @return the haltAnalysisButton
+     */
+    public JButton getHaltAnalysisButton() {
+        return haltAnalysisButton;
+    }
+
+    /**
+     * @param haltAnalysisButton the haltAnalysisButton to set
+     */
+    public void setHaltAnalysisButton(JButton haltAnalysisButton) {
+        this.haltAnalysisButton = haltAnalysisButton;
     }
 }

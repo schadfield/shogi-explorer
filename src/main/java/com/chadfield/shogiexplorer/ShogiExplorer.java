@@ -90,6 +90,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     DefaultIntervalXYDataset plotDataset;
     JFreeChart chart;
     ChartPanel chartPanel;
+    Thread analysisThread;
 
     /**
      * Creates new form NewJFrame
@@ -185,6 +186,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mediaPlay = new javax.swing.JButton();
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         mediaEnd = new javax.swing.JButton();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0));
+        jButton4 = new javax.swing.JButton();
         gameScrollPanel = new javax.swing.JScrollPane();
         gameTextArea = new javax.swing.JTextArea();
         commentScrollPane = new javax.swing.JScrollPane();
@@ -465,6 +468,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         mainToolBar.add(mediaEnd);
+        mainToolBar.add(filler7);
+
+        jButton4.setEnabled(false);
+        jButton4.setFocusable(false);
+        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton4.setLabel(bundle.getString("ShogiExplorer.jButton4.label")); // NOI18N
+        jButton4.setMaximumSize(new java.awt.Dimension(100, 24));
+        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        mainToolBar.add(jButton4);
 
         gameScrollPanel.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         gameScrollPanel.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -656,7 +673,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(moveListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE))
+                                .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(gameScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
@@ -949,6 +966,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setGraphView1(jRadioButtonMenuItem3);
         analysisParam.setGraphView2(jRadioButtonMenuItem4);
         analysisParam.setGraphView3(jRadioButtonMenuItem5);
+        analysisParam.setHaltAnalysisButton(jButton4);
         plotDataset = new DefaultIntervalXYDataset();  
         chart = ChartFactory.createXYBarChart("", "", false, "", plotDataset);
        
@@ -993,7 +1011,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 moveList.setSelectedIndex((int) Math.round(chartX + 0.5));            
             }
         });
-        new Thread() {
+        jButton4.setEnabled(true);
+        analysisThread = new Thread() {
             @Override
             public void run() {
                 Engine engine = null;
@@ -1011,7 +1030,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }.start();
+        };
+        analysisThread.start();
         jAnalysisDialog.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -1164,6 +1184,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jRadioButtonMenuItem5ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        analysisThread.interrupt();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1222,6 +1246,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler7;
     private javax.swing.JMenu gameMenu;
     private javax.swing.JScrollPane gameScrollPanel;
     private javax.swing.JTextArea gameTextArea;
@@ -1229,6 +1254,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JPanel jEngineConfPanel1;
