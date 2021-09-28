@@ -23,6 +23,7 @@ import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Position;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -31,8 +32,11 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
@@ -1175,6 +1179,22 @@ public class ShogiExplorer extends javax.swing.JFrame {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        Desktop desktop = Desktop.getDesktop();
+        
+        final ImageIcon icon;
+        String message = 
+            "Shogi Explorer\n\nVersion 1.0.0\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
+                + "\n\nPlay more Shogi!";
+        try {
+            icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));
+            desktop.setAboutHandler(e ->
+                JOptionPane.showMessageDialog(mainFrame, message, null, JOptionPane.INFORMATION_MESSAGE, icon)
+            );
+        } catch (IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             mainFrame = new ShogiExplorer();
