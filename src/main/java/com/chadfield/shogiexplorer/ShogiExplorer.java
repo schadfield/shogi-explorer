@@ -90,7 +90,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     DefaultIntervalXYDataset plotDataset;
     JFreeChart chart;
     ChartPanel chartPanel;
-    Thread analysisThread;
+    transient Thread analysisThread;
 
     /**
      * Creates new form NewJFrame
