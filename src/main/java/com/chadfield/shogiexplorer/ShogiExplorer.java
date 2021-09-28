@@ -1185,6 +1185,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButtonMenuItem5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        jButton4.setEnabled(false);
         analysisThread.interrupt();
     }//GEN-LAST:event_jButton4ActionPerformed
 
