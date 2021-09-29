@@ -122,7 +122,7 @@ public class GameAnalyser {
 
         count++;
         updateMoveList(moveList, count);
-        analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, lastDestination);
+        analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, previousMoveDestination);
         
         quitEngine();
         haltAnalysisButton.setEnabled(false);
