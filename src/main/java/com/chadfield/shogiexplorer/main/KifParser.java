@@ -70,18 +70,12 @@ public class KifParser {
                         continue;
                     }
                     
+                    if (!isRegularMove(line)) {
+                        break;
+                    }
+                    
                     count++;
-                    
-                    if (isResigns(line)) {
-                        parseResignLine(board, line, moveListModel, positionList);
-                        continue;
-                    }
-                    
-                    if (isSuspended(line)) {
-                        parseSuspendedLine(board, line, moveListModel, positionList);
-                        continue;
-                    }
-                    
+                                       
                     board.setMoveCount(count);
 
                     lastDestination = parseRegularMove(board, line, moveListModel, lastDestination, positionList);
@@ -127,31 +121,7 @@ public class KifParser {
         }
         return move;
     }
-        
-    private static void parseResignLine(Board board, String line, DefaultListModel<String> moveListModel, List<Position> positionList) {
-        String[] splitLine = line.trim().split(MULTI_WHITESPACE);
-        int gameNum = Integer.parseInt(splitLine[0]);
-        
-        Notation  notation = new Notation();
-        notation.setEngineMove("Resigns");
-        notation.setJapanese(NotationUtils.RESIGNS);
-        Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), notation);
-        addMoveToMoveList(moveListModel, gameNum, position.getNotation().getJapanese());
-        positionList.add(position);
-    }
-    
-    private static void parseSuspendedLine(Board board, String line, DefaultListModel<String> moveListModel, List<Position> positionList) {
-        String[] splitLine = line.trim().split(MULTI_WHITESPACE);
-        int gameNum = Integer.parseInt(splitLine[0]);
-        
-        Notation  notation = new Notation();
-        notation.setEngineMove("Suspended");
-        notation.setJapanese(NotationUtils.SUSPENDED);
-        Position position = new Position(SFENParser.getSFEN(board), board.getSource(), board.getDestination(), notation);
-        addMoveToMoveList(moveListModel, gameNum, position.getNotation().getJapanese());
-        positionList.add(position);
-    }
-    
+            
     private static void parseGameDetails(String line, Game game) {
         if (line.startsWith(SENTE)) {
             game.setSente(line.substring(SENTE.length()));
@@ -211,7 +181,7 @@ public class KifParser {
     }
     
 
-    private static Notation executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
+    private static Notation executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, Coordinate lastDestination, String move) {
         Koma destinationKoma = getKoma(board, thisDestination);
         if (destinationKoma != null) {
             ParserUtils.addPieceToInHand(getKoma(board, thisDestination), board);
@@ -220,8 +190,16 @@ public class KifParser {
         String disambiguation = NotationUtils.getDisambiguation(board, thisSource, thisDestination, sourceKoma.getType());
         putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null);
+        
+        
+        boolean same;
+        if (lastDestination == null) {
+            same = false;
+        } else {
+            same = thisDestination.sameValue(lastDestination);
+        }
               
-        return getNotation(thisSource, thisDestination, false, move, NotationUtils.getKomaKanji(sourceKoma.getType()), disambiguation);
+        return getNotation(thisSource, thisDestination, same, move, NotationUtils.getKomaKanji(sourceKoma.getType()), disambiguation);
     }
         
     private static Notation executeSameMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
@@ -289,13 +267,11 @@ public class KifParser {
         Coordinate thisDestination = new Coordinate();
         Coordinate thisSource;
         
-        if (isSame(move)) {
+        if (!isRegularMove(move)) {
+            return null;
+        } else if (isSame(move)) {
             thisSource = NotationUtils.getSourceCoordinate(move);
-            copyCoords(lastDestination, thisDestination);
-        } else if (isResigns(move)) {
-            return null;
-        } else if (isSuspended(move)) {
-            return null;
+            copyCoords(lastDestination, thisDestination);        
         } else if (isDrop(move)) {
             thisDestination = getDestinationCoordinate(move);
             thisSource = null;
@@ -303,20 +279,25 @@ public class KifParser {
             thisSource = NotationUtils.getSourceCoordinate(move);
             thisDestination = getDestinationCoordinate(move);
         }
-        Notation notation = new Notation();
-        if (!isResigns(move)) {
-            if (!isDrop(move)) {
-                if (!isSame(move)) {
-                    notation = executeRegularMove(board, thisDestination, thisSource, move);
-                } else {
-                    notation = executeSameMove(board, thisDestination, thisSource, move);
-                }
+        Notation notation;
+        if (!isDrop(move)) {
+            if (!isSame(move)) {
+                notation = executeRegularMove(board, thisDestination, thisSource, lastDestination, move);
             } else {
-                notation = executeDropMove(board, thisDestination, move);
+                notation = executeSameMove(board, thisDestination, thisSource, move);
             }
+        } else {
+            notation = executeDropMove(board, thisDestination, move);
         }
         board.setNextTurn(ParserUtils.switchTurn(board.getNextTurn()));
         return new Position(SFENParser.getSFEN(board), thisSource, thisDestination, notation);
+    }
+    
+    private static boolean isRegularMove(String move) {
+        if (move.contains(NotationUtils.DROPPED)) {
+            return true;
+        }
+        return move.contains("(") && move.contains(")");
     }
     
     private static String getEngineMoveCoordinate(Coordinate coordinate) {
@@ -368,15 +349,7 @@ public class KifParser {
         }
         return move.charAt(move.indexOf('(') - 1) == NotationUtils.PROMOTED.charAt(0);
     }
-
-    private static boolean isResigns(String move) {
-        return (move.contains(NotationUtils.RESIGNS) && !move.contains(NotationUtils.MADE));
-    }
-
-    private static boolean isSuspended(String move) {
-        return (move.contains(NotationUtils.SUSPENDED) && !move.contains(NotationUtils.MADE));
-    }
-
+     
     private static boolean isDrop(String move) {
         return move.contains(NotationUtils.DROPPED);
     }

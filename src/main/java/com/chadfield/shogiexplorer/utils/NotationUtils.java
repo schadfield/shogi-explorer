@@ -16,6 +16,7 @@ public class NotationUtils {
     
     public static final String PROMOTED = "成";
     public static final String RESIGNS = "投了";
+    public static final String LOSING = "切れ負け";
     public static final String SUSPENDED = "中断";
     public static final String MADE = "まで";
     public static final String DROPPED = "打";
