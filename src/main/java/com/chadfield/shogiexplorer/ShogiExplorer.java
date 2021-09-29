@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FileDialog;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -157,7 +158,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jKifFileChooser = new javax.swing.JFileChooser();
         jEngineManagerDialog = new javax.swing.JDialog();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEngineList = new javax.swing.JList<>();
@@ -166,7 +166,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         addEngineButton = new javax.swing.JButton();
         configureEngineButton = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jEngineFileChooser1 = new javax.swing.JFileChooser();
         jEngineConfDialog = new javax.swing.JDialog(jEngineManagerDialog);
         jEngineConfPanel = new javax.swing.JPanel();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -230,8 +229,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
         jRadioButtonMenuItem6 = new javax.swing.JRadioButtonMenuItem();
-
-        jKifFileChooser.setFileFilter(kifFileFilter);
 
         jEngineManagerDialog.setAlwaysOnTop(true);
         jEngineManagerDialog.setModal(true);
@@ -764,15 +761,21 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_boardPanelComponentResized
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));
-        jKifFileChooser.setCurrentDirectory(dirFile);
-
+        File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));    
+        FileDialog fileChooser = new FileDialog(mainFrame);
+        fileChooser.setDirectory(dirFile.getPath());
+        fileChooser.setMode(FileDialog.LOAD);
+        fileChooser.setTitle("Select KIF fileFile");
+        
         java.awt.EventQueue.invokeLater(() -> {
-            jKifFileChooser.showOpenDialog(mainFrame);
-            File kifFile = jKifFileChooser.getSelectedFile();
-            if (kifFile == null) {
+            fileChooser.setVisible(true);
+            String name = fileChooser.getFile();
+            String dir = fileChooser.getDirectory();
+            if (name == null || dir == null) {
                 return;
             }
+            File kifFile = new File(fileChooser.getDirectory(), fileChooser.getFile());
+            
             prefs.put("fileOpenDir", kifFile.getParent());
             DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
             analysisTableModel.getDataVector().clear();
@@ -947,15 +950,22 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteEngineButtonActionPerformed
 
     private void addEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEngineButtonActionPerformed
-        File dirFile = new File(prefs.get("engineOpenDir", System.getProperty("user.home")));
-        jEngineFileChooser1.setCurrentDirectory(dirFile);
-        jEngineFileChooser1.showOpenDialog(jEngineManagerDialog);
-        newEngineFile = jEngineFileChooser1.getSelectedFile();
-
-        if (newEngineFile == null) {
+        File dirFile = new File(prefs.get("engineOpenDir", System.getProperty("user.home"))); 
+        FileDialog fileChooser = new FileDialog(mainFrame);
+        fileChooser.setDirectory(dirFile.getPath());
+        fileChooser.setMode(FileDialog.LOAD);
+        fileChooser.setTitle("Select KIF fileFile");
+        
+        fileChooser.setVisible(true);
+        String name = fileChooser.getFile();
+        String dir = fileChooser.getDirectory();
+        if (name == null || dir == null) {
             return;
         }
+        newEngineFile = new File(fileChooser.getDirectory(), fileChooser.getFile());
+
         prefs.put("engineOpenDir", newEngineFile.getParent());
+        
         EngineManager.addNewEngine(newEngineFile, engineListModel, jEngineList, engineList);
         EngineManager.saveEngines(engineList);
     }//GEN-LAST:event_addEngineButtonActionPerformed
@@ -1266,7 +1276,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         
         final ImageIcon icon;
         String message = 
-            "Shogi Explorer\n\nVersion 1.0.0\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
+            "Shogi Explorer\n\nVersion 1.0.2\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
                 + "\n\nPlay more Shogi!";
         try {
             icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));
@@ -1318,10 +1328,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JPanel jEngineConfPanel1;
-    private javax.swing.JFileChooser jEngineFileChooser1;
     private javax.swing.JList<String> jEngineList;
     private javax.swing.JDialog jEngineManagerDialog;
-    private javax.swing.JFileChooser jKifFileChooser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenuBar jMenuBar1;
