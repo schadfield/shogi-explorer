@@ -1276,7 +1276,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         
         final ImageIcon icon;
         String message = 
-            "Shogi Explorer\n\nVersion 1.0.6\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
+            "Shogi Explorer\n\nVersion 1.0.7\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
                 + "\n\nPlay more Shogi!";
         try {
             icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));
