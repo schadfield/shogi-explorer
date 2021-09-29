@@ -96,6 +96,7 @@ public class GameAnalyser {
         int count = 0;
         Coordinate lastDestination = null;
         Coordinate previousMoveDestination = null;
+        game.setAnalysisPositionList(new ArrayList<>());
                 
         for (Position position : game.getPositionList()) {
             if (engineMove != null) {
