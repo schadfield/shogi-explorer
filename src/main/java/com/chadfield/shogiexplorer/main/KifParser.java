@@ -19,7 +19,6 @@ import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.NotationUtils;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
-import java.util.List;
 
 /**
  *
@@ -107,10 +106,9 @@ public class KifParser {
         if (position != null) {
             lastDestination = position.getDestination();
             addMoveToMoveList(moveListModel, gameNum, position.getNotation().getJapanese());
+            positionList.add(position);
         }
-        
-        
-        positionList.add(position);
+               
         return lastDestination;
     }
     

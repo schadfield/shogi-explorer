@@ -1006,6 +1006,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (analysing.get()) {
             return;
         }
+        if (game == null) {
+            return;
+        }
         browse = false;
         analysisEngineName = (String) analysisEngineComboBox.getSelectedItem();
         analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
@@ -1276,7 +1279,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         
         final ImageIcon icon;
         String message = 
-            "Shogi Explorer\n\nVersion 1.0.7\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
+            "Shogi Explorer\n\nVersion 1.0.8\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
                 + "\n\nPlay more Shogi!";
         try {
             icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));

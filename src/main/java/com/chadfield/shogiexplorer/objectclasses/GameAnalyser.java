@@ -99,29 +99,27 @@ public class GameAnalyser {
         game.setAnalysisPositionList(new ArrayList<>());
                 
         for (Position position : game.getPositionList()) {
-            if (position != null) {
 
-                if (engineMove != null) {
-                    count++;
-                    updateMoveList(moveList, count);
-                    analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, previousMoveDestination);
-                    previousMoveDestination = lastDestination;
-                } 
-                lastSFEN = sfen;
+            if (engineMove != null) {
+                count++;
+                updateMoveList(moveList, count);
+                analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, previousMoveDestination);
+                previousMoveDestination = lastDestination;
+            } 
+            lastSFEN = sfen;
 
 
-                sfen = position.getGameSFEN();
-                engineMove = position.getNotation().getEngineMove();
+            sfen = position.getGameSFEN();
+            engineMove = position.getNotation().getEngineMove();
 
-                if (count % 2 == 0) {
-                    japaneseMove = trans.transliterate(" ☗" + position.getNotation().getJapanese());
-                } else {
-                    japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
-                }
-                lastDestination = position.getDestination();
-
+            if (count % 2 == 0) {
+                japaneseMove = trans.transliterate(" ☗" + position.getNotation().getJapanese());
+            } else {
+                japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
             }
             
+            lastDestination = position.getDestination();
+
             if (Thread.interrupted()) {
                 break;
             }
