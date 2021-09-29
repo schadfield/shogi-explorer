@@ -2,6 +2,7 @@ package com.chadfield.shogiexplorer.main;
 
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
+import com.chadfield.shogiexplorer.utils.OSValidator;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.StreamException;
 import com.thoughtworks.xstream.security.AnyTypePermission;
@@ -19,6 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import net.harawata.appdirs.AppDirs;
+import net.harawata.appdirs.AppDirsFactory;
 
 /**
  *
@@ -189,7 +192,8 @@ public class EngineManager {
     }
 
     public static List<Engine> loadEngines(DefaultListModel<String> engineListModel) {
-        String directoryName = System.getProperty("user.home") + File.separator + "Library" + File.separator + "ShogiExplorer";
+        AppDirs appDirs = AppDirsFactory.getInstance();
+        String directoryName = appDirs.getUserDataDir("Shogi Explorer", null, "Stephen R Chadfield");
         File directory = new File(directoryName);
         if (!directory.exists()) {
             directory.mkdir();
@@ -202,6 +206,8 @@ public class EngineManager {
             List<Engine> result;
             try ( FileInputStream inputFileStream = new FileInputStream(directoryName + File.separator + "engines.xml")) {
                 result = (List<Engine>) xstream.fromXML(inputFileStream);
+            } catch (IOException ex) {
+                return new ArrayList<>();
             }
             int index = 0;
             for (Engine engine : result) {
@@ -209,14 +215,15 @@ public class EngineManager {
                 index++;
             }
             return result;
-        } catch (IOException | StreamException ex) {
+        } catch (StreamException ex) {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
         } 
         return new ArrayList<>();
     }
 
     public static void saveEngines(List<Engine> engineList) {
-        String directoryName = System.getProperty("user.home") + File.separator + "Library" + File.separator + "ShogiExplorer";
+        AppDirs appDirs = AppDirsFactory.getInstance();
+        String directoryName = appDirs.getUserDataDir("Shogi Explorer", null, "Stephen R Chadfield");
         File directory = new File(directoryName);
         if (!directory.exists()) {
             directory.mkdir();
