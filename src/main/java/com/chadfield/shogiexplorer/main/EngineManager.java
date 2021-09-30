@@ -2,7 +2,6 @@ package com.chadfield.shogiexplorer.main;
 
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
-import com.chadfield.shogiexplorer.utils.OSValidator;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.StreamException;
 import com.thoughtworks.xstream.security.AnyTypePermission;

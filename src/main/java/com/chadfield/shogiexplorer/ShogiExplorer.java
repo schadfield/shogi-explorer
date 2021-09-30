@@ -27,6 +27,7 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FileDialog;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -324,7 +325,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jEngineConfDialog.setSize(new java.awt.Dimension(100, 100));
         jEngineConfDialog.getContentPane().setLayout(new java.awt.FlowLayout());
 
-        jEngineConfPanel.setLayout(new java.awt.GridLayout(0, 4, 20, 0));
+        jEngineConfPanel.setLayout(new java.awt.GridLayout(0, 4, 20, 2));
         jEngineConfDialog.getContentPane().add(jEngineConfPanel);
 
         jEngineConfDialog.getAccessibleContext().setAccessibleParent(null);
@@ -956,7 +957,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         fileChooser.setDirectory(dirFile.getPath());
         fileChooser.setMode(FileDialog.LOAD);
         fileChooser.setTitle("Select engine executable");
-        jEngineManagerDialog.setVisible(false);
+        if (OSValidator.IS_WINDOWS) {
+            jEngineManagerDialog.setVisible(false);
+        }
         fileChooser.setVisible(true);
         String name = fileChooser.getFile();
         String dir = fileChooser.getDirectory();
@@ -969,10 +972,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         
         EngineManager.addNewEngine(newEngineFile, engineListModel, jEngineList, engineList);
         EngineManager.saveEngines(engineList);
-                    jEngineManagerDialog.pack();
+        if (OSValidator.IS_WINDOWS) {
+            jEngineManagerDialog.pack();
             jEngineManagerDialog.setLocationRelativeTo(mainFrame);
             jEngineManagerDialog.setVisible(true);
-
+        }
     }//GEN-LAST:event_addEngineButtonActionPerformed
 
     private void configureEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureEngineButtonActionPerformed
@@ -1166,7 +1170,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         @Override
         public Component getTableCellRendererComponent(JTable arg0, Object arg1, boolean arg2, boolean arg3, int arg4, int arg5) {
             Color selBG = analysisTable.getSelectionBackground();
-            String hexCol = String.format("#%06x", Integer.valueOf(selBG.getRGB() & 0x00FFFFFF));
+            String hexCol = String.format("#%06x", selBG.getRGB() & 0x00FFFFFF);
             if (arg1 != null) {
                 if (browse && arg4 == moveNumber-1) {
                     // We are in browse mode and rendering the PV for the active line.
@@ -1280,7 +1284,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
             * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
              */
-            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());  
+            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
             //</editor-fold>
         } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);

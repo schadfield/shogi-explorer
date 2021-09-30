@@ -166,6 +166,7 @@
             <Property name="columns" type="int" value="4"/>
             <Property name="horizontalGap" type="int" value="20"/>
             <Property name="rows" type="int" value="0"/>
+            <Property name="verticalGap" type="int" value="2"/>
           </Layout>
         </Container>
       </SubComponents>
