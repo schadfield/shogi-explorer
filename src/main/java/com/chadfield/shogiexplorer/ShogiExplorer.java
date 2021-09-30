@@ -40,6 +40,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -96,7 +97,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     JFreeChart chart;
     ChartPanel chartPanel;
     transient Thread analysisThread;
-    static ImageIcon icon;
     static final String ABOUT_MESSAGE = 
                 "Shogi Explorer\n\nVersion 1.1.0\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
                     + "\n\nPlay more Shogi!";
@@ -105,12 +105,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
      * Creates new form NewJFrame
      */
     public ShogiExplorer() {
-        try {
-            ShogiExplorer.icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));
-
-        } catch (IOException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
         String language = prefs.get(PREF_LANGUAGE, "english");
         if (language.contentEquals("japanese")) {
@@ -165,6 +159,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.getColumnModel().getColumn(4).setCellRenderer(analysisMoveRenderer);
         analysisTable.setShowHorizontalLines(false);
         analysisTable.setShowVerticalLines(false);
+        
+        if (OSValidator.IS_MAC) {
+            jMenu1.setVisible(false);
+        }
 
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
     }
@@ -1320,7 +1318,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButtonMenuItem6ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        JOptionPane.showMessageDialog(mainFrame, ABOUT_MESSAGE, null, JOptionPane.INFORMATION_MESSAGE, icon);
+        try {
+            JOptionPane.showMessageDialog(mainFrame, ABOUT_MESSAGE, null, JOptionPane.INFORMATION_MESSAGE,
+                    new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png"))));
+        } catch (IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
@@ -1355,7 +1358,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         
         if (OSValidator.IS_MAC) {
             desktop.setAboutHandler(e ->
-                JOptionPane.showMessageDialog(mainFrame, ABOUT_MESSAGE, null, JOptionPane.INFORMATION_MESSAGE, icon)
+                {
+                try {
+                    JOptionPane.showMessageDialog(mainFrame, ABOUT_MESSAGE, null, JOptionPane.INFORMATION_MESSAGE,
+                            new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png"))));
+                } catch (IOException ex) {
+                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             );
         }
 
