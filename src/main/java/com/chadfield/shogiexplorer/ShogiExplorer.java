@@ -21,6 +21,7 @@ import com.chadfield.shogiexplorer.objects.AnalysisParameter;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Position;
+import com.chadfield.shogiexplorer.utils.OSValidator;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -954,8 +955,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         FileDialog fileChooser = new FileDialog(mainFrame);
         fileChooser.setDirectory(dirFile.getPath());
         fileChooser.setMode(FileDialog.LOAD);
-        fileChooser.setTitle("Select KIF fileFile");
-        
+        fileChooser.setTitle("Select engine executable");
+        jEngineManagerDialog.setVisible(false);
         fileChooser.setVisible(true);
         String name = fileChooser.getFile();
         String dir = fileChooser.getDirectory();
@@ -968,6 +969,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         
         EngineManager.addNewEngine(newEngineFile, engineListModel, jEngineList, engineList);
         EngineManager.saveEngines(engineList);
+                    jEngineManagerDialog.pack();
+            jEngineManagerDialog.setLocationRelativeTo(mainFrame);
+            jEngineManagerDialog.setVisible(true);
+
     }//GEN-LAST:event_addEngineButtonActionPerformed
 
     private void configureEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureEngineButtonActionPerformed
@@ -1160,6 +1165,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         @Override
         public Component getTableCellRendererComponent(JTable arg0, Object arg1, boolean arg2, boolean arg3, int arg4, int arg5) {
+            Color selBG = analysisTable.getSelectionBackground();
+            String hexCol = String.format("#%06x", Integer.valueOf(selBG.getRGB() & 0x00FFFFFF));
             if (arg1 != null) {
                 if (browse && arg4 == moveNumber-1) {
                     // We are in browse mode and rendering the PV for the active line.
@@ -1169,7 +1176,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     boolean foundEnd = false;
                     if (browsePos == 0) {
                         // In this case we insert at the begining.
-                        cellStrBld.append("<span style=\"background:#0148e2;color:white;\">");
+                        cellStrBld.append("<span style=\"background:");
+                        cellStrBld.append(hexCol);
+                        cellStrBld.append(";color:white;\">");
                         foundStart = true;
                     }
                     for (int i = 0; i < arg1.toString().length(); i++) {
@@ -1182,7 +1191,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                             } else {
                                 // Is this the start?
                                 if (spaceCount == browsePos) {
-                                    cellStrBld.append("\u3000<span style=\"background:#0148e2;color:white;\">");
+                                    cellStrBld.append("\u3000<span style=\"background:");
+                                    cellStrBld.append(hexCol);
+                                    cellStrBld.append(";color:white;\">");
                                     foundStart = true;
                                 } else {
                                     // Keep looking.
@@ -1277,17 +1288,19 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         Desktop desktop = Desktop.getDesktop();
         
-        final ImageIcon icon;
-        String message = 
-            "Shogi Explorer\n\nVersion 1.1.0\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
-                + "\n\nPlay more Shogi!";
-        try {
-            icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));
-            desktop.setAboutHandler(e ->
-                JOptionPane.showMessageDialog(mainFrame, message, null, JOptionPane.INFORMATION_MESSAGE, icon)
-            );
-        } catch (IOException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        if (OSValidator.IS_MAC) {
+            final ImageIcon icon;
+            String message = 
+                "Shogi Explorer\n\nVersion 1.1.0\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
+                    + "\n\nPlay more Shogi!";
+            try {
+                icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));
+                desktop.setAboutHandler(e ->
+                    JOptionPane.showMessageDialog(mainFrame, message, null, JOptionPane.INFORMATION_MESSAGE, icon)
+                );
+            } catch (IOException ex) {
+                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         

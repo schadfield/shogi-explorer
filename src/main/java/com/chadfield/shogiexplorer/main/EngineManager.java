@@ -193,7 +193,7 @@ public class EngineManager {
 
     public static List<Engine> loadEngines(DefaultListModel<String> engineListModel) {
         AppDirs appDirs = AppDirsFactory.getInstance();
-        String directoryName = appDirs.getUserDataDir("Shogi Explorer", null, "Stephen R Chadfield");
+        String directoryName = appDirs.getUserDataDir("Shogi Explorer", null, null);
         File directory = new File(directoryName);
         if (!directory.exists()) {
             directory.mkdir();
@@ -223,7 +223,7 @@ public class EngineManager {
 
     public static void saveEngines(List<Engine> engineList) {
         AppDirs appDirs = AppDirsFactory.getInstance();
-        String directoryName = appDirs.getUserDataDir("Shogi Explorer", null, "Stephen R Chadfield");
+        String directoryName = appDirs.getUserDataDir("Shogi Explorer", null, null);
         File directory = new File(directoryName);
         if (!directory.exists()) {
             directory.mkdir();
