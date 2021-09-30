@@ -31,9 +31,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -97,9 +99,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     JFreeChart chart;
     ChartPanel chartPanel;
     transient Thread analysisThread;
-    static final String ABOUT_MESSAGE = 
-                "Shogi Explorer\n\nVersion 1.1.0\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
-                    + "\n\nPlay more Shogi!";
+    static  String aboutMessage; 
     
     static final String LOGO_NAME = "logo.png";
     
@@ -166,6 +166,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.getColumnModel().getColumn(4).setCellRenderer(analysisMoveRenderer);
         analysisTable.setShowHorizontalLines(false);
         analysisTable.setShowVerticalLines(false);
+        
+        try (InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+            aboutMessage = "Shogi Explorer\n\nVersion " + prop.getProperty("project.version") + 
+                    "\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
+                    + "\n\nPlay more Shogi!";
+        } catch (IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         if (IS_MAC) {
             jMenu1.setVisible(false);
@@ -1317,7 +1327,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         try {
-            JOptionPane.showMessageDialog(mainFrame, ABOUT_MESSAGE, null, JOptionPane.INFORMATION_MESSAGE,
+            JOptionPane.showMessageDialog(mainFrame, aboutMessage, null, JOptionPane.INFORMATION_MESSAGE,
                     new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME))));
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
@@ -1358,7 +1368,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             desktop.setAboutHandler(e ->
                 {
                 try {
-                    JOptionPane.showMessageDialog(mainFrame, ABOUT_MESSAGE, null, JOptionPane.INFORMATION_MESSAGE,
+                    JOptionPane.showMessageDialog(mainFrame, aboutMessage, null, JOptionPane.INFORMATION_MESSAGE,
                             new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME))));
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
