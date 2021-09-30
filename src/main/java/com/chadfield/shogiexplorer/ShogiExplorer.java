@@ -97,7 +97,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     ChartPanel chartPanel;
     transient Thread analysisThread;
     static ImageIcon icon;
-    static final String aboutMessage = 
+    static final String ABOUT_MESSAGE = 
                 "Shogi Explorer\n\nVersion 1.1.0\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
                     + "\n\nPlay more Shogi!";
 
@@ -106,7 +106,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
      */
     public ShogiExplorer() {
         try {
-            this.icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));
+            ShogiExplorer.icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));
+
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -123,6 +124,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
 
         initComponents();
+        try {
+            setIconImage(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("big_logo.png")));
+        } catch (IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         
         if (language.contentEquals("japanese")) {
             jRadioButtonMenuItem6.setSelected(true);
@@ -198,6 +205,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         JRadioButton graph3000Button = new JRadioButton("3000");
         buttonGroup1.add(graph3000Button);
         buttonGroup2 = new javax.swing.ButtonGroup();
+        jMenuItem5 = new javax.swing.JMenuItem();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
@@ -229,6 +237,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         gameMenu = new javax.swing.JMenu();
         analyseGame = new javax.swing.JMenuItem();
         enginesMenu = new javax.swing.JMenu();
@@ -379,6 +388,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jAnalysisStartPanel.add(jButton2);
 
         jAnalysisDialog.getContentPane().add(jAnalysisStartPanel);
+
+        jMenuItem5.setText(bundle.getString("ShogiExplorer.jMenuItem5.text")); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -618,6 +629,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         fileMenu.add(jMenuItem1);
+
+        jMenuItem6.setText(bundle.getString("ShogiExplorer.jMenuItem6.text")); // NOI18N
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem6);
 
         jMenuBar1.add(fileMenu);
 
@@ -1301,8 +1320,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButtonMenuItem6ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        JOptionPane.showMessageDialog(mainFrame, aboutMessage, null, JOptionPane.INFORMATION_MESSAGE, icon);
+        JOptionPane.showMessageDialog(mainFrame, ABOUT_MESSAGE, null, JOptionPane.INFORMATION_MESSAGE, icon);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1332,7 +1355,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         
         if (OSValidator.IS_MAC) {
             desktop.setAboutHandler(e ->
-                JOptionPane.showMessageDialog(mainFrame, aboutMessage, null, JOptionPane.INFORMATION_MESSAGE, icon)
+                JOptionPane.showMessageDialog(mainFrame, ABOUT_MESSAGE, null, JOptionPane.INFORMATION_MESSAGE, icon)
             );
         }
 
@@ -1387,6 +1410,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton1;
