@@ -38,6 +38,7 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -572,6 +573,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         analysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         analysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        analysisTable.setShowHorizontalLines(false);
+        analysisTable.setShowVerticalLines(false);
         analysisTable.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 analysisTableKeyReleased(evt);
@@ -763,41 +766,53 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_boardPanelComponentResized
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));    
-        FileDialog fileChooser = new FileDialog(mainFrame);
-        fileChooser.setDirectory(dirFile.getPath());
-        fileChooser.setMode(FileDialog.LOAD);
-        fileChooser.setTitle("Select KIF fileFile");
+        File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home"))); 
+        String name;
+        String dir;
+        File kifFile;
         
-        java.awt.EventQueue.invokeLater(() -> {
-            fileChooser.setVisible(true);
-            String name = fileChooser.getFile();
-            String dir = fileChooser.getDirectory();
+        if (OSValidator.IS_MAC) {
+            FileDialog fileDialog = new FileDialog(mainFrame);
+            fileDialog.setDirectory(dirFile.getPath());
+            fileDialog.setMode(FileDialog.LOAD);
+            fileDialog.setTitle("Select KIF fileFile");
+
+            fileDialog.setVisible(true);
+            name = fileDialog.getFile();
+            dir = fileDialog.getDirectory();
             if (name == null || dir == null) {
                 return;
             }
-            File kifFile = new File(fileChooser.getDirectory(), fileChooser.getFile());
-            
-            prefs.put("fileOpenDir", kifFile.getParent());
-            DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
-            analysisTableModel.getDataVector().clear();
-            jTabbedPane1.setComponentAt(1, new JPanel());
-
-            try {
-                game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
-            } catch (IOException ex) {
-                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+            kifFile = new File(dir, name);
+        } else {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(dirFile);
+            fileChooser.showOpenDialog(jEngineManagerDialog);
+            kifFile = fileChooser.getSelectedFile();
+            if (kifFile == null) {
+                return;
             }
-            ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
-            gameTextArea.setText(null);
-            gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
-            gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
-            gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
-            gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
-            gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
-            moveNumber = 0;
-            moveList.setSelectedIndex(0);
-        });
+        }
+
+        prefs.put("fileOpenDir", kifFile.getParent());
+        DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
+        analysisTableModel.getDataVector().clear();
+        jTabbedPane1.setComponentAt(1, new JPanel());
+
+        try {
+            game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
+        } catch (IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+        gameTextArea.setText(null);
+        gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
+        gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
+        gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
+        gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
+        gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
+        moveNumber = 0;
+        moveList.setSelectedIndex(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
@@ -953,20 +968,31 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void addEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEngineButtonActionPerformed
         File dirFile = new File(prefs.get("engineOpenDir", System.getProperty("user.home"))); 
-        FileDialog fileChooser = new FileDialog(mainFrame);
-        fileChooser.setDirectory(dirFile.getPath());
-        fileChooser.setMode(FileDialog.LOAD);
-        fileChooser.setTitle("Select engine executable");
-        if (OSValidator.IS_WINDOWS) {
-            jEngineManagerDialog.setVisible(false);
+        
+        String name;
+        String dir;
+        
+        if (OSValidator.IS_MAC) {
+            FileDialog fileDialog = new FileDialog(mainFrame);
+            fileDialog.setDirectory(dirFile.getPath());
+            fileDialog.setMode(FileDialog.LOAD);
+            fileDialog.setTitle("Select engine executable");
+            fileDialog.setVisible(true);
+            name = fileDialog.getFile();
+            dir = fileDialog.getDirectory();
+            if (name == null || dir == null) {
+                return;
+            }
+            newEngineFile = new File(dir, name);
+        } else {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(dirFile);
+            fileChooser.showOpenDialog(jEngineManagerDialog);
+            newEngineFile = fileChooser.getSelectedFile();
+            if (newEngineFile == null) {
+                return;
+            }
         }
-        fileChooser.setVisible(true);
-        String name = fileChooser.getFile();
-        String dir = fileChooser.getDirectory();
-        if (name == null || dir == null) {
-            return;
-        }
-        newEngineFile = new File(fileChooser.getDirectory(), fileChooser.getFile());
 
         prefs.put("engineOpenDir", newEngineFile.getParent());
         
@@ -1031,7 +1057,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setHaltAnalysisButton(jButton4);
         plotDataset = new DefaultIntervalXYDataset();  
         chart = ChartFactory.createXYBarChart("", "", false, "", plotDataset);
-       
         XYPlot plot = chart.getXYPlot();
         plot.setRenderer(0, new XYBarRenderer());
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
@@ -1285,7 +1310,19 @@ public class ShogiExplorer extends javax.swing.JFrame {
             * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
              */
             javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
-            //</editor-fold>
+            
+            if (OSValidator.IS_WINDOWS) {
+                java.util.Enumeration keys = UIManager.getDefaults().keys();
+                while (keys.hasMoreElements()) {
+                    Object key = keys.nextElement();
+                    Object value = UIManager.get (key);
+                    if (value instanceof javax.swing.plaf.FontUIResource) {
+                        UIManager.put (key, new javax.swing.plaf.FontUIResource("Meiryo",Font.PLAIN,12));
+                    }
+                }
+            }
+        
+        //</editor-fold>
         } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }

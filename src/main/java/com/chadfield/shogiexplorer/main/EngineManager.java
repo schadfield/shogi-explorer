@@ -4,6 +4,7 @@ import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.StreamException;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import java.io.BufferedReader;
 import java.io.File;
@@ -124,7 +125,7 @@ public class EngineManager {
                 return;
             }
         }
-
+        
         Process process;
 
         try {
@@ -229,7 +230,7 @@ public class EngineManager {
         }
         File engineFile = new File(directoryName + File.separator + "engines.xml");
 
-        XStream xstream = new XStream();
+        XStream xstream = new XStream(new DomDriver("UTF-8"));
         xstream.alias("engine", Engine.class);
         xstream.alias("engineOption", EngineOption.class);
         String dataXml = xstream.toXML(engineList);
