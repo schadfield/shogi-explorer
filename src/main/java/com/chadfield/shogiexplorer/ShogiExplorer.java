@@ -40,7 +40,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -1341,7 +1340,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
              */
             javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
             if (OSValidator.IS_WINDOWS) {
-                java.util.Enumeration keys = UIManager.getDefaults().keys();
+                java.util.Enumeration<?> keys = UIManager.getDefaults().keys();
                 while (keys.hasMoreElements()) {
                     Object key = keys.nextElement();
                     Object value = UIManager.get (key);
