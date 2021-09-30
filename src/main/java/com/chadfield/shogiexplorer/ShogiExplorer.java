@@ -96,11 +96,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
     JFreeChart chart;
     ChartPanel chartPanel;
     transient Thread analysisThread;
+    static ImageIcon icon;
+    static final String aboutMessage = 
+                "Shogi Explorer\n\nVersion 1.1.0\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
+                    + "\n\nPlay more Shogi!";
 
     /**
      * Creates new form NewJFrame
      */
     public ShogiExplorer() {
+        try {
+            this.icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));
+        } catch (IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
         String language = prefs.get(PREF_LANGUAGE, "english");
         if (language.contentEquals("japanese")) {
@@ -231,6 +240,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
         jRadioButtonMenuItem6 = new javax.swing.JRadioButtonMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         jEngineManagerDialog.setAlwaysOnTop(true);
         jEngineManagerDialog.setModal(true);
@@ -693,6 +704,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
         viewMenu.add(jRadioButtonMenuItem6);
 
         jMenuBar1.add(viewMenu);
+
+        jMenu1.setText(bundle.getString("ShogiExplorer.jMenu1.text")); // NOI18N
+
+        jMenuItem4.setText(bundle.getString("ShogiExplorer.jMenuItem4.text")); // NOI18N
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -1275,6 +1298,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }         
     }//GEN-LAST:event_jRadioButtonMenuItem6ActionPerformed
 
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        JOptionPane.showMessageDialog(mainFrame, aboutMessage, null, JOptionPane.INFORMATION_MESSAGE, icon);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1293,18 +1320,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         Desktop desktop = Desktop.getDesktop();
         
         if (OSValidator.IS_MAC) {
-            final ImageIcon icon;
-            String message = 
-                "Shogi Explorer\n\nVersion 1.1.0\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
-                    + "\n\nPlay more Shogi!";
-            try {
-                icon = new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png")));
-                desktop.setAboutHandler(e ->
-                    JOptionPane.showMessageDialog(mainFrame, message, null, JOptionPane.INFORMATION_MESSAGE, icon)
-                );
-            } catch (IOException ex) {
-                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            desktop.setAboutHandler(e ->
+                JOptionPane.showMessageDialog(mainFrame, aboutMessage, null, JOptionPane.INFORMATION_MESSAGE, icon)
+            );
         }
 
         
@@ -1352,10 +1370,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JDialog jEngineManagerDialog;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton1;
