@@ -156,6 +156,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.getColumnModel().getColumn(4).setMinWidth(1000);
         analysisTable.getSelectionModel().addListSelectionListener(new AnalysisTableListener());
         analysisTable.getColumnModel().getColumn(4).setCellRenderer(analysisMoveRenderer);
+        analysisTable.setShowHorizontalLines(false);
+        analysisTable.setShowVerticalLines(false);
 
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
     }
@@ -1312,7 +1314,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
             * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
              */
             javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
-            //</editor-fold>
+            if (OSValidator.IS_WINDOWS) {
+                java.util.Enumeration keys = UIManager.getDefaults().keys();
+                while (keys.hasMoreElements()) {
+                    Object key = keys.nextElement();
+                    Object value = UIManager.get (key);
+                    if (value instanceof javax.swing.plaf.FontUIResource) {
+                        UIManager.put (key, new javax.swing.plaf.FontUIResource("Meiryo",Font.PLAIN,12));
+                    }
+                }
+            }            //</editor-fold>
         } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
