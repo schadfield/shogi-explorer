@@ -335,10 +335,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jAnalysisDialog.setAlwaysOnTop(true);
         jAnalysisDialog.setModal(true);
         jAnalysisDialog.setResizable(false);
-        jAnalysisDialog.setSize(new java.awt.Dimension(480, 130));
+        jAnalysisDialog.setSize(new java.awt.Dimension(485, 116));
         jAnalysisDialog.getContentPane().setLayout(new java.awt.FlowLayout());
 
-        jEngineConfPanel1.setLayout(new java.awt.GridLayout(0, 2, 20, 0));
+        jEngineConfPanel1.setLayout(new java.awt.GridLayout(3, 2, 20, 2));
 
         jLabel1.setText(bundle.getString("ShogiExplorer.jLabel1.text")); // NOI18N
         jLabel1.setMinimumSize(new java.awt.Dimension(200, 16));

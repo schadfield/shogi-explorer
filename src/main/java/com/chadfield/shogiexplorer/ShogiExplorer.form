@@ -184,7 +184,7 @@
         <Property name="modal" type="boolean" value="true"/>
         <Property name="resizable" type="boolean" value="false"/>
         <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[480, 130]"/>
+          <Dimension value="[485, 116]"/>
         </Property>
       </Properties>
 
@@ -195,7 +195,8 @@
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
             <Property name="columns" type="int" value="2"/>
             <Property name="horizontalGap" type="int" value="20"/>
-            <Property name="rows" type="int" value="0"/>
+            <Property name="rows" type="int" value="3"/>
+            <Property name="verticalGap" type="int" value="2"/>
           </Layout>
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel1">
