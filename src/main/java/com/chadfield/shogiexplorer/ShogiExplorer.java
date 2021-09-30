@@ -38,7 +38,6 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -173,7 +172,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jEngineConfPanel = new javax.swing.JPanel();
         jMenuItem3 = new javax.swing.JMenuItem();
         jAnalysisDialog = new javax.swing.JDialog();
-        jEngineConfPanel1 = new javax.swing.JPanel();
+        jAnalysisStartPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         analysisEngineComboBox = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
@@ -336,19 +335,19 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jAnalysisDialog.setAlwaysOnTop(true);
         jAnalysisDialog.setModal(true);
         jAnalysisDialog.setResizable(false);
-        jAnalysisDialog.setSize(new java.awt.Dimension(485, 116));
+        jAnalysisDialog.setSize(new java.awt.Dimension(480, 130));
         jAnalysisDialog.getContentPane().setLayout(new java.awt.FlowLayout());
 
-        jEngineConfPanel1.setLayout(new java.awt.GridLayout(3, 2, 20, 2));
+        jAnalysisStartPanel.setLayout(new java.awt.GridLayout(0, 2, 20, 2));
 
         jLabel1.setText(bundle.getString("ShogiExplorer.jLabel1.text")); // NOI18N
         jLabel1.setMinimumSize(new java.awt.Dimension(200, 16));
-        jEngineConfPanel1.add(jLabel1);
-        jEngineConfPanel1.add(analysisEngineComboBox);
+        jAnalysisStartPanel.add(jLabel1);
+        jAnalysisStartPanel.add(analysisEngineComboBox);
 
         jLabel3.setText(bundle.getString("ShogiExplorer.jLabel3.text")); // NOI18N
-        jEngineConfPanel1.add(jLabel3);
-        jEngineConfPanel1.add(analysisTimePerMoveSpinner);
+        jAnalysisStartPanel.add(jLabel3);
+        jAnalysisStartPanel.add(analysisTimePerMoveSpinner);
 
         jButton1.setText(bundle.getString("ShogiExplorer.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -356,7 +355,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jEngineConfPanel1.add(jButton1);
+        jAnalysisStartPanel.add(jButton1);
 
         jButton2.setText(bundle.getString("ShogiExplorer.jButton2.text")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -364,9 +363,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        jEngineConfPanel1.add(jButton2);
+        jAnalysisStartPanel.add(jButton2);
 
-        jAnalysisDialog.getContentPane().add(jEngineConfPanel1);
+        jAnalysisDialog.getContentPane().add(jAnalysisStartPanel);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -573,8 +572,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         analysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         analysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        analysisTable.setShowHorizontalLines(false);
-        analysisTable.setShowVerticalLines(false);
         analysisTable.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 analysisTableKeyReleased(evt);
@@ -766,53 +763,41 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_boardPanelComponentResized
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home"))); 
-        String name;
-        String dir;
-        File kifFile;
+        File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));    
+        FileDialog fileChooser = new FileDialog(mainFrame);
+        fileChooser.setDirectory(dirFile.getPath());
+        fileChooser.setMode(FileDialog.LOAD);
+        fileChooser.setTitle("Select KIF fileFile");
         
-        if (OSValidator.IS_MAC) {
-            FileDialog fileDialog = new FileDialog(mainFrame);
-            fileDialog.setDirectory(dirFile.getPath());
-            fileDialog.setMode(FileDialog.LOAD);
-            fileDialog.setTitle("Select KIF fileFile");
-
-            fileDialog.setVisible(true);
-            name = fileDialog.getFile();
-            dir = fileDialog.getDirectory();
+        java.awt.EventQueue.invokeLater(() -> {
+            fileChooser.setVisible(true);
+            String name = fileChooser.getFile();
+            String dir = fileChooser.getDirectory();
             if (name == null || dir == null) {
                 return;
             }
-            kifFile = new File(dir, name);
-        } else {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory(dirFile);
-            fileChooser.showOpenDialog(jEngineManagerDialog);
-            kifFile = fileChooser.getSelectedFile();
-            if (kifFile == null) {
-                return;
+            File kifFile = new File(fileChooser.getDirectory(), fileChooser.getFile());
+            
+            prefs.put("fileOpenDir", kifFile.getParent());
+            DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
+            analysisTableModel.getDataVector().clear();
+            jTabbedPane1.setComponentAt(1, new JPanel());
+
+            try {
+                game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
+            } catch (IOException ex) {
+                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-
-        prefs.put("fileOpenDir", kifFile.getParent());
-        DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
-        analysisTableModel.getDataVector().clear();
-        jTabbedPane1.setComponentAt(1, new JPanel());
-
-        try {
-            game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
-        } catch (IOException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
-        gameTextArea.setText(null);
-        gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
-        gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
-        gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
-        gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
-        gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
-        moveNumber = 0;
-        moveList.setSelectedIndex(0);
+            ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+            gameTextArea.setText(null);
+            gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
+            gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
+            gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
+            gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
+            gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
+            moveNumber = 0;
+            moveList.setSelectedIndex(0);
+        });
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
@@ -968,31 +953,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void addEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEngineButtonActionPerformed
         File dirFile = new File(prefs.get("engineOpenDir", System.getProperty("user.home"))); 
-        
-        String name;
-        String dir;
-        
-        if (OSValidator.IS_MAC) {
-            FileDialog fileDialog = new FileDialog(mainFrame);
-            fileDialog.setDirectory(dirFile.getPath());
-            fileDialog.setMode(FileDialog.LOAD);
-            fileDialog.setTitle("Select engine executable");
-            fileDialog.setVisible(true);
-            name = fileDialog.getFile();
-            dir = fileDialog.getDirectory();
-            if (name == null || dir == null) {
-                return;
-            }
-            newEngineFile = new File(dir, name);
-        } else {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory(dirFile);
-            fileChooser.showOpenDialog(jEngineManagerDialog);
-            newEngineFile = fileChooser.getSelectedFile();
-            if (newEngineFile == null) {
-                return;
-            }
+        FileDialog fileChooser = new FileDialog(mainFrame);
+        fileChooser.setDirectory(dirFile.getPath());
+        fileChooser.setMode(FileDialog.LOAD);
+        fileChooser.setTitle("Select engine executable");
+        if (OSValidator.IS_WINDOWS) {
+            jEngineManagerDialog.setVisible(false);
         }
+        fileChooser.setVisible(true);
+        String name = fileChooser.getFile();
+        String dir = fileChooser.getDirectory();
+        if (name == null || dir == null) {
+            return;
+        }
+        newEngineFile = new File(fileChooser.getDirectory(), fileChooser.getFile());
 
         prefs.put("engineOpenDir", newEngineFile.getParent());
         
@@ -1057,6 +1031,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setHaltAnalysisButton(jButton4);
         plotDataset = new DefaultIntervalXYDataset();  
         chart = ChartFactory.createXYBarChart("", "", false, "", plotDataset);
+       
         XYPlot plot = chart.getXYPlot();
         plot.setRenderer(0, new XYBarRenderer());
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
@@ -1310,19 +1285,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
              */
             javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
-            
-            if (OSValidator.IS_WINDOWS) {
-                java.util.Enumeration keys = UIManager.getDefaults().keys();
-                while (keys.hasMoreElements()) {
-                    Object key = keys.nextElement();
-                    Object value = UIManager.get (key);
-                    if (value instanceof javax.swing.plaf.FontUIResource) {
-                        UIManager.put (key, new javax.swing.plaf.FontUIResource("Meiryo",Font.PLAIN,12));
-                    }
-                }
-            }
-        
-        //</editor-fold>
+            //</editor-fold>
         } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1378,13 +1341,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JScrollPane gameScrollPanel;
     private javax.swing.JTextArea gameTextArea;
     private javax.swing.JDialog jAnalysisDialog;
+    private javax.swing.JPanel jAnalysisStartPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
-    private javax.swing.JPanel jEngineConfPanel1;
     private javax.swing.JList<String> jEngineList;
     private javax.swing.JDialog jEngineManagerDialog;
     private javax.swing.JLabel jLabel1;
