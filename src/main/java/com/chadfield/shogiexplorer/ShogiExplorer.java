@@ -1275,27 +1275,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
     };
         
     private void jRadioButtonMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem3ActionPerformed
-        if (analysing.get()) {
-            return;
-        }
         if (chart != null) {
             chart.getXYPlot().getRangeAxis().setRange(-1000, 1000);
         }
     }//GEN-LAST:event_jRadioButtonMenuItem3ActionPerformed
 
     private void jRadioButtonMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem4ActionPerformed
-        if (analysing.get()) {
-            return;
-        }     
         if (chart != null) {
             chart.getXYPlot().getRangeAxis().setRange(-2000, 2000);
         }
     }//GEN-LAST:event_jRadioButtonMenuItem4ActionPerformed
 
     private void jRadioButtonMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem5ActionPerformed
-        if (analysing.get()) {
-            return;
-        }
         if (chart != null) {
             chart.getXYPlot().getRangeAxis().setRange(-3000, 3000);
         }
