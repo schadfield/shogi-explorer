@@ -21,7 +21,6 @@ import com.chadfield.shogiexplorer.objects.AnalysisParameter;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Position;
-import com.chadfield.shogiexplorer.utils.OSValidator;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -92,6 +91,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_ANALYSIS_IGNORE_THRESHOLD = "analysisLosingThreshold";
     int analysisIgnoreThreshold;
     static final String PREF_LANGUAGE = "language";
+    static final String PREF_LANGUAGE_ENGLISH = "english";
+    static final String PREF_LANGUAGE_JAPANESE = "japanese";
     DefaultIntervalXYDataset plotDataset;
     JFreeChart chart;
     ChartPanel chartPanel;
@@ -99,14 +100,21 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String ABOUT_MESSAGE = 
                 "Shogi Explorer\n\nVersion 1.1.0\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
                     + "\n\nPlay more Shogi!";
+    
+    static final String LOGO_NAME = "logo.png";
+    
+    private static final String OS = System.getProperty("os.name").toLowerCase();
+    public static final boolean IS_WINDOWS = (OS.contains("win"));
+    public static final boolean IS_MAC = (OS.contains("mac"));
+    public static final boolean IS_LINUX = (OS.contains("nux"));
 
     /**
      * Creates new form NewJFrame
      */
     public ShogiExplorer() {
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
-        String language = prefs.get(PREF_LANGUAGE, "english");
-        if (language.contentEquals("japanese")) {
+        String language = prefs.get(PREF_LANGUAGE, PREF_LANGUAGE_ENGLISH);
+        if (language.contentEquals(PREF_LANGUAGE_JAPANESE)) {
             Locale.setDefault(Locale.JAPAN);
         } else {
             Locale.setDefault(Locale.ENGLISH);
@@ -118,13 +126,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         initComponents();
         try {
-            setIconImage(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("big_logo.png")));
+            setIconImage(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME)));
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         
-        if (language.contentEquals("japanese")) {
+        if (language.contentEquals(PREF_LANGUAGE_JAPANESE)) {
             jRadioButtonMenuItem6.setSelected(true);
         } 
 
@@ -159,7 +167,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.setShowHorizontalLines(false);
         analysisTable.setShowVerticalLines(false);
         
-        if (OSValidator.IS_MAC) {
+        if (IS_MAC) {
             jMenu1.setVisible(false);
         }
 
@@ -998,7 +1006,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         fileChooser.setDirectory(dirFile.getPath());
         fileChooser.setMode(FileDialog.LOAD);
         fileChooser.setTitle("Select engine executable");
-        if (OSValidator.IS_WINDOWS) {
+        if (IS_WINDOWS) {
             jEngineManagerDialog.setVisible(false);
         }
         fileChooser.setVisible(true);
@@ -1013,7 +1021,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         
         EngineManager.addNewEngine(newEngineFile, engineListModel, jEngineList, engineList);
         EngineManager.saveEngines(engineList);
-        if (OSValidator.IS_WINDOWS) {
+        if (IS_WINDOWS) {
             jEngineManagerDialog.pack();
             jEngineManagerDialog.setLocationRelativeTo(mainFrame);
             jEngineManagerDialog.setVisible(true);
@@ -1299,7 +1307,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jRadioButtonMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem2ActionPerformed
-        prefs.put(PREF_LANGUAGE, "english");
+        prefs.put(PREF_LANGUAGE, PREF_LANGUAGE_ENGLISH);
         try {
             prefs.flush();
         } catch (BackingStoreException ex) {
@@ -1308,7 +1316,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButtonMenuItem2ActionPerformed
 
     private void jRadioButtonMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem6ActionPerformed
-        prefs.put(PREF_LANGUAGE, "japanese");
+        prefs.put(PREF_LANGUAGE, PREF_LANGUAGE_JAPANESE);
         try {
             prefs.flush();
         } catch (BackingStoreException ex) {
@@ -1319,7 +1327,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         try {
             JOptionPane.showMessageDialog(mainFrame, ABOUT_MESSAGE, null, JOptionPane.INFORMATION_MESSAGE,
-                    new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png"))));
+                    new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME))));
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1339,7 +1347,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
              */
             javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
-            if (OSValidator.IS_WINDOWS) {
+            if (IS_WINDOWS) {
                 java.util.Enumeration<?> keys = UIManager.getDefaults().keys();
                 while (keys.hasMoreElements()) {
                     Object key = keys.nextElement();
@@ -1355,12 +1363,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         Desktop desktop = Desktop.getDesktop();
         
-        if (OSValidator.IS_MAC) {
+        if (IS_MAC) {
             desktop.setAboutHandler(e ->
                 {
                 try {
                     JOptionPane.showMessageDialog(mainFrame, ABOUT_MESSAGE, null, JOptionPane.INFORMATION_MESSAGE,
-                            new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource("logo.png"))));
+                            new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME))));
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }

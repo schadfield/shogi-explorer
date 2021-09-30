@@ -220,7 +220,7 @@ public class EngineManager {
         } 
         return new ArrayList<>();
     }
-
+    
     public static void saveEngines(List<Engine> engineList) {
         AppDirs appDirs = AppDirsFactory.getInstance();
         String directoryName = appDirs.getUserDataDir("Shogi Explorer", null, null);
