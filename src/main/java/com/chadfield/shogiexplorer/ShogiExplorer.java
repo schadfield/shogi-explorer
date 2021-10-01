@@ -166,6 +166,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.getColumnModel().getColumn(4).setCellRenderer(analysisMoveRenderer);
         analysisTable.setShowHorizontalLines(false);
         analysisTable.setShowVerticalLines(false);
+        analysisTable.setDefaultEditor(Object.class, null);
         
         try (InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
             Properties prop = new Properties();
