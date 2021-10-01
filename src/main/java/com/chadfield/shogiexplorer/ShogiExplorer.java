@@ -21,6 +21,7 @@ import com.chadfield.shogiexplorer.objects.AnalysisParameter;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.Position;
+import com.chadfield.shogiexplorer.utils.ImageUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -126,12 +127,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         initComponents();
         
-        try {
-            setIconImage(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME)));
-        } catch (IOException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        setIconImage(ImageUtils.loadIconImageFromResources("logo"));
+        jEngineManagerDialog.setIconImage(ImageUtils.loadIconImageFromResources("logo"));
         
         if (language.contentEquals(PREF_LANGUAGE_JAPANESE)) {
             jRadioButtonMenuItem6.setSelected(true);

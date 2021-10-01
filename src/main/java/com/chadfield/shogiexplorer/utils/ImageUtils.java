@@ -55,6 +55,23 @@ public class ImageUtils {
         return (mri);
     }
 
+    public static Image loadIconImageFromResources(String imageName) {
+        Image image1 = null;
+        Image image2 = null;
+        Image image3 = null;
+        Image image4 = null;
+        try {
+            image1 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "_16x16.png"));
+            image2 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "_32x32.png"));
+            image3 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "_64x64.png"));
+            image4 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "_128x128.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(image1, image2, image3, image4);
+        return (mri);
+    }
+
     public static void drawImage(Board board, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset) {
         ImageCache imageCache = board.getImageCache();
         Image imageFile = imageCache.getImage(imageName);
