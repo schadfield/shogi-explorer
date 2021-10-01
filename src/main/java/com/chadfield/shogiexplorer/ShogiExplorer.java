@@ -125,6 +125,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
 
         initComponents();
+        
         try {
             setIconImage(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME)));
         } catch (IOException ex) {
@@ -178,10 +179,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        if (IS_MAC) {
-            jMenu1.setVisible(false);
-        }
-
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
     }
     
