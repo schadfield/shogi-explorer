@@ -1011,7 +1011,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         fileChooser.setDirectory(dirFile.getPath());
         fileChooser.setMode(FileDialog.LOAD);
         fileChooser.setTitle("Select engine executable");
-        if (IS_WINDOWS) {
+        if (IS_WINDOWS || IS_LINUX) {
             jEngineManagerDialog.setVisible(false);
         }
         fileChooser.setVisible(true);
@@ -1026,7 +1026,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         
         EngineManager.addNewEngine(newEngineFile, engineListModel, jEngineList, engineList);
         EngineManager.saveEngines(engineList);
-        if (IS_WINDOWS) {
+        if (IS_WINDOWS || IS_LINUX) {
             jEngineManagerDialog.pack();
             jEngineManagerDialog.setLocationRelativeTo(mainFrame);
             jEngineManagerDialog.setVisible(true);

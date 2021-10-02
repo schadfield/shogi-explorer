@@ -60,15 +60,19 @@ public class ImageUtils {
         Image image2 = null;
         Image image3 = null;
         Image image4 = null;
+        Image image5 = null;
+        Image image6 = null;
         try {
             image1 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "_16x16.png"));
             image2 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "_32x32.png"));
             image3 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "_64x64.png"));
             image4 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "_128x128.png"));
+            image5 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "_256x256.png"));
+            image6 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "_512x512.png"));
         } catch (IOException ex) {
             Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
-        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(image1, image2, image3, image4);
+        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(image1, image2, image3, image4, image5, image6);
         return (mri);
     }
 
