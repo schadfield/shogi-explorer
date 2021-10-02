@@ -101,6 +101,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     ChartPanel chartPanel;
     transient Thread analysisThread;
     static  String aboutMessage; 
+    boolean meep = false;
     
     static final String LOGO_NAME = "logo.png";
     
@@ -174,6 +175,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     + "\n\nPlay more Shogi!";
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (IS_LINUX) {
+            moveList.setFixedCellHeight(analysisTable.getRowHeight());
         }
         
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
@@ -1056,7 +1061,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 60,
                 1
         ));
-
+        if (!meep && IS_LINUX) {
+            meep = true;
+            jAnalysisDialog.setSize(jAnalysisDialog.getPreferredSize().width, jAnalysisDialog.getPreferredSize().height+40);
+        }
         jAnalysisDialog.setLocationRelativeTo(mainFrame);
         jAnalysisDialog.setVisible(true);
     }//GEN-LAST:event_openAnalyseGameDialog

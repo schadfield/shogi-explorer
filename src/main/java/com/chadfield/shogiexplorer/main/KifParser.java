@@ -141,9 +141,9 @@ public class KifParser {
     private static void addMoveToMoveList(DefaultListModel<String> moveListModel, int gameNum, String move) {
         Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
         if (gameNum % 2 == 0) {
-            moveListModel.addElement(gameNum + trans.transliterate(" ☖" + move + "\n"));
+            moveListModel.addElement(gameNum + trans.transliterate(" ☖" + move));
         } else {
-            moveListModel.addElement(gameNum + trans.transliterate(" ☗" + move + "\n"));
+            moveListModel.addElement(gameNum + trans.transliterate(" ☗" + move));
         }
     }
     
