@@ -166,9 +166,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.setShowHorizontalLines(false);
         analysisTable.setShowVerticalLines(false);
         analysisTable.setDefaultEditor(Object.class, null);
-        
-
-        
+                
         if (IS_LINUX) {
             moveList.setFixedCellHeight(analysisTable.getRowHeight());
         }
@@ -203,22 +201,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jEngineManagerDialog = new javax.swing.JDialog();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEngineList = new javax.swing.JList<>();
-        jPanel2 = new javax.swing.JPanel();
-        deleteEngineButton = new javax.swing.JButton();
+        jEngineManagerPanel = new javax.swing.JPanel();
         addEngineButton = new javax.swing.JButton();
         configureEngineButton = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        deleteEngineButton = new javax.swing.JButton();
+        closeEngineManagerButton = new javax.swing.JButton();
         jEngineConfDialog = new javax.swing.JDialog(jEngineManagerDialog);
         jEngineConfPanel = new javax.swing.JPanel();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jAnalysisDialog = new javax.swing.JDialog();
-        jAnalysisStartPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        analysisEngineComboBox = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
-        analysisTimePerMoveSpinner = new javax.swing.JSpinner();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         buttonGroup1 = new javax.swing.ButtonGroup();
         JRadioButton graph1000Button = new JRadioButton("1000");
         buttonGroup1.add(graph1000Button);
@@ -227,7 +216,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         JRadioButton graph3000Button = new JRadioButton("3000");
         buttonGroup1.add(graph3000Button);
         buttonGroup2 = new javax.swing.ButtonGroup();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        jAnalysisDialog = new javax.swing.JDialog();
+        jAnalysisPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        analysisEngineComboBox = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        analysisTimePerMoveSpinner = new javax.swing.JSpinner();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
@@ -287,13 +283,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jEngineList);
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("Bundle"); // NOI18N
-        deleteEngineButton.setText(bundle.getString("ShogiExplorer.deleteEngineButton.text")); // NOI18N
-        deleteEngineButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteEngineButtonActionPerformed(evt);
-            }
-        });
-
         addEngineButton.setText(bundle.getString("ShogiExplorer.addEngineButton.text")); // NOI18N
         addEngineButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -308,34 +297,44 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addEngineButton)
-                    .addComponent(deleteEngineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(configureEngineButton))
-                .addGap(0, 12, Short.MAX_VALUE))
+        deleteEngineButton.setText(bundle.getString("ShogiExplorer.deleteEngineButton.text")); // NOI18N
+        deleteEngineButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteEngineButtonActionPerformed(evt);
+            }
+        });
+
+        closeEngineManagerButton.setText(bundle.getString("ShogiExplorer.closeEngineManagerButton.text")); // NOI18N
+        closeEngineManagerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeEngineManagerButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jEngineManagerPanelLayout = new javax.swing.GroupLayout(jEngineManagerPanel);
+        jEngineManagerPanel.setLayout(jEngineManagerPanelLayout);
+        jEngineManagerPanelLayout.setHorizontalGroup(
+            jEngineManagerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(addEngineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jEngineManagerPanelLayout.createSequentialGroup()
+                .addGroup(jEngineManagerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(configureEngineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(closeEngineManagerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(deleteEngineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        jEngineManagerPanelLayout.setVerticalGroup(
+            jEngineManagerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jEngineManagerPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(addEngineButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deleteEngineButton)
+                .addGap(8, 8, 8)
+                .addComponent(configureEngineButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(configureEngineButton))
+                .addComponent(closeEngineManagerButton))
         );
-
-        jButton3.setText(bundle.getString("ShogiExplorer.jButton3.text")); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jEngineManagerDialogLayout = new javax.swing.GroupLayout(jEngineManagerDialog.getContentPane());
         jEngineManagerDialog.getContentPane().setLayout(jEngineManagerDialogLayout);
@@ -343,23 +342,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
             jEngineManagerDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jEngineManagerDialogLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addGroup(jEngineManagerDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jEngineManagerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jEngineManagerDialogLayout.setVerticalGroup(
             jEngineManagerDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jEngineManagerDialogLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jEngineManagerDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jEngineManagerDialogLayout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
+                .addGroup(jEngineManagerDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                    .addComponent(jEngineManagerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -374,24 +368,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jEngineConfDialog.getAccessibleContext().setAccessibleParent(null);
 
-        jMenuItem3.setText(bundle.getString("ShogiExplorer.jMenuItem3.text")); // NOI18N
-
-        jAnalysisDialog.setAlwaysOnTop(true);
-        jAnalysisDialog.setModal(true);
         jAnalysisDialog.setResizable(false);
-        jAnalysisDialog.setSize(new java.awt.Dimension(480, 130));
-        jAnalysisDialog.getContentPane().setLayout(new java.awt.FlowLayout());
-
-        jAnalysisStartPanel.setLayout(new java.awt.GridLayout(0, 2, 20, 2));
 
         jLabel1.setText(bundle.getString("ShogiExplorer.jLabel1.text")); // NOI18N
         jLabel1.setMinimumSize(new java.awt.Dimension(200, 16));
-        jAnalysisStartPanel.add(jLabel1);
-        jAnalysisStartPanel.add(analysisEngineComboBox);
 
         jLabel3.setText(bundle.getString("ShogiExplorer.jLabel3.text")); // NOI18N
-        jAnalysisStartPanel.add(jLabel3);
-        jAnalysisStartPanel.add(analysisTimePerMoveSpinner);
 
         jButton1.setText(bundle.getString("ShogiExplorer.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -399,7 +381,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jAnalysisStartPanel.add(jButton1);
 
         jButton2.setText(bundle.getString("ShogiExplorer.jButton2.text")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -407,11 +388,62 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        jAnalysisStartPanel.add(jButton2);
 
-        jAnalysisDialog.getContentPane().add(jAnalysisStartPanel);
+        javax.swing.GroupLayout jAnalysisPanelLayout = new javax.swing.GroupLayout(jAnalysisPanel);
+        jAnalysisPanel.setLayout(jAnalysisPanelLayout);
+        jAnalysisPanelLayout.setHorizontalGroup(
+            jAnalysisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jAnalysisPanelLayout.createSequentialGroup()
+                .addGroup(jAnalysisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addGroup(jAnalysisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jAnalysisPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(analysisEngineComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jAnalysisPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                        .addGroup(jAnalysisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(analysisTimePerMoveSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jAnalysisPanelLayout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addGap(40, 40, 40)
+                                .addComponent(jButton2)))
+                        .addContainerGap())))
+        );
+        jAnalysisPanelLayout.setVerticalGroup(
+            jAnalysisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jAnalysisPanelLayout.createSequentialGroup()
+                .addGroup(jAnalysisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(analysisEngineComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jAnalysisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(analysisTimePerMoveSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jAnalysisPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
-        jMenuItem5.setText(bundle.getString("ShogiExplorer.jMenuItem5.text")); // NOI18N
+        javax.swing.GroupLayout jAnalysisDialogLayout = new javax.swing.GroupLayout(jAnalysisDialog.getContentPane());
+        jAnalysisDialog.getContentPane().setLayout(jAnalysisDialogLayout);
+        jAnalysisDialogLayout.setHorizontalGroup(
+            jAnalysisDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jAnalysisDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jAnalysisPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jAnalysisDialogLayout.setVerticalGroup(
+            jAnalysisDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jAnalysisDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jAnalysisPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -1052,11 +1084,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         
         EngineManager.addNewEngine(newEngineFile, engineListModel, jEngineList, engineList);
         EngineManager.saveEngines(engineList);
-        if (IS_WINDOWS || IS_LINUX) {
-            jEngineManagerDialog.pack();
-            jEngineManagerDialog.setLocationRelativeTo(mainFrame);
-            jEngineManagerDialog.setVisible(true);
-        }
     }//GEN-LAST:event_addEngineButtonActionPerformed
 
     private void configureEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureEngineButtonActionPerformed
@@ -1067,7 +1094,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_configureEngineButtonActionPerformed
 
     private void openAnalyseGameDialog(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openAnalyseGameDialog
-        Dimension comboSize = analysisEngineComboBox.getPreferredSize();
         analysisEngineComboBox.removeAllItems();
         for (Engine engine : engineList) {
             analysisEngineComboBox.addItem(engine.getName());
@@ -1075,18 +1101,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 analysisEngineComboBox.setSelectedItem(analysisEngineName);
             }
         }
-        analysisEngineComboBox.setPreferredSize(new Dimension(220, comboSize.height));
         analysisTimePerMoveSpinner.setModel(new SpinnerNumberModel(
                 analysisTimePerMove,
                 3,
                 60,
                 1
         ));
-        if (!meep && IS_LINUX) {
-            meep = true;
-            jAnalysisDialog.setSize(jAnalysisDialog.getPreferredSize().width, jAnalysisDialog.getPreferredSize().height+40);
-        }
         jAnalysisDialog.setLocationRelativeTo(mainFrame);
+        jAnalysisDialog.pack();
         jAnalysisDialog.setVisible(true);
     }//GEN-LAST:event_openAnalyseGameDialog
 
@@ -1180,9 +1202,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jAnalysisDialog.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void closeEngineManagerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeEngineManagerButtonActionPerformed
         jEngineManagerDialog.setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_closeEngineManagerButtonActionPerformed
 
     private void analysisTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_analysisTableKeyReleased
         if (analysing.get()) {
@@ -1418,6 +1440,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JPanel boardPanel;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JButton closeEngineManagerButton;
     private javax.swing.JScrollPane commentScrollPane;
     private javax.swing.JTextArea commentTextArea;
     private javax.swing.JButton configureEngineButton;
@@ -1435,27 +1458,24 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JScrollPane gameScrollPanel;
     private javax.swing.JTextArea gameTextArea;
     private javax.swing.JDialog jAnalysisDialog;
-    private javax.swing.JPanel jAnalysisStartPanel;
+    private javax.swing.JPanel jAnalysisPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JList<String> jEngineList;
     private javax.swing.JDialog jEngineManagerDialog;
+    private javax.swing.JPanel jEngineManagerPanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
