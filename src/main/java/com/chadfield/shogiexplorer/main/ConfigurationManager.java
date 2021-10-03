@@ -124,6 +124,8 @@ public class ConfigurationManager {
         for (int i = 0; i < remainder; i++) {
             jEngineConfPanel.add(new JLabel(""));
         }
+        jEngineConfPanel.add(new JLabel(""));
+        jEngineConfPanel.add(new JLabel(""));
         JButton applyButton = new JButton("Apply");
         applyButton.addActionListener((java.awt.event.ActionEvent evt) -> 
             applyChanges(configurationItemList, engineList, engineConfDialog));
