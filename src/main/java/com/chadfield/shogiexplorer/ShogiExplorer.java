@@ -25,7 +25,6 @@ import com.chadfield.shogiexplorer.utils.ImageUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Point;
