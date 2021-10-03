@@ -1103,10 +1103,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        jAnalysisDialog.setVisible(false);
         if (analysing.get()) {
             return;
         }
-        if (game == null) {
+        if (game == null || game.getPositionList().size() < 2) {
             return;
         }
         browse = false;
@@ -1185,7 +1186,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         };
         analysisThread.start();
-        jAnalysisDialog.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void closeEngineManagerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeEngineManagerButtonActionPerformed
