@@ -101,7 +101,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     JFreeChart chart;
     ChartPanel chartPanel;
     transient Thread analysisThread;
-    static  String aboutMessage; 
     boolean meep = false;
     
     static final String LOGO_NAME = "logo.png";
@@ -168,18 +167,25 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.setShowVerticalLines(false);
         analysisTable.setDefaultEditor(Object.class, null);
         
-        try (InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
-            Properties prop = new Properties();
-            prop.load(input);
-            aboutMessage = "Shogi Explorer\n\nVersion " + prop.getProperty("project.version") + 
-                    "\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
-                    + "\n\nPlay more Shogi!";
-        } catch (IOException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
         
         if (IS_LINUX) {
             moveList.setFixedCellHeight(analysisTable.getRowHeight());
+        }
+        
+        Desktop desktop = Desktop.getDesktop();
+        
+        if (IS_MAC) {
+            desktop.setAboutHandler(e ->
+                {
+                try {
+                    JOptionPane.showMessageDialog(mainFrame, getAboutMessage(), null, JOptionPane.INFORMATION_MESSAGE,
+                            new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME))));
+                } catch (IOException ex) {
+                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            );
         }
         
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
@@ -1345,7 +1351,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         try {
-            JOptionPane.showMessageDialog(mainFrame, aboutMessage, null, JOptionPane.INFORMATION_MESSAGE,
+            JOptionPane.showMessageDialog(mainFrame, getAboutMessage(), null, JOptionPane.INFORMATION_MESSAGE,
                     new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME))));
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
@@ -1356,6 +1362,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private String getAboutMessage() {
+        String aboutMessage;
+        try (InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+            aboutMessage = "Shogi Explorer\n\nVersion " + prop.getProperty("project.version") + 
+                    "\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
+                    + "\n\nPlay more Shogi!";
+        } catch (IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+            return "";
+        } 
+        return aboutMessage;
+    }
     /**
      * @param args the command line arguments
      */
@@ -1380,20 +1400,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Desktop desktop = Desktop.getDesktop();
-        
-        if (IS_MAC) {
-            desktop.setAboutHandler(e ->
-                {
-                try {
-                    JOptionPane.showMessageDialog(mainFrame, aboutMessage, null, JOptionPane.INFORMATION_MESSAGE,
-                            new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME))));
-                } catch (IOException ex) {
-                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            );
-        }
 
         
         /* Create and display the form */
