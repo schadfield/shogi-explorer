@@ -11,12 +11,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JList;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -46,7 +43,7 @@ public class AnalysisManager {
         }
     }
 
-    public static void load(File kifFile, Game game, JTable analysisTable, AnalysisParameter analysisParameter, XYPlot plot, JList<String> moveList) {
+    public static void load(File kifFile, Game game, JTable analysisTable, AnalysisParameter analysisParameter, XYPlot plot) {
         File analysisFile = getAnalysisFile(kifFile);
         if (!analysisFile.exists()) {
             return;
@@ -67,10 +64,10 @@ public class AnalysisManager {
             analysisTableModel.addRow(analysis.getTableRows().get(i));
         }
         game.setAnalysisPositionList(analysis.getAnalysisPositionList());
-        updateScoreChart(analysis, analysisParameter, plot, moveList);
+        updateScoreChart(analysis, analysisParameter, plot);
     }
 
-    private static void updateScoreChart(Analysis analysis, AnalysisParameter analysisParameter, XYPlot plot, JList<String> moveList) {
+    private static void updateScoreChart(Analysis analysis, AnalysisParameter analysisParameter, XYPlot plot) {
         int moveNum = 0;
         double[] x1Start = new double[]{};
         double[] x1 = new double[]{};
@@ -134,7 +131,6 @@ public class AnalysisManager {
                 data2 = new double[][]{x2, x2Start, x2End, y2, y2Start, y2End};
                 plotDataset.addSeries("G", data2);
             }
-            //moveList.setSelectedIndex(moveNum);
         }
     }
 

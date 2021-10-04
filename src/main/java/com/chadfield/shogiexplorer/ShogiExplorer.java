@@ -105,7 +105,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     transient Thread analysisThread;
     boolean meep = false;
     File kifFile;
-    AnalysisParameter analysisParam;
+    transient AnalysisParameter analysisParam;
     XYPlot plot;
     
     static final String LOGO_NAME = "logo.png";
@@ -879,7 +879,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         moveNumber = 0;
         moveList.setSelectedIndex(0);
         initializeChart(false);
-        AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot, moveList);
+        AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void initializeChart(boolean anal) {
@@ -899,12 +899,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         renderer.setBarPainter(new StandardXYBarPainter());
         renderer.setShadowVisible(false);
         if (anal) {
-            System.out.println("true");
             renderer.setSeriesPaint(0, Color.BLACK);  
             renderer.setSeriesPaint(2, Color.WHITE); 
             renderer.setSeriesPaint(1, Color.RED); 
         } else {
-            System.out.println("false");
             renderer.setSeriesPaint(0, Color.BLACK);  
             renderer.setSeriesPaint(2, Color.RED); 
             renderer.setSeriesPaint(1, Color.WHITE); 
@@ -932,7 +930,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 int mouseY = evt.getTrigger().getY();
                 Point2D p = chartPanel.translateScreenToJava2D(
                         new Point(mouseX, mouseY));
-                XYPlot plot = (XYPlot) chart.getPlot();
                 ChartRenderingInfo info = chartPanel.getChartRenderingInfo();
                 Rectangle2D dataArea = info.getPlotInfo().getDataArea();
                 ValueAxis domainAxis = plot.getDomainAxis();
