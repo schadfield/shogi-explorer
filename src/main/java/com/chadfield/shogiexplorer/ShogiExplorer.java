@@ -1,5 +1,6 @@
 package com.chadfield.shogiexplorer;
 
+import com.chadfield.shogiexplorer.main.AnalysisManager;
 import com.chadfield.shogiexplorer.main.ConfigurationManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
 import com.chadfield.shogiexplorer.objectclasses.GameAnalyser;
@@ -17,6 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.main.RenderBoard;
 import com.chadfield.shogiexplorer.main.SFENParser;
+import com.chadfield.shogiexplorer.objects.Analysis;
 import com.chadfield.shogiexplorer.objects.AnalysisParameter;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
@@ -77,12 +79,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
     DefaultListModel<String> moveListModel = new DefaultListModel<>();
     DefaultListModel<String> engineListModel = new DefaultListModel<>();
     boolean rotatedView;
+    boolean saveAnalysis;
     transient List<Engine> engineList = new ArrayList<>();
     transient FileNameExtensionFilter kifFileFilter;
     File newEngineFile;
     static JFrame mainFrame;
     boolean inSelectionChange = false;
-    static final String PREF_ROTATED = "rotated";
+    static final String PREF_ROTATED_VIEW = "rotatedView";
+    static final String PREF_SAVE_ANALYSIS = "saveAnalysis";
     static final String PREF_ANALYSIS_ENGINE_NAME = "analysisEngineName";
     String analysisEngineName;
     static final String PREF_ANALYSIS_TIME_PER_MOVE = "analysisTimePerMove";
@@ -101,6 +105,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     ChartPanel chartPanel;
     transient Thread analysisThread;
     boolean meep = false;
+    File kifFile;
     
     static final String LOGO_NAME = "logo.png";
     
@@ -138,10 +143,19 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         board = SFENParser.parse("lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
         
-        String rotated = prefs.get(PREF_ROTATED, "false");
-        if (rotated.compareTo("true") == 0) {
+        if (prefs.getBoolean(PREF_ROTATED_VIEW, false)) {
             jRadioButtonMenuItem1.doClick();
         }
+        
+        if (prefs.getBoolean(PREF_SAVE_ANALYSIS, false)) {
+            jCheckBox1.setSelected(true);
+            saveAnalysis = true;
+            System.out.println("TRUE");
+        } else {
+            saveAnalysis = false;
+            System.out.println("FALSE");
+        }
+        
         analysisEngineName = prefs.get(PREF_ANALYSIS_ENGINE_NAME, "");
         analysisTimePerMove = prefs.getInt(PREF_ANALYSIS_TIME_PER_MOVE, 3);
         analysisMistakeThreshold = prefs.getInt(PREF_ANALYSIS_MISTAKE_THRESHOLD, 250);
@@ -221,6 +235,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisEngineComboBox = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         analysisTimePerMoveSpinner = new javax.swing.JSpinner();
+        jLabel2 = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         mainToolBar = new javax.swing.JToolBar();
@@ -380,6 +396,17 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jLabel3.setText(bundle.getString("ShogiExplorer.jLabel3.text")); // NOI18N
         jPanel2.add(jLabel3);
         jPanel2.add(analysisTimePerMoveSpinner);
+
+        jLabel2.setText(bundle.getString("ShogiExplorer.jLabel2.text")); // NOI18N
+        jPanel2.add(jLabel2);
+
+        jCheckBox1.setText(bundle.getString("ShogiExplorer.jCheckBox1.text")); // NOI18N
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jCheckBox1);
 
         jButton1.setText(bundle.getString("ShogiExplorer.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -792,11 +819,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void jRadioButtonMenuItem1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ItemStateChanged
         rotatedView = !rotatedView;
-        if (rotatedView) {
-            prefs.put(PREF_ROTATED, "true");
-        } else {
-            prefs.put(PREF_ROTATED, "false");
-        }
+        prefs.putBoolean(PREF_ROTATED_VIEW, rotatedView);
         try {
             prefs.flush();
         } catch (BackingStoreException ex) {
@@ -816,7 +839,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));
-        File kifFile;
         if (IS_MAC) {
             FileDialog fileDialog = new FileDialog(mainFrame);
             fileDialog.setDirectory(dirFile.getPath());
@@ -857,6 +879,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
         moveNumber = 0;
         moveList.setSelectedIndex(0);
+        AnalysisManager.load(kifFile, game, analysisTable);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
@@ -1089,6 +1112,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setGraphView2(jRadioButtonMenuItem4);
         analysisParam.setGraphView3(jRadioButtonMenuItem5);
         analysisParam.setHaltAnalysisButton(jButton4);
+        analysisParam.setKifFile(kifFile);
         plotDataset = new DefaultIntervalXYDataset();  
         chart = ChartFactory.createXYBarChart("", "", false, "", plotDataset);
        
@@ -1147,7 +1171,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
                 analysisTableModel.getDataVector().clear();
                 try {
-                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, plot);
+                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, plot, saveAnalysis);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -1338,6 +1362,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        saveAnalysis = !saveAnalysis;
+        prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
     private String getAboutMessage() {
         String aboutMessage;
         try (InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
@@ -1415,12 +1449,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JList<String> jEngineList;
     private javax.swing.JDialog jEngineManagerDialog;
     private javax.swing.JPanel jEngineManagerPanel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;

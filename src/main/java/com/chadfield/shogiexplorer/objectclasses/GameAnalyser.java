@@ -1,7 +1,9 @@
 package com.chadfield.shogiexplorer.objectclasses;
 
+import com.chadfield.shogiexplorer.main.AnalysisManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
 import com.chadfield.shogiexplorer.main.SFENParser;
+import com.chadfield.shogiexplorer.objects.Analysis;
 import com.chadfield.shogiexplorer.objects.AnalysisParameter;
 import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.objects.Coordinate;
@@ -71,9 +73,8 @@ public class GameAnalyser {
     JRadioButtonMenuItem graphView3;
     JButton haltAnalysisButton;
     Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
-
     
-    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot) throws IOException {
+    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, boolean saveAnalysis) throws IOException {
         analysing.set(true);
         this.plot = plot;
         DefaultIntervalXYDataset plotDataset = (DefaultIntervalXYDataset ) plot.getDataset();
@@ -131,6 +132,24 @@ public class GameAnalyser {
         
         quitEngine();
         haltAnalysisButton.setEnabled(false);
+        
+        if (saveAnalysis) {
+            Analysis analysis = new Analysis();
+            analysis.setAnalysisPositionList(game.getAnalysisPositionList());
+            List<Object[]> tableRows = new ArrayList<>();
+            DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
+            for (int i = 0; i < analysisTableModel.getRowCount(); i++) {
+                tableRows.add(new Object[]{
+                    analysisTableModel.getValueAt(i, 0),
+                    analysisTableModel.getValueAt(i, 1),
+                    analysisTableModel.getValueAt(i, 2),
+                    analysisTableModel.getValueAt(i, 3),
+                    analysisTableModel.getValueAt(i, 4)
+                });
+            }
+            analysis.setTableRows(tableRows);
+            AnalysisManager.save(analysis, analysisParam.getKifFile());
+        }
         analysing.set(false);
     }
 

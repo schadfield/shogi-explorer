@@ -1,5 +1,6 @@
 package com.chadfield.shogiexplorer.objects;
 
+import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JRadioButtonMenuItem;
 
@@ -13,6 +14,7 @@ public class AnalysisParameter {
     private JRadioButtonMenuItem graphView2;
     private JRadioButtonMenuItem graphView3;
     private JButton haltAnalysisButton;
+    private File kifFile;
 
     /**
      * @return the analysisTimePerMove
@@ -82,5 +84,19 @@ public class AnalysisParameter {
      */
     public void setHaltAnalysisButton(JButton haltAnalysisButton) {
         this.haltAnalysisButton = haltAnalysisButton;
+    }
+
+    /**
+     * @return the kifFile
+     */
+    public File getKifFile() {
+        return kifFile;
+    }
+
+    /**
+     * @param kifFile the kifFile to set
+     */
+    public void setKifFile(File kifFile) {
+        this.kifFile = kifFile;
     }
 }
