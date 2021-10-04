@@ -142,7 +142,7 @@ public class AnalysisManager {
 
     private static File getAnalysisFile(File kifFile) {
         int dotPos = kifFile.getPath().lastIndexOf(".");
-        String newPath = kifFile.getPath().substring(0, dotPos) + ".kan";
+        String newPath = kifFile.getPath().substring(0, dotPos) + ".kaf";
         return new File(newPath);
     }
 
