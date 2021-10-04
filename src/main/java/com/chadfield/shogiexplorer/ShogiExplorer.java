@@ -18,7 +18,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.main.RenderBoard;
 import com.chadfield.shogiexplorer.main.SFENParser;
-import com.chadfield.shogiexplorer.objects.Analysis;
 import com.chadfield.shogiexplorer.objects.AnalysisParameter;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
@@ -150,10 +149,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (prefs.getBoolean(PREF_SAVE_ANALYSIS, false)) {
             jCheckBox1.setSelected(true);
             saveAnalysis = true;
-            System.out.println("TRUE");
         } else {
             saveAnalysis = false;
-            System.out.println("FALSE");
         }
         
         analysisEngineName = prefs.get(PREF_ANALYSIS_ENGINE_NAME, "");

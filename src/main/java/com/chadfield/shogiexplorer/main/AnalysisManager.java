@@ -21,11 +21,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AnalysisManager {
     
+    private AnalysisManager() {
+        throw new IllegalStateException("Utility class");
+    }
+    
     public static void save(Analysis analysis, File kifFile) {
         File analysisFile = getAnalysisFile(kifFile);
-        if (analysisFile == null) {
-            return;
-        }
         XStream xstream = new XStream(new DomDriver("UTF-8"));
         xstream.alias("analysis", Analysis.class);
         xstream.alias("position", Position.class);
@@ -39,7 +40,7 @@ public class AnalysisManager {
     
     public static void load(File kifFile, Game game, JTable analysisTable) {
         File analysisFile = getAnalysisFile(kifFile);
-        if (analysisFile == null || !analysisFile.exists()) {
+        if (!analysisFile.exists()) {
             return;
         }
         XStream xstream = new XStream(new DomDriver("UTF-8"));
