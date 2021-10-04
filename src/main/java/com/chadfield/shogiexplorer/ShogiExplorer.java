@@ -877,9 +877,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
         gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
         moveNumber = 0;
-        moveList.setSelectedIndex(0);
         initializeChart(false);
         AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot);
+        moveList.setSelectedIndex(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void initializeChart(boolean anal) {
