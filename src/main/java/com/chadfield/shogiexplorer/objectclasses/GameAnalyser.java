@@ -68,6 +68,7 @@ public class GameAnalyser {
     XYPlot plot;
     int range;
     String scoreStr;
+    List<Integer> scoreList;
     JRadioButtonMenuItem graphView1;
     JRadioButtonMenuItem graphView2;
     JRadioButtonMenuItem graphView3;
@@ -98,6 +99,7 @@ public class GameAnalyser {
         Coordinate lastDestination = null;
         Coordinate previousMoveDestination = null;
         game.setAnalysisPositionList(new ArrayList<>());
+        scoreList = new ArrayList<>();
                 
         for (Position position : game.getPositionList()) {
 
@@ -148,6 +150,7 @@ public class GameAnalyser {
                 });
             }
             analysis.setTableRows(tableRows);
+            analysis.setScoreList(scoreList);
             AnalysisManager.save(analysis, analysisParam.getKifFile());
         }
         analysing.set(false);
@@ -410,7 +413,7 @@ public class GameAnalyser {
         boolean lower = false;
         boolean upper = false;
         boolean foundPV = false;
-        int score;
+        Integer score = null;
         String[] splitLine = lastLine.split(" ");
         for (int i = 0; i < splitLine.length; i++) {
             if (!foundPV) {
@@ -437,6 +440,8 @@ public class GameAnalyser {
                 }       
             }
         }
+        
+        scoreList.add(score);
         
         StringBuilder pvBuilder = new StringBuilder("");
         

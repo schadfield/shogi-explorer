@@ -9,6 +9,7 @@ import java.util.List;
 public class Analysis {
     private List<List<Position>> analysisPositionList;
     private List<Object[]> tableRows;
+    private List<Integer> scoreList;
 
     /**
      * @return the analysisPositionList
@@ -36,6 +37,20 @@ public class Analysis {
      */
     public void setTableRows(List<Object[]> tableRows) {
         this.tableRows = tableRows;
+    }
+
+    /**
+     * @return the scoreList
+     */
+    public List<Integer> getScoreList() {
+        return scoreList;
+    }
+
+    /**
+     * @param scoreList the scoreList to set
+     */
+    public void setScoreList(List<Integer> scoreList) {
+        this.scoreList = scoreList;
     }
 
 }
