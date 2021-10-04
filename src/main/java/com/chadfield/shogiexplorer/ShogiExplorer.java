@@ -1061,8 +1061,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 60,
                 1
         ));
-        jAnalysisDialog.setLocationRelativeTo(mainFrame);
         jAnalysisDialog.pack();
+        jAnalysisDialog.setLocationRelativeTo(mainFrame);
         jAnalysisDialog.setVisible(true);
     }//GEN-LAST:event_openAnalyseGameDialog
 
