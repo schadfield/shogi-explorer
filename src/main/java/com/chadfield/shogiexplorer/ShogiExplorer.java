@@ -1034,15 +1034,27 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 double[] y3Start = new double[2];
                 double[] y3 = new double[2];
                 double[] y3End = new double[2];
-                x3Start[0] = moveNumber-0.02;
-                x3[0] = 0;
-                x3End[0] = moveNumber+0.02;
+                if (moveNumber == 0) {
+                    x3Start[0] = moveNumber;
+                    x3[0] = 0;
+                    x3End[0] = moveNumber+0.04;
+                } else {
+                    x3Start[0] = moveNumber-0.02;
+                    x3[0] = 0;
+                    x3End[0] = moveNumber+0.02;
+                }
                 y3Start[0] = 0;
                 y3[0] = 3000;
                 y3End[0] = 0;
-                x3Start[1] = moveNumber-0.02;
-                x3[1] = 0;
-                x3End[1] = moveNumber+0.02;
+                if (moveNumber == 0) {
+                    x3Start[1] = moveNumber;
+                    x3[1] = 0;
+                    x3End[1] = moveNumber+0.04;
+                } else {
+                    x3Start[1] = moveNumber-0.02;
+                    x3[1] = 0;
+                    x3End[1] = moveNumber+0.02;
+                }
                 y3Start[1] = 0;
                 y3[1] = -3000;
                 y3End[1] = 0;
