@@ -105,6 +105,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     transient Thread analysisThread;
     boolean meep = false;
     File kifFile;
+    AnalysisParameter analysisParam;
+    XYPlot plot;
     
     static final String LOGO_NAME = "logo.png";
     
@@ -876,7 +878,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
         moveNumber = 0;
         moveList.setSelectedIndex(0);
-        AnalysisParameter analysisParam = new AnalysisParameter();
+        initializeChart(false);
+        AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot, moveList);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void initializeChart(boolean anal) {
+        analysisParam = new AnalysisParameter();
         analysisParam.setAnalysisTimePerMove(analysisTimePerMove);
         analysisParam.setGraphView1(jRadioButtonMenuItem3);
         analysisParam.setGraphView2(jRadioButtonMenuItem4);
@@ -886,14 +893,22 @@ public class ShogiExplorer extends javax.swing.JFrame {
         plotDataset = new DefaultIntervalXYDataset();  
         chart = ChartFactory.createXYBarChart("", "", false, "", plotDataset);
    
-        XYPlot plot = chart.getXYPlot();
+        plot = chart.getXYPlot();
         plot.setRenderer(0, new XYBarRenderer());
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
         renderer.setBarPainter(new StandardXYBarPainter());
         renderer.setShadowVisible(false);
-        renderer.setSeriesPaint(0, Color.BLACK);  
-        renderer.setSeriesPaint(2, Color.WHITE); 
-        renderer.setSeriesPaint(1, Color.RED); 
+        if (anal) {
+            System.out.println("true");
+            renderer.setSeriesPaint(0, Color.BLACK);  
+            renderer.setSeriesPaint(2, Color.WHITE); 
+            renderer.setSeriesPaint(1, Color.RED); 
+        } else {
+            System.out.println("false");
+            renderer.setSeriesPaint(0, Color.BLACK);  
+            renderer.setSeriesPaint(2, Color.RED); 
+            renderer.setSeriesPaint(1, Color.WHITE); 
+        }
         renderer.setSeriesVisibleInLegend(0, false);
         renderer.setSeriesVisibleInLegend(1, false);
         renderer.setSeriesVisibleInLegend(2, false);
@@ -927,9 +942,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 moveList.setSelectedIndex((int) Math.round(chartX + 0.5));            
             }
         });
-        AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot, moveList);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+    }
+    
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
         if (!play && game != null  && !analysing.get() && moveNumber < game.getPositionList().size() + 1) {
             moveList.setSelectedIndex(moveNumber + 1);
@@ -1154,57 +1168,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
         prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
         prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
-        AnalysisParameter analysisParam = new AnalysisParameter();
-        analysisParam.setAnalysisTimePerMove(analysisTimePerMove);
-        analysisParam.setGraphView1(jRadioButtonMenuItem3);
-        analysisParam.setGraphView2(jRadioButtonMenuItem4);
-        analysisParam.setGraphView3(jRadioButtonMenuItem5);
-        analysisParam.setHaltAnalysisButton(jButton4);
-        analysisParam.setKifFile(kifFile);
-        plotDataset = new DefaultIntervalXYDataset();  
-        chart = ChartFactory.createXYBarChart("", "", false, "", plotDataset);
-       
-        XYPlot plot = chart.getXYPlot();
-        plot.setRenderer(0, new XYBarRenderer());
-        XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
-        renderer.setBarPainter(new StandardXYBarPainter());
-        renderer.setShadowVisible(false);
-        renderer.setSeriesPaint(0, Color.BLACK);  
-        renderer.setSeriesPaint(2, Color.WHITE); 
-        renderer.setSeriesPaint(1, Color.RED); 
-        renderer.setSeriesVisibleInLegend(0, false);
-        renderer.setSeriesVisibleInLegend(1, false);
-        renderer.setSeriesVisibleInLegend(2, false);
-        plot.getDomainAxis().setVisible(false);
-        plot.getRangeAxis().setRange(-1000, 1000);
-        chartPanel = new ChartPanel(chart); 
-        chartPanel.setPopupMenu(null);
-        chartPanel.setMouseZoomable(false);
-        jTabbedPane1.setComponentAt(1, chartPanel);
-        chartPanel.addChartMouseListener(new ChartMouseListener() {
-            @Override
-            public void chartMouseMoved(ChartMouseEvent evt) {
-                // Required implementation.
-            }
-            @Override
-            public void chartMouseClicked(ChartMouseEvent evt) {
-                if (analysing.get()) {
-                    return;
-                }
-                int mouseX = evt.getTrigger().getX();
-                int mouseY = evt.getTrigger().getY();
-                Point2D p = chartPanel.translateScreenToJava2D(
-                        new Point(mouseX, mouseY));
-                XYPlot plot = (XYPlot) chart.getPlot();
-                ChartRenderingInfo info = chartPanel.getChartRenderingInfo();
-                Rectangle2D dataArea = info.getPlotInfo().getDataArea();
-                ValueAxis domainAxis = plot.getDomainAxis();
-                RectangleEdge domainAxisEdge = plot.getDomainAxisEdge();
-                double chartX = domainAxis.java2DToValue(p.getX(), dataArea,
-                        domainAxisEdge);
-                moveList.setSelectedIndex((int) Math.round(chartX + 0.5));            
-            }
-        });
+        initializeChart(true);
         jButton4.setEnabled(true);
         analysisThread = new Thread() {
             @Override

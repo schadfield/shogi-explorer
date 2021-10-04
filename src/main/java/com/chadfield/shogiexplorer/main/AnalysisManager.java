@@ -78,14 +78,14 @@ public class AnalysisManager {
         double[] y1Start = new double[]{};
         double[] y1 = new double[]{};
         double[] y1End = new double[]{};
-        double[][] data1 = new double[][]{x1, x1Start, x1End, y1, y1Start, y1End};
+        double[][] data1;
         double[] x2Start = new double[]{};
         double[] x2 = new double[]{};
         double[] x2End = new double[]{};
         double[] y2Start = new double[]{};
         double[] y2 = new double[]{};
         double[] y2End = new double[]{};
-        double[][] data2 = new double[][]{x2, x2Start, x2End, y2, y2Start, y2End};
+        double[][] data2;
         DefaultIntervalXYDataset plotDataset = (DefaultIntervalXYDataset) plot.getDataset();
 
         for (int score : analysis.getScoreList()) {
@@ -134,7 +134,7 @@ public class AnalysisManager {
                 data2 = new double[][]{x2, x2Start, x2End, y2, y2Start, y2End};
                 plotDataset.addSeries("G", data2);
             }
-            moveList.setSelectedIndex(moveNum);
+            //moveList.setSelectedIndex(moveNum);
         }
     }
 
