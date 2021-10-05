@@ -1060,23 +1060,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     x3Start[0] = moveNumber;
                     x3[0] = 0;
                     x3End[0] = moveNumber+0.04;
-                } else {
-                    x3Start[0] = moveNumber-0.02;
-                    x3[0] = 0;
-                    x3End[0] = moveNumber+0.02;
-                }
-                y3Start[0] = 0;
-                y3[0] = 3000;
-                y3End[0] = 0;
-                if (moveNumber == 0) {
                     x3Start[1] = moveNumber;
                     x3[1] = 0;
                     x3End[1] = moveNumber+0.04;
                 } else {
+                    x3Start[0] = moveNumber-0.02;
+                    x3[0] = 0;
+                    x3End[0] = moveNumber+0.02;
                     x3Start[1] = moveNumber-0.02;
                     x3[1] = 0;
                     x3End[1] = moveNumber+0.02;
                 }
+                y3Start[0] = 0;
+                y3[0] = 3000;
+                y3End[0] = 0;
                 y3Start[1] = 0;
                 y3[1] = -3000;
                 y3End[1] = 0;
@@ -1427,13 +1424,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 jCheckBox1.setEnabled(false);
                 saveAnalysis = false;
                 prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
-                try {
-                    prefs.flush();
-                } catch (BackingStoreException ex) {
-                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                prefs.flush();
                 parseKifu();
-            } catch (UnsupportedFlavorException | IOException ex) {
+            } catch (UnsupportedFlavorException | IOException  | BackingStoreException ex) {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

@@ -49,47 +49,55 @@ public class KifParser {
         positionList.add(new Position(SFENParser.getSFEN(board), null, null, new Notation()));
 
         boolean foundHeader = false;
-        BufferedReader fileReader;
         
-        if (clipboardStr == null) {
-            fileReader = Files.newBufferedReader(kifFile.toPath());
-        } else {
-            fileReader = new BufferedReader(new StringReader(clipboardStr));
-        }
+        BufferedReader fileReader = null;
         
-        int count = 1;
-        String line;
-        Coordinate lastDestination = null;
-        while ((line = fileReader.readLine()) != null) {
-            if (!foundHeader) {
-                foundHeader = isHeader(line);
-                if (foundHeader || isComment(line)) {
-                    continue;
-                }
-                parseGameDetails(line, game);
+        try {
+            if (clipboardStr == null) {
+                fileReader = Files.newBufferedReader(kifFile.toPath());
             } else {
-                if (line.isEmpty()) {
-                    break;
-                }
-
-                if (isComment(line)) {
-                    positionList.getLast().setComment(positionList.getLast().getComment()+line.substring(1) + "\n") ;
-                    continue;
-                }
-
-                if (!isRegularMove(line)) {
-                    break;
-                }
-
-                count++;
-
-                board.setMoveCount(count);
-
-                lastDestination = parseRegularMove(board, line, moveListModel, lastDestination, positionList);
+                fileReader = new BufferedReader(new StringReader(clipboardStr));
             }
 
-        }
+            int count = 1;
+            String line;
+            Coordinate lastDestination = null;
+            while ((line = fileReader.readLine()) != null) {
+                if (!foundHeader) {
+                    foundHeader = isHeader(line);
+                    if (foundHeader || isComment(line)) {
+                        continue;
+                    }
+                    parseGameDetails(line, game);
+                } else {
+                    if (line.isEmpty()) {
+                        break;
+                    }
+
+                    if (isComment(line)) {
+                        positionList.getLast().setComment(positionList.getLast().getComment()+line.substring(1) + "\n") ;
+                        continue;
+                    }
+
+                    if (!isRegularMove(line)) {
+                        break;
+                    }
+
+                    count++;
+
+                    board.setMoveCount(count);
+
+                    lastDestination = parseRegularMove(board, line, moveListModel, lastDestination, positionList);
+                }
+
+            }
         
+        } finally {
+            if (fileReader != null) {
+                fileReader.close();  
+            }
+        }
+   
         game.setPositionList(positionList);
         return game;
     }
