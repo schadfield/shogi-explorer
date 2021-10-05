@@ -19,6 +19,7 @@ import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.NotationUtils;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
+import java.io.StringReader;
 
 /**
  *
@@ -38,7 +39,7 @@ public class KifParser {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile) throws  IOException {
+    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile, String clipboardStr) throws  IOException {
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         moveListModel.clear();
         moveListModel.addElement(bundle.getString("label_start_position"));
@@ -48,42 +49,47 @@ public class KifParser {
         positionList.add(new Position(SFENParser.getSFEN(board), null, null, new Notation()));
 
         boolean foundHeader = false;
-        try (BufferedReader fileReader = Files.newBufferedReader(kifFile.toPath())) {
-            int count = 1;
-            String line;
-            Coordinate lastDestination = null;
-            while ((line = fileReader.readLine()) != null) {
-                if (!foundHeader) {
-                    foundHeader = isHeader(line);
-                    if (foundHeader || isComment(line)) {
-                        continue;
-                    }
-                    parseGameDetails(line, game);
-                } else {
-                    if (line.isEmpty()) {
-                        break;
-                    }
-                                        
-                    if (isComment(line)) {
-                        positionList.getLast().setComment(positionList.getLast().getComment()+line.substring(1) + "\n") ;
-                        continue;
-                    }
-                    
-                    if (!isRegularMove(line)) {
-                        break;
-                    }
-                    
-                    count++;
-                                       
-                    board.setMoveCount(count);
-
-                    lastDestination = parseRegularMove(board, line, moveListModel, lastDestination, positionList);
+        BufferedReader fileReader;
+        
+        if (clipboardStr == null) {
+            fileReader = Files.newBufferedReader(kifFile.toPath());
+        } else {
+            fileReader = new BufferedReader(new StringReader(clipboardStr));
+        }
+        
+        int count = 1;
+        String line;
+        Coordinate lastDestination = null;
+        while ((line = fileReader.readLine()) != null) {
+            if (!foundHeader) {
+                foundHeader = isHeader(line);
+                if (foundHeader || isComment(line)) {
+                    continue;
+                }
+                parseGameDetails(line, game);
+            } else {
+                if (line.isEmpty()) {
+                    break;
                 }
 
+                if (isComment(line)) {
+                    positionList.getLast().setComment(positionList.getLast().getComment()+line.substring(1) + "\n") ;
+                    continue;
+                }
+
+                if (!isRegularMove(line)) {
+                    break;
+                }
+
+                count++;
+
+                board.setMoveCount(count);
+
+                lastDestination = parseRegularMove(board, line, moveListModel, lastDestination, positionList);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(KifParser.class.getName()).log(Level.SEVERE, null, ex);
+
         }
+        
         game.setPositionList(positionList);
         return game;
     }

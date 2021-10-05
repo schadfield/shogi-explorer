@@ -30,6 +30,11 @@ import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.InputStream;
@@ -107,6 +112,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     File kifFile;
     transient AnalysisParameter analysisParam;
     XYPlot plot;
+    String clipboardStr;
     
     static final String LOGO_NAME = "logo.png";
     
@@ -269,6 +275,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         gameMenu = new javax.swing.JMenu();
         analyseGame = new javax.swing.JMenuItem();
@@ -664,6 +671,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         fileMenu.add(jMenuItem1);
 
+        jMenuItem3.setText(bundle.getString("ShogiExplorer.jMenuItem3.text_1")); // NOI18N
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem3);
+
         jMenuItem6.setText(bundle.getString("ShogiExplorer.jMenuItem6.text")); // NOI18N
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -837,6 +852,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_boardPanelComponentResized
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        clipboardStr = null;
+        jCheckBox1.setEnabled(true);
         File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));
         if (IS_MAC) {
             FileDialog fileDialog = new FileDialog(mainFrame);
@@ -860,12 +877,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         }
         prefs.put("fileOpenDir", kifFile.getParent());
+        parseKifu();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void parseKifu() {
         DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
         analysisTableModel.getDataVector().clear();
         jTabbedPane1.setComponentAt(1, new JPanel());
 
         try {
-            game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile);
+            game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile, clipboardStr);
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -878,10 +899,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
         moveNumber = 0;
         initializeChart(false);
-        AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot);
-        moveList.setSelectedIndex(0);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+        if (clipboardStr == null) {
+            AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot);
+        }
+        moveList.setSelectedIndex(0);    }
+    
     private void initializeChart(boolean anal) {
         analysisParam = new AnalysisParameter();
         analysisParam.setAnalysisTimePerMove(analysisTimePerMove);
@@ -1393,6 +1415,30 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        Clipboard clipBoard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+        Transferable transferable = clipBoard.getContents(null);
+
+        if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+            try {
+                clipboardStr = (String)transferable.getTransferData(DataFlavor.stringFlavor);
+                jCheckBox1.setSelected(false);
+                jCheckBox1.setEnabled(false);
+                saveAnalysis = false;
+                prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
+                try {
+                    prefs.flush();
+                } catch (BackingStoreException ex) {
+                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                parseKifu();
+            } catch (UnsupportedFlavorException | IOException ex) {
+                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     private String getAboutMessage() {
         String aboutMessage;
         try (InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
@@ -1483,6 +1529,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
