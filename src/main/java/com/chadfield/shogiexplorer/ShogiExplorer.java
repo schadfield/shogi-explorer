@@ -1291,10 +1291,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         JLabel cellLabel = new JLabel();
 
         @Override
-        public Component getTableCellRendererComponent(JTable jTable, Object cellText, boolean arg2, boolean arg3, int row, int arg5) {
+        public Component getTableCellRendererComponent(JTable jTable, Object cellContents, boolean arg2, boolean arg3, int row, int arg5) {
             Color selBG = analysisTable.getSelectionBackground();
             String hexCol = String.format("#%06x", selBG.getRGB() & 0x00FFFFFF);
-            if (cellText != null) {
+            if (cellContents != null) {
                 if (browse && row == moveNumber-1) {
                     // We are in browse mode and rendering the PV for the active line.
                     StringBuilder cellStrBld = new StringBuilder("<html>");
@@ -1308,8 +1308,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         cellStrBld.append(";color:white;\">");
                         foundStart = true;
                     }
-                    for (int i = 0; i < cellText.toString().length(); i++) {
-                        if (!foundEnd && cellText.toString().charAt(i) == '\u3000') {
+                    for (int i = 0; i < cellContents.toString().length(); i++) {
+                        if (!foundEnd && cellContents.toString().charAt(i) == '\u3000') {
                             spaceCount++;
                             if (foundStart) {
                                 //　This is the end, my friend.
@@ -1329,7 +1329,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                             }
                         } else {
                             // Just a regular char.
-                            cellStrBld.append(cellText.toString().charAt(i));
+                            cellStrBld.append(cellContents.toString().charAt(i));
                         }
                     }
                     if (foundStart && !foundEnd) {
@@ -1339,7 +1339,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     cellLabel.setText(cellStrBld.toString());
                 } else {
                     // Either we are not browsing or we are rendering PV for a non-active line.
-                    cellLabel.setText(cellText.toString());
+                    cellLabel.setText(cellContents.toString());
                 }
             } else {
                 cellLabel.setText("");
