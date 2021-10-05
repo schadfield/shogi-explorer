@@ -1291,11 +1291,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         JLabel cellLabel = new JLabel();
 
         @Override
-        public Component getTableCellRendererComponent(JTable arg0, Object arg1, boolean arg2, boolean arg3, int arg4, int arg5) {
+        public Component getTableCellRendererComponent(JTable jTable, Object cellText, boolean arg2, boolean arg3, int row, int arg5) {
             Color selBG = analysisTable.getSelectionBackground();
             String hexCol = String.format("#%06x", selBG.getRGB() & 0x00FFFFFF);
-            if (arg1 != null) {
-                if (browse && arg4 == moveNumber-1) {
+            if (cellText != null) {
+                if (browse && row == moveNumber-1) {
                     // We are in browse mode and rendering the PV for the active line.
                     StringBuilder cellStrBld = new StringBuilder("<html>");
                     int spaceCount = 0;
@@ -1308,8 +1308,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         cellStrBld.append(";color:white;\">");
                         foundStart = true;
                     }
-                    for (int i = 0; i < arg1.toString().length(); i++) {
-                        if (!foundEnd && arg1.toString().charAt(i) == '\u3000') {
+                    for (int i = 0; i < cellText.toString().length(); i++) {
+                        if (!foundEnd && cellText.toString().charAt(i) == '\u3000') {
                             spaceCount++;
                             if (foundStart) {
                                 //　This is the end, my friend.
@@ -1329,7 +1329,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                             }
                         } else {
                             // Just a regular char.
-                            cellStrBld.append(arg1.toString().charAt(i));
+                            cellStrBld.append(cellText.toString().charAt(i));
                         }
                     }
                     if (foundStart && !foundEnd) {
@@ -1339,7 +1339,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     cellLabel.setText(cellStrBld.toString());
                 } else {
                     // Either we are not browsing or we are rendering PV for a non-active line.
-                    cellLabel.setText(arg1.toString());
+                    cellLabel.setText(cellText.toString());
                 }
             } else {
                 cellLabel.setText("");
