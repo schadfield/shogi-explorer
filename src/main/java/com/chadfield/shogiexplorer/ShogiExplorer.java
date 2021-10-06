@@ -701,7 +701,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         gameMenu.add(analyseGame);
 
-        stopAnalysis.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        stopAnalysis.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         stopAnalysis.setText(bundle.getString("ShogiExplorer.stopAnalysis.text_1")); // NOI18N
         stopAnalysis.setEnabled(false);
         stopAnalysis.addActionListener(new java.awt.event.ActionListener() {
