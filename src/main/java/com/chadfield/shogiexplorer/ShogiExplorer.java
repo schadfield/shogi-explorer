@@ -59,7 +59,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import org.eclipse.swt.widgets.DateTime;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
@@ -1317,6 +1316,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         foundStart = true;
                     }
                     for (int i = 0; i < cellContents.toString().length(); i++) {
+                        if (browsePos > 6 && i ==0) {
+                            cellStrBld.append("…");
+                        }
                         if (!foundEnd && cellContents.toString().charAt(i) == '\u3000') {
                             spaceCount++;
                             if (foundStart) {
@@ -1332,12 +1334,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
                                     foundStart = true;
                                 } else {
                                     // Keep looking.
-                                    cellStrBld.append("\u3000");
+                                    if (browsePos < 7 || spaceCount > browsePos - 6) {
+                                        cellStrBld.append("\u3000");
+                                    }
                                 }
                             }
                         } else {
                             // Just a regular char.
-                            cellStrBld.append(cellContents.toString().charAt(i));
+                            if (browsePos < 7 || spaceCount > browsePos - 7) {
+                                cellStrBld.append(cellContents.toString().charAt(i));
+                            }
                         }
                     }
                     if (foundStart && !foundEnd) {
