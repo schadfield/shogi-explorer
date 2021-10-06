@@ -35,6 +35,9 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.desktop.QuitEvent;
+import java.awt.desktop.QuitHandler;
+import java.awt.desktop.QuitResponse;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -114,7 +117,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     transient AnalysisParameter analysisParam;
     XYPlot plot;
     String clipboardStr;
-    long rotateTime; 
+    long rotateTime;
+    static final String PREF_HEIGHT = "height";
+    int mainHeight;
+    static final String PREF_WIDTH = "width";
+    int mainWidth;
     
     static final String LOGO_NAME = "logo.png";
     
@@ -134,7 +141,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } else {
             Locale.setDefault(Locale.ENGLISH);
         }
-
+        
+        mainHeight = prefs.getInt(PREF_HEIGHT, 650);
+        mainWidth = prefs.getInt(PREF_WIDTH, 1000);
+        
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         this.kifFileFilter = new FileNameExtensionFilter(bundle.getString("label_kif_files"), "kif");
         System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -202,6 +212,17 @@ public class ShogiExplorer extends javax.swing.JFrame {
             );
             jMenuItem6.setVisible(false);
         }
+        
+        desktop.setQuitHandler((QuitEvent evt, QuitResponse res) -> {
+            try {
+                prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
+                prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
+                prefs.flush();
+            } catch (BackingStoreException ex) {
+                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.exit(0);
+        });
         
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
         rotateTime = System.currentTimeMillis();
@@ -438,7 +459,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
         setBounds(new java.awt.Rectangle(58, 25, 1000, 650));
         setMinimumSize(new java.awt.Dimension(1000, 650));
-        setSize(new java.awt.Dimension(1000, 650));
+        setPreferredSize(new java.awt.Dimension(mainWidth, mainHeight));
+        setSize(new java.awt.Dimension(0, 0));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -1414,6 +1436,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
+        prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.exit(0);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
