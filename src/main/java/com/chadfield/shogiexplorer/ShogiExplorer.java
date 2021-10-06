@@ -200,6 +200,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         Desktop desktop = Desktop.getDesktop();
         
         if (IS_MAC) {
+            jMenuItem6.setVisible(false);
             desktop.setAboutHandler(e ->
                 {
                     try {
@@ -210,19 +211,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     }
                 }
             );
-            jMenuItem6.setVisible(false);
+            desktop.setQuitHandler((QuitEvent evt, QuitResponse res) -> {
+                try {
+                    prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
+                    prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
+                    prefs.flush();
+                } catch (BackingStoreException ex) {
+                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                System.exit(0);
+            });
         }
         
-        desktop.setQuitHandler((QuitEvent evt, QuitResponse res) -> {
-            try {
-                prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
-                prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
-                prefs.flush();
-            } catch (BackingStoreException ex) {
-                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.exit(0);
-        });
         
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
         rotateTime = System.currentTimeMillis();
