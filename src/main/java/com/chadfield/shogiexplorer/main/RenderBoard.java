@@ -45,11 +45,8 @@ public class RenderBoard {
         drawBans(board, boardPanel);
         drawBackground(board, boardPanel);
         drawTurnNotification(board, boardPanel, rotatedView);
-
-        java.awt.EventQueue.invokeLater(() -> {
-            boardPanel.setVisible(true);
-            boardPanel.repaint();
-        });
+        boardPanel.setVisible(true);
+        boardPanel.repaint();
     }
 
     private static void drawCoordinates(JPanel boardPanel, boolean rotatedView) {
