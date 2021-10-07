@@ -49,9 +49,9 @@ public class GameAnalyser {
     private String lastScore = "";
     private String opinion = "";
     private int analysisTimePerMove;
-    private final int ANALYSIS_MISTAKE_THRESHOLD = 250;
-    private final int ANALYSIS_BLUNDER_THRESHOLD = 500;
-    private final int ANALYSIS_IGNORE_THRESHOLD = 2000;
+    private static final int ANALYSIS_MISTAKE_THRESHOLD = 250;
+    private static final int ANALYSIS_BLUNDER_THRESHOLD = 500;
+    private static final int ANALYSIS_IGNORE_THRESHOLD = 2000;
     double[] x1Start = new double[] {};
     double[] x1 = new double[] {};
     double[] x1End = new double[] {};

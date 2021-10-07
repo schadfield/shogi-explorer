@@ -680,7 +680,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         fileMenu.setText(bundle.getString("ShogiExplorer.fileMenu.text_1")); // NOI18N
 
-        jMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         jMenuItem1.setText(bundle.getString("ShogiExplorer.jMenuItem1.text_1")); // NOI18N
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -689,7 +689,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         fileMenu.add(jMenuItem1);
 
-        jMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         jMenuItem3.setText(bundle.getString("ShogiExplorer.jMenuItem3.text_1")); // NOI18N
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -698,7 +698,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         fileMenu.add(jMenuItem3);
 
-        jMenuItem6.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jMenuItem6.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         jMenuItem6.setText(bundle.getString("ShogiExplorer.jMenuItem6.text")); // NOI18N
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -711,7 +711,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         gameMenu.setText(bundle.getString("ShogiExplorer.gameMenu.text_1")); // NOI18N
 
-        analyseGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        analyseGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         analyseGame.setText(bundle.getString("ShogiExplorer.analyseGame.text")); // NOI18N
         analyseGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -720,7 +720,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         gameMenu.add(analyseGame);
 
-        stopAnalysis.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        stopAnalysis.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         stopAnalysis.setText(bundle.getString("ShogiExplorer.stopAnalysis.text_1")); // NOI18N
         stopAnalysis.setEnabled(false);
         stopAnalysis.addActionListener(new java.awt.event.ActionListener() {
@@ -734,7 +734,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         enginesMenu.setText(bundle.getString("ShogiExplorer.enginesMenu.text_1")); // NOI18N
 
-        jMenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jMenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         jMenuItem2.setText(bundle.getString("ShogiExplorer.jMenuItem2.text_1")); // NOI18N
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -747,7 +747,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         viewMenu.setLabel(bundle.getString("ShogiExplorer.viewMenu.label_1")); // NOI18N
 
-        jCheckBoxMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jCheckBoxMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         jCheckBoxMenuItem1.setText(bundle.getString("ShogiExplorer.jCheckBoxMenuItem1.text")); // NOI18N
         jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -757,7 +757,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         viewMenu.add(jCheckBoxMenuItem1);
         viewMenu.add(jSeparator1);
 
-        jRadioButtonMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jRadioButtonMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         buttonGroup1.add(jRadioButtonMenuItem3);
         jRadioButtonMenuItem3.setSelected(true);
         jRadioButtonMenuItem3.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem3.text")); // NOI18N
@@ -768,7 +768,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         viewMenu.add(jRadioButtonMenuItem3);
 
-        jRadioButtonMenuItem4.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jRadioButtonMenuItem4.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         buttonGroup1.add(jRadioButtonMenuItem4);
         jRadioButtonMenuItem4.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem4.text")); // NOI18N
         jRadioButtonMenuItem4.addActionListener(new java.awt.event.ActionListener() {
@@ -778,7 +778,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         viewMenu.add(jRadioButtonMenuItem4);
 
-        jRadioButtonMenuItem5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jRadioButtonMenuItem5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         buttonGroup1.add(jRadioButtonMenuItem5);
         jRadioButtonMenuItem5.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem5.text")); // NOI18N
         jRadioButtonMenuItem5.addActionListener(new java.awt.event.ActionListener() {
