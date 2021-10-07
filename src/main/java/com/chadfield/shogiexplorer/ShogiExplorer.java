@@ -713,6 +713,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         analyseGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         analyseGame.setText(bundle.getString("ShogiExplorer.analyseGame.text")); // NOI18N
+        analyseGame.setEnabled(false);
         analyseGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openAnalyseGameDialog(evt);
@@ -902,7 +903,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             String newPath = kifFile.getPath().substring(0, dotPos) + ".kif";
             kifFile = new File(newPath);
         }
-        parseKifu();    
+        parseKifu(); 
+        analyseGame.setEnabled(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void parseKifu() {
@@ -1475,6 +1477,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
                 prefs.flush();
                 parseKifu();
+                analyseGame.setEnabled(true);
             } catch (UnsupportedFlavorException | IOException  | BackingStoreException ex) {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
