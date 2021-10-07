@@ -925,20 +925,26 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
         gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
         moveNumber = 0;
+        initializeAnalysisParams();
         initializeChart(false);
         if (clipboardStr == null) {
             AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot);
         }
-        moveList.setSelectedIndex(0);    }
+        moveList.setSelectedIndex(0);    
+    }
     
-    private void initializeChart(boolean anal) {
+    private void initializeAnalysisParams() {
         analysisParam = new AnalysisParameter();
         analysisParam.setAnalysisTimePerMove(analysisTimePerMove);
         analysisParam.setGraphView1(jRadioButtonMenuItem3);
         analysisParam.setGraphView2(jRadioButtonMenuItem4);
         analysisParam.setGraphView3(jRadioButtonMenuItem5);
         analysisParam.setHaltAnalysisButton(jButton4);
+        analysisParam.setStopAnalysisMenuItem(stopAnalysis);
         analysisParam.setKifFile(kifFile);
+    }
+    
+    private void initializeChart(boolean anal) {
         plotDataset = new DefaultIntervalXYDataset();  
         chart = ChartFactory.createXYBarChart("", "", false, "", plotDataset);
    
@@ -1224,6 +1230,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
         prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
         prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
+        initializeAnalysisParams();
         initializeChart(true);
         jButton4.setEnabled(true);
         stopAnalysis.setEnabled(true);

@@ -30,6 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -73,6 +74,7 @@ public class GameAnalyser {
     JRadioButtonMenuItem graphView2;
     JRadioButtonMenuItem graphView3;
     JButton haltAnalysisButton;
+    JMenuItem stopAnalysisMenuItem;
     Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
     
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, boolean saveAnalysis) throws IOException {
@@ -84,6 +86,7 @@ public class GameAnalyser {
         this.graphView2 = analysisParam.getGraphView2();
         this.graphView3 = analysisParam.getGraphView3();
         this.haltAnalysisButton = analysisParam.getHaltAnalysisButton();
+        this.stopAnalysisMenuItem = analysisParam.getStopAnalysisMenuItem();
         initializeEngine(engine);
         initiateUSIProtocol();
         setOptions(engine);
@@ -106,9 +109,8 @@ public class GameAnalyser {
                 analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, previousMoveDestination);
                 previousMoveDestination = lastDestination;
             } 
+
             lastSFEN = sfen;
-
-
             sfen = position.getGameSFEN();
             engineMove = position.getNotation().getEngineMove();
 
@@ -131,6 +133,7 @@ public class GameAnalyser {
         
         quitEngine();
         haltAnalysisButton.setEnabled(false);
+        stopAnalysisMenuItem.setEnabled(false);
         
         if (saveAnalysis) {
             Analysis analysis = new Analysis();
@@ -294,26 +297,26 @@ public class GameAnalyser {
     }
     
     private static String getNotation(Board board, Coordinate lastDestination, Koma.Type sourceKomaType, boolean isDrop, String move, String disambiguation) {
-        String result;
+        StringBuilder result = new StringBuilder("");
         if (board.getNextTurn() == Board.Turn.GOTE) {
-            result = "☗";
+            result.append("☗");
         } else {
-            result = "☖";
+            result.append("☖");
         }  
         
         Coordinate destination = board.getDestination();
         if (lastDestination != null && destination.sameValue(lastDestination)) {
-            result += NotationUtils.SAME;
+            result.append(NotationUtils.SAME);
         } else {
-            result +=  NotationUtils.getJapaneseCoordinate(destination);
+            result.append(NotationUtils.getJapaneseCoordinate(destination));
         }
         
-        result += NotationUtils.getKomaKanji(sourceKomaType);
-        result += disambiguation;
+        result.append(NotationUtils.getKomaKanji(sourceKomaType));
+        result.append(disambiguation);
         if (!isDrop && isPromoted(move)) {
-            result += NotationUtils.PROMOTED;
+            result.append(NotationUtils.PROMOTED);
         }
-        return result;
+        return result.toString();
     }
     
     private static void removePieceInHand(Koma.Type komaType, Board board) {
@@ -334,11 +337,9 @@ public class GameAnalyser {
     }
         
     private void executeRegularMove(Board board, Coordinate thisSource, Coordinate thisDestination, Koma sourceKoma, String move) {
-        if (getKoma(board, thisDestination) != null) {
-            Koma thisKoma = getKoma(board, thisDestination);
-            if (thisKoma != null) {
-                ParserUtils.addPieceToInHand(getKoma(board, thisDestination), board);
-            }
+        Koma destinationKoma = getKoma(board, thisDestination);
+        if (destinationKoma != null) {
+            ParserUtils.addPieceToInHand(destinationKoma, board);
         }
         putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null); 
@@ -447,7 +448,6 @@ public class GameAnalyser {
             pvBuilder.append("\u3000");
         }
         
-
         String pvStr = pvBuilder.toString().trim();
         
         String lowUp = getLowUpString(lower, upper);
