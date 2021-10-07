@@ -48,9 +48,9 @@ public class GameAnalyser {
     private String lastScore = "";
     private String opinion = "";
     private int analysisTimePerMove;
-    private int analysisMistakeThreshold;
-    private int analysisBlunderThreshold;
-    private int analysisIgnoreThreshold;
+    private final int ANALYSIS_MISTAKE_THRESHOLD = 250;
+    private final int ANALYSIS_BLUNDER_THRESHOLD = 500;
+    private final int ANALYSIS_IGNORE_THRESHOLD = 2000;
     double[] x1Start = new double[] {};
     double[] x1 = new double[] {};
     double[] x1End = new double[] {};
@@ -80,9 +80,6 @@ public class GameAnalyser {
         this.plot = plot;
         DefaultIntervalXYDataset plotDataset = (DefaultIntervalXYDataset ) plot.getDataset();
         this.analysisTimePerMove = analysisParam.getAnalysisTimePerMove();
-        this.analysisMistakeThreshold = 250;
-        this.analysisBlunderThreshold = 500;
-        this.analysisIgnoreThreshold = 2000;
         this.graphView1 = analysisParam.getGraphView1();
         this.graphView2 = analysisParam.getGraphView2();
         this.graphView3 = analysisParam.getGraphView3();
@@ -543,7 +540,7 @@ public class GameAnalyser {
                 
         scoreVal = getScoreVal(score);
                 
-        if ((scoreVal >= analysisIgnoreThreshold && lastScoreVal >= analysisIgnoreThreshold) || (scoreVal <= -analysisIgnoreThreshold && lastScoreVal <= -analysisIgnoreThreshold)) {
+        if ((scoreVal >= ANALYSIS_IGNORE_THRESHOLD && lastScoreVal >= ANALYSIS_IGNORE_THRESHOLD) || (scoreVal <= -ANALYSIS_IGNORE_THRESHOLD && lastScoreVal <= -ANALYSIS_IGNORE_THRESHOLD)) {
             return "";
         }
         
@@ -554,18 +551,18 @@ public class GameAnalyser {
         // We are finding the opinion for the PREVIOUS move.
         if (moveNum % 2 != 0) {
             // This move is for sente.
-            if (scoreVal - lastScoreVal > analysisBlunderThreshold) {
+            if (scoreVal - lastScoreVal > ANALYSIS_BLUNDER_THRESHOLD) {
                 return "??";
             }
-            if (scoreVal - lastScoreVal > analysisMistakeThreshold) {
+            if (scoreVal - lastScoreVal > ANALYSIS_MISTAKE_THRESHOLD) {
                 return "?";
             }
         } else {
             // This move is for gote.
-            if (scoreVal - lastScoreVal < -analysisBlunderThreshold) {
+            if (scoreVal - lastScoreVal < -ANALYSIS_BLUNDER_THRESHOLD) {
                 return "??";
             }
-            if (scoreVal - lastScoreVal < -analysisMistakeThreshold) {
+            if (scoreVal - lastScoreVal < -ANALYSIS_MISTAKE_THRESHOLD) {
                 return "?";
             }
         }
