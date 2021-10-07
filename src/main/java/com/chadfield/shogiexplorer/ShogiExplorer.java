@@ -36,7 +36,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.desktop.QuitEvent;
-import java.awt.desktop.QuitHandler;
 import java.awt.desktop.QuitResponse;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
@@ -222,8 +221,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 System.exit(0);
             });
         }
-        
-        
+                
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
         rotateTime = System.currentTimeMillis();
         RenderBoard.loadBoard(board, boardPanel, rotatedView);                
