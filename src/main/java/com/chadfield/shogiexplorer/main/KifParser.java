@@ -199,7 +199,8 @@ public class KifParser {
             ParserUtils.addPieceToInHand(getKoma(board, thisDestination), board);
         }        
         Koma sourceKoma = getKoma(board, thisSource);
-        String disambiguation = NotationUtils.getDisambiguation(board, thisSource, thisDestination, sourceKoma.getType());
+        Koma.Type sourceKomaType = sourceKoma.getType();
+        String disambiguation = NotationUtils.getDisambiguation(board, thisSource, thisDestination, sourceKomaType);
         putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null);
         
@@ -211,7 +212,7 @@ public class KifParser {
             same = thisDestination.sameValue(lastDestination);
         }
               
-        return getNotation(thisSource, thisDestination, same, move, NotationUtils.getKomaKanji(sourceKoma.getType()), disambiguation);
+        return getNotation(thisSource, thisDestination, same, move, NotationUtils.getKomaKanji(sourceKomaType), disambiguation);
     }
         
     private static Notation executeSameMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
@@ -220,11 +221,12 @@ public class KifParser {
             ParserUtils.addPieceToInHand(destinationKoma, board);
         }
         Koma sourceKoma = getKoma(board, thisSource);
-        String disambiguation = NotationUtils.getDisambiguation(board, thisSource, thisDestination, sourceKoma.getType());
+        Koma.Type sourceKomaType = sourceKoma.getType();
+        String disambiguation = NotationUtils.getDisambiguation(board, thisSource, thisDestination, sourceKomaType);
         putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null);
         
-        return getNotation(thisSource, thisDestination, true, move, NotationUtils.getKomaKanji(sourceKoma.getType()), disambiguation);
+        return getNotation(thisSource, thisDestination, true, move, NotationUtils.getKomaKanji(sourceKomaType), disambiguation);
     }
         
     private static Notation executeDropMove(Board board, Coordinate thisDestination, String move) {
@@ -232,21 +234,21 @@ public class KifParser {
         Koma koma;
         try {
             koma = ParserUtils.getDropKoma(move.substring(2, 3), board.getNextTurn());
-            String dropNotation = NotationUtils.getDropNotation(board, thisDestination, koma.getType());
+            Koma.Type komaType = koma.getType();
+            String dropNotation = NotationUtils.getDropNotation(board, thisDestination, komaType);
             putKoma(board, thisDestination, koma);
-            removePieceInHand(koma.getType(), board);
-            engineMove = getKomaLetter(koma.getType()) + "*" + getEngineMoveCoordinate(thisDestination);
+            removePieceInHand(komaType, board);
+            engineMove = getKomaLetter(komaType) + "*" + getEngineMoveCoordinate(thisDestination);
             Notation notation = new Notation();
             notation.setEngineMove(engineMove);
-            notation.setJapanese(NotationUtils.getJapaneseCoordinate(thisDestination) + NotationUtils.getKomaKanji(koma.getType()) + dropNotation);
+            notation.setJapanese(NotationUtils.getJapaneseCoordinate(thisDestination) + NotationUtils.getKomaKanji(komaType) + dropNotation);
             return notation;
         } catch (Exception ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;      
     }
-    
-    
+
     private static String getKomaLetter(Koma.Type type) {
         switch(type) {
             case SFU:
@@ -401,7 +403,5 @@ public class KifParser {
                 return null;
         }
     }
-
-
 
 }
