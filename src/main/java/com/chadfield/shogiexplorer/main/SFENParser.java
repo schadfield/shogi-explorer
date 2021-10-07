@@ -56,14 +56,10 @@ public class SFENParser {
             }
         }
 
-        bldResult.append(getNextTurnString(board.getNextTurn()));
-        
+        bldResult.append(getNextTurnString(board.getNextTurn()));       
         bldResult.append(getInHandString(board));
-
-        bldResult.append(" ");
-        
-        bldResult.append(board.getMoveCount());
-        
+        bldResult.append(" ");       
+        bldResult.append(board.getMoveCount());       
         return bldResult.toString();
     }
     
