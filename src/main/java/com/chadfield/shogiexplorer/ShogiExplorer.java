@@ -224,6 +224,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
         rotateTime = System.currentTimeMillis();
+        initializeChart(true);
         RenderBoard.loadBoard(board, boardPanel, rotatedView);                
     }
     
