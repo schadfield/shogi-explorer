@@ -55,90 +55,90 @@ public class RenderBoard {
         if (rotatedView) {
             for (int i = 0; i < 9; i++) {
                 boardPanel.add(ImageUtils.getTextLabelForBan(
-                        new Coordinate(i,
-                                0),
-                        new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
+                        new Coordinate(i, 0),
+                        new Dimension(
+                                MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
                                 MathUtils.BOARD_XY * MathUtils.KOMA_Y + MathUtils.COORD_XY / 2 - 3),
-                        new Coordinate(CENTRE_X,
-                                CENTRE_Y),
+                        new Coordinate(CENTRE_X, CENTRE_Y),
                         Integer.toString(i + 1)
                 ));
             }
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(ImageUtils.getTextLabelForBan(
-                        new Coordinate(0,
-                                i),
-                        new Dimension(MathUtils.COORD_XY * 4 + 7,
-                                MathUtils.COORD_XY / 2 + 7),
-                        new Coordinate(CENTRE_X,
-                                CENTRE_Y),
-                        rank[8 - i]
-                ));
+                boardPanel.add(
+                        ImageUtils.getTextLabelForBan(
+                                new Coordinate(0, i),
+                                new Dimension(
+                                        MathUtils.COORD_XY * 4 + 7,
+                                        MathUtils.COORD_XY / 2 + 7),
+                                new Coordinate(CENTRE_X, CENTRE_Y),
+                                rank[8 - i]
+                        ));
             }
         } else {
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(ImageUtils.getTextLabelForBan(
-                        new Coordinate(i,
-                                0),
-                        new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
-                                -(MathUtils.COORD_XY / 2) - 3),
-                        new Coordinate(CENTRE_X,
-                                CENTRE_Y),
-                        Integer.toString(9 - i)
-                ));
+                boardPanel.add(
+                        ImageUtils.getTextLabelForBan(
+                                new Coordinate(i, 0),
+                                new Dimension(
+                                        MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
+                                        -(MathUtils.COORD_XY / 2) - 3),
+                                new Coordinate(CENTRE_X, CENTRE_Y),
+                                Integer.toString(9 - i)
+                        ));
             }
             for (int i = 0; i < 9; i++) {
-                boardPanel.add(ImageUtils.getTextLabelForBan(
-                        new Coordinate(0,
-                                i),
-                        new Dimension(MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 3,
-                                MathUtils.COORD_XY / 2 + 7),
-                        new Coordinate(CENTRE_X,
-                                CENTRE_Y),
-                        rank[i]
-                ));
+                boardPanel.add(
+                        ImageUtils.getTextLabelForBan(
+                                new Coordinate(0, i),
+                                new Dimension(
+                                        MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 3,
+                                        MathUtils.COORD_XY / 2 + 7),
+                                new Coordinate(CENTRE_X, CENTRE_Y),
+                                rank[i]
+                        ));
             }
         }
     }
 
     private static void drawTurnNotification(Board board, JPanel boardPanel, boolean rotatedView) {
         if (board.getNextTurn() == Turn.SENTE) {
-            Image image = ImageUtils.loadImageFromResources(
-                    "sente"
-            );
+            Image image = ImageUtils.loadImageFromResources("sente");
             if (rotatedView) {
-                boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
-                        new Coordinate(0, 8),
-                        new Dimension(MathUtils.COORD_XY, MathUtils.COORD_XY),
-                        new Coordinate(CENTRE_X, CENTRE_Y)
-                )
+                boardPanel.add(
+                        ImageUtils.getPieceLabelForKoma(image,
+                                new Coordinate(0, 8),
+                                new Dimension(MathUtils.COORD_XY, MathUtils.COORD_XY),
+                                new Coordinate(CENTRE_X, CENTRE_Y)
+                        )
                 );
             } else {
-                boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
-                        new Coordinate(0, -2),
-                        new Dimension(SBAN_XOFFSET, SBAN_YOFFSET - MathUtils.COORD_XY),
-                        new Coordinate(CENTRE_X, CENTRE_Y)
-                )
+                boardPanel.add(
+                        ImageUtils.getPieceLabelForKoma(
+                                image,
+                                new Coordinate(0, -2),
+                                new Dimension(SBAN_XOFFSET, SBAN_YOFFSET - MathUtils.COORD_XY),
+                                new Coordinate(CENTRE_X, CENTRE_Y)
+                        )
                 );
             }
         } else {
-            Image image = ImageUtils.loadImageFromResources(
-                    "gote"
-            );
+            Image image = ImageUtils.loadImageFromResources("gote");
             if (rotatedView) {
-                boardPanel.add(ImageUtils.getPieceLabelForKoma(image,
-                        new Coordinate(0, -2),
-                        new Dimension(SBAN_XOFFSET, SBAN_YOFFSET - MathUtils.COORD_XY),
-                        new Coordinate(CENTRE_X, CENTRE_Y)
-                )
+                boardPanel.add(
+                        ImageUtils.getPieceLabelForKoma(image,
+                                new Coordinate(0, -2),
+                                new Dimension(SBAN_XOFFSET, SBAN_YOFFSET - MathUtils.COORD_XY),
+                                new Coordinate(CENTRE_X, CENTRE_Y)
+                        )
                 );
             } else {
-                boardPanel.add(ImageUtils.getPieceLabelForKoma(
-                        image,
-                        new Coordinate(0, 8),
-                        new Dimension(MathUtils.COORD_XY, MathUtils.COORD_XY),
-                        new Coordinate(CENTRE_X, CENTRE_Y)
-                )
+                boardPanel.add(
+                        ImageUtils.getPieceLabelForKoma(
+                                image,
+                                new Coordinate(0, 8),
+                                new Dimension(MathUtils.COORD_XY, MathUtils.COORD_XY),
+                                new Coordinate(CENTRE_X, CENTRE_Y)
+                        )
                 );
             }
         }
@@ -278,50 +278,40 @@ public class RenderBoard {
             if (numberHeld != null && numberHeld > 0) {
                 Image pieceImage;
                 if (rotatedView) {
-                    pieceImage = ImageUtils.loadImageFromResources(
-                            substituteKomaNameRotated(komaType.toString())
-                    );
+                    pieceImage = ImageUtils.loadImageFromResources(substituteKomaNameRotated(komaType.toString()));
                 } else {
-                    pieceImage = ImageUtils.loadImageFromResources(
-                            substituteKomaName(komaType.toString())
-                    );
+                    pieceImage = ImageUtils.loadImageFromResources(substituteKomaName(komaType.toString()));
                 }
                 if (rotatedView) {
-                    boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                            new Coordinate(xCoordMapRotated.get(komaType),
-                                    yCoordMapRotated.get(komaType)),
-                            new Dimension(xOffsetMapRotated.get(komaType),
-                                    yOffsetMapRotated.get(komaType)),
-                            new Coordinate(CENTRE_X,
-                                    CENTRE_Y)
-                    ));
-                    boardPanel.add(ImageUtils.getTextLabelForBan(
-                            new Coordinate(xCoordMapRotated.get(komaType) + 1,
-                                    yCoordMapRotated.get(komaType)),
-                            new Dimension(xOffsetMapRotated.get(komaType),
-                                    yOffsetMapRotated.get(komaType)),
-                            new Coordinate(CENTRE_X,
-                                    CENTRE_Y),
-                            numberHeld.toString()
-                    ));
+                    boardPanel.add(
+                            ImageUtils.getPieceLabelForKoma(
+                                    pieceImage,
+                                    new Coordinate(xCoordMapRotated.get(komaType), yCoordMapRotated.get(komaType)),
+                                    new Dimension(xOffsetMapRotated.get(komaType), yOffsetMapRotated.get(komaType)),
+                                    new Coordinate(CENTRE_X, CENTRE_Y)
+                            ));
+                    boardPanel.add(
+                            ImageUtils.getTextLabelForBan(
+                                    new Coordinate(xCoordMapRotated.get(komaType) + 1, yCoordMapRotated.get(komaType)),
+                                    new Dimension(xOffsetMapRotated.get(komaType), yOffsetMapRotated.get(komaType)),
+                                    new Coordinate(CENTRE_X, CENTRE_Y),
+                                    numberHeld.toString()
+                            ));
                 } else {
-                    boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                            new Coordinate(xCoordMap.get(komaType),
-                                    yCoordMap.get(komaType)),
-                            new Dimension(xOffsetMap.get(komaType),
-                                    yOffsetMap.get(komaType)),
-                            new Coordinate(CENTRE_X,
-                                    CENTRE_Y)
-                    ));
-                    boardPanel.add(ImageUtils.getTextLabelForBan(
-                            new Coordinate(xCoordMap.get(komaType) + 1,
-                                    yCoordMap.get(komaType)),
-                            new Dimension(xOffsetMap.get(komaType),
-                                    yOffsetMap.get(komaType)),
-                            new Coordinate(CENTRE_X,
-                                    CENTRE_Y),
-                            numberHeld.toString()
-                    ));
+                    boardPanel.add(
+                            ImageUtils.getPieceLabelForKoma(
+                                    pieceImage,
+                                    new Coordinate(xCoordMap.get(komaType), yCoordMap.get(komaType)),
+                                    new Dimension(xOffsetMap.get(komaType), yOffsetMap.get(komaType)),
+                                    new Coordinate(CENTRE_X, CENTRE_Y)
+                            ));
+                    boardPanel.add(
+                            ImageUtils.getTextLabelForBan(
+                                    new Coordinate(xCoordMap.get(komaType) + 1, yCoordMap.get(komaType)),
+                                    new Dimension(xOffsetMap.get(komaType), yOffsetMap.get(komaType)),
+                                    new Coordinate(CENTRE_X, CENTRE_Y),
+                                    numberHeld.toString()
+                            ));
                 }
             }
         }
@@ -340,9 +330,7 @@ public class RenderBoard {
     }
 
     private static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord) {
-        Image pieceImage = ImageUtils.loadImageFromResources(
-                "highlight"
-        );
+        Image pieceImage = ImageUtils.loadImageFromResources("highlight");
         int x;
         int y;
         if (rotatedView) {
@@ -352,21 +340,19 @@ public class RenderBoard {
             x = 9 - thisCoord.getX();
             y = thisCoord.getY() - 1;
         }
-        boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                new Coordinate(x,
-                        y),
-                new Dimension(MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                        MathUtils.COORD_XY),
-                new Coordinate(CENTRE_X,
-                        CENTRE_Y)
-        ));
+        boardPanel.add(
+                ImageUtils.getPieceLabelForKoma(
+                        pieceImage,
+                        new Coordinate(x, y),
+                        new Dimension(MathUtils.KOMA_X + 3 * MathUtils.COORD_XY, MathUtils.COORD_XY),
+                        new Coordinate(CENTRE_X, CENTRE_Y)
+                ));
     }
 
     private static void drawPieces(Board board, JPanel boardPanel, boolean rotatedView) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 Image pieceImage = getPieceImage(rotatedView, i, j, board);
-
                 if (pieceImage != null) {
                     addPiece(boardPanel, pieceImage, i, j);
                 }
@@ -394,18 +380,18 @@ public class RenderBoard {
     }
 
     private static void addPiece(JPanel boardPanel, Image pieceImage, int i, int j) {
-        boardPanel.add(ImageUtils.getPieceLabelForKoma(pieceImage,
-                new Coordinate(i,
-                        j),
-                new Dimension(MathUtils.KOMA_X + 3 * MathUtils.COORD_XY,
-                        MathUtils.COORD_XY),
-                new Coordinate(CENTRE_X,
-                        CENTRE_Y)
-        ));
+        boardPanel.add(
+                ImageUtils.getPieceLabelForKoma(
+                        pieceImage,
+                        new Coordinate(i, j),
+                        new Dimension(MathUtils.KOMA_X + 3 * MathUtils.COORD_XY, MathUtils.COORD_XY),
+                        new Coordinate(CENTRE_X, CENTRE_Y)
+                ));
     }
 
     private static void drawGrid(Board board, JPanel boardPanel) {
-        ImageUtils.drawImage(board,
+        ImageUtils.drawImage(
+                board,
                 boardPanel,
                 "grid",
                 new Coordinate(MathUtils.KOMA_X + MathUtils.COORD_XY * 2, 0),
@@ -418,24 +404,20 @@ public class RenderBoard {
     }
 
     private static void drawBans(Board board, JPanel boardPanel) {
-        ImageUtils.drawImage(board,
+        ImageUtils.drawImage(
+                board,
                 boardPanel,
                 "ban",
                 new Coordinate(
                         MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
                         MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2
                 ),
-                new Dimension(
-                        MathUtils.KOMA_X + MathUtils.COORD_XY,
-                        MathUtils.KOMA_Y * 7
-                ),
-                new Coordinate(
-                        CENTRE_X,
-                        CENTRE_Y
-                )
+                new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
+                new Coordinate(CENTRE_X, CENTRE_Y)
         );
 
-        ImageUtils.drawImage(board,
+        ImageUtils.drawImage(
+                board,
                 boardPanel,
                 "ban",
                 new Coordinate(0, 0),
@@ -445,7 +427,8 @@ public class RenderBoard {
     }
 
     private static void drawBackground(Board board, JPanel boardPanel) {
-        ImageUtils.drawImage(board,
+        ImageUtils.drawImage(
+                board,
                 boardPanel,
                 "background",
                 new Coordinate(MathUtils.KOMA_X + MathUtils.COORD_XY * 2, 0),
