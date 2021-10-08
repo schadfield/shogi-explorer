@@ -427,9 +427,24 @@ public class GameAnalyser {
                         processScore(score, moveNum, plotDataset);
                         break;
                     case "mate":
-                        score = 31111;                      
+                        int mateCount;
+                        if (moveNum % 2 != 0) {
+                            mateCount = Integer.parseInt(splitLine[i+1]);
+                        } else {
+                            mateCount = Integer.parseInt(splitLine[i+1]) * -1;
+                        }
+                        if (mateCount > 0) {
+                            score = 31111;
+                        } else {
+                            score = -31111;
+                        }
                         processScore(score, moveNum, plotDataset);
-                        scoreStr = getMateScore(moveNum, splitLine[i+1]);
+                        if (score > 0) {
+                            scoreStr = "+Mate:";
+                        } else {
+                            scoreStr = "-Mate:";
+                        }
+                        scoreStr += Math.abs(mateCount);
                         break;
                     case "pv":
                         foundPV = true;
@@ -589,23 +604,6 @@ public class GameAnalyser {
         }
     }
     
-    private String getMateScore(int moveNum, String value) {
-        int scoreVal;
-        String score;
-        if (moveNum % 2 != 0) {
-            scoreVal = Integer.parseInt(value);
-        } else {
-            scoreVal = Integer.parseInt(value) * -1;
-        }
-        if (scoreVal > 0) {
-            score = "+Mate:";
-        } else {
-            score = "-Mate:";
-        }
-        score += Math.abs(scoreVal);
-        return score;
-    }
-
     private int getScore(int moveNum, String value) {
         if (moveNum % 2 != 0) {
             return Integer.parseInt(value);
