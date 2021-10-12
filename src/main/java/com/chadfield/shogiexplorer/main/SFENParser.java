@@ -65,13 +65,19 @@ public class SFENParser {
     
     private static Board parseInHand(Board board, String pieceStr) {
         int inHandCount = 1;
+        boolean foundNum = false;
         for (int k = 0; k < pieceStr.length(); k++) {
             char thisChar = pieceStr.charAt(k);
             if (thisChar == '-') {
                 return board;
             } else {
                 if (isNumber(thisChar)) {
-                    inHandCount = thisChar - 48;
+                    if (foundNum) {
+                        inHandCount = inHandCount * 10 + thisChar - 48;
+                    } else {
+                        inHandCount = thisChar - 48;
+                        foundNum = true;
+                    }
                 } else {
                     switch (thisChar) {
                         case 'R':
@@ -133,6 +139,7 @@ public class SFENParser {
                         default:
                             break;
                     }
+                    foundNum = false;
                 }
             }
         }
@@ -321,7 +328,7 @@ public class SFENParser {
     }
 
     private static boolean isNumber(char thisChar) {
-        return thisChar > '0' && thisChar <= '9';
+        return thisChar >= '0' && thisChar <= '9';
     }
 
 }
