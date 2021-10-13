@@ -104,6 +104,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     int analysisBlunderThreshold;
     static final String PREF_ANALYSIS_IGNORE_THRESHOLD = "analysisLosingThreshold";
     int analysisIgnoreThreshold;
+    static final String PREF_FILE_OPEN_DIR = "fileOpenDir";
     static final String PREF_LANGUAGE = "language";
     static final String PREF_LANGUAGE_ENGLISH = "english";
     static final String PREF_LANGUAGE_JAPANESE = "japanese";
@@ -876,7 +877,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         clipboardStr = null;
         jCheckBox1.setEnabled(true);
-        File dirFile = new File(prefs.get("fileOpenDir", System.getProperty("user.home")));
+        File dirFile = new File(prefs.get(PREF_FILE_OPEN_DIR, System.getProperty("user.home")));
         if (IS_MAC) {
             FileDialog fileDialog = new FileDialog(mainFrame);
             fileDialog.setDirectory(dirFile.getPath());
@@ -897,6 +898,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
             if (kifFile == null) {
                 return;
             }
+        }
+        
+        prefs.put(PREF_FILE_OPEN_DIR, kifFile.getParent());
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         int dotPos = kifFile.getPath().lastIndexOf(".");

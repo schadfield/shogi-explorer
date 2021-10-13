@@ -7,7 +7,7 @@ public class Board {
     public enum Turn { SENTE, GOTE }
     
     private Koma[][] masu = new Koma[9][9];
-    private ImageCache scaledImageCache = null;
+    private ImageCache imageCache = null;
     private Map<Koma.Type, Integer> inHandKomaMap;
     private Turn nextTurn;
     private int moveCount;
@@ -39,17 +39,17 @@ public class Board {
     }
 
     /**
-     * @return the scaledImageCache
+     * @return the imageCache
      */
     public ImageCache getImageCache() {
-        return getScaledImageCache();
+        return this.imageCache;
     }
 
     /**
-     * @param scaledImageCache the scaledImageCache to set
+     * @param imageCache the imageCache to set
      */
-    public void setImageCache(ImageCache scaledImageCache) {
-        this.setScaledImageCache(scaledImageCache);
+    public void setImageCache(ImageCache imageCache) {
+        this.imageCache = imageCache;
     }
 
     /**
@@ -120,20 +120,6 @@ public class Board {
      */
     public void setDestination(Coordinate destination) {
         this.destination = destination;
-    }
-
-    /**
-     * @return the scaledImageCache
-     */
-    public ImageCache getScaledImageCache() {
-        return scaledImageCache;
-    }
-
-    /**
-     * @param scaledImageCache the scaledImageCache to set
-     */
-    public void setScaledImageCache(ImageCache scaledImageCache) {
-        this.scaledImageCache = scaledImageCache;
     }
 
 }

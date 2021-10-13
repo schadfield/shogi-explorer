@@ -438,11 +438,10 @@ public class GameAnalyser {
                         } 
                         processScore(score, moveNum, plotDataset);
                         if (score > 0) {
-                            scoreStr = "+Mate:";
+                            scoreStr = "+Mate:" + Math.abs(mateNum);
                         } else {
-                            scoreStr = "-Mate:";
+                            scoreStr = "-Mate:" + Math.abs(mateNum);
                         }
-                        scoreStr += Math.abs(mateNum);
                         break;
                     case "pv":
                         foundPV = true;

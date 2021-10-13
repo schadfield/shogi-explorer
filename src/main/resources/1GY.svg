@@ -9,9 +9,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    style="overflow:visible"
-   viewBox="-150 -150 300 300"
-   height="1200px"
-   width="1200px"
+   viewBox="-150 -150 350 350"
+   height="1400"
+   width="1400"
    id="svg2538"
    sodipodi:docname="1GY.svg"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -43,20 +43,23 @@
      id="namedview2540"
      showgrid="false"
      inkscape:zoom="0.19666667"
-     inkscape:cx="559.38722"
-     inkscape:cy="600.00002"
-     inkscape:window-x="146"
-     inkscape:window-y="76"
+     inkscape:cx="61.864453"
+     inkscape:cy="700.00003"
+     inkscape:window-x="232"
+     inkscape:window-y="305"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g2534" />
+     inkscape:current-layer="g2534"
+     fit-margin-top="100"
+     fit-margin-left="100"
+     fit-margin-right="100"
+     fit-margin-bottom="100" />
   <rect
-     fill-opacity="0"
-     fill="rgb(0,0,0)"
      height="300"
      width="300"
-     y="-150"
-     x="-150"
-     id="rect2524" />
+     y="-125"
+     x="-125"
+     id="rect2524"
+     style="fill:#000000;fill-opacity:0" />
   <svg
      version="1.1"
      y="-250"
@@ -70,25 +73,25 @@
        id="g2534"
        style="fill:#ffffff;stroke-linejoin:round">
       <path
-         d="M -0.00218,132.30006 88.43488,85.666556 110.54365,-132.29994 h -221.0877 l 22.10877,217.966496 z"
+         d="m 24.997771,157.30066 88.437499,-46.62092 22.10888,-217.90768 H -85.544644 l 22.108879,217.90768 z"
          id="path2526"
          inkscape:connector-curvature="0"
-         style="fill:#f7eaa6;fill-opacity:1;stroke:none;stroke-width:0.89999998;stroke-linecap:butt;stroke-linejoin:round" />
+         style="fill:#f7eaa6;fill-opacity:1;stroke:none;stroke-width:0.89988095;stroke-linecap:butt;stroke-linejoin:round" />
       <path
-         d="m -9.4080791,-68.114644 v 45.69597 H -60.984109 V -2.9307046 H -9.4080791 V 34.029326 H -68.376078 v 19.656 h 137.088 v -19.656 H 12.599892 V -2.9307046 h 48.04803 V -22.418674 h -48.04803 v -45.69597 h 63.504 v -19.48797 h -152.208 v 19.48797 z"
+         d="M 15.591825,-43.059967 V 2.6236728 H -35.984458 V 22.106382 H 15.591825 V 59.056441 H -43.376464 V 78.707137 H 93.712212 V 59.056441 H 37.599905 V 22.106382 H 85.648171 V 2.6236728 H 37.599905 V -43.059967 H 101.10421 V -62.542678 H -51.104533 v 19.482711 z"
          id="path2528"
          inkscape:connector-curvature="0"
-         style="fill:#000000;stroke:none;stroke-width:0.89999998;stroke-linecap:butt;stroke-linejoin:round" />
+         style="fill:#000000;stroke:none;stroke-width:0.89988095;stroke-linecap:butt;stroke-linejoin:round" />
       <path
-         d="m -19.99208,-36.195243 c -9.24003,-9.40797 -22.176,-22.51197 -28.224,-30.40803 l -15.12,13.43997 c 6.552,7.728003 19.82403,19.99197 28.89603,28.55997 z"
+         d="M 5.0077724,-11.149179 C -4.2323031,-20.554611 -17.168337,-33.655074 -23.216367,-41.549004 l -15.120074,13.436344 c 6.552032,7.725917 19.824128,19.9865753 28.8961722,28.55226329 z"
          id="path2530"
          inkscape:connector-curvature="0"
-         style="fill:#000000;stroke:none;stroke-width:0.89999998;stroke-linecap:butt;stroke-linejoin:round" />
+         style="fill:#000000;stroke:none;stroke-width:0.89988095;stroke-linecap:butt;stroke-linejoin:round" />
       <path
-         d="M -0.00218,132.30006 88.43488,85.666556 110.54365,-132.29994 h -221.0877 l 22.10877,217.966496 z"
+         d="m 24.997771,157.30066 88.437499,-46.62092 22.10888,-217.90768 H -85.544644 l 22.108879,217.90768 z"
          id="path2532"
          inkscape:connector-curvature="0"
-         style="fill:none;stroke:#000000;stroke-width:9;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1" />
+         style="fill:none;stroke:#000000;stroke-width:8.99880981;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1" />
     </g>
   </svg>
 </svg>

@@ -20,6 +20,8 @@ public class RenderBoard {
     static final int SBAN_YOFFSET = MathUtils.KOMA_Y * 2 + MathUtils.COORD_XY * 2;
     static final int CENTRE_X = 5;
     static final int CENTRE_Y = 5;
+    static final String IMAGE_STR_SENTE = "sente";
+    static final String IMAGE_STR_HIGHLIGHT = "highlight";
 
     private RenderBoard() {
         throw new IllegalStateException("Utility class");
@@ -101,8 +103,13 @@ public class RenderBoard {
     }
 
     private static void drawTurnNotification(Board board, JPanel boardPanel, boolean rotatedView) {
+        ImageCache imageCache = board.getImageCache();
         if (board.getNextTurn() == Turn.SENTE) {
-            Image image = ImageUtils.loadImageFromResources("sente");
+            Image image = imageCache.getImage(IMAGE_STR_SENTE);
+            if (image == null) {
+                image = ImageUtils.loadSVGImageFromResources(IMAGE_STR_SENTE, new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+                imageCache.putImage(IMAGE_STR_SENTE, image);
+            }
             if (rotatedView) {
                 boardPanel.add(
                         ImageUtils.getPieceLabelForKoma(image,
@@ -122,7 +129,11 @@ public class RenderBoard {
                 );
             }
         } else {
-            Image image = ImageUtils.loadImageFromResources("gote");
+            Image image = imageCache.getImage("gote");
+            if (image == null) {
+                image = ImageUtils.loadSVGImageFromResources("gote", new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+                imageCache.putImage("gote", image);
+            }
             if (rotatedView) {
                 boardPanel.add(
                         ImageUtils.getPieceLabelForKoma(image,
@@ -154,6 +165,7 @@ public class RenderBoard {
         EnumMap<Koma.Type, Integer> yCoordMap = new EnumMap<>(Koma.Type.class);
         EnumMap<Koma.Type, Integer> xCoordMapRotated = new EnumMap<>(Koma.Type.class);
         EnumMap<Koma.Type, Integer> yCoordMapRotated = new EnumMap<>(Koma.Type.class);
+        ImageCache imageCache = board.getImageCache();
 
         //<editor-fold defaultstate="collapsed" desc="Map initialization">
         xOffsetMap.put(Koma.Type.GFU, 0);
@@ -278,9 +290,21 @@ public class RenderBoard {
             if (numberHeld != null && numberHeld > 0) {
                 Image pieceImage;
                 if (rotatedView) {
-                    pieceImage = ImageUtils.loadImageFromResources(substituteKomaNameRotated(komaType.toString()));
+                    pieceImage = imageCache.getImage(substituteKomaNameRotated(komaType.toString()));
+                    if (pieceImage == null) {
+                        pieceImage = ImageUtils.loadSVGImageFromResources(
+                                substituteKomaNameRotated(komaType.toString()),
+                                new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+                        imageCache.putImage(substituteKomaNameRotated(komaType.toString()), pieceImage);
+                    }
                 } else {
-                    pieceImage = ImageUtils.loadImageFromResources(substituteKomaName(komaType.toString()));
+                    pieceImage = imageCache.getImage(substituteKomaName(komaType.toString()));
+                    if (pieceImage == null) {
+                        pieceImage = ImageUtils.loadSVGImageFromResources(
+                                substituteKomaName(komaType.toString()),
+                                new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+                        imageCache.putImage(substituteKomaName(komaType.toString()), pieceImage);
+                    }
                 }
                 if (rotatedView) {
                     boardPanel.add(
@@ -321,16 +345,23 @@ public class RenderBoard {
     private static void drawHighlights(Board board, JPanel boardPanel, boolean rotatedView) {
         Coordinate thisCoord = board.getSource();
         if (thisCoord != null) {
-            drawThisHighlight(rotatedView, boardPanel, thisCoord);
+            drawThisHighlight(rotatedView, boardPanel, thisCoord, board);
         }
         thisCoord = board.getDestination();
         if (thisCoord != null) {
-            drawThisHighlight(rotatedView, boardPanel, thisCoord);
+            drawThisHighlight(rotatedView, boardPanel, thisCoord, board);
         }
     }
 
-    private static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord) {
-        Image pieceImage = ImageUtils.loadImageFromResources("highlight");
+    private static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord, Board board) {
+        ImageCache imageCache = board.getImageCache();
+        Image highLightImage = imageCache.getImage(IMAGE_STR_HIGHLIGHT);
+        if (highLightImage == null) {
+            highLightImage = ImageUtils.loadSVGImageFromResources(
+                    IMAGE_STR_HIGHLIGHT,
+                    new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+            imageCache.putImage(IMAGE_STR_HIGHLIGHT, highLightImage);
+        }
         int x;
         int y;
         if (rotatedView) {
@@ -342,7 +373,7 @@ public class RenderBoard {
         }
         boardPanel.add(
                 ImageUtils.getPieceLabelForKoma(
-                        pieceImage,
+                        highLightImage,
                         new Coordinate(x, y),
                         new Dimension(MathUtils.KOMA_X + 3 * MathUtils.COORD_XY, MathUtils.COORD_XY),
                         new Coordinate(CENTRE_X, CENTRE_Y)
@@ -376,7 +407,16 @@ public class RenderBoard {
             }
             name = substituteKomaName(koma.getType().toString());
         }
-        return ImageUtils.loadImageFromResources(name);
+        ImageCache imageCache = board.getImageCache();
+        Image cacheImage = imageCache.getImage(name);
+        if (cacheImage == null) {
+            cacheImage = ImageUtils.loadSVGImageFromResources(
+                    name,
+                    new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+            imageCache.putImage(name, cacheImage);
+        }
+
+        return cacheImage;
     }
 
     private static void addPiece(JPanel boardPanel, Image pieceImage, int i, int j) {

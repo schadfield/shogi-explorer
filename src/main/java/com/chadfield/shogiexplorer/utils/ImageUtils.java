@@ -13,6 +13,16 @@ import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Dimension;
 import com.chadfield.shogiexplorer.objects.ImageCache;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import org.apache.batik.transcoder.SVGAbstractTranscoder;
+import org.apache.batik.transcoder.Transcoder;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 
 public class ImageUtils {
 
@@ -40,19 +50,64 @@ public class ImageUtils {
         return numberLabel;
     }
 
-    public static Image loadImageFromResources(String imageName) {
+    public static Image loadSVGImageFromResources(String imageName, Dimension imageDimension) {
         Image image1 = null;
         Image image2 = null;
         Image image3 = null;
+        Image image4 = null;
+
         try {
-            image1 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + ".png"));
-            image2 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "@1.25x.png"));
-            image3 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "@2x.png"));
-        } catch (IOException ex) {
+            InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
+            image1 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth(), imageDimension.getHeight());
+            inputStream.close();
+            inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
+            image2 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 1.25, imageDimension.getHeight() * 1.25);
+            inputStream.close();
+            inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
+            image3 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 1.5, imageDimension.getHeight() * 1.5);
+            inputStream.close();
+            inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
+            image4 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 2.0, imageDimension.getHeight() * 2.0);
+            inputStream.close();
+        } catch (TranscoderException | IOException ex) {
             Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
-        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(image1, image2, image3);
+
+        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(image1, image2, image3, image4);
         return (mri);
+    }
+
+    public static BufferedImage transcodeSVGToBufferedImage(InputStream inputStream, double width, double height) throws TranscoderException {
+        // Create a PNG transcoder.
+        Transcoder t = new PNGTranscoder();
+
+        // Set the transcoding hints.
+        t.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
+        t.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
+        t.addTranscodingHint(SVGAbstractTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 3.543f);
+        try {
+            // Create the transcoder input.
+            TranscoderInput input = new TranscoderInput(inputStream);
+
+            // Create the transcoder output.
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            TranscoderOutput output = new TranscoderOutput(outputStream);
+
+            // Save the image.
+            t.transcode(input, output);
+
+            // Flush and close the stream.
+            outputStream.flush();
+            outputStream.close();
+
+            // Convert the byte stream into an image.
+            byte[] imgData = outputStream.toByteArray();
+            return ImageIO.read(new ByteArrayInputStream(imgData));
+
+        } catch (IOException | TranscoderException ex) {
+            Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public static Image loadIconImageFromResources(String imageName) {
@@ -80,7 +135,7 @@ public class ImageUtils {
         ImageCache imageCache = board.getImageCache();
         Image imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
-            imageFile = loadImageFromResources(imageName);
+            imageFile = loadSVGImageFromResources(imageName, imageDimension);
             imageCache.putImage(imageName, imageFile);
         }
         JLabel imageLable = new JLabel(new ImageIcon(imageFile));
