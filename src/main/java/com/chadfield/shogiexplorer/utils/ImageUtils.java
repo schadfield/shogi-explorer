@@ -131,8 +131,7 @@ public class ImageUtils {
         return (mri);
     }
 
-    public static void drawImage(Board board, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset) {
-        ImageCache imageCache = board.getImageCache();
+    public static void drawImage(Board board, ImageCache imageCache, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset) {
         Image imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
             imageFile = loadSVGImageFromResources(imageName, imageDimension);

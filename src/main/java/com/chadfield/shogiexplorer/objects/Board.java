@@ -7,7 +7,6 @@ public class Board {
     public enum Turn { SENTE, GOTE }
     
     private Koma[][] masu = new Koma[9][9];
-    private ImageCache imageCache = null;
     private Map<Koma.Type, Integer> inHandKomaMap;
     private Turn nextTurn;
     private int moveCount;
@@ -36,20 +35,6 @@ public class Board {
      */
     public void setMasu(Koma[][] masu) {
         this.masu = masu;
-    }
-
-    /**
-     * @return the imageCache
-     */
-    public ImageCache getImageCache() {
-        return this.imageCache;
-    }
-
-    /**
-     * @param imageCache the imageCache to set
-     */
-    public void setImageCache(ImageCache imageCache) {
-        this.imageCache = imageCache;
     }
 
     /**

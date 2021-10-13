@@ -21,6 +21,7 @@ import com.chadfield.shogiexplorer.main.SFENParser;
 import com.chadfield.shogiexplorer.objects.AnalysisParameter;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
+import com.chadfield.shogiexplorer.objects.ImageCache;
 import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.ImageUtils;
 import java.awt.Color;
@@ -77,6 +78,7 @@ import org.jfree.ui.RectangleEdge;
 public class ShogiExplorer extends javax.swing.JFrame {
 
     transient Board board;
+    ImageCache imageCache;
     transient Preferences prefs;
     transient Game game;
     int moveNumber;
@@ -161,6 +163,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } 
 
         jTabbedPane1.setForeground(Color.BLACK);
+        
+        imageCache = new ImageCache();
 
         board = SFENParser.parse("lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
                 
@@ -235,7 +239,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
         rotateTime = System.currentTimeMillis();
         initializeChart(true);
-        RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);                
+        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);                
     }
     
 
@@ -1147,7 +1151,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 plotDataset.addSeries("M", data3); 
             }
             analysisTable.repaint();
-            RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
+            RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
             inSelectionChange = false;
         }
     }//GEN-LAST:event_moveListValueChanged
@@ -1324,7 +1328,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 commentTextArea.setText(null);
                 commentTextArea.append(position.getComment());
                 analysisTable.repaint();
-                RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
+                RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
                 return;
             }
             position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
@@ -1333,7 +1337,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             board.setDestination(position.getDestination());
             commentTextArea.setText(null);
             analysisTable.repaint();
-            RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
+            RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
         }
     }
     
@@ -1353,7 +1357,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 board.setDestination(position.getDestination());
                 commentTextArea.setText(null);
                 analysisTable.repaint();
-                RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
+                RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
     }
     
     transient TableCellRenderer analysisMoveRenderer = new TableCellRenderer() {
@@ -1527,14 +1531,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         long now = System.currentTimeMillis();
         if (now - rotateTime > 500) {
             rotatedView = !rotatedView;
-            RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
+            RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
             rotateTime = now;
         }
     }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
 
     private void jCheckBoxMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem3ActionPerformed
         classic = !classic;
-        RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
+        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
         prefs.putBoolean(PREF_CLASSIC, classic);
         try {
             prefs.flush();
