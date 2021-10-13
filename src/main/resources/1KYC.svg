@@ -63,7 +63,7 @@
        transform="rotate(-180,18.227797,278.97021)">
       <polygon
          transform="matrix(-0.94419614,0,0,-0.94419614,31.541044,293.57516)"
-         style="fill:#fff7b7;fill-opacity:1;stroke:#000000;stroke-width:0.5291667;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:#f7eaa6;fill-opacity:1;stroke:#000000;stroke-width:1.2591667;stroke-miterlimit:4;stroke-dasharray:none"
          points="27.7,0 23.855018,27.358471 13.85,31 3.844982,27.358471 0,0 "
          id="shogi_trapezoid" />
       <path
