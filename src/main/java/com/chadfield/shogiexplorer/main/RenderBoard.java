@@ -27,7 +27,7 @@ public class RenderBoard {
         throw new IllegalStateException("Utility class");
     }
 
-    public static void loadBoard(Board board, javax.swing.JPanel boardPanel, boolean rotatedView) {
+    public static void loadBoard(Board board, javax.swing.JPanel boardPanel, boolean rotatedView, boolean classic) {
         if (boardPanel.getWidth() == 0) {
             return;
         }
@@ -39,8 +39,8 @@ public class RenderBoard {
         // Start with a clean slate.
         boardPanel.removeAll();
 
-        drawPieces(board, boardPanel, rotatedView);
-        drawPiecesInHand(board, boardPanel, rotatedView);
+        drawPieces(board, boardPanel, rotatedView, classic);
+        drawPiecesInHand(board, boardPanel, rotatedView, classic);
         drawCoordinates(boardPanel, rotatedView);
         drawGrid(board, boardPanel);
         drawHighlights(board, boardPanel, rotatedView);
@@ -155,7 +155,7 @@ public class RenderBoard {
         }
     }
 
-    private static void drawPiecesInHand(Board board, JPanel boardPanel, boolean rotatedView) {
+    private static void drawPiecesInHand(Board board, JPanel boardPanel, boolean rotatedView, boolean classic) {
 
         EnumMap<Koma.Type, Integer> xOffsetMap = new EnumMap<>(Koma.Type.class);
         EnumMap<Koma.Type, Integer> yOffsetMap = new EnumMap<>(Koma.Type.class);
@@ -290,20 +290,32 @@ public class RenderBoard {
             if (numberHeld != null && numberHeld > 0) {
                 Image pieceImage;
                 if (rotatedView) {
-                    pieceImage = imageCache.getImage(substituteKomaNameRotated(komaType.toString()));
+                    String name;
+                    if (classic) {
+                        name = substituteKomaNameRotated(komaType.toString()) + "C";
+                    } else {
+                        name = substituteKomaNameRotated(komaType.toString());
+                    }
+                    pieceImage = imageCache.getImage(name);
                     if (pieceImage == null) {
                         pieceImage = ImageUtils.loadSVGImageFromResources(
-                                substituteKomaNameRotated(komaType.toString()),
+                                name,
                                 new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
-                        imageCache.putImage(substituteKomaNameRotated(komaType.toString()), pieceImage);
+                        imageCache.putImage(name, pieceImage);
                     }
                 } else {
-                    pieceImage = imageCache.getImage(substituteKomaName(komaType.toString()));
+                    String name;
+                    if (classic) {
+                        name = substituteKomaName(komaType.toString()) + "C";
+                    } else {
+                        name = substituteKomaName(komaType.toString());
+                    }
+                    pieceImage = imageCache.getImage(name);
                     if (pieceImage == null) {
                         pieceImage = ImageUtils.loadSVGImageFromResources(
-                                substituteKomaName(komaType.toString()),
+                                name,
                                 new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
-                        imageCache.putImage(substituteKomaName(komaType.toString()), pieceImage);
+                        imageCache.putImage(name, pieceImage);
                     }
                 }
                 if (rotatedView) {
@@ -380,10 +392,10 @@ public class RenderBoard {
                 ));
     }
 
-    private static void drawPieces(Board board, JPanel boardPanel, boolean rotatedView) {
+    private static void drawPieces(Board board, JPanel boardPanel, boolean rotatedView, boolean classic) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                Image pieceImage = getPieceImage(rotatedView, i, j, board);
+                Image pieceImage = getPieceImage(rotatedView, classic, i, j, board);
                 if (pieceImage != null) {
                     addPiece(boardPanel, pieceImage, i, j);
                 }
@@ -391,7 +403,7 @@ public class RenderBoard {
         }
     }
 
-    private static Image getPieceImage(boolean rotatedView, int i, int j, Board board) {
+    private static Image getPieceImage(boolean rotatedView, boolean classic, int i, int j, Board board) {
         String name;
         Koma koma;
         if (rotatedView) {
@@ -399,13 +411,21 @@ public class RenderBoard {
             if (koma == null) {
                 return null;
             }
-            name = substituteKomaNameRotated(koma.getType().toString());
+            if (classic) {
+                name = substituteKomaNameRotated(koma.getType().toString()) + "C";
+            } else {
+                name = substituteKomaNameRotated(koma.getType().toString());
+            }
         } else {
             koma = board.getMasu()[i][j];
             if (koma == null) {
                 return null;
             }
-            name = substituteKomaName(koma.getType().toString());
+            if (classic) {
+                name = substituteKomaName(koma.getType().toString()) + "C";
+            } else {
+                name = substituteKomaName(koma.getType().toString());
+            }
         }
         ImageCache imageCache = board.getImageCache();
         Image cacheImage = imageCache.getImage(name);

@@ -87,6 +87,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     DefaultListModel<String> moveListModel = new DefaultListModel<>();
     DefaultListModel<String> engineListModel = new DefaultListModel<>();
     boolean rotatedView;
+    boolean classic;
     boolean saveAnalysis;
     transient List<Engine> engineList = new ArrayList<>();
     transient FileNameExtensionFilter kifFileFilter;
@@ -108,6 +109,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_LANGUAGE = "language";
     static final String PREF_LANGUAGE_ENGLISH = "english";
     static final String PREF_LANGUAGE_JAPANESE = "japanese";
+    static final String PREF_CLASSIC = "classic";
     DefaultIntervalXYDataset plotDataset;
     JFreeChart chart;
     ChartPanel chartPanel;
@@ -169,6 +171,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
             saveAnalysis = false;
         }
         
+        if (prefs.getBoolean(PREF_CLASSIC, false)) {
+            classic = true;
+            jCheckBoxMenuItem3.setSelected(true);
+        } else {
+            classic = false;
+        }
+        
         analysisEngineName = prefs.get(PREF_ANALYSIS_ENGINE_NAME, "");
         analysisTimePerMove = prefs.getInt(PREF_ANALYSIS_TIME_PER_MOVE, 3);
         analysisMistakeThreshold = prefs.getInt(PREF_ANALYSIS_MISTAKE_THRESHOLD, 250);
@@ -226,7 +235,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
         rotateTime = System.currentTimeMillis();
         initializeChart(true);
-        RenderBoard.loadBoard(board, boardPanel, rotatedView);                
+        RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);                
     }
     
 
@@ -266,6 +275,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jCheckBox1 = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
@@ -307,6 +317,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         viewMenu = new javax.swing.JMenu();
         jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jCheckBoxMenuItem3 = new javax.swing.JCheckBoxMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jRadioButtonMenuItem3 = new javax.swing.JRadioButtonMenuItem();
         jRadioButtonMenuItem4 = new javax.swing.JRadioButtonMenuItem();
         jRadioButtonMenuItem5 = new javax.swing.JRadioButtonMenuItem();
@@ -454,6 +466,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jPanel2.add(jButton2);
 
         jAnalysisDialog.getContentPane().add(jPanel2);
+
+        jCheckBoxMenuItem2.setSelected(true);
+        jCheckBoxMenuItem2.setText(bundle.getString("ShogiExplorer.jCheckBoxMenuItem2.text")); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -759,6 +774,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         viewMenu.add(jCheckBoxMenuItem1);
         viewMenu.add(jSeparator1);
+
+        jCheckBoxMenuItem3.setText(bundle.getString("ShogiExplorer.jCheckBoxMenuItem3.text")); // NOI18N
+        jCheckBoxMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem3ActionPerformed(evt);
+            }
+        });
+        viewMenu.add(jCheckBoxMenuItem3);
+        viewMenu.add(jSeparator3);
 
         jRadioButtonMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         buttonGroup1.add(jRadioButtonMenuItem3);
@@ -1123,7 +1147,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 plotDataset.addSeries("M", data3); 
             }
             analysisTable.repaint();
-            RenderBoard.loadBoard(board, boardPanel, rotatedView);
+            RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
             inSelectionChange = false;
         }
     }//GEN-LAST:event_moveListValueChanged
@@ -1300,7 +1324,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 commentTextArea.setText(null);
                 commentTextArea.append(position.getComment());
                 analysisTable.repaint();
-                RenderBoard.loadBoard(board, boardPanel, rotatedView);
+                RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
                 return;
             }
             position = game.getAnalysisPositionList().get(moveNumber-1).get(browsePos);
@@ -1309,7 +1333,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             board.setDestination(position.getDestination());
             commentTextArea.setText(null);
             analysisTable.repaint();
-            RenderBoard.loadBoard(board, boardPanel, rotatedView);
+            RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
         }
     }
     
@@ -1329,7 +1353,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 board.setDestination(position.getDestination());
                 commentTextArea.setText(null);
                 analysisTable.repaint();
-                RenderBoard.loadBoard(board, boardPanel, rotatedView);
+                RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
     }
     
     transient TableCellRenderer analysisMoveRenderer = new TableCellRenderer() {
@@ -1503,10 +1527,22 @@ public class ShogiExplorer extends javax.swing.JFrame {
         long now = System.currentTimeMillis();
         if (now - rotateTime > 500) {
             rotatedView = !rotatedView;
-            RenderBoard.loadBoard(board, boardPanel, rotatedView);
+            RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
             rotateTime = now;
         }
     }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+
+    private void jCheckBoxMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem3ActionPerformed
+        classic = !classic;
+        RenderBoard.loadBoard(board, boardPanel, rotatedView, classic);
+        prefs.putBoolean(PREF_CLASSIC, classic);
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jCheckBoxMenuItem3ActionPerformed
 
     private String getAboutMessage() {
         String aboutMessage;
@@ -1587,6 +1623,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem3;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JList<String> jEngineList;
@@ -1614,6 +1652,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar mainToolBar;
     private javax.swing.JButton mediaBack;
