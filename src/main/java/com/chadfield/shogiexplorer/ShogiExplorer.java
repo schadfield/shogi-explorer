@@ -78,7 +78,7 @@ import org.jfree.ui.RectangleEdge;
 public class ShogiExplorer extends javax.swing.JFrame {
 
     transient Board board;
-    ImageCache imageCache;
+    transient ImageCache imageCache;
     transient Preferences prefs;
     transient Game game;
     int moveNumber;

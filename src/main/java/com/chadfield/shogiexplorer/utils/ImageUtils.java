@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Dimension;
 import com.chadfield.shogiexplorer.objects.ImageCache;
@@ -131,7 +130,7 @@ public class ImageUtils {
         return (mri);
     }
 
-    public static void drawImage(Board board, ImageCache imageCache, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset) {
+    public static void drawImage(ImageCache imageCache, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset) {
         Image imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
             imageFile = loadSVGImageFromResources(imageName, imageDimension);

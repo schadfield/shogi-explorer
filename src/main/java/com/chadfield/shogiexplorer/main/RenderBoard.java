@@ -12,7 +12,6 @@ import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Dimension;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaName;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaNameRotated;
-import java.io.File;
 import java.util.EnumMap;
 
 public class RenderBoard {
@@ -24,6 +23,8 @@ public class RenderBoard {
     static final String IMAGE_STR_SENTE = "sente";
     static final String IMAGE_STR_GOTE = "gote";
     static final String IMAGE_STR_HIGHLIGHT = "highlight";
+    static final String PIECE_SET_CLASSIC = "classic";
+    static final String PIECE_SET_MODERN = "modern";
 
     private RenderBoard() {
         throw new IllegalStateException("Utility class");
@@ -40,10 +41,10 @@ public class RenderBoard {
         drawPieces(board, imageCache, boardPanel, rotatedView, classic);
         drawPiecesInHand(board, imageCache, boardPanel, rotatedView, classic);
         drawCoordinates(boardPanel, rotatedView);
-        drawGrid(board, imageCache, boardPanel);
+        drawGrid(imageCache, boardPanel);
         drawHighlights(board, imageCache, boardPanel, rotatedView);
-        drawBans(board, imageCache, boardPanel);
-        drawBackground(board, imageCache, boardPanel);
+        drawBans(imageCache, boardPanel);
+        drawBackground(imageCache, boardPanel);
         drawTurnNotification(board, imageCache, boardPanel, rotatedView);
         boardPanel.setVisible(true);
         boardPanel.repaint();
@@ -288,9 +289,9 @@ public class RenderBoard {
                 if (rotatedView) {
                     String name;
                     if (classic) {
-                        name = "classic/" + substituteKomaNameRotated(komaType.toString());
+                        name = PIECE_SET_CLASSIC + "/" + substituteKomaNameRotated(komaType.toString());
                     } else {
-                        name = "modern/" + substituteKomaNameRotated(komaType.toString());
+                        name = PIECE_SET_MODERN + "/" + substituteKomaNameRotated(komaType.toString());
                     }
                     pieceImage = imageCache.getImage(name);
                     if (pieceImage == null) {
@@ -302,9 +303,9 @@ public class RenderBoard {
                 } else {
                     String name;
                     if (classic) {
-                        name = "classic/" + substituteKomaName(komaType.toString());
+                        name = PIECE_SET_CLASSIC + "/" + substituteKomaName(komaType.toString());
                     } else {
-                        name = "modern/" + substituteKomaName(komaType.toString());
+                        name = PIECE_SET_MODERN + substituteKomaName(komaType.toString());
                     }
                     pieceImage = imageCache.getImage(name);
                     if (pieceImage == null) {
@@ -353,15 +354,15 @@ public class RenderBoard {
     private static void drawHighlights(Board board, ImageCache imageCache, JPanel boardPanel, boolean rotatedView) {
         Coordinate thisCoord = board.getSource();
         if (thisCoord != null) {
-            drawThisHighlight(rotatedView, boardPanel, thisCoord, board, imageCache);
+            drawThisHighlight(rotatedView, boardPanel, thisCoord, imageCache);
         }
         thisCoord = board.getDestination();
         if (thisCoord != null) {
-            drawThisHighlight(rotatedView, boardPanel, thisCoord, board, imageCache);
+            drawThisHighlight(rotatedView, boardPanel, thisCoord, imageCache);
         }
     }
 
-    private static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord, Board board, ImageCache imageCache) {
+    private static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord, ImageCache imageCache) {
         Image highLightImage = imageCache.getImage(IMAGE_STR_HIGHLIGHT);
         if (highLightImage == null) {
             highLightImage = ImageUtils.loadSVGImageFromResources(
@@ -407,9 +408,9 @@ public class RenderBoard {
                 return null;
             }
             if (classic) {
-                name = "classic/" + substituteKomaNameRotated(koma.getType().toString());
+                name = PIECE_SET_CLASSIC + "/" + substituteKomaNameRotated(koma.getType().toString());
             } else {
-                name = "modern/"+ substituteKomaNameRotated(koma.getType().toString());
+                name = PIECE_SET_MODERN + "/" + substituteKomaNameRotated(koma.getType().toString());
             }
         } else {
             koma = board.getMasu()[i][j];
@@ -417,9 +418,9 @@ public class RenderBoard {
                 return null;
             }
             if (classic) {
-                name = "classic/" + substituteKomaName(koma.getType().toString());
+                name = PIECE_SET_CLASSIC + "/" + substituteKomaName(koma.getType().toString());
             } else {
-                name = "modern/" + substituteKomaName(koma.getType().toString());
+                name = PIECE_SET_MODERN + "/" + substituteKomaName(koma.getType().toString());
             }
         }
         Image cacheImage = imageCache.getImage(name);
@@ -443,9 +444,8 @@ public class RenderBoard {
                 ));
     }
 
-    private static void drawGrid(Board board, ImageCache imageCache, JPanel boardPanel) {
+    private static void drawGrid(ImageCache imageCache, JPanel boardPanel) {
         ImageUtils.drawImage(
-                board,
                 imageCache,
                 boardPanel,
                 "grid",
@@ -458,9 +458,8 @@ public class RenderBoard {
         );
     }
 
-    private static void drawBans(Board board, ImageCache imageCache, JPanel boardPanel) {
+    private static void drawBans(ImageCache imageCache, JPanel boardPanel) {
         ImageUtils.drawImage(
-                board,
                 imageCache,
                 boardPanel,
                 "komadai",
@@ -473,7 +472,6 @@ public class RenderBoard {
         );
 
         ImageUtils.drawImage(
-                board,
                 imageCache,
                 boardPanel,
                 "komadai",
@@ -483,9 +481,8 @@ public class RenderBoard {
         );
     }
 
-    private static void drawBackground(Board board, ImageCache imageCache, JPanel boardPanel) {
+    private static void drawBackground(ImageCache imageCache, JPanel boardPanel) {
         ImageUtils.drawImage(
-                board,
                 imageCache,
                 boardPanel,
                 "background",
