@@ -7,10 +7,11 @@ import java.util.List;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Engine {
+
     private String name;
     private String path;
     private List<EngineOption> engineOptionList;
-    
+
     public Engine(String name, String path) {
         this.name = name;
         this.path = path;
@@ -57,5 +58,5 @@ public class Engine {
     public void setEngineOptionList(List<EngineOption> engineOptionList) {
         this.engineOptionList = engineOptionList;
     }
-    
+
 }

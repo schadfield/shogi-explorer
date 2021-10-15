@@ -7,13 +7,14 @@ import java.util.Objects;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Coordinate {
+
     private Integer x;
     private Integer y;
-    
+
     public Coordinate() {
-        
+
     }
-    
+
     public Coordinate(Integer x, Integer y) {
         this.x = x;
         this.y = y;
@@ -46,7 +47,7 @@ public class Coordinate {
     public void setY(Integer y) {
         this.y = y;
     }
-    
+
     public boolean sameValue(Coordinate otherCoordinate) {
         return (Objects.equals(this.x, otherCoordinate.getX())) && (Objects.equals(this.y, otherCoordinate.getY()));
     }

@@ -7,11 +7,11 @@ import java.util.Map;
 public class ImageCache {
 
     private Map<String, Image> imageMap = new HashMap<>();
-    
+
     public void putImage(String identifier, Image image) {
         getImageMap().put(identifier, image);
     }
-    
+
     public Image getImage(String identifier) {
         if (getImageMap().containsKey(identifier)) {
             return getImageMap().get(identifier);

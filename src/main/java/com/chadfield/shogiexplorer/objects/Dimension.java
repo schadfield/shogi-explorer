@@ -5,13 +5,14 @@ package com.chadfield.shogiexplorer.objects;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Dimension {
+
     private Integer width;
     private Integer height;
-    
+
     public Dimension() {
-        
+
     }
-    
+
     public Dimension(Integer x, Integer y) {
         this.width = x;
         this.height = y;

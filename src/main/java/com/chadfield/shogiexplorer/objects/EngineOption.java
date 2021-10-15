@@ -9,15 +9,15 @@ import java.util.List;
 public class EngineOption {
 
     public enum Type {
-        CHECK, SPIN, COMBO, BUTTON, STRING, FILENAME
+        CHECK, SPIN, COMBO, STRING, FILENAME
     }
-        
+
     private String name;
     private Type type;
     private String def;
     private String min;
-    private String max;   
-    private List<String> varList;   
+    private String max;
+    private List<String> varList;
     private String value;
 
     /**

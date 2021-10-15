@@ -5,12 +5,13 @@ package com.chadfield.shogiexplorer.objects;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Position {
+
     private String gameSFEN;
     private Notation notation;
     private Coordinate source;
     private Coordinate destination;
     private String comment;
-    
+
     public Position(String gameSFEN, Coordinate source, Coordinate destination, Notation notation) {
         this.gameSFEN = gameSFEN;
         this.notation = notation;

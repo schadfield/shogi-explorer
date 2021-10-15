@@ -7,6 +7,7 @@ import java.util.List;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Analysis {
+
     private List<List<Position>> analysisPositionList;
     private List<Object[]> tableRows;
     private List<Integer> scoreList;

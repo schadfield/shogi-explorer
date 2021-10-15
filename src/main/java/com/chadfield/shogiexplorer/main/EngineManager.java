@@ -28,7 +28,7 @@ import net.harawata.appdirs.AppDirsFactory;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class EngineManager {
-    
+
     private EngineManager() {
         throw new IllegalStateException("Utility class");
     }
@@ -51,69 +51,60 @@ public class EngineManager {
         saveEngines(newEngineList);
         return newEngineList;
     }
-    
+
     private static EngineOption parseOption(String optionLine) {
         EngineOption engineOption = new EngineOption();
         String[] optionArray = optionLine.trim().split(" ");
         int index = 0;
         while (index < optionArray.length) {
-            switch(optionArray[index]) {
-                case "option":
+            switch (optionArray[index]) {
+                case "option" ->
                     index++;
-                    break;
-                case "name":
-                   engineOption.setName(optionArray[index+1]);
-                   index += 2;
-                   break;
-                case "type":
-                    switch(optionArray[index+1]) {
-                        case "check":
+                case "name" -> {
+                    engineOption.setName(optionArray[index + 1]);
+                    index += 2;
+                }
+                case "type" -> {
+                    switch (optionArray[index + 1]) {
+                        case "check" ->
                             engineOption.setType(EngineOption.Type.CHECK);
-                            break;
-                        case "spin":
+                        case "spin" ->
                             engineOption.setType(EngineOption.Type.SPIN);
-                            break;
-                        case "combo":
+                        case "combo" ->
                             engineOption.setType(EngineOption.Type.COMBO);
-                            break;
-                        case "button":
-                            engineOption.setType(EngineOption.Type.BUTTON);
-                            break;
-                        case "string":
+                        case "string" ->
                             engineOption.setType(EngineOption.Type.STRING);
-                            break;
-                        case "filename":
+                        case "filename" ->
                             engineOption.setType(EngineOption.Type.FILENAME);
-                            break;
-                        default:
+                        default ->
                             engineOption.setType(null);
                     }
-                   index += 2;
-                   break;
-                case "default":
-                   engineOption.setDef(optionArray[index+1]);
-                   engineOption.setValue(optionArray[index+1]);
-                   index += 2;
-                   break;
-                case "min":
-                   engineOption.setMin(optionArray[index+1]);
-                   index += 2;
-                   break;
-                case "max":
-                   engineOption.setMax(optionArray[index+1]);
-                   index += 2;
-                   break;
-                case "var":
+                    index += 2;
+                }
+                case "default" -> {
+                    engineOption.setDef(optionArray[index + 1]);
+                    engineOption.setValue(optionArray[index + 1]);
+                    index += 2;
+                }
+                case "min" -> {
+                    engineOption.setMin(optionArray[index + 1]);
+                    index += 2;
+                }
+                case "max" -> {
+                    engineOption.setMax(optionArray[index + 1]);
+                    index += 2;
+                }
+                case "var" -> {
                     List<String> varList = engineOption.getVarList();
                     if (varList == null) {
                         varList = new ArrayList<>();
                     }
-                   varList.add(optionArray[index+1]);
-                   engineOption.setVarList(varList);
-                   index += 2;
-                   break;
-                default:
-                    index +=2;
+                    varList.add(optionArray[index + 1]);
+                    engineOption.setVarList(varList);
+                    index += 2;
+                }
+                default ->
+                    index++;
             }
         }
         return engineOption;
@@ -125,7 +116,7 @@ public class EngineManager {
                 return;
             }
         }
-        
+
         Process process;
 
         try {
@@ -142,7 +133,7 @@ public class EngineManager {
         InputStream stdout = process.getInputStream();
         Engine newEngine = new Engine("", engineFile.getPath());
         List<EngineOption> engineOptionList = new ArrayList<>();
-        
+
         // These options are necessary.
         // We may change default later.
         engineOptionList.add(parseOption("option name USI_Ponder type check default false"));
@@ -178,7 +169,7 @@ public class EngineManager {
         jEngineList.setSelectedIndex(engineListModel.size() - 1);
         saveEngines(engineList);
     }
-    
+
     private static void checkAndAddEngineOption(List<EngineOption> engineOptionList, EngineOption engineOption) {
         for (EngineOption thisOption : engineOptionList) {
             if (thisOption.getName().contentEquals(engineOption.getName())) {
@@ -186,7 +177,7 @@ public class EngineManager {
                 thisOption.setMin(engineOption.getMin());
                 thisOption.setMax(engineOption.getMax());
                 return;
-            } 
+            }
         }
         engineOptionList.add(engineOption);
     }
@@ -217,10 +208,10 @@ public class EngineManager {
             return result;
         } catch (StreamException ex) {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
         return new ArrayList<>();
     }
-    
+
     public static void saveEngines(List<Engine> engineList) {
         AppDirs appDirs = AppDirsFactory.getInstance();
         String directoryName = appDirs.getUserDataDir("Shogi Explorer", null, null);
@@ -234,7 +225,7 @@ public class EngineManager {
         xstream.alias("engine", Engine.class);
         xstream.alias("engineOption", EngineOption.class);
         String dataXml = xstream.toXML(engineList);
-        try (FileWriter fileWriter = new FileWriter(engineFile, false)) {
+        try ( FileWriter fileWriter = new FileWriter(engineFile, false)) {
             fileWriter.write(dataXml);
         } catch (IOException ex) {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);

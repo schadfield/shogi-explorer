@@ -34,12 +34,12 @@ public class KifParser {
     public static final String GOTE = "後手：";
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
     public static final String MULTI_WHITESPACE = "\\s+|\\u3000";
-    
+
     private KifParser() {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile, String clipboardStr) throws  IOException {
+    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile, String clipboardStr) throws IOException {
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         moveListModel.clear();
         moveListModel.addElement(bundle.getString("label_start_position"));
@@ -49,9 +49,9 @@ public class KifParser {
         positionList.add(new Position(SFENParser.getSFEN(board), null, null, new Notation()));
 
         boolean foundHeader = false;
-        
+
         BufferedReader fileReader = null;
-        
+
         try {
             if (clipboardStr == null) {
                 fileReader = Files.newBufferedReader(kifFile.toPath());
@@ -75,7 +75,7 @@ public class KifParser {
                     }
 
                     if (isComment(line)) {
-                        positionList.getLast().setComment(positionList.getLast().getComment()+line.substring(1) + "\n") ;
+                        positionList.getLast().setComment(positionList.getLast().getComment() + line.substring(1) + "\n");
                         continue;
                     }
 
@@ -91,29 +91,29 @@ public class KifParser {
                 }
 
             }
-        
+
         } finally {
             if (fileReader != null) {
-                fileReader.close();  
+                fileReader.close();
             }
         }
-   
+
         game.setPositionList(positionList);
         return game;
     }
-    
+
     private static Coordinate parseRegularMove(Board board, String line, DefaultListModel<String> moveListModel, Coordinate lastDestination, LinkedList<Position> positionList) {
         String[] splitLine = line.trim().split(MULTI_WHITESPACE);
 
         int gameNum;
-        
+
         try {
             gameNum = Integer.parseInt(splitLine[0]);
         } catch (NumberFormatException ex) {
-            positionList.getLast().setComment(positionList.getLast().getComment()+line + "\n") ;
+            positionList.getLast().setComment(positionList.getLast().getComment() + line + "\n");
             return lastDestination;
         }
-        
+
         String move = extractRegularMove(splitLine, isSame(line));
 
         Position position = executeMove(board, move, lastDestination);
@@ -122,10 +122,10 @@ public class KifParser {
             addMoveToMoveList(moveListModel, gameNum, position.getNotation().getJapanese());
             positionList.add(position);
         }
-               
+
         return lastDestination;
     }
-    
+
     private static String extractRegularMove(String[] moveArray, boolean isSame) {
         String move = moveArray[1];
         if (isSame) {
@@ -133,7 +133,7 @@ public class KifParser {
         }
         return move;
     }
-            
+
     private static void parseGameDetails(String line, Game game) {
         if (line.startsWith(SENTE)) {
             game.setSente(line.substring(SENTE.length()));
@@ -151,7 +151,7 @@ public class KifParser {
             game.setDate(line.substring(DATE.length()));
         }
     }
-        
+
     private static void addMoveToMoveList(DefaultListModel<String> moveListModel, int gameNum, String move) {
         Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
         if (gameNum % 2 == 0) {
@@ -160,61 +160,59 @@ public class KifParser {
             moveListModel.addElement(gameNum + trans.transliterate(" ☗" + move));
         }
     }
-    
+
     private static Notation getNotation(Coordinate thisSource, Coordinate thisDestination, boolean same, String move, String piece, String disambiguation) {
         String engineMove = "";
         try {
             engineMove = getEngineMoveCoordinate(thisSource) + getEngineMoveCoordinate(thisDestination);
             if (isPromoted(move)) {
                 engineMove += "+";
-            } 
+            }
         } catch (Exception ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         Notation notation = new Notation();
         notation.setEngineMove(engineMove);
-        
+
         String japanese = "";
-        
+
         if (same) {
             japanese += NotationUtils.SAME + piece;
         } else {
             japanese += NotationUtils.getJapaneseCoordinate(thisDestination) + piece + disambiguation;
         }
-        
+
         if (isPromoted(move)) {
             japanese += NotationUtils.PROMOTED;
         }
-        
+
         notation.setJapanese(japanese);
-        
+
         return notation;
     }
-    
 
     private static Notation executeRegularMove(Board board, Coordinate thisDestination, Coordinate thisSource, Coordinate lastDestination, String move) {
         Koma destinationKoma = getKoma(board, thisDestination);
         if (destinationKoma != null) {
             ParserUtils.addPieceToInHand(getKoma(board, thisDestination), board);
-        }        
+        }
         Koma sourceKoma = getKoma(board, thisSource);
         Koma.Type sourceKomaType = sourceKoma.getType();
         String disambiguation = NotationUtils.getDisambiguation(board, thisSource, thisDestination, sourceKomaType);
         putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null);
-        
-        
+
         boolean same;
         if (lastDestination == null) {
             same = false;
         } else {
             same = thisDestination.sameValue(lastDestination);
         }
-              
+
         return getNotation(thisSource, thisDestination, same, move, NotationUtils.getKomaKanji(sourceKomaType), disambiguation);
     }
-        
+
     private static Notation executeSameMove(Board board, Coordinate thisDestination, Coordinate thisSource, String move) {
         Koma destinationKoma = getKoma(board, thisDestination);
         if (destinationKoma != null) {
@@ -225,10 +223,10 @@ public class KifParser {
         String disambiguation = NotationUtils.getDisambiguation(board, thisSource, thisDestination, sourceKomaType);
         putKoma(board, thisDestination, promCheck(sourceKoma, move));
         putKoma(board, thisSource, null);
-        
+
         return getNotation(thisSource, thisDestination, true, move, NotationUtils.getKomaKanji(sourceKomaType), disambiguation);
     }
-        
+
     private static Notation executeDropMove(Board board, Coordinate thisDestination, String move) {
         String engineMove;
         Koma koma;
@@ -246,31 +244,39 @@ public class KifParser {
         } catch (Exception ex) {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;      
+        return null;
     }
 
     private static String getKomaLetter(Koma.Type type) {
         return switch (type) {
-            case SFU, GFU -> "P";
-            case SGI, GGI -> "S";
-            case SHI, GHI -> "R";
-            case SKA, GKA -> "B";
-            case SKE, GKE -> "N";
-            case SKI, GKI -> "G";
-            case SKY, GKY -> "L";
-            default -> null;
+            case SFU, GFU ->
+                "P";
+            case SGI, GGI ->
+                "S";
+            case SHI, GHI ->
+                "R";
+            case SKA, GKA ->
+                "B";
+            case SKE, GKE ->
+                "N";
+            case SKI, GKI ->
+                "G";
+            case SKY, GKY ->
+                "L";
+            default ->
+                null;
         };
     }
-     
+
     private static Position executeMove(Board board, String move, Coordinate lastDestination) {
         Coordinate thisDestination = new Coordinate();
         Coordinate thisSource;
-        
+
         if (!isRegularMove(move)) {
             return null;
         } else if (isSame(move)) {
             thisSource = NotationUtils.getSourceCoordinate(move);
-            copyCoords(lastDestination, thisDestination);        
+            copyCoords(lastDestination, thisDestination);
         } else if (isDrop(move)) {
             thisDestination = getDestinationCoordinate(move);
             thisSource = null;
@@ -291,14 +297,14 @@ public class KifParser {
         board.setNextTurn(ParserUtils.switchTurn(board.getNextTurn()));
         return new Position(SFENParser.getSFEN(board), thisSource, thisDestination, notation);
     }
-    
+
     private static boolean isRegularMove(String move) {
         if (move.contains(NotationUtils.DROPPED)) {
             return true;
         }
         return move.contains("(") && move.contains(")");
     }
-    
+
     private static String getEngineMoveCoordinate(Coordinate coordinate) {
         return Integer.toString(coordinate.getX()) + (char) ('a' + coordinate.getY() - 1);
     }
@@ -325,7 +331,7 @@ public class KifParser {
             board.getInHandKomaMap().put(komaType, board.getInHandKomaMap().get(komaType) - 1);
         }
     }
-    
+
     private static Koma promCheck(Koma koma, String move) {
         if (!isPromoted(move)) {
             return koma;
@@ -348,7 +354,7 @@ public class KifParser {
         }
         return move.charAt(move.indexOf('(') - 1) == NotationUtils.PROMOTED.charAt(0);
     }
-     
+
     private static boolean isDrop(String move) {
         return move.contains(NotationUtils.DROPPED);
     }
@@ -366,16 +372,26 @@ public class KifParser {
 
     private static Integer parseJapaneseNumber(String thisChar) {
         return switch (thisChar) {
-            case NotationUtils.ICHI -> 1;
-            case NotationUtils.NI -> 2;
-            case NotationUtils.SAN -> 3;
-            case NotationUtils.SHI -> 4;
-            case NotationUtils.GO -> 5;
-            case NotationUtils.ROKU -> 6;
-            case NotationUtils.NANA -> 7;
-            case NotationUtils.HACHI -> 8;
-            case NotationUtils.KYUU -> 9;
-            default -> null;
+            case NotationUtils.ICHI ->
+                1;
+            case NotationUtils.NI ->
+                2;
+            case NotationUtils.SAN ->
+                3;
+            case NotationUtils.SHI ->
+                4;
+            case NotationUtils.GO ->
+                5;
+            case NotationUtils.ROKU ->
+                6;
+            case NotationUtils.NANA ->
+                7;
+            case NotationUtils.HACHI ->
+                8;
+            case NotationUtils.KYUU ->
+                9;
+            default ->
+                null;
         };
     }
 

@@ -5,7 +5,7 @@ package com.chadfield.shogiexplorer.objects;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Notation {
-    
+
     private String engineMove;
     private String japanese;
 
@@ -36,5 +36,5 @@ public class Notation {
     public void setJapanese(String japanese) {
         this.japanese = japanese;
     }
-    
+
 }

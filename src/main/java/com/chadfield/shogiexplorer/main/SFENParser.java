@@ -7,6 +7,8 @@ import com.chadfield.shogiexplorer.objects.Board.Turn;
 import com.chadfield.shogiexplorer.objects.Koma;
 import java.util.LinkedHashMap;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,19 +21,19 @@ public class SFENParser {
     }
 
     public static Board parse(String sfen) {
-        
+
         Board board = new Board();
         board.setInHandKomaMap(new EnumMap<>(Koma.Type.class));
-        
+
         String[] splitSfen = sfen.split(" ");
-     
+
         parsePieces(board, splitSfen[0]);
         board.setNextTurn(getTurn(splitSfen[1]));
         board = parseInHand(board, splitSfen[2]);
         board.setMoveCount(Integer.parseInt(splitSfen[3]));
         return board;
     }
-    
+
     public static String getSFEN(Board board) {
         StringBuilder bldResult = new StringBuilder();
         int spaceCount = 0;
@@ -56,13 +58,13 @@ public class SFENParser {
             }
         }
 
-        bldResult.append(getNextTurnString(board.getNextTurn()));       
+        bldResult.append(getNextTurnString(board.getNextTurn()));
         bldResult.append(getInHandString(board));
-        bldResult.append(" ");       
-        bldResult.append(board.getMoveCount());       
+        bldResult.append(" ");
+        bldResult.append(board.getMoveCount());
         return bldResult.toString();
     }
-    
+
     private static Board parseInHand(Board board, String pieceStr) {
         int inHandCount = 1;
         boolean foundNum = false;
@@ -80,64 +82,64 @@ public class SFENParser {
                     }
                 } else {
                     switch (thisChar) {
-                        case 'R':
+                        case 'R' -> {
                             board.getInHandKomaMap().put(Koma.Type.SHI, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'B':
+                        }
+                        case 'B' -> {
                             board.getInHandKomaMap().put(Koma.Type.SKA, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'G':
+                        }
+                        case 'G' -> {
                             board.getInHandKomaMap().put(Koma.Type.SKI, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'S':
+                        }
+                        case 'S' -> {
                             board.getInHandKomaMap().put(Koma.Type.SGI, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'N':
+                        }
+                        case 'N' -> {
                             board.getInHandKomaMap().put(Koma.Type.SKE, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'L':
+                        }
+                        case 'L' -> {
                             board.getInHandKomaMap().put(Koma.Type.SKY, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'P':
+                        }
+                        case 'P' -> {
                             board.getInHandKomaMap().put(Koma.Type.SFU, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'r':
+                        }
+                        case 'r' -> {
                             board.getInHandKomaMap().put(Koma.Type.GHI, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'b':
+                        }
+                        case 'b' -> {
                             board.getInHandKomaMap().put(Koma.Type.GKA, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'g':
+                        }
+                        case 'g' -> {
                             board.getInHandKomaMap().put(Koma.Type.GKI, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 's':
+                        }
+                        case 's' -> {
                             board.getInHandKomaMap().put(Koma.Type.GGI, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'n':
+                        }
+                        case 'n' -> {
                             board.getInHandKomaMap().put(Koma.Type.GKE, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'l':
+                        }
+                        case 'l' -> {
                             board.getInHandKomaMap().put(Koma.Type.GKY, inHandCount);
                             inHandCount = 1;
-                            break;
-                        case 'p':
+                        }
+                        case 'p' -> {
                             board.getInHandKomaMap().put(Koma.Type.GFU, inHandCount);
                             inHandCount = 1;
-                            break;
-                        default:
-                            break;
+                        }
+                        default -> 
+                            Logger.getLogger(SFENParser.class.getName()).log(Level.SEVERE, "Invalid SFEN syntax.");
                     }
                     foundNum = false;
                 }
@@ -145,7 +147,7 @@ public class SFENParser {
         }
         return board;
     }
-    
+
     private static Board parsePieces(Board board, String pieceStr) {
         int i = 0;
         int j = 0;
@@ -172,7 +174,7 @@ public class SFENParser {
         }
         return board;
     }
-        
+
     private static Board.Turn getTurn(String thisStr) {
         if (thisStr.contains("b")) {
             return Turn.SENTE;
@@ -225,7 +227,7 @@ public class SFENParser {
             return new Koma(pieceMap.get(thisChar));
         }
     }
-    
+
     private static int putBlanks(char thisChar, Board board, int i, int j, int k) {
         int numBlanks = thisChar - 48;
         for (int x = k; x < numBlanks; x++) {
@@ -262,7 +264,7 @@ public class SFENParser {
         pieceMap.put(Koma.Type.SKE, "N");
         pieceMap.put(Koma.Type.SKY, "L");
         pieceMap.put(Koma.Type.SFU, "P");
-        
+
         pieceMap.put(Koma.Type.GHI, "r");
         pieceMap.put(Koma.Type.GKA, "b");
         pieceMap.put(Koma.Type.GKI, "g");
@@ -271,22 +273,22 @@ public class SFENParser {
         pieceMap.put(Koma.Type.GKY, "l");
         pieceMap.put(Koma.Type.GFU, "p");
         //</editor-fold>
-                
+
         StringBuilder bldResult = new StringBuilder(" ");
-        
+
         Set<Koma.Type> keys = pieceMap.keySet();
-        for(Koma.Type thisType: keys) {
+        for (Koma.Type thisType : keys) {
             if (board.getInHandKomaMap().containsKey(thisType)) {
                 int number = board.getInHandKomaMap().get(thisType);
                 if (number > 1) {
                     bldResult.append(number);
                 }
                 bldResult.append(pieceMap.get(thisType));
-            }            
+            }
         }
         return bldResult.toString();
     }
-    
+
     private static String getSFENCode(Koma koma) {
         EnumMap<Koma.Type, String> pieceMap = new EnumMap<>(Koma.Type.class);
 

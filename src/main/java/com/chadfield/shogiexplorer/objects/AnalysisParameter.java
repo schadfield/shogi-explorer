@@ -10,6 +10,7 @@ import javax.swing.JRadioButtonMenuItem;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class AnalysisParameter {
+
     private int analysisTimePerMove;
     private JRadioButtonMenuItem graphView1;
     private JRadioButtonMenuItem graphView2;

@@ -13,9 +13,9 @@ public class ConfigurationItem {
 
     private String optionName;
     private EngineOption engineOption;
-    private JCheckBox checkBox;    
-    private JTextField textField;   
-    private JSpinner spinField;    
+    private JCheckBox checkBox;
+    private JTextField textField;
+    private JSpinner spinField;
     private JComboBox<String> comboBox;
 
     public ConfigurationItem(String optionName) {

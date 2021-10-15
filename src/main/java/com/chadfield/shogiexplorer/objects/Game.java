@@ -8,6 +8,7 @@ import java.util.List;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class Game {
+
     private List<Position> positionList;
     private List<List<Position>> analysisPositionList;
     private String date;
@@ -15,8 +16,8 @@ public class Game {
     private String timeLimit;
     private String sente;
     private String gote;
-    
-    public Game () {
+
+    public Game() {
         date = "";
         place = "";
         timeLimit = "";
@@ -122,5 +123,5 @@ public class Game {
     public void setAnalysisPositionList(List<List<Position>> analysisPositionList) {
         this.analysisPositionList = analysisPositionList;
     }
-    
+
 }

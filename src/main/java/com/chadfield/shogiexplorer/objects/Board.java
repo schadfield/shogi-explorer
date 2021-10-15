@@ -4,8 +4,10 @@ import java.util.Map;
 
 public class Board {
 
-    public enum Turn { SENTE, GOTE }
-    
+    public enum Turn {
+        SENTE, GOTE
+    }
+
     private Koma[][] masu = new Koma[9][9];
     private Map<Koma.Type, Integer> inHandKomaMap;
     private Turn nextTurn;
@@ -14,7 +16,7 @@ public class Board {
     private Coordinate destination = null;
 
     public Board() {
-        
+
         for (int i = 0;
                 i < 9; i++) {
             for (int j = 0; j < 9; j++) {
