@@ -12,6 +12,7 @@ import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Dimension;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaName;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaNameRotated;
+import java.io.File;
 import java.util.EnumMap;
 
 public class RenderBoard {
@@ -287,9 +288,9 @@ public class RenderBoard {
                 if (rotatedView) {
                     String name;
                     if (classic) {
-                        name = substituteKomaNameRotated(komaType.toString()) + "C";
+                        name = "classic/" + substituteKomaNameRotated(komaType.toString());
                     } else {
-                        name = substituteKomaNameRotated(komaType.toString());
+                        name = "modern/" + substituteKomaNameRotated(komaType.toString());
                     }
                     pieceImage = imageCache.getImage(name);
                     if (pieceImage == null) {
@@ -301,9 +302,9 @@ public class RenderBoard {
                 } else {
                     String name;
                     if (classic) {
-                        name = substituteKomaName(komaType.toString()) + "C";
+                        name = "classic/" + substituteKomaName(komaType.toString());
                     } else {
-                        name = substituteKomaName(komaType.toString());
+                        name = "modern/" + substituteKomaName(komaType.toString());
                     }
                     pieceImage = imageCache.getImage(name);
                     if (pieceImage == null) {
@@ -406,9 +407,9 @@ public class RenderBoard {
                 return null;
             }
             if (classic) {
-                name = substituteKomaNameRotated(koma.getType().toString()) + "C";
+                name = "classic/" + substituteKomaNameRotated(koma.getType().toString());
             } else {
-                name = substituteKomaNameRotated(koma.getType().toString());
+                name = "modern/"+ substituteKomaNameRotated(koma.getType().toString());
             }
         } else {
             koma = board.getMasu()[i][j];
@@ -416,9 +417,9 @@ public class RenderBoard {
                 return null;
             }
             if (classic) {
-                name = substituteKomaName(koma.getType().toString()) + "C";
+                name = "classic/" + substituteKomaName(koma.getType().toString());
             } else {
-                name = substituteKomaName(koma.getType().toString());
+                name = "modern/" + substituteKomaName(koma.getType().toString());
             }
         }
         Image cacheImage = imageCache.getImage(name);
@@ -462,7 +463,7 @@ public class RenderBoard {
                 board,
                 imageCache,
                 boardPanel,
-                "ban",
+                "komadai",
                 new Coordinate(
                         MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
                         MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2
@@ -475,7 +476,7 @@ public class RenderBoard {
                 board,
                 imageCache,
                 boardPanel,
-                "ban",
+                "komadai",
                 new Coordinate(0, 0),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y)
