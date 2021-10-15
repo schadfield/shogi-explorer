@@ -250,31 +250,16 @@ public class KifParser {
     }
 
     private static String getKomaLetter(Koma.Type type) {
-        switch(type) {
-            case SFU:
-            case GFU:
-                return "P";
-            case SGI:
-            case GGI:
-                return "S";
-            case SHI:
-            case GHI:
-                return "R";
-            case SKA:
-            case GKA:
-                return "B";
-            case SKE:
-            case GKE:
-                return "N";
-            case SKI:
-            case GKI:
-                return "G";
-            case SKY:
-            case GKY:
-                return "L";
-            default:
-                return null;
-        }
+        return switch (type) {
+            case SFU, GFU -> "P";
+            case SGI, GGI -> "S";
+            case SHI, GHI -> "R";
+            case SKA, GKA -> "B";
+            case SKE, GKE -> "N";
+            case SKI, GKI -> "G";
+            case SKY, GKY -> "L";
+            default -> null;
+        };
     }
      
     private static Position executeMove(Board board, String move, Coordinate lastDestination) {
@@ -380,28 +365,18 @@ public class KifParser {
     }
 
     private static Integer parseJapaneseNumber(String thisChar) {
-        switch (thisChar) {
-            case NotationUtils.ICHI:
-                return 1;
-            case NotationUtils.NI:
-                return 2;
-            case NotationUtils.SAN:
-                return 3;
-            case NotationUtils.SHI:
-                return 4;
-            case NotationUtils.GO:
-                return 5;
-            case NotationUtils.ROKU:
-                return 6;
-            case NotationUtils.NANA:
-                return 7;
-            case NotationUtils.HACHI:
-                return 8;
-            case NotationUtils.KYUU:
-                return 9;
-            default:
-                return null;
-        }
+        return switch (thisChar) {
+            case NotationUtils.ICHI -> 1;
+            case NotationUtils.NI -> 2;
+            case NotationUtils.SAN -> 3;
+            case NotationUtils.SHI -> 4;
+            case NotationUtils.GO -> 5;
+            case NotationUtils.ROKU -> 6;
+            case NotationUtils.NANA -> 7;
+            case NotationUtils.HACHI -> 8;
+            case NotationUtils.KYUU -> 9;
+            default -> null;
+        };
     }
 
 }

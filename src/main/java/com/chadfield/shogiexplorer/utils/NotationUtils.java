@@ -328,99 +328,77 @@ public class NotationUtils {
     }
 
     public static String getDisambiguation(Board board, Coordinate sourceCoordinate, Coordinate destinationCoordinate, Koma.Type komaType) {
-        switch (komaType) {
-            case SKE:
-            case GKE:
-                return disXKE(board, sourceCoordinate, destinationCoordinate, komaType);
-            case SGI:
-            case GGI:
-                return disXGI(board, sourceCoordinate, destinationCoordinate, komaType);
-            case SKI:
-            case STO:
-            case SNK:
-            case SNY:
-            case SNG:
-            case GKI:
-            case GTO:
-            case GNK:
-            case GNY:
-            case GNG:
-                return disXKXI(board, sourceCoordinate, destinationCoordinate, komaType);
-            case SKA:
-            case GKA:
-                return disXKA(board, sourceCoordinate, destinationCoordinate, komaType);
-            case SHI:
-            case GHI:
-                return disXHI(board, sourceCoordinate, destinationCoordinate, komaType);
-            case SUM:
-            case SRY:
-            case GUM:
-            case GRY:
-                return disXUMRY(board, sourceCoordinate, destinationCoordinate, komaType);
-            default:
-                return "";
-        }
+        return switch (komaType) {
+            case SKE, GKE -> disXKE(board, sourceCoordinate, destinationCoordinate, komaType);
+            case SGI, GGI -> disXGI(board, sourceCoordinate, destinationCoordinate, komaType);
+            case SKI, STO, SNK, SNY, SNG, GKI, GTO, GNK, GNY, GNG -> disXKXI(board, sourceCoordinate, destinationCoordinate, komaType);
+            case SKA, GKA -> disXKA(board, sourceCoordinate, destinationCoordinate, komaType);
+            case SHI, GHI -> disXHI(board, sourceCoordinate, destinationCoordinate, komaType);
+            case SUM, SRY, GUM, GRY -> disXUMRY(board, sourceCoordinate, destinationCoordinate, komaType);
+            default -> "";
+        };
     }
 
     public static List<Coordinate> getPossibleSources(Board board, Coordinate destination, Koma.Type komaType) {
         List<Coordinate> result = new ArrayList<>();
         Coordinate resultCoordinate;
         switch (komaType) {
-            case SKE:
+            case SKE -> {
                 return getSourcesForKoma(board, destination, new int[]{1, -1}, new int[]{2, 2}, komaType);
-            case GKE:
+            }
+            case GKE -> {
                 return getSourcesForKoma(board, destination, new int[]{1, -1}, new int[]{-2, -2}, komaType);
-            case SGI:
+            }
+            case SGI -> {
                 return getSourcesForKoma(board, destination, new int[]{1, 0, -1, 1, -1}, new int[]{1, 1, 1, -1, -1}, komaType);
-            case GGI:
+            }
+            case GGI -> {
                 return getSourcesForKoma(board, destination, new int[]{1, 0, -1, 1, -1}, new int[]{-1, -1, -1, 1, 1}, komaType);
-            case SKI:
-            case STO:
-            case SNK:
-            case SNY:
-            case SNG:
+            }
+            case SKI, STO, SNK, SNY, SNG -> {
                 return getSourcesForKoma(board, destination, new int[]{1, 0, -1, 1, -1, 0}, new int[]{1, 1, 1, 0, 0, -1}, komaType);
-            case GKI:
-            case GTO:
-            case GNK:
-            case GNY:
-            case GNG:
+            }
+            case GKI, GTO, GNK, GNY, GNG -> {
                 return getSourcesForKoma(board, destination, new int[]{1, 0, -1, 1, -1, 0}, new int[]{-1, -1, -1, 0, 0, 1}, komaType);
-            case SKY:
+            }
+            case SKY -> {
                 resultCoordinate = getSourceOnVector(board, destination, 0, 1, komaType);
                 if (resultCoordinate != null) {
                     result.add(resultCoordinate);
                 }
                 return result;
-            case GKY:
+            }
+            case GKY -> {
                 resultCoordinate = getSourceOnVector(board, destination, 0, -1, komaType);
                 if (resultCoordinate != null) {
                     result.add(resultCoordinate);
                 }
                 return result;
-            case SKA:
-            case GKA:
+            }
+            case SKA, GKA -> {
                 return getSourcesOnDiagonalVectors(board, destination, komaType);
-            case SHI:
-            case GHI:
+            }
+            case SHI, GHI -> {
                 return getSourcesOnHorizontalVectors(board, destination, komaType);
-            case SUM:
-            case GUM:
+            }
+            case SUM, GUM -> {
                 result = getSourcesForKoma(board, destination, new int[]{-1, 1, 0, 0}, new int[]{0, 0, -1, 1}, komaType);
                 for (Coordinate thisCoordinate : getSourcesOnDiagonalVectors(board, destination, komaType)) {
                     result.add(thisCoordinate);
                 }
                 return result;
-            case SRY:
-            case GRY:
+            }
+            case SRY, GRY -> {
                 result = getSourcesForKoma(board, destination, new int[]{-1, 1, 1, -1}, new int[]{-1, -1, 1, 1}, komaType);
                 for (Coordinate thisCoordinate : getSourcesOnHorizontalVectors(board, destination, komaType)) {
                     result.add(thisCoordinate);
                 }
                 return result;
-            default:
+            }
+            default -> {
+                return result;
+            }
         }
-        return result;
     }
 
     public static Coordinate getSourceCoordinate(String move) {
@@ -520,79 +498,38 @@ public class NotationUtils {
     }
 
     private static String convertJapaneseNumber(int number) {
-        switch (number) {
-            case 1:
-                return ICHI;
-            case 2:
-                return NI;
-            case 3:
-                return SAN;
-            case 4:
-                return SHI;
-            case 5:
-                return GO;
-            case 6:
-                return ROKU;
-            case 7:
-                return NANA;
-            case 8:
-                return HACHI;
-            case 9:
-                return KYUU;
-            default:
-                return null;
-        }
+        return switch (number) {
+            case 1 -> ICHI;
+            case 2 -> NI;
+            case 3 -> SAN;
+            case 4 -> SHI;
+            case 5 -> GO;
+            case 6 -> ROKU;
+            case 7 -> NANA;
+            case 8 -> HACHI;
+            case 9 -> KYUU;
+            default -> null;
+        };
     }
     
     public static String getKomaKanji(Koma.Type type) {
-        switch(type) {
-            case SFU:
-            case GFU:
-                return "歩";
-            case SGI:
-            case GGI:
-                return "銀";
-            case SHI:
-            case GHI:
-                return "飛";
-            case SKA:
-            case GKA:
-                return "角";
-            case SKE:
-            case GKE:
-                return "桂";
-            case SKI:
-            case GKI:
-                return "金";
-            case SKY:
-            case GKY:
-                return "香";
-            case STO:
-            case GTO:
-                return "と";
-            case SNY:
-            case GNY:
-                return "成香";
-            case SNK:
-            case GNK:
-                return "成桂";
-            case SNG:
-            case GNG:
-                return "成銀";
-            case SUM:
-            case GUM:
-                return "馬";
-            case SRY:
-            case GRY:
-                return "竜";
-            case SGY:
-            case SOU:
-            case GGY:
-            case GOU:
-                return "玉";
-            default:
-                return null;
-        }
+        return switch (type) {
+            case SFU, GFU -> "歩";
+            case SGI, GGI -> "銀";
+            case SHI, GHI -> "飛";
+            case SKA, GKA -> "角";
+            case SKE, GKE -> "桂";
+            case SKI, GKI -> "金";
+            case SKY, GKY -> "香";
+            case STO, GTO -> "と";
+            case SNY, GNY -> "成香";
+            case SNK, GNK -> "成桂";
+            case SNG, GNG -> "成銀";
+            case SUM, GUM -> "馬";
+            case SRY, GRY -> "竜";
+            case SGY, SOU, GGY, GOU -> "玉";
+            default -> null;
+        };
     }
 
     public static String getJapaneseCoordinate(Coordinate thisCoordinate) {

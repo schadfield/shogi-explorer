@@ -22,34 +22,21 @@ public class ParserUtils {
         }
     
         public static Koma promoteKoma(Koma.Type komaType) {
-        switch (komaType) {
-            case SFU:
-                return new Koma(Koma.Type.STO);
-            case SKY:
-                return new Koma(Koma.Type.SNY);
-            case SKE:
-                return new Koma(Koma.Type.SNK);
-            case SGI:
-                return new Koma(Koma.Type.SNG);
-            case SKA:
-                return new Koma(Koma.Type.SUM);
-            case SHI:
-                return new Koma(Koma.Type.SRY);
-            case GFU:
-                return new Koma(Koma.Type.GTO);
-            case GKY:
-                return new Koma(Koma.Type.GNY);
-            case GKE:
-                return new Koma(Koma.Type.GNK);
-            case GGI:
-                return new Koma(Koma.Type.GNG);
-            case GKA:
-                return new Koma(Koma.Type.GUM);
-            case GHI:
-                return new Koma(Koma.Type.GRY);
-            default:
-                return null;
-        }
+        return switch (komaType) {
+            case SFU -> new Koma(Koma.Type.STO);
+            case SKY -> new Koma(Koma.Type.SNY);
+            case SKE -> new Koma(Koma.Type.SNK);
+            case SGI -> new Koma(Koma.Type.SNG);
+            case SKA -> new Koma(Koma.Type.SUM);
+            case SHI -> new Koma(Koma.Type.SRY);
+            case GFU -> new Koma(Koma.Type.GTO);
+            case GKY -> new Koma(Koma.Type.GNY);
+            case GKE -> new Koma(Koma.Type.GNK);
+            case GGI -> new Koma(Koma.Type.GNG);
+            case GKA -> new Koma(Koma.Type.GUM);
+            case GHI -> new Koma(Koma.Type.GRY);
+            default -> null;
+        };
     }
 
     public static void addPieceToInHand(Koma koma, Board board) {
@@ -64,86 +51,37 @@ public class ParserUtils {
     }
     
     public static Koma invertKoma(Koma.Type komaType) {
-        switch (komaType) {
-            case SFU:
-            case STO:
-                return new Koma(Koma.Type.GFU);
-            case SKY:
-            case SNY:
-                return new Koma(Koma.Type.GKY);
-            case SKE:
-            case SNK:
-                return new Koma(Koma.Type.GKE);
-            case SGI:
-            case SNG:
-                return new Koma(Koma.Type.GGI);
-            case SKI:
-                return new Koma(Koma.Type.GKI);
-            case SKA:
-            case SUM:
-                return new Koma(Koma.Type.GKA);
-            case SHI:
-            case SRY:
-                return new Koma(Koma.Type.GHI);
-            case GFU:
-            case GTO:
-                return new Koma(Koma.Type.SFU);
-            case GKY:
-            case GNY:
-                return new Koma(Koma.Type.SKY);
-            case GKE:
-            case GNK:
-                return new Koma(Koma.Type.SKE);
-            case GGI:
-            case GNG:
-                return new Koma(Koma.Type.SGI);
-            case GKI:
-                return new Koma(Koma.Type.SKI);
-            case GKA:
-            case GUM:
-                return new Koma(Koma.Type.SKA);
-            case GHI:
-            case GRY:
-                return new Koma(Koma.Type.SHI);
-            default:
-                return null;
-        }
+        return switch (komaType) {
+            case SFU, STO -> new Koma(Koma.Type.GFU);
+            case SKY, SNY -> new Koma(Koma.Type.GKY);
+            case SKE, SNK -> new Koma(Koma.Type.GKE);
+            case SGI, SNG -> new Koma(Koma.Type.GGI);
+            case SKI -> new Koma(Koma.Type.GKI);
+            case SKA, SUM -> new Koma(Koma.Type.GKA);
+            case SHI, SRY -> new Koma(Koma.Type.GHI);
+            case GFU, GTO -> new Koma(Koma.Type.SFU);
+            case GKY, GNY -> new Koma(Koma.Type.SKY);
+            case GKE, GNK -> new Koma(Koma.Type.SKE);
+            case GGI, GNG -> new Koma(Koma.Type.SGI);
+            case GKI -> new Koma(Koma.Type.SKI);
+            case GKA, GUM -> new Koma(Koma.Type.SKA);
+            case GHI, GRY -> new Koma(Koma.Type.SHI);
+            default -> null;
+        };
     }
     
     public static Koma getDropKoma(String locationString, Board.Turn turn) {
         Koma.Type komaType;
-        switch (locationString) {
-            case KOMA_HI:
-            case "R":
-                komaType = Koma.Type.SHI;
-                break;
-            case KOMA_KA:
-            case "B":
-                komaType = Koma.Type.SKA;
-                break;
-            case KOMA_KI:
-            case "G":
-                komaType = Koma.Type.SKI;
-                break;
-            case KOMA_GI:
-            case "S":
-                komaType = Koma.Type.SGI;
-                break;
-            case KOMA_KE:
-            case "N":
-                komaType = Koma.Type.SKE;
-                break;
-            case KOMA_KY:
-            case "L":
-                komaType = Koma.Type.SKY;
-                break;
-            case KOMA_FU:
-            case "P":
-                komaType = Koma.Type.SFU;
-                break;
-            default:
-                return null;
-        }
+        komaType = switch (locationString) {
+            case KOMA_HI, "R" -> Koma.Type.SHI;
+            case KOMA_KA, "B" -> Koma.Type.SKA;
+            case KOMA_KI, "G" -> Koma.Type.SKI;
+            case KOMA_GI, "S" -> Koma.Type.SGI;
+            case KOMA_KE, "N" -> Koma.Type.SKE;
+            case KOMA_KY, "L" -> Koma.Type.SKY;
+            case KOMA_FU, "P" -> Koma.Type.SFU;
+            default -> null;        
+        };
         if (turn == Board.Turn.SENTE) {
             return new Koma(komaType);
         } else {
