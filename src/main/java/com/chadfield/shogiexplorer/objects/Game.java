@@ -16,6 +16,7 @@ public class Game {
     private String timeLimit;
     private String sente;
     private String gote;
+    private String handicap;
 
     public Game() {
         date = "";
@@ -23,6 +24,7 @@ public class Game {
         timeLimit = "";
         sente = "";
         gote = "";
+        handicap = "";
         analysisPositionList = new ArrayList<>();
     }
 
@@ -122,6 +124,20 @@ public class Game {
      */
     public void setAnalysisPositionList(List<List<Position>> analysisPositionList) {
         this.analysisPositionList = analysisPositionList;
+    }
+
+    /**
+     * @return the handicap
+     */
+    public String getHandicap() {
+        return handicap;
+    }
+
+    /**
+     * @param handicap the handicap to set
+     */
+    public void setHandicap(String handicap) {
+        this.handicap = handicap;
     }
 
 }

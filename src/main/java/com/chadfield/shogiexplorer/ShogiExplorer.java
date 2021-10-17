@@ -3,6 +3,7 @@ package com.chadfield.shogiexplorer;
 import com.chadfield.shogiexplorer.main.AnalysisManager;
 import com.chadfield.shogiexplorer.main.ConfigurationManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
+import com.chadfield.shogiexplorer.main.KifParser;
 import com.chadfield.shogiexplorer.objectclasses.GameAnalyser;
 import java.io.File;
 import java.io.IOException;
@@ -959,6 +960,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
         gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
         gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
+        gameTextArea.append(bundle.getString("label_handicap") + ": " + game.getHandicap() + "\n");
         gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
         gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
         moveNumber = 0;
@@ -991,9 +993,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
         renderer.setBarPainter(new StandardXYBarPainter());
         renderer.setShadowVisible(false);
         if (anal) {
-            renderer.setSeriesPaint(0, Color.BLACK);  
-            renderer.setSeriesPaint(2, Color.WHITE); 
-            renderer.setSeriesPaint(1, Color.RED); 
+            if (game == null || game.getHandicap().contentEquals(KifParser.HANDICAP_NONE)) {
+                renderer.setSeriesPaint(0, Color.BLACK);  
+                renderer.setSeriesPaint(2, Color.WHITE); 
+                renderer.setSeriesPaint(1, Color.RED); 
+            } else {
+                renderer.setSeriesPaint(0, Color.WHITE);  
+                renderer.setSeriesPaint(2, Color.BLACK); 
+                renderer.setSeriesPaint(1, Color.RED); 
+            }
         } else {
             renderer.setSeriesPaint(0, Color.BLACK);  
             renderer.setSeriesPaint(2, Color.RED); 

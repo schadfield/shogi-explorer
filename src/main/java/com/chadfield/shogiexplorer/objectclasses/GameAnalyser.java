@@ -2,6 +2,7 @@ package com.chadfield.shogiexplorer.objectclasses;
 
 import com.chadfield.shogiexplorer.main.AnalysisManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
+import com.chadfield.shogiexplorer.main.KifParser;
 import com.chadfield.shogiexplorer.main.SFENParser;
 import com.chadfield.shogiexplorer.objects.Analysis;
 import com.chadfield.shogiexplorer.objects.AnalysisParameter;
@@ -76,6 +77,7 @@ public class GameAnalyser {
     JButton haltAnalysisButton;
     JMenuItem stopAnalysisMenuItem;
     Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
+    boolean handicap;
 
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, boolean saveAnalysis) throws IOException {
         analysing.set(true);
@@ -100,6 +102,7 @@ public class GameAnalyser {
         Coordinate previousMoveDestination = null;
         game.setAnalysisPositionList(new ArrayList<>());
         scoreList = new ArrayList<>();
+        handicap = !game.getHandicap().contentEquals(KifParser.HANDICAP_NONE);
 
         for (Position position : game.getPositionList()) {
 
@@ -115,9 +118,17 @@ public class GameAnalyser {
             engineMove = position.getNotation().getEngineMove();
 
             if (count % 2 == 0) {
-                japaneseMove = trans.transliterate(" ☗" + position.getNotation().getJapanese());
+                if (handicap) {
+                    japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
+                } else {
+                    japaneseMove = trans.transliterate(" ☗" + position.getNotation().getJapanese());
+                }
             } else {
-                japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
+                if (handicap) {
+                    japaneseMove = trans.transliterate(" ☗" + position.getNotation().getJapanese());
+                } else {
+                    japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
+                }
             }
 
             lastDestination = position.getDestination();
@@ -432,7 +443,13 @@ public class GameAnalyser {
                             score = -31111;
                         }
                         if (moveNum % 2 == 0) {
-                            score = -score;
+                            if (!handicap) {
+                                score = -score;
+                            }
+                        } else {
+                            if (handicap) {
+                                score = -score;
+                            }
                         }
                         processScore(score, moveNum, plotDataset);
                         if (score > 0) {
@@ -496,25 +513,25 @@ public class GameAnalyser {
             plot.getDomainAxis().setAutoRange(true);
         }
         if (moveNum % 2 == 0) {
-            x1Start = arrayAppend(x1Start, moveNum - 1.0);
-            x1 = arrayAppend(x1, moveNum - 0.5);
-            x1End = arrayAppend(x1End, moveNum);
-            y1Start = arrayAppend(y1Start, 0);
-            y1 = arrayAppend(y1, score);
-            y1End = arrayAppend(y1End, 0);
-            data1 = new double[][]{x1, x1Start, x1End, y1, y1Start, y1End};
-            plotDataset.addSeries("S", data1);
+                x1Start = arrayAppend(x1Start, moveNum - 1.0);
+                x1 = arrayAppend(x1, moveNum - 0.5);
+                x1End = arrayAppend(x1End, moveNum);
+                y1Start = arrayAppend(y1Start, 0);
+                y1 = arrayAppend(y1, score);
+                y1End = arrayAppend(y1End, 0);
+                data1 = new double[][]{x1, x1Start, x1End, y1, y1Start, y1End};
+                plotDataset.addSeries("S", data1);
         } else {
-            x2Start = arrayAppend(x2Start, moveNum - 1.0);
-            x2 = arrayAppend(x2, moveNum - 0.5);
-            x2End = arrayAppend(x2End, moveNum);
-            y2Start = arrayAppend(y2Start, 0);
-            y2 = arrayAppend(y2, score);
-            y2End = arrayAppend(y2End, 0);
-            data2 = new double[][]{x2, x2Start, x2End, y2, y2Start, y2End};
-            plotDataset.addSeries("G", data2);
+                x2Start = arrayAppend(x2Start, moveNum - 1.0);
+                x2 = arrayAppend(x2, moveNum - 0.5);
+                x2End = arrayAppend(x2End, moveNum);
+                y2Start = arrayAppend(y2Start, 0);
+                y2 = arrayAppend(y2, score);
+                y2End = arrayAppend(y2End, 0);
+                data2 = new double[][]{x2, x2Start, x2End, y2, y2Start, y2End};
+                plotDataset.addSeries("G", data2);
+            }
         }
-    }
 
     private double[] arrayAppend(double[] array, double value) {
         double[] result = Arrays.copyOf(array, array.length + 1);
@@ -561,20 +578,37 @@ public class GameAnalyser {
     private String assessScores(int moveNum, int lastScoreVal, int scoreVal) {
         // We are finding the opinion for the PREVIOUS move.
         if (moveNum % 2 != 0) {
-            // This move is for sente.
-            if (scoreVal - lastScoreVal > ANALYSIS_BLUNDER_THRESHOLD) {
-                return "??";
+            if (handicap) {
+                if (scoreVal - lastScoreVal < -ANALYSIS_BLUNDER_THRESHOLD) {
+                    return "??";
+                }
+                if (scoreVal - lastScoreVal < -ANALYSIS_MISTAKE_THRESHOLD) {
+                    return "?";
+                }
             }
-            if (scoreVal - lastScoreVal > ANALYSIS_MISTAKE_THRESHOLD) {
-                return "?";
+            else {
+                if (scoreVal - lastScoreVal > ANALYSIS_BLUNDER_THRESHOLD) {
+                    return "??";
+                }
+                if (scoreVal - lastScoreVal > ANALYSIS_MISTAKE_THRESHOLD) {
+                    return "?";
+                }
             }
         } else {
-            // This move is for gote.
-            if (scoreVal - lastScoreVal < -ANALYSIS_BLUNDER_THRESHOLD) {
-                return "??";
-            }
-            if (scoreVal - lastScoreVal < -ANALYSIS_MISTAKE_THRESHOLD) {
-                return "?";
+            if (handicap) {
+                if (scoreVal - lastScoreVal > ANALYSIS_BLUNDER_THRESHOLD) {
+                    return "??";
+                }
+                if (scoreVal - lastScoreVal > ANALYSIS_MISTAKE_THRESHOLD) {
+                    return "?";
+                }
+            } else {
+                if (scoreVal - lastScoreVal < -ANALYSIS_BLUNDER_THRESHOLD) {
+                    return "??";
+                }
+                if (scoreVal - lastScoreVal < -ANALYSIS_MISTAKE_THRESHOLD) {
+                    return "?";
+                }
             }
         }
         return "";
@@ -602,9 +636,17 @@ public class GameAnalyser {
 
     private int getScore(int moveNum, String value) {
         if (moveNum % 2 != 0) {
-            return Integer.parseInt(value);
+            if (handicap) {
+                return Integer.parseInt(value) * -1;
+            } else {
+                return Integer.parseInt(value);
+            }
         } else {
-            return Integer.parseInt(value) * -1;
+            if (handicap) {
+                return Integer.parseInt(value);
+            } else {
+                return Integer.parseInt(value) * -1;
+            }
         }
     }
 
