@@ -1003,9 +1003,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 renderer.setSeriesPaint(1, Color.RED); 
             }
         } else {
-            renderer.setSeriesPaint(0, Color.BLACK);  
-            renderer.setSeriesPaint(2, Color.RED); 
-            renderer.setSeriesPaint(1, Color.WHITE); 
+            if (game == null || game.getHandicap().contentEquals(KifParser.HANDICAP_NONE)) {
+                renderer.setSeriesPaint(0, Color.BLACK);  
+                renderer.setSeriesPaint(2, Color.RED); 
+                renderer.setSeriesPaint(1, Color.WHITE); 
+            } else {
+                renderer.setSeriesPaint(0, Color.WHITE);  
+                renderer.setSeriesPaint(2, Color.RED); 
+                renderer.setSeriesPaint(1, Color.BLACK); 
+            }
         }
         renderer.setSeriesVisibleInLegend(0, false);
         renderer.setSeriesVisibleInLegend(1, false);
