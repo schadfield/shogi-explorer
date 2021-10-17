@@ -40,11 +40,11 @@ public class KifParser {
     public static final String HANDICAP_LANCE = "香落ち";
     public static final String HANDICAP_BISHOP = "角落ち";
     public static final String HANDICAP_ROOK = "飛車落ち";
-    public static final String HANDICAP_ROOK_LANCE = "飛香落ち"; 
-    public static final String HANDICAP_2_PIECE = "二枚落ち";   
+    public static final String HANDICAP_ROOK_LANCE = "飛香落ち";
+    public static final String HANDICAP_2_PIECE = "二枚落ち";
     public static final String HANDICAP_4_PIECE = "四枚落ち";
     public static final String HANDICAP_6_PIECE = "六枚落ち";
-            
+
     private KifParser() {
         throw new IllegalStateException("Utility class");
     }
@@ -83,7 +83,7 @@ public class KifParser {
                         board = getStartBoard(game);
                         positionList.add(new Position(SFENParser.getSFEN(board), null, null, new Notation()));
                     }
-                    
+
                     if (line.isEmpty()) {
                         break;
                     }
@@ -115,18 +115,26 @@ public class KifParser {
         game.setPositionList(positionList);
         return game;
     }
-        
+
     private static Board getStartBoard(Game game) {
         String sfen;
         sfen = switch (game.getHandicap()) {
-            case HANDICAP_LANCE -> "lnsgkgsn1/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_BISHOP -> "lnsgkgsnl/1r7/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_ROOK -> "lnsgkgsnl/7b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_ROOK_LANCE -> "lnsgkgsn1/7b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_2_PIECE -> "lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_4_PIECE -> "1nsgkgsn1/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_6_PIECE -> "2sgkgs2/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            default -> "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
+            case HANDICAP_LANCE ->
+                "lnsgkgsn1/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
+            case HANDICAP_BISHOP ->
+                "lnsgkgsnl/1r7/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
+            case HANDICAP_ROOK ->
+                "lnsgkgsnl/7b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
+            case HANDICAP_ROOK_LANCE ->
+                "lnsgkgsn1/7b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
+            case HANDICAP_2_PIECE ->
+                "lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
+            case HANDICAP_4_PIECE ->
+                "1nsgkgsn1/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
+            case HANDICAP_6_PIECE ->
+                "2sgkgs2/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
+            default ->
+                "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
         };
         return SFENParser.parse(sfen);
     }
@@ -174,7 +182,7 @@ public class KifParser {
             game.setPlace(line.substring(PLACE.length()));
         }
         if (line.startsWith(HANDICAP)) {
-            game.setHandicap(line.substring(HANDICAP.length()+1));
+            game.setHandicap(line.substring(HANDICAP.length() + 1));
         }
         if (line.startsWith(TIME_LIMIT)) {
             game.setTimeLimit(line.substring(TIME_LIMIT.length()).split("#")[0]);
