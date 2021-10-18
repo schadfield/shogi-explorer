@@ -991,25 +991,27 @@ public class ShogiExplorer extends javax.swing.JFrame {
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
         renderer.setBarPainter(new StandardXYBarPainter());
         renderer.setShadowVisible(false);
-        if (anal) {
-            if (game == null || game.isHandicap()) {
-                renderer.setSeriesPaint(0, Color.WHITE);  
-                renderer.setSeriesPaint(1, Color.RED); 
-                renderer.setSeriesPaint(2, Color.BLACK);       
+        if (game != null) {
+            if (anal) {
+                if (game.isHandicap()) {
+                    renderer.setSeriesPaint(0, Color.WHITE);  
+                    renderer.setSeriesPaint(1, Color.RED); 
+                    renderer.setSeriesPaint(2, Color.BLACK);       
+                } else {
+                    renderer.setSeriesPaint(0, Color.BLACK);  
+                    renderer.setSeriesPaint(1, Color.RED); 
+                    renderer.setSeriesPaint(2, Color.WHITE); 
+                }
             } else {
-                renderer.setSeriesPaint(0, Color.BLACK);  
-                renderer.setSeriesPaint(1, Color.RED); 
-                renderer.setSeriesPaint(2, Color.WHITE); 
-            }
-        } else {
-            if (game == null || game.isHandicap()) {
-                renderer.setSeriesPaint(0, Color.WHITE);  
-                renderer.setSeriesPaint(1, Color.BLACK);
-                renderer.setSeriesPaint(2, Color.RED); 
-            } else {          
-                renderer.setSeriesPaint(0, Color.BLACK);  
-                renderer.setSeriesPaint(1, Color.WHITE); 
-                renderer.setSeriesPaint(2, Color.RED); 
+                if (game.isHandicap()) {
+                    renderer.setSeriesPaint(0, Color.WHITE);  
+                    renderer.setSeriesPaint(1, Color.BLACK);
+                    renderer.setSeriesPaint(2, Color.RED); 
+                } else {          
+                    renderer.setSeriesPaint(0, Color.BLACK);  
+                    renderer.setSeriesPaint(1, Color.WHITE); 
+                    renderer.setSeriesPaint(2, Color.RED); 
+                }
             }
         }
         renderer.setSeriesVisibleInLegend(0, false);
