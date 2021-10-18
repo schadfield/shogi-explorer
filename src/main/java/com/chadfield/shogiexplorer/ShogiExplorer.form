@@ -578,7 +578,7 @@
                   <Component id="boardPanel" pref="508" max="32767" attributes="0"/>
                   <Component id="jSplitPane1" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jTabbedPane1" pref="74" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
