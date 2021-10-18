@@ -141,9 +141,6 @@ public class GameAnalyser {
         updateMoveList(moveList, count);
         analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, turn, previousMoveDestination);
 
-        //count++;
-        //turn = ParserUtils.switchTurn(turn);
-
         quitEngine();
         haltAnalysisButton.setEnabled(false);
         stopAnalysisMenuItem.setEnabled(false);
