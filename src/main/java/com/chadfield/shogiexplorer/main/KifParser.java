@@ -36,14 +36,6 @@ public class KifParser {
     public static final String MOVE_HEADER = "手数----指手---------消費時間-";
     public static final String MULTI_WHITESPACE = "\\s+|\\u3000";
     public static final String HANDICAP = "手合割";
-    public static final String HANDICAP_NONE = "平手";
-    public static final String HANDICAP_LANCE = "香落ち";
-    public static final String HANDICAP_BISHOP = "角落ち";
-    public static final String HANDICAP_ROOK = "飛車落ち";
-    public static final String HANDICAP_ROOK_LANCE = "飛香落ち";
-    public static final String HANDICAP_2_PIECE = "二枚落ち";
-    public static final String HANDICAP_4_PIECE = "四枚落ち";
-    public static final String HANDICAP_6_PIECE = "六枚落ち";
 
     private KifParser() {
         throw new IllegalStateException("Utility class");
@@ -119,19 +111,19 @@ public class KifParser {
     private static Board getStartBoard(Game game) {
         String sfen;
         sfen = switch (game.getHandicap()) {
-            case HANDICAP_LANCE ->
+            case Game.HANDICAP_LANCE ->
                 "lnsgkgsn1/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_BISHOP ->
+            case Game.HANDICAP_BISHOP ->
                 "lnsgkgsnl/1r7/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_ROOK ->
+            case Game.HANDICAP_ROOK ->
                 "lnsgkgsnl/7b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_ROOK_LANCE ->
+            case Game.HANDICAP_ROOK_LANCE ->
                 "lnsgkgsn1/7b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_2_PIECE ->
+            case Game.HANDICAP_2_PIECE ->
                 "lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_4_PIECE ->
+            case Game.HANDICAP_4_PIECE ->
                 "1nsgkgsn1/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
-            case HANDICAP_6_PIECE ->
+            case Game.HANDICAP_6_PIECE ->
                 "2sgkgs2/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1";
             default ->
                 "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";

@@ -102,7 +102,7 @@ public class GameAnalyser {
         Coordinate previousMoveDestination = null;
         game.setAnalysisPositionList(new ArrayList<>());
         scoreList = new ArrayList<>();
-        handicap = !game.getHandicap().contentEquals(KifParser.HANDICAP_NONE);
+        handicap = game.isHandicap();
 
         for (Position position : game.getPositionList()) {
 

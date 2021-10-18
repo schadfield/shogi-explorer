@@ -993,7 +993,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         renderer.setBarPainter(new StandardXYBarPainter());
         renderer.setShadowVisible(false);
         if (anal) {
-            if (game == null || game.getHandicap().contentEquals(KifParser.HANDICAP_NONE)) {
+            if (game == null || !game.isHandicap()) {
                 renderer.setSeriesPaint(0, Color.BLACK);  
                 renderer.setSeriesPaint(2, Color.WHITE); 
                 renderer.setSeriesPaint(1, Color.RED); 
@@ -1003,7 +1003,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 renderer.setSeriesPaint(1, Color.RED); 
             }
         } else {
-            if (game == null || game.getHandicap().contentEquals(KifParser.HANDICAP_NONE)) {
+            if (game == null || !game.isHandicap()) {
                 renderer.setSeriesPaint(0, Color.BLACK);  
                 renderer.setSeriesPaint(2, Color.RED); 
                 renderer.setSeriesPaint(1, Color.WHITE); 

@@ -17,6 +17,14 @@ public class Game {
     private String sente;
     private String gote;
     private String handicap;
+    public static final String HANDICAP_NONE = "平手";
+    public static final String HANDICAP_LANCE = "香落ち";
+    public static final String HANDICAP_BISHOP = "角落ち";
+    public static final String HANDICAP_ROOK = "飛車落ち";
+    public static final String HANDICAP_ROOK_LANCE = "飛香落ち";
+    public static final String HANDICAP_2_PIECE = "二枚落ち";
+    public static final String HANDICAP_4_PIECE = "四枚落ち";
+    public static final String HANDICAP_6_PIECE = "六枚落ち";
 
     public Game() {
         date = "";
@@ -138,6 +146,10 @@ public class Game {
      */
     public void setHandicap(String handicap) {
         this.handicap = handicap;
+    }
+    
+    public boolean isHandicap() {
+        return !this.handicap.contentEquals(HANDICAP_NONE);
     }
 
 }
