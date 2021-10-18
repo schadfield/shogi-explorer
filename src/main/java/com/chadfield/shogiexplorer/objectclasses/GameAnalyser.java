@@ -2,11 +2,11 @@ package com.chadfield.shogiexplorer.objectclasses;
 
 import com.chadfield.shogiexplorer.main.AnalysisManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
-import com.chadfield.shogiexplorer.main.KifParser;
 import com.chadfield.shogiexplorer.main.SFENParser;
 import com.chadfield.shogiexplorer.objects.Analysis;
 import com.chadfield.shogiexplorer.objects.AnalysisParameter;
 import com.chadfield.shogiexplorer.objects.Board;
+import com.chadfield.shogiexplorer.objects.Board.Turn;
 import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
@@ -78,6 +78,7 @@ public class GameAnalyser {
     JMenuItem stopAnalysisMenuItem;
     Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
     boolean handicap;
+    Turn turn;
 
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, boolean saveAnalysis) throws IOException {
         analysing.set(true);
@@ -97,38 +98,37 @@ public class GameAnalyser {
         String japaneseMove = null;
         String sfen = null;
         String lastSFEN = null;
-        int count = 0;
+        int count = 1;
         Coordinate lastDestination = null;
         Coordinate previousMoveDestination = null;
         game.setAnalysisPositionList(new ArrayList<>());
         scoreList = new ArrayList<>();
         handicap = game.isHandicap();
 
+        if (game.isHandicap()) {
+            turn = Turn.GOTE;
+        } else {
+            turn = Turn.SENTE;
+        }
+
         for (Position position : game.getPositionList()) {
 
             if (engineMove != null) {
-                count++;
                 updateMoveList(moveList, count);
-                analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, previousMoveDestination);
+                analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, turn, previousMoveDestination);
                 previousMoveDestination = lastDestination;
+                count++;
+                turn = ParserUtils.switchTurn(turn);
             }
 
             lastSFEN = sfen;
             sfen = position.getGameSFEN();
             engineMove = position.getNotation().getEngineMove();
 
-            if (count % 2 == 0) {
-                if (handicap) {
-                    japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
-                } else {
-                    japaneseMove = trans.transliterate(" ☗" + position.getNotation().getJapanese());
-                }
+            if (turn == Turn.SENTE) {
+                japaneseMove = trans.transliterate(" ☗" + position.getNotation().getJapanese());
             } else {
-                if (handicap) {
-                    japaneseMove = trans.transliterate(" ☗" + position.getNotation().getJapanese());
-                } else {
-                    japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
-                }
+                japaneseMove = trans.transliterate(" ☖" + position.getNotation().getJapanese());
             }
 
             lastDestination = position.getDestination();
@@ -138,9 +138,11 @@ public class GameAnalyser {
             }
         }
 
-        count++;
         updateMoveList(moveList, count);
-        analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, previousMoveDestination);
+        analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, turn, previousMoveDestination);
+
+        //count++;
+        //turn = ParserUtils.switchTurn(turn);
 
         quitEngine();
         haltAnalysisButton.setEnabled(false);
@@ -232,7 +234,7 @@ public class GameAnalyser {
         process.destroy();
     }
 
-    private void analysePosition(Game game, String sfen, String engineMove, String japaneseMove, JTable analysisTable, DefaultIntervalXYDataset plotDataset, int moveNum, Coordinate previousMoveDestination) throws IOException {
+    private void analysePosition(Game game, String sfen, String engineMove, String japaneseMove, JTable analysisTable, DefaultIntervalXYDataset plotDataset, int moveNum, Turn turn, Coordinate previousMoveDestination) throws IOException {
         stdin.write(("position sfen " + sfen + " " + engineMove + "\n").getBytes());
         stdin.write(("go btime 0 wtime 0 byoyomi " + analysisTimePerMove * 1000 + "\n").getBytes());
         stdin.flush();
@@ -242,7 +244,7 @@ public class GameAnalyser {
             if (line.contains("bestmove")) {
                 String bestLine = getBestLine(line, lineList);
                 ArrayList<Position> pvPositionList = getPVPositionList(sfen, bestLine, previousMoveDestination);
-                updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, japaneseMove, pvPositionList, plotDataset));
+                updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, turn, japaneseMove, pvPositionList, plotDataset));
                 game.getAnalysisPositionList().add(pvPositionList);
                 return;
             }
@@ -418,7 +420,7 @@ public class GameAnalyser {
         return lineList.get(lineListSize - 1);
     }
 
-    private Object[] getTableInsert(String lastLine, int moveNum, String japaneseMove, ArrayList<Position> pvPositionList, DefaultIntervalXYDataset plotDataset) {
+    private Object[] getTableInsert(String lastLine, int moveNum, Turn turn, String japaneseMove, ArrayList<Position> pvPositionList, DefaultIntervalXYDataset plotDataset) {
         boolean lower = false;
         boolean upper = false;
         boolean foundPV = false;
@@ -432,8 +434,8 @@ public class GameAnalyser {
                     case "upperbound" ->
                         upper = true;
                     case "cp" -> {
-                        score = getScore(moveNum, splitLine[i + 1]);
-                        processScore(score, moveNum, plotDataset);
+                        score = getScore(turn, splitLine[i + 1]);
+                        processScore(score, moveNum, turn, plotDataset);
                     }
                     case "mate" -> {
                         int mateNum = Integer.parseInt(splitLine[i + 1]);
@@ -442,16 +444,10 @@ public class GameAnalyser {
                         } else {
                             score = -31111;
                         }
-                        if (moveNum % 2 == 0) {
-                            if (!handicap) {
-                                score = -score;
-                            }
-                        } else {
-                            if (handicap) {
-                                score = -score;
-                            }
+                        if (turn == Turn.GOTE) {
+                            score = -score;
                         }
-                        processScore(score, moveNum, plotDataset);
+                        processScore(score, moveNum, turn, plotDataset);
                         if (score > 0) {
                             scoreStr = "+Mate:" + Math.abs(mateNum);
                         } else {
@@ -483,7 +479,7 @@ public class GameAnalyser {
         return new Object[]{moveNum + japaneseMove, "", scoreStr, lowUp, pvStr};
     }
 
-    private void processScore(int score, int moveNum, DefaultIntervalXYDataset plotDataset) {
+    private void processScore(int score, int moveNum, Turn turn, DefaultIntervalXYDataset plotDataset) {
         int testRange = Math.abs(score);
         int newRange;
         JRadioButtonMenuItem thisItem;
@@ -504,7 +500,7 @@ public class GameAnalyser {
         }
 
         scoreStr = Integer.toString(score);
-        opinion = compareScore(moveNum, lastScore, scoreStr);
+        opinion = compareScore(lastScore, scoreStr);
         lastScore = String.copyValueOf(scoreStr.toCharArray());
 
         if (moveNum < 50) {
@@ -512,26 +508,26 @@ public class GameAnalyser {
         } else if (moveNum == 50) {
             plot.getDomainAxis().setAutoRange(true);
         }
-        if (moveNum % 2 == 0) {
-                x1Start = arrayAppend(x1Start, moveNum - 1.0);
-                x1 = arrayAppend(x1, moveNum - 0.5);
-                x1End = arrayAppend(x1End, moveNum);
-                y1Start = arrayAppend(y1Start, 0);
-                y1 = arrayAppend(y1, score);
-                y1End = arrayAppend(y1End, 0);
-                data1 = new double[][]{x1, x1Start, x1End, y1, y1Start, y1End};
-                plotDataset.addSeries("S", data1);
+        if (turn == Turn.SENTE) {
+            x1Start = arrayAppend(x1Start, moveNum - 1.0);
+            x1 = arrayAppend(x1, moveNum - 0.5);
+            x1End = arrayAppend(x1End, moveNum);
+            y1Start = arrayAppend(y1Start, 0);
+            y1 = arrayAppend(y1, score);
+            y1End = arrayAppend(y1End, 0);
+            data1 = new double[][]{x1, x1Start, x1End, y1, y1Start, y1End};
+            plotDataset.addSeries("S", data1);
         } else {
-                x2Start = arrayAppend(x2Start, moveNum - 1.0);
-                x2 = arrayAppend(x2, moveNum - 0.5);
-                x2End = arrayAppend(x2End, moveNum);
-                y2Start = arrayAppend(y2Start, 0);
-                y2 = arrayAppend(y2, score);
-                y2End = arrayAppend(y2End, 0);
-                data2 = new double[][]{x2, x2Start, x2End, y2, y2Start, y2End};
-                plotDataset.addSeries("G", data2);
-            }
+            x2Start = arrayAppend(x2Start, moveNum - 1.0);
+            x2 = arrayAppend(x2, moveNum - 0.5);
+            x2End = arrayAppend(x2End, moveNum);
+            y2Start = arrayAppend(y2Start, 0);
+            y2 = arrayAppend(y2, score);
+            y2End = arrayAppend(y2End, 0);
+            data2 = new double[][]{x2, x2Start, x2End, y2, y2Start, y2End};
+            plotDataset.addSeries("G", data2);
         }
+    }
 
     private double[] arrayAppend(double[] array, double value) {
         double[] result = Arrays.copyOf(array, array.length + 1);
@@ -556,7 +552,7 @@ public class GameAnalyser {
         return result;
     }
 
-    private String compareScore(int moveNum, String lastScore, String score) {
+    private String compareScore(String lastScore, String score) {
         int lastScoreVal;
         int scoreVal;
 
@@ -572,45 +568,27 @@ public class GameAnalyser {
             return "";
         }
 
-        return assessScores(moveNum, lastScoreVal, scoreVal);
+        return assessScores(turn, lastScoreVal, scoreVal);
     }
 
-    private String assessScores(int moveNum, int lastScoreVal, int scoreVal) {
+    private String assessScores(Turn turn, int lastScoreVal, int scoreVal) {
         // We are finding the opinion for the PREVIOUS move.
-        if (moveNum % 2 != 0) {
-            if (handicap) {
-                if (scoreVal - lastScoreVal < -ANALYSIS_BLUNDER_THRESHOLD) {
-                    return "??";
-                }
-                if (scoreVal - lastScoreVal < -ANALYSIS_MISTAKE_THRESHOLD) {
-                    return "?";
-                }
+        if (turn == Turn.SENTE) {
+            if (scoreVal - lastScoreVal > ANALYSIS_BLUNDER_THRESHOLD) {
+                return "??";
             }
-            else {
-                if (scoreVal - lastScoreVal > ANALYSIS_BLUNDER_THRESHOLD) {
-                    return "??";
-                }
-                if (scoreVal - lastScoreVal > ANALYSIS_MISTAKE_THRESHOLD) {
-                    return "?";
-                }
+            if (scoreVal - lastScoreVal > ANALYSIS_MISTAKE_THRESHOLD) {
+                return "?";
             }
         } else {
-            if (handicap) {
-                if (scoreVal - lastScoreVal > ANALYSIS_BLUNDER_THRESHOLD) {
-                    return "??";
-                }
-                if (scoreVal - lastScoreVal > ANALYSIS_MISTAKE_THRESHOLD) {
-                    return "?";
-                }
-            } else {
-                if (scoreVal - lastScoreVal < -ANALYSIS_BLUNDER_THRESHOLD) {
-                    return "??";
-                }
-                if (scoreVal - lastScoreVal < -ANALYSIS_MISTAKE_THRESHOLD) {
-                    return "?";
-                }
+            if (scoreVal - lastScoreVal < -ANALYSIS_BLUNDER_THRESHOLD) {
+                return "??";
+            }
+            if (scoreVal - lastScoreVal < -ANALYSIS_MISTAKE_THRESHOLD) {
+                return "?";
             }
         }
+
         return "";
     }
 
@@ -634,19 +612,11 @@ public class GameAnalyser {
         }
     }
 
-    private int getScore(int moveNum, String value) {
-        if (moveNum % 2 != 0) {
-            if (handicap) {
-                return Integer.parseInt(value) * -1;
-            } else {
-                return Integer.parseInt(value);
-            }
+    private int getScore(Turn turn, String value) {
+        if (turn == Turn.SENTE) {
+            return Integer.parseInt(value);
         } else {
-            if (handicap) {
-                return Integer.parseInt(value);
-            } else {
-                return Integer.parseInt(value) * -1;
-            }
+            return Integer.parseInt(value) * -1;
         }
     }
 
