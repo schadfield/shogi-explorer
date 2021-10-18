@@ -3,7 +3,6 @@ package com.chadfield.shogiexplorer;
 import com.chadfield.shogiexplorer.main.AnalysisManager;
 import com.chadfield.shogiexplorer.main.ConfigurationManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
-import com.chadfield.shogiexplorer.main.KifParser;
 import com.chadfield.shogiexplorer.objectclasses.GameAnalyser;
 import java.io.File;
 import java.io.IOException;
