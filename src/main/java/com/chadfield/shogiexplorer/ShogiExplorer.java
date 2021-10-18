@@ -993,24 +993,24 @@ public class ShogiExplorer extends javax.swing.JFrame {
         renderer.setBarPainter(new StandardXYBarPainter());
         renderer.setShadowVisible(false);
         if (anal) {
-            if (game == null || !game.isHandicap()) {
-                renderer.setSeriesPaint(0, Color.BLACK);  
-                renderer.setSeriesPaint(2, Color.WHITE); 
-                renderer.setSeriesPaint(1, Color.RED); 
-            } else {
+            if (game == null || game.isHandicap()) {
                 renderer.setSeriesPaint(0, Color.WHITE);  
-                renderer.setSeriesPaint(2, Color.BLACK); 
                 renderer.setSeriesPaint(1, Color.RED); 
+                renderer.setSeriesPaint(2, Color.BLACK);       
+            } else {
+                renderer.setSeriesPaint(0, Color.BLACK);  
+                renderer.setSeriesPaint(1, Color.RED); 
+                renderer.setSeriesPaint(2, Color.WHITE); 
             }
         } else {
-            if (game == null || !game.isHandicap()) {
-                renderer.setSeriesPaint(0, Color.BLACK);  
-                renderer.setSeriesPaint(2, Color.RED); 
-                renderer.setSeriesPaint(1, Color.WHITE); 
-            } else {
+            if (game == null || game.isHandicap()) {
                 renderer.setSeriesPaint(0, Color.WHITE);  
+                renderer.setSeriesPaint(1, Color.BLACK);
                 renderer.setSeriesPaint(2, Color.RED); 
-                renderer.setSeriesPaint(1, Color.BLACK); 
+            } else {          
+                renderer.setSeriesPaint(0, Color.BLACK);  
+                renderer.setSeriesPaint(1, Color.WHITE); 
+                renderer.setSeriesPaint(2, Color.RED); 
             }
         }
         renderer.setSeriesVisibleInLegend(0, false);
