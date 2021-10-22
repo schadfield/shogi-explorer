@@ -21,6 +21,7 @@ import com.chadfield.shogiexplorer.utils.NotationUtils;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 
 /**
  *
@@ -41,7 +42,7 @@ public class KifParser {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile, String clipboardStr) throws IOException {
+    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile, String clipboardStr, boolean shiftFile) throws IOException {
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         moveListModel.clear();
         moveListModel.addElement(bundle.getString("label_start_position"));
@@ -55,7 +56,11 @@ public class KifParser {
 
         try {
             if (clipboardStr == null) {
-                fileReader = Files.newBufferedReader(kifFile.toPath());
+                if (shiftFile) {
+                    fileReader = Files.newBufferedReader(kifFile.toPath(), Charset.forName("SJIS"));
+                } else {
+                    fileReader = Files.newBufferedReader(kifFile.toPath(), Charset.forName("UTF8"));
+                }
             } else {
                 fileReader = new BufferedReader(new StringReader(clipboardStr));
             }
@@ -64,6 +69,7 @@ public class KifParser {
             String line;
             Coordinate lastDestination = null;
             while ((line = fileReader.readLine()) != null) {
+                System.out.println(line);
                 if (!foundHeader) {
                     foundHeader = isHeader(line);
                     if (foundHeader || isComment(line)) {
