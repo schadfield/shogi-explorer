@@ -305,7 +305,7 @@ public class RenderBoard {
                     if (classic) {
                         name = PIECE_SET_CLASSIC + "/" + substituteKomaName(komaType.toString());
                     } else {
-                        name = PIECE_SET_MODERN + substituteKomaName(komaType.toString());
+                        name = PIECE_SET_MODERN + "/" + substituteKomaName(komaType.toString());
                     }
                     pieceImage = imageCache.getImage(name);
                     if (pieceImage == null) {
