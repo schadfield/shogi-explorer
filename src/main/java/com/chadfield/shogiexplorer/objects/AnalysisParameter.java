@@ -18,6 +18,19 @@ public class AnalysisParameter {
     private JButton haltAnalysisButton;
     private JMenuItem stopAnalysisMenuItem;
     private File kifFile;
+    private double[] x1Start;
+    private double[] x1;
+    private double[] x1End;
+    private double[] y1Start;
+    private double[] y1;
+    private double[] y1End;
+    private double[] x2Start;
+    private double[] x2;
+    private double[] x2End;
+    private double[] y2Start;
+    private double[] y2;
+    private double[] y2End;
+
 
     /**
      * @return the analysisTimePerMove
@@ -115,5 +128,173 @@ public class AnalysisParameter {
      */
     public void setStopAnalysisMenuItem(JMenuItem stopAnalysisMenuItem) {
         this.stopAnalysisMenuItem = stopAnalysisMenuItem;
+    }
+
+    /**
+     * @return the x1Start
+     */
+    public double[] getX1Start() {
+        return x1Start;
+    }
+
+    /**
+     * @param x1Start the x1Start to set
+     */
+    public void setX1Start(double[] x1Start) {
+        this.x1Start = x1Start;
+    }
+
+    /**
+     * @return the x1
+     */
+    public double[] getX1() {
+        return x1;
+    }
+
+    /**
+     * @param x1 the x1 to set
+     */
+    public void setX1(double[] x1) {
+        this.x1 = x1;
+    }
+
+    /**
+     * @return the x1End
+     */
+    public double[] getX1End() {
+        return x1End;
+    }
+
+    /**
+     * @param x1End the x1End to set
+     */
+    public void setX1End(double[] x1End) {
+        this.x1End = x1End;
+    }
+
+    /**
+     * @return the y1Start
+     */
+    public double[] getY1Start() {
+        return y1Start;
+    }
+
+    /**
+     * @param y1Start the y1Start to set
+     */
+    public void setY1Start(double[] y1Start) {
+        this.y1Start = y1Start;
+    }
+
+    /**
+     * @return the y1
+     */
+    public double[] getY1() {
+        return y1;
+    }
+
+    /**
+     * @param y1 the y1 to set
+     */
+    public void setY1(double[] y1) {
+        this.y1 = y1;
+    }
+
+    /**
+     * @return the y1End
+     */
+    public double[] getY1End() {
+        return y1End;
+    }
+
+    /**
+     * @param y1End the y1End to set
+     */
+    public void setY1End(double[] y1End) {
+        this.y1End = y1End;
+    }
+
+    /**
+     * @return the x2Start
+     */
+    public double[] getX2Start() {
+        return x2Start;
+    }
+
+    /**
+     * @param x2Start the x2Start to set
+     */
+    public void setX2Start(double[] x2Start) {
+        this.x2Start = x2Start;
+    }
+
+    /**
+     * @return the x2
+     */
+    public double[] getX2() {
+        return x2;
+    }
+
+    /**
+     * @param x2 the x2 to set
+     */
+    public void setX2(double[] x2) {
+        this.x2 = x2;
+    }
+
+    /**
+     * @return the x2End
+     */
+    public double[] getX2End() {
+        return x2End;
+    }
+
+    /**
+     * @param x2End the x2End to set
+     */
+    public void setX2End(double[] x2End) {
+        this.x2End = x2End;
+    }
+
+    /**
+     * @return the y2Start
+     */
+    public double[] getY2Start() {
+        return y2Start;
+    }
+
+    /**
+     * @param y2Start the y2Start to set
+     */
+    public void setY2Start(double[] y2Start) {
+        this.y2Start = y2Start;
+    }
+
+    /**
+     * @return the y2
+     */
+    public double[] getY2() {
+        return y2;
+    }
+
+    /**
+     * @param y2 the y2 to set
+     */
+    public void setY2(double[] y2) {
+        this.y2 = y2;
+    }
+
+    /**
+     * @return the y2End
+     */
+    public double[] getY2End() {
+        return y2End;
+    }
+
+    /**
+     * @param y2End the y2End to set
+     */
+    public void setY2End(double[] y2End) {
+        this.y2End = y2End;
     }
 }

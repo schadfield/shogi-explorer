@@ -53,20 +53,20 @@ public class GameAnalyser {
     private static final int ANALYSIS_MISTAKE_THRESHOLD = 250;
     private static final int ANALYSIS_BLUNDER_THRESHOLD = 500;
     private static final int ANALYSIS_IGNORE_THRESHOLD = 2000;
-    double[] x1Start = new double[]{};
-    double[] x1 = new double[]{};
-    double[] x1End = new double[]{};
-    double[] y1Start = new double[]{};
-    double[] y1 = new double[]{};
-    double[] y1End = new double[]{};
-    double[][] data1 = new double[][]{x1, x1Start, x1End, y1, y1Start, y1End};
-    double[] x2Start = new double[]{};
-    double[] x2 = new double[]{};
-    double[] x2End = new double[]{};
-    double[] y2Start = new double[]{};
-    double[] y2 = new double[]{};
-    double[] y2End = new double[]{};
-    double[][] data2 = new double[][]{x2, x2Start, x2End, y2, y2Start, y2End};
+    double[] x1Start;
+    double[] x1;
+    double[] x1End;
+    double[] y1Start;
+    double[] y1;
+    double[] y1End;
+    double[][] data1;
+    double[] x2Start;
+    double[] x2;
+    double[] x2End;
+    double[] y2Start;
+    double[] y2;
+    double[] y2End;
+    double[][] data2;
     XYPlot plot;
     int range;
     String scoreStr;
@@ -80,7 +80,7 @@ public class GameAnalyser {
     boolean handicap;
     Turn turn;
 
-    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, boolean saveAnalysis) throws IOException {
+    public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, boolean saveAnalysis, boolean resume) throws IOException {
         analysing.set(true);
         this.plot = plot;
         DefaultIntervalXYDataset plotDataset = (DefaultIntervalXYDataset) plot.getDataset();
@@ -90,6 +90,18 @@ public class GameAnalyser {
         this.graphView3 = analysisParam.getGraphView3();
         this.haltAnalysisButton = analysisParam.getHaltAnalysisButton();
         this.stopAnalysisMenuItem = analysisParam.getStopAnalysisMenuItem();
+        this.x1Start = analysisParam.getX1Start();
+        this.x1 = analysisParam.getX1();
+        this.x1End = analysisParam.getX1End();
+        this.y1Start = analysisParam.getY1Start();
+        this.y1 = analysisParam.getY1();
+        this.y1End = analysisParam.getY1End();
+        this.x2Start = analysisParam.getX2Start();
+        this.x2 = analysisParam.getX2();
+        this.x2End = analysisParam.getX2End();
+        this.y2Start = analysisParam.getY2Start();
+        this.y2 = analysisParam.getY2();
+        this.y2End = analysisParam.getY2End();
         initializeEngine(engine);
         initiateUSIProtocol();
         setOptions(engine);
@@ -99,9 +111,15 @@ public class GameAnalyser {
         String sfen = null;
         String lastSFEN = null;
         int count = 1;
+        int resumeCount = 1;
+        if (resume) {
+            resumeCount = analysisTable.getRowCount();
+        }
         Coordinate lastDestination = null;
         Coordinate previousMoveDestination = null;
-        game.setAnalysisPositionList(new ArrayList<>());
+        if (!resume) {
+            game.setAnalysisPositionList(new ArrayList<>());
+        }
         scoreList = new ArrayList<>();
         handicap = game.isHandicap();
 
@@ -114,8 +132,10 @@ public class GameAnalyser {
         for (Position position : game.getPositionList()) {
 
             if (engineMove != null) {
-                updateMoveList(moveList, count);
-                analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, turn, previousMoveDestination);
+                if (!resume || count > resumeCount) {
+                    updateMoveList(moveList, count);
+                    analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, turn, previousMoveDestination);
+                }
                 previousMoveDestination = lastDestination;
                 count++;
                 turn = ParserUtils.switchTurn(turn);
@@ -144,6 +164,18 @@ public class GameAnalyser {
         quitEngine();
         haltAnalysisButton.setEnabled(false);
         stopAnalysisMenuItem.setEnabled(false);
+        analysisParam.setX1Start(x1Start);
+        analysisParam.setX1(x1);
+        analysisParam.setX1End(x1End);
+        analysisParam.setY1Start(y1Start);
+        analysisParam.setY1(y1);
+        analysisParam.setY1End(y1End);
+        analysisParam.setX2Start(x2Start);
+        analysisParam.setX2(x2);
+        analysisParam.setX2End(x2End);
+        analysisParam.setY2Start(y2Start);
+        analysisParam.setY2(y2);
+        analysisParam.setY2End(y2End);
 
         if (saveAnalysis) {
             Analysis analysis = new Analysis();

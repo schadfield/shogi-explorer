@@ -361,6 +361,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jRadioButtonMenuItem9 = new javax.swing.JRadioButtonMenuItem();
         gameMenu = new javax.swing.JMenu();
         analyseGame = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         stopAnalysis = new javax.swing.JMenuItem();
         enginesMenu = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -884,6 +885,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         gameMenu.add(analyseGame);
 
+        jMenuItem7.setText(bundle.getString("ShogiExplorer.jMenuItem7.text")); // NOI18N
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        gameMenu.add(jMenuItem7);
+
         stopAnalysis.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         stopAnalysis.setText(bundle.getString("ShogiExplorer.stopAnalysis.text_1")); // NOI18N
         stopAnalysis.setEnabled(false);
@@ -1107,7 +1116,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
         gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
         moveNumber = 0;
-        initializeAnalysisParams();
+        initializeAnalysisParams(true);
         initializeChart(false);
         if (clipboardStr == null) {
             AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot);
@@ -1115,8 +1124,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         moveList.setSelectedIndex(0);    
     }
     
-    private void initializeAnalysisParams() {
-        analysisParam = new AnalysisParameter();
+    private void initializeAnalysisParams(boolean initChart) {
+        if (initChart) {
+            analysisParam = new AnalysisParameter();
+        }
         analysisParam.setAnalysisTimePerMove(analysisTimePerMove);
         analysisParam.setGraphView1(jRadioButtonMenuItem3);
         analysisParam.setGraphView2(jRadioButtonMenuItem4);
@@ -1124,6 +1135,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setHaltAnalysisButton(jButton4);
         analysisParam.setStopAnalysisMenuItem(stopAnalysis);
         analysisParam.setKifFile(kifFile);
+        if (initChart) {
+            analysisParam.setX1Start(new double[]{});
+            analysisParam.setX1(new double[]{});
+            analysisParam.setX1End(new double[]{});
+            analysisParam.setY1Start(new double[]{});
+            analysisParam.setY1(new double[]{});
+            analysisParam.setY1End(new double[]{});
+            analysisParam.setX2Start(new double[]{});
+            analysisParam.setX2(new double[]{});
+            analysisParam.setX2End(new double[]{});
+            analysisParam.setY2Start(new double[]{});
+            analysisParam.setY2(new double[]{});
+            analysisParam.setY2End(new double[]{});
+        }
     }
     
     private void initializeChart(boolean anal) {
@@ -1426,7 +1451,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
         prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
         prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
-        initializeAnalysisParams();
+        initializeAnalysisParams(true);
         initializeChart(true);
         jButton4.setEnabled(true);
         stopAnalysis.setEnabled(true);
@@ -1443,7 +1468,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
                 analysisTableModel.getDataVector().clear();
                 try {
-                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, plot, saveAnalysis);
+                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, plot, saveAnalysis, false);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -1786,6 +1811,44 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jRadioButtonMenuItem11ActionPerformed
 
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        if (analysing.get()) {
+            return;
+        }
+        if (game == null || game.getPositionList().size() < 2) {
+            return;
+        }
+        browse = false;
+        analysisEngineName = (String) analysisEngineComboBox.getSelectedItem();
+        analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
+        prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
+        prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
+        initializeAnalysisParams(false);
+        //initializeChart(true);
+        jButton4.setEnabled(true);
+        stopAnalysis.setEnabled(true);
+        analysisThread = new Thread() {
+            @Override
+            public void run() {
+                Engine engine = null;
+                for (Engine thisEngine : engineList) {
+                    if (thisEngine.getName().contentEquals(analysisEngineName)) {
+                        engine = thisEngine;
+                        break;
+                    }
+                }
+                //DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
+                //analysisTableModel.getDataVector().clear();
+                try {
+                    new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, plot, saveAnalysis, true);
+                } catch (IOException ex) {
+                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        };
+        analysisThread.start();
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
     private String getAboutMessage() {
         String aboutMessage;
         try (InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
@@ -1885,6 +1948,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
