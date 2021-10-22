@@ -356,6 +356,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         jRadioButtonMenuItem8 = new javax.swing.JRadioButtonMenuItem();
         jRadioButtonMenuItem9 = new javax.swing.JRadioButtonMenuItem();
@@ -850,6 +851,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         jMenu2.add(jMenuItem5);
+
+        jMenuItem8.setText(bundle.getString("ShogiExplorer.jMenuItem8.text")); // NOI18N
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem8);
         jMenu2.add(jSeparator6);
 
         buttonGroup4.add(jRadioButtonMenuItem8);
@@ -1093,14 +1102,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
             String newPath = kifFile.getPath().substring(0, dotPos) + ".kif";
             kifFile = new File(newPath);
         }
-        parseKifu(); 
+        parseKifu(false); 
         analyseGame.setEnabled(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void parseKifu() {
-        DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
-        analysisTableModel.getDataVector().clear();
-        jTabbedPane1.setComponentAt(1, new JPanel());
+    private void parseKifu(boolean refresh) {
+        if (!refresh) {
+            DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
+            analysisTableModel.getDataVector().clear();
+            jTabbedPane1.setComponentAt(1, new JPanel());
+        }
 
         try {
             game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile, clipboardStr, shiftFile);
@@ -1116,12 +1127,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
         gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
         moveNumber = 0;
-        initializeAnalysisParams(true);
-        initializeChart(false);
-        if (clipboardStr == null) {
-            AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot);
+        if (!refresh) {
+            initializeAnalysisParams(true);
+            initializeChart(false);
+            if (clipboardStr == null) {
+                AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot);
+            }
+            moveList.setSelectedIndex(0);    
+        } else {
+            initializeAnalysisParams(false);
         }
-        moveList.setSelectedIndex(0);    
     }
     
     private void initializeAnalysisParams(boolean initChart) {
@@ -1698,7 +1713,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 saveAnalysis = false;
                 prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
                 prefs.flush();
-                parseKifu();
+                parseKifu(false);
                 analyseGame.setEnabled(true);
             } catch (UnsupportedFlavorException | IOException  | BackingStoreException ex) {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
@@ -1740,7 +1755,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 } catch (BackingStoreException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                parseKifu();
+                parseKifu(false);
                 analyseGame.setEnabled(true);
 
             } catch (UnsupportedFlavorException | IOException ex) {
@@ -1849,6 +1864,24 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisThread.start();
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        //String URLStr = (String)transferable.getTransferData(DataFlavor.stringFlavor);
+        String URLGameStr = URLUtils.readGameURL("http://live.shogi.or.jp/ryuou/kifu/34/ryuou202110220101.kif", shiftURL);
+        System.out.println(URLGameStr);
+        clipboardStr = URLGameStr;
+        jCheckBox1.setSelected(false);
+        jCheckBox1.setEnabled(false);
+        saveAnalysis = false;
+        prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        parseKifu(true);
+        analyseGame.setEnabled(true);
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
     private String getAboutMessage() {
         String aboutMessage;
         try (InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
@@ -1949,6 +1982,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
