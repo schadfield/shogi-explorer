@@ -1,6 +1,5 @@
 package com.chadfield.shogiexplorer.objects;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -146,9 +145,14 @@ public class Game {
     public void setHandicap(String handicap) {
         this.handicap = handicap;
     }
-    
+
     public boolean isHandicap() {
-        return !this.handicap.contentEquals(HANDICAP_NONE);
+        return switch (this.handicap) {
+            case HANDICAP_2_PIECE, HANDICAP_4_PIECE, HANDICAP_6_PIECE, HANDICAP_BISHOP, HANDICAP_LANCE, HANDICAP_ROOK, HANDICAP_ROOK_LANCE ->
+                true;
+            default ->
+                false;
+        };
     }
 
 }

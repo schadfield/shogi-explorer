@@ -30,14 +30,14 @@ import java.util.List;
  */
 public class KifParser {
 
-    public static final String DATE = "開始日時：";
-    public static final String PLACE = "場所：";
-    public static final String TIME_LIMIT = "持ち時間：";
-    public static final String SENTE = "先手：";
-    public static final String GOTE = "後手：";
-    public static final String MOVE_HEADER = "手数----指手---------消費時間-";
-    public static final String MULTI_WHITESPACE = "\\s+|\\u3000";
-    public static final String HANDICAP = "手合割";
+    private static final String DATE = "開始日時：";
+    private static final String PLACE = "場所：";
+    private static final String TIME_LIMIT = "持ち時間：";
+    private static final String SENTE = "先手：";
+    private static final String GOTE = "後手：";
+    private static final String MOVE_HEADER = "手数----指手---------消費時間-";
+    private static final String MULTI_WHITESPACE = "\\s+|\\u3000";
+    private static final String HANDICAP = "手合割：";
 
     private KifParser() {
         throw new IllegalStateException("Utility class");
@@ -172,22 +172,22 @@ public class KifParser {
 
     private static void parseGameDetails(String line, Game game) {
         if (line.startsWith(SENTE)) {
-            game.setSente(line.substring(SENTE.length()));
+            game.setSente(line.substring(SENTE.length()).trim());
         }
         if (line.startsWith(GOTE)) {
-            game.setGote(line.substring(GOTE.length()));
+            game.setGote(line.substring(GOTE.length()).trim());
         }
         if (line.startsWith(PLACE)) {
-            game.setPlace(line.substring(PLACE.length()));
+            game.setPlace(line.substring(PLACE.length()).trim());
         }
         if (line.startsWith(HANDICAP)) {
-            game.setHandicap(line.substring(HANDICAP.length() + 1));
+            game.setHandicap(line.substring(HANDICAP.length()).trim());
         }
         if (line.startsWith(TIME_LIMIT)) {
-            game.setTimeLimit(line.substring(TIME_LIMIT.length()).split("#")[0]);
+            game.setTimeLimit(line.substring(TIME_LIMIT.length()).trim());
         }
         if (line.startsWith(DATE)) {
-            game.setDate(line.substring(DATE.length()));
+            game.setDate(line.substring(DATE.length()).trim());
         }
     }
 
