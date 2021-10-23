@@ -1333,11 +1333,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         public void valueChanged(ListSelectionEvent evt) {
             if (!evt.getValueIsAdjusting() && !inSelectionChange && !analysing.get()) {
                 browse = false;
-                if (evt.getFirstIndex() + 1 == moveNumber) {
-                    moveList.setSelectedIndex(evt.getLastIndex() + 1);
-                } else {
-                    moveList.setSelectedIndex(evt.getFirstIndex() + 1);
-                }
+                moveList.setSelectedIndex(analysisTable.getSelectedRow() + 1);
             }
         }
     }
