@@ -22,6 +22,7 @@ import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  *
@@ -42,12 +43,13 @@ public class KifParser {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile, String clipboardStr, boolean shiftFile) throws IOException {
+    public static Game parseKif(DefaultListModel<String> moveListModel, File kifFile, String clipboardStr, boolean shiftFile, List<List<Position>> analysisPositionList) throws IOException {
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         moveListModel.clear();
         moveListModel.addElement(bundle.getString("label_start_position"));
         Board board = null;
         Game game = new Game();
+        game.setAnalysisPositionList(analysisPositionList);
         LinkedList<Position> positionList = new LinkedList<>();
 
         boolean foundHeader = false;

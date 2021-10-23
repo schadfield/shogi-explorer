@@ -134,6 +134,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_DIVIDER_LOCATION = "dividerLocation";
     int dividerLocation;
     String URLStr;
+    static final String PREF_AUTO_REFRESH = "autoRefresh";
+    boolean autoRefresh;
+    static final String PREF_AUTO_ANALYSE = "autoAnalyse";
+    boolean autoAnalyse;
     
     static final String LOGO_NAME = "logo.png";
     
@@ -182,6 +186,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
             saveAnalysis = true;
         } else {
             saveAnalysis = false;
+        }
+    
+        if (prefs.getBoolean(PREF_AUTO_REFRESH, false)) {
+            autoRefreshCheckBoxMenuItem.setSelected(true);
+            autoRefresh = true;
+        } else {
+            autoRefresh = false;
+        }
+    
+        if (prefs.getBoolean(PREF_AUTO_ANALYSE, false)) {
+            autoAnalyseCheckBoxMenuItem.setSelected(true);
+            autoAnalyse = true;
+        } else {
+            autoAnalyse = false;
         }
     
         if (prefs.getBoolean(PREF_CLASSIC, true)) {
@@ -361,14 +379,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
-        jCheckBoxMenuItem5 = new javax.swing.JCheckBoxMenuItem();
+        autoRefreshCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         jRadioButtonMenuItem8 = new javax.swing.JRadioButtonMenuItem();
         jRadioButtonMenuItem9 = new javax.swing.JRadioButtonMenuItem();
         gameMenu = new javax.swing.JMenu();
         analyseGameMenuItem = new javax.swing.JMenuItem();
         resumeAnalysisMenuItem = new javax.swing.JMenuItem();
-        jCheckBoxMenuItem6 = new javax.swing.JCheckBoxMenuItem();
+        autoAnalyseCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
         stopAnalysisMenuItem = new javax.swing.JMenuItem();
         enginesMenu = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -872,8 +890,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenu2.add(jMenuItem8);
         jMenu2.add(jSeparator7);
 
-        jCheckBoxMenuItem5.setText(bundle.getString("ShogiExplorer.jCheckBoxMenuItem5.text")); // NOI18N
-        jMenu2.add(jCheckBoxMenuItem5);
+        autoRefreshCheckBoxMenuItem.setText(bundle.getString("ShogiExplorer.autoRefreshCheckBoxMenuItem.text")); // NOI18N
+        autoRefreshCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autoRefreshCheckBoxMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu2.add(autoRefreshCheckBoxMenuItem);
         jMenu2.add(jSeparator6);
 
         buttonGroup4.add(jRadioButtonMenuItem8);
@@ -918,8 +941,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         gameMenu.add(resumeAnalysisMenuItem);
 
-        jCheckBoxMenuItem6.setText(bundle.getString("ShogiExplorer.jCheckBoxMenuItem6.text")); // NOI18N
-        gameMenu.add(jCheckBoxMenuItem6);
+        autoAnalyseCheckBoxMenuItem.setText(bundle.getString("ShogiExplorer.autoAnalyseCheckBoxMenuItem.text")); // NOI18N
+        autoAnalyseCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autoAnalyseCheckBoxMenuItemActionPerformed(evt);
+            }
+        });
+        gameMenu.add(autoAnalyseCheckBoxMenuItem);
 
         stopAnalysisMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         stopAnalysisMenuItem.setText(bundle.getString("ShogiExplorer.stopAnalysisMenuItem.text_1")); // NOI18N
@@ -1127,14 +1155,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void parseKifu(boolean refresh) {
+        List<List<Position>> analysisPositionList;
         if (!refresh) {
             DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
             analysisTableModel.getDataVector().clear();
             jTabbedPane1.setComponentAt(1, new JPanel());
+            analysisPositionList = new ArrayList<>();
+        } else {
+            analysisPositionList = game.getAnalysisPositionList();
         }
 
         try {
-            game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile, clipboardStr, shiftFile);
+            game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile, clipboardStr, shiftFile, analysisPositionList);
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1326,6 +1358,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             browse = false;
             moveNumber = moveList.getSelectedIndex();
             if (moveNumber < 0) {
+                inSelectionChange = false;
                 return;
             }
             moveList.ensureIndexIsVisible(moveNumber);
@@ -1863,7 +1896,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
         prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
         initializeAnalysisParams(false);
-        //initializeChart(true);
         jButton4.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
         analyseGameMenuItem.setEnabled(false);
@@ -1878,8 +1910,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         break;
                     }
                 }
-                //DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
-                //analysisTableModel.getDataVector().clear();
                 try {
                     new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, plot, saveAnalysis, true);
                 } catch (IOException ex) {
@@ -1910,6 +1940,24 @@ public class ShogiExplorer extends javax.swing.JFrame {
             resumeAnalysisMenuItem.setEnabled(false);
         }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void autoAnalyseCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoAnalyseCheckBoxMenuItemActionPerformed
+        prefs.putBoolean(PREF_AUTO_ANALYSE, autoAnalyseCheckBoxMenuItem.getState());
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }//GEN-LAST:event_autoAnalyseCheckBoxMenuItemActionPerformed
+
+    private void autoRefreshCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoRefreshCheckBoxMenuItemActionPerformed
+        prefs.putBoolean(PREF_AUTO_REFRESH, autoRefreshCheckBoxMenuItem.getState());
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }//GEN-LAST:event_autoRefreshCheckBoxMenuItemActionPerformed
 
     private String getAboutMessage() {
         String aboutMessage;
@@ -1964,6 +2012,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> analysisEngineComboBox;
     private javax.swing.JTable analysisTable;
     private javax.swing.JSpinner analysisTimePerMoveSpinner;
+    private javax.swing.JCheckBoxMenuItem autoAnalyseCheckBoxMenuItem;
+    private javax.swing.JCheckBoxMenuItem autoRefreshCheckBoxMenuItem;
     private javax.swing.JPanel boardPanel;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
@@ -1995,8 +2045,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem3;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem4;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem5;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem6;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JList<String> jEngineList;

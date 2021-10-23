@@ -33,7 +33,6 @@ public class Game {
         sente = "";
         gote = "";
         handicap = "";
-        analysisPositionList = new ArrayList<>();
     }
 
     /**
