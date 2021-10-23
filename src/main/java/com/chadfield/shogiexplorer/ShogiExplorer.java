@@ -1549,13 +1549,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
         int keyCode = evt.getKeyCode();
         switch (keyCode) {
-            case 37:
+            case 37 ->
                 leftButtonAnalysis();
-                break;
-            case 39:
+            case 39 ->
                 rightButtonAnalysis();
-                break;
-            default:
+            default ->
                 browse = false;
         }
     }//GEN-LAST:event_analysisTableKeyReleased
@@ -1826,7 +1824,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 refreshTimer.setRepeats(true);
                 if (autoRefresh) {
                     refreshTimer.start();
-                } 
+                }
             } catch (UnsupportedFlavorException | IOException ex) {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
