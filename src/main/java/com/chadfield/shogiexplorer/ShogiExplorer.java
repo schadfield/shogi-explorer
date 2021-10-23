@@ -133,6 +133,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     int mainWidth;
     static final String PREF_DIVIDER_LOCATION = "dividerLocation";
     int dividerLocation;
+    String URLGameStr;
     
     static final String LOGO_NAME = "logo.png";
     
@@ -1743,7 +1744,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             try {
                 String URLStr = (String)transferable.getTransferData(DataFlavor.stringFlavor);
-                String URLGameStr = URLUtils.readGameURL("http://live.shogi.or.jp/ryuou/kifu/34/ryuou202110220101.kif", shiftURL);
+                URLGameStr = URLUtils.readGameURL(URLStr, shiftURL);
                 System.out.println(URLGameStr);
                 clipboardStr = URLGameStr;
                 jCheckBox1.setSelected(false);
@@ -1865,9 +1866,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        //String URLStr = (String)transferable.getTransferData(DataFlavor.stringFlavor);
-        String URLGameStr = URLUtils.readGameURL("http://live.shogi.or.jp/ryuou/kifu/34/ryuou202110220101.kif", shiftURL);
-        System.out.println(URLGameStr);
         clipboardStr = URLGameStr;
         jCheckBox1.setSelected(false);
         jCheckBox1.setEnabled(false);
