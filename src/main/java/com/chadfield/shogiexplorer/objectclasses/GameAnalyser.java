@@ -76,6 +76,8 @@ public class GameAnalyser {
     JRadioButtonMenuItem graphView3;
     JButton haltAnalysisButton;
     JMenuItem stopAnalysisMenuItem;
+    JMenuItem analyseGameMenuItem;
+    JMenuItem resumeAnalysisMenuItem;
     Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
     boolean handicap;
     Turn turn;
@@ -90,6 +92,8 @@ public class GameAnalyser {
         this.graphView3 = analysisParam.getGraphView3();
         this.haltAnalysisButton = analysisParam.getHaltAnalysisButton();
         this.stopAnalysisMenuItem = analysisParam.getStopAnalysisMenuItem();
+        this.analyseGameMenuItem = analysisParam.getAnalyseGameMenuItem();
+        this.resumeAnalysisMenuItem = analysisParam.getResumeAnalysisMenuItem();
         this.x1Start = analysisParam.getX1Start();
         this.x1 = analysisParam.getX1();
         this.x1End = analysisParam.getX1End();
@@ -164,6 +168,12 @@ public class GameAnalyser {
         quitEngine();
         haltAnalysisButton.setEnabled(false);
         stopAnalysisMenuItem.setEnabled(false);
+        analyseGameMenuItem.setEnabled(true);
+        if (count < game.getPositionList().size()-1) {
+            resumeAnalysisMenuItem.setEnabled(true);
+        } else {
+            resumeAnalysisMenuItem.setEnabled(false);
+        }
         analysisParam.setX1Start(x1Start);
         analysisParam.setX1(x1);
         analysisParam.setX1End(x1End);

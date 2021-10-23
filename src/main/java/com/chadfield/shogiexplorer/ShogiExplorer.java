@@ -362,9 +362,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jRadioButtonMenuItem8 = new javax.swing.JRadioButtonMenuItem();
         jRadioButtonMenuItem9 = new javax.swing.JRadioButtonMenuItem();
         gameMenu = new javax.swing.JMenu();
-        analyseGame = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        stopAnalysis = new javax.swing.JMenuItem();
+        analyseGameMenuItem = new javax.swing.JMenuItem();
+        resumeAnalysisMenuItem = new javax.swing.JMenuItem();
+        stopAnalysisMenuItem = new javax.swing.JMenuItem();
         enginesMenu = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
@@ -884,33 +884,34 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         gameMenu.setText(bundle.getString("ShogiExplorer.gameMenu.text_1")); // NOI18N
 
-        analyseGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        analyseGame.setText(bundle.getString("ShogiExplorer.analyseGame.text")); // NOI18N
-        analyseGame.setEnabled(false);
-        analyseGame.addActionListener(new java.awt.event.ActionListener() {
+        analyseGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        analyseGameMenuItem.setText(bundle.getString("ShogiExplorer.analyseGameMenuItem.text")); // NOI18N
+        analyseGameMenuItem.setEnabled(false);
+        analyseGameMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openAnalyseGameDialog(evt);
             }
         });
-        gameMenu.add(analyseGame);
+        gameMenu.add(analyseGameMenuItem);
 
-        jMenuItem7.setText(bundle.getString("ShogiExplorer.jMenuItem7.text")); // NOI18N
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+        resumeAnalysisMenuItem.setText(bundle.getString("ShogiExplorer.resumeAnalysisMenuItem.text")); // NOI18N
+        resumeAnalysisMenuItem.setEnabled(false);
+        resumeAnalysisMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
+                resumeAnalysisMenuItemActionPerformed(evt);
             }
         });
-        gameMenu.add(jMenuItem7);
+        gameMenu.add(resumeAnalysisMenuItem);
 
-        stopAnalysis.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        stopAnalysis.setText(bundle.getString("ShogiExplorer.stopAnalysis.text_1")); // NOI18N
-        stopAnalysis.setEnabled(false);
-        stopAnalysis.addActionListener(new java.awt.event.ActionListener() {
+        stopAnalysisMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        stopAnalysisMenuItem.setText(bundle.getString("ShogiExplorer.stopAnalysisMenuItem.text_1")); // NOI18N
+        stopAnalysisMenuItem.setEnabled(false);
+        stopAnalysisMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                stopAnalysisActionPerformed(evt);
+                stopAnalysisMenuItemActionPerformed(evt);
             }
         });
-        gameMenu.add(stopAnalysis);
+        gameMenu.add(stopAnalysisMenuItem);
 
         jMenuBar1.add(gameMenu);
 
@@ -1103,7 +1104,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             kifFile = new File(newPath);
         }
         parseKifu(false); 
-        analyseGame.setEnabled(true);
+        analyseGameMenuItem.setEnabled(true);
+        resumeAnalysisMenuItem.setEnabled(false);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void parseKifu(boolean refresh) {
@@ -1148,7 +1150,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setGraphView2(jRadioButtonMenuItem4);
         analysisParam.setGraphView3(jRadioButtonMenuItem5);
         analysisParam.setHaltAnalysisButton(jButton4);
-        analysisParam.setStopAnalysisMenuItem(stopAnalysis);
+        analysisParam.setAnalyseGameMenuItem(analyseGameMenuItem);
+        analysisParam.setStopAnalysisMenuItem(stopAnalysisMenuItem);
+        analysisParam.setResumeAnalysisMenuItem(resumeAnalysisMenuItem);
         analysisParam.setKifFile(kifFile);
         if (initChart) {
             analysisParam.setX1Start(new double[]{});
@@ -1469,7 +1473,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         initializeAnalysisParams(true);
         initializeChart(true);
         jButton4.setEnabled(true);
-        stopAnalysis.setEnabled(true);
+        stopAnalysisMenuItem.setEnabled(true);
         analysisThread = new Thread() {
             @Override
             public void run() {
@@ -1489,6 +1493,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
             }
         };
+        analyseGameMenuItem.setEnabled(false);
+        resumeAnalysisMenuItem.setEnabled(false);
         analysisThread.start();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -1647,7 +1653,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         jButton4.setEnabled(false);
-        stopAnalysis.setEnabled(false);
+        stopAnalysisMenuItem.setEnabled(false);
         analysisThread.interrupt();
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -1714,18 +1720,19 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
                 prefs.flush();
                 parseKifu(false);
-                analyseGame.setEnabled(true);
+                analyseGameMenuItem.setEnabled(true);
+                resumeAnalysisMenuItem.setEnabled(false);
             } catch (UnsupportedFlavorException | IOException  | BackingStoreException ex) {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void stopAnalysisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopAnalysisActionPerformed
+    private void stopAnalysisMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopAnalysisMenuItemActionPerformed
         jButton4.setEnabled(false);
-        stopAnalysis.setEnabled(false);
+        stopAnalysisMenuItem.setEnabled(false);
         analysisThread.interrupt();    
-    }//GEN-LAST:event_stopAnalysisActionPerformed
+    }//GEN-LAST:event_stopAnalysisMenuItemActionPerformed
 
     private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
         long now = System.currentTimeMillis();
@@ -1744,7 +1751,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             try {
                 URLStr = (String)transferable.getTransferData(DataFlavor.stringFlavor);
                 String URLGameStr = URLUtils.readGameURL(URLStr, shiftURL);
-                System.out.println(URLGameStr);
                 clipboardStr = URLGameStr;
                 jCheckBox1.setSelected(false);
                 jCheckBox1.setEnabled(false);
@@ -1756,8 +1762,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 parseKifu(false);
-                analyseGame.setEnabled(true);
-
+                analyseGameMenuItem.setEnabled(true);
+                resumeAnalysisMenuItem.setEnabled(false);
             } catch (UnsupportedFlavorException | IOException ex) {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1826,7 +1832,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jRadioButtonMenuItem11ActionPerformed
 
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+    private void resumeAnalysisMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resumeAnalysisMenuItemActionPerformed
         if (analysing.get()) {
             return;
         }
@@ -1841,7 +1847,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         initializeAnalysisParams(false);
         //initializeChart(true);
         jButton4.setEnabled(true);
-        stopAnalysis.setEnabled(true);
+        stopAnalysisMenuItem.setEnabled(true);
+        analyseGameMenuItem.setEnabled(false);
+        resumeAnalysisMenuItem.setEnabled(false);
         analysisThread = new Thread() {
             @Override
             public void run() {
@@ -1862,7 +1870,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         };
         analysisThread.start();
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+    }//GEN-LAST:event_resumeAnalysisMenuItemActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         String URLGameStr = URLUtils.readGameURL(URLStr, shiftURL);
@@ -1877,7 +1885,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
         parseKifu(true);
-        analyseGame.setEnabled(true);
+        analyseGameMenuItem.setEnabled(true);
+        resumeAnalysisMenuItem.setEnabled(false);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private String getAboutMessage() {
@@ -1929,7 +1938,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEngineButton;
-    private javax.swing.JMenuItem analyseGame;
+    private javax.swing.JMenuItem analyseGameMenuItem;
     private javax.swing.JComboBox<String> analysisEngineComboBox;
     private javax.swing.JTable analysisTable;
     private javax.swing.JSpinner analysisTimePerMoveSpinner;
@@ -1979,7 +1988,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -2018,7 +2026,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton mediaStop;
     private javax.swing.JList<String> moveList;
     private javax.swing.JScrollPane moveListScrollPane;
-    private javax.swing.JMenuItem stopAnalysis;
+    private javax.swing.JMenuItem resumeAnalysisMenuItem;
+    private javax.swing.JMenuItem stopAnalysisMenuItem;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 }

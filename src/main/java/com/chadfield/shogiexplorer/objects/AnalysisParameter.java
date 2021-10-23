@@ -16,7 +16,9 @@ public class AnalysisParameter {
     private JRadioButtonMenuItem graphView2;
     private JRadioButtonMenuItem graphView3;
     private JButton haltAnalysisButton;
+    private JMenuItem analyseGameMenuItem;
     private JMenuItem stopAnalysisMenuItem;
+    private JMenuItem resumeAnalysisMenuItem;
     private File kifFile;
     private double[] x1Start;
     private double[] x1;
@@ -296,5 +298,33 @@ public class AnalysisParameter {
      */
     public void setY2End(double[] y2End) {
         this.y2End = y2End;
+    }
+
+    /**
+     * @return the resumeAnalysisMenuItem
+     */
+    public JMenuItem getResumeAnalysisMenuItem() {
+        return resumeAnalysisMenuItem;
+    }
+
+    /**
+     * @param resumeAnalysisMenuItem the resumeAnalysisMenuItem to set
+     */
+    public void setResumeAnalysisMenuItem(JMenuItem resumeAnalysisMenuItem) {
+        this.resumeAnalysisMenuItem = resumeAnalysisMenuItem;
+    }
+
+    /**
+     * @return the analyseGameMenuItem
+     */
+    public JMenuItem getAnalyseGameMenuItem() {
+        return analyseGameMenuItem;
+    }
+
+    /**
+     * @param analyseGameMenuItem the analyseGameMenuItem to set
+     */
+    public void setAnalyseGameMenuItem(JMenuItem analyseGameMenuItem) {
+        this.analyseGameMenuItem = analyseGameMenuItem;
     }
 }

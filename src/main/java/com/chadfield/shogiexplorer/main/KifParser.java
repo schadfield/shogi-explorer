@@ -69,7 +69,6 @@ public class KifParser {
             String line;
             Coordinate lastDestination = null;
             while ((line = fileReader.readLine()) != null) {
-                System.out.println(line);
                 if (!foundHeader) {
                     foundHeader = isHeader(line);
                     if (foundHeader || isComment(line)) {
