@@ -739,7 +739,7 @@
               <Component id="mainToolBar" min="-2" pref="34" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="boardPanel" pref="508" max="32767" attributes="0"/>
+                  <Component id="boardPanel" max="32767" attributes="0"/>
                   <Component id="jSplitPane1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -1190,7 +1190,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="moveListScrollPane" pref="371" max="32767" attributes="0"/>
+                          <Component id="moveListScrollPane" pref="345" max="32767" attributes="0"/>
                           <Component id="commentScrollPane" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
