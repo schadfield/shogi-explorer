@@ -17,6 +17,7 @@ import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.NotationUtils;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -133,6 +134,8 @@ public class GameAnalyser {
             turn = Turn.SENTE;
         }
 
+        boolean interrupted = false;
+
         for (Position position : game.getPositionList()) {
 
             if (engineMove != null) {
@@ -158,18 +161,29 @@ public class GameAnalyser {
             lastDestination = position.getDestination();
 
             if (Thread.interrupted()) {
+                interrupted = true;
                 break;
             }
         }
 
-        updateMoveList(moveList, count);
-        analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, turn, previousMoveDestination);
+        if (!interrupted) {
+            updateMoveList(moveList, count);
+            analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, turn, previousMoveDestination);
+            count++;
+        }
+
+        System.out.println(count);
+        
+        if (analysisTable.getRowCount() > 0) {
+            analysisTable.setRowSelectionInterval(count - 2, count - 2);
+            analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(count - 2, 0, true)));
+        }
 
         quitEngine();
         haltAnalysisButton.setEnabled(false);
         stopAnalysisMenuItem.setEnabled(false);
         analyseGameMenuItem.setEnabled(true);
-        resumeAnalysisMenuItem.setEnabled(count < game.getPositionList().size()-1);
+        resumeAnalysisMenuItem.setEnabled(count < game.getPositionList().size() - 1);
         analysisParam.setX1Start(x1Start);
         analysisParam.setX1(x1);
         analysisParam.setX1End(x1End);
