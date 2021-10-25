@@ -171,8 +171,6 @@ public class GameAnalyser {
             analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, turn, previousMoveDestination);
             count++;
         }
-
-        System.out.println(count);
         
         if (analysisTable.getRowCount() > 0) {
             analysisTable.setRowSelectionInterval(count - 2, count - 2);
