@@ -872,6 +872,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jMenu2.setText(bundle.getString("ShogiExplorer.jMenu2.text")); // NOI18N
 
+        importURLMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         importURLMenuItem.setText(bundle.getString("ShogiExplorer.importURLMenuItem.text_1")); // NOI18N
         importURLMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -880,6 +881,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         jMenu2.add(importURLMenuItem);
 
+        refreshMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | java.awt.Event.SHIFT_MASK));
         refreshMenuItem.setText(bundle.getString("ShogiExplorer.refreshMenuItem.text")); // NOI18N
         refreshMenuItem.setEnabled(false);
         refreshMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -932,6 +934,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         gameMenu.add(analyseGameMenuItem);
 
+        resumeAnalysisMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | java.awt.Event.SHIFT_MASK));
         resumeAnalysisMenuItem.setText(bundle.getString("ShogiExplorer.resumeAnalysisMenuItem.text")); // NOI18N
         resumeAnalysisMenuItem.setEnabled(false);
         resumeAnalysisMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1888,7 +1891,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         saveAnalysis = false;
         prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
         flushPrefs();
+        int currentMove = moveList.getSelectedIndex();
         parseKifu(true);
+        moveList.setSelectedIndex(currentMove);
         analyseGameMenuItem.setEnabled(true);
         resumeAnalysisMenuItem.setEnabled(analysisTable.getRowCount() < game.getPositionList().size() - 1);
     }//GEN-LAST:event_refreshMenuItemActionPerformed
