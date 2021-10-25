@@ -35,6 +35,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.desktop.QuitEvent;
@@ -1918,7 +1919,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_autoRefreshCheckBoxMenuItemActionPerformed
 
     private void commentTextAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_commentTextAreaMouseClicked
-        // TODO add your handling code here:
+        if (game != null) {
+            List<Position> positionList = game.getPositionList();
+            if (positionList != null) {
+                Position position = positionList.get(moveNumber);
+                if (position != null) {
+                    Clipboard clipBoard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipBoard.setContents(new StringSelection(position.getComment()), null);
+                }
+            }
+        }
     }//GEN-LAST:event_commentTextAreaMouseClicked
 
     private String getAboutMessage() {
