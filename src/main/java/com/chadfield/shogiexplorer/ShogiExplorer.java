@@ -1161,6 +1161,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } else {
             analysisPositionList = game.getAnalysisPositionList();
         }
+        
+        int oldIndex = moveList.getSelectedIndex();
 
         try {
             game = com.chadfield.shogiexplorer.main.KifParser.parseKif(moveListModel, kifFile, clipboardStr, shiftFile, analysisPositionList);
@@ -1185,6 +1187,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             moveList.setSelectedIndex(0);
         } else {
             initializeAnalysisParams(false);
+            moveList.setSelectedIndex(oldIndex);
         }
     }
 
@@ -1365,8 +1368,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
             commentTextArea.append(position.getComment());
             if (moveNumber > 0 && analysisTable.getRowCount() >= moveNumber) {
                 analysisTable.setRowSelectionInterval(moveNumber - 1, moveNumber - 1);
-                analysisTable.getSelectionModel().setSelectionInterval(moveNumber - 1, moveNumber - 1);
                 analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber - 1, 0, true)));
+            } else {
+                analysisTable.clearSelection();
             }
             if (plotDataset != null && plotDataset.getSeriesCount() > 0) {
                 double[] x3Start = new double[2];
@@ -1892,11 +1896,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
         saveAnalysis = false;
         prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
         flushPrefs();
-        int currentMove = moveList.getSelectedIndex();
         parseKifu(true);
-        moveList.setSelectedIndex(currentMove);
+        analysisTable.clearSelection();
         analyseGameMenuItem.setEnabled(true);
-        resumeAnalysisMenuItem.setEnabled(analysisTable.getRowCount() < game.getPositionList().size() - 1);
+        resumeAnalysisMenuItem.setEnabled(
+                analysisTable.getRowCount() > 0 &&
+                analysisTable.getRowCount() < game.getPositionList().size() - 1);
     }//GEN-LAST:event_refreshMenuItemActionPerformed
 
     private void autoRefreshCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoRefreshCheckBoxMenuItemActionPerformed
