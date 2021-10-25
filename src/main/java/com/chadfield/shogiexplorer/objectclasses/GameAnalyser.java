@@ -172,6 +172,14 @@ public class GameAnalyser {
             count++;
         }
         
+        while(analysisTable.getRowCount() < count-1 ) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+         
         if (analysisTable.getRowCount() > 0) {
             analysisTable.setRowSelectionInterval(count - 2, count - 2);
             analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(count - 2, 0, true)));
