@@ -1364,8 +1364,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             board = SFENParser.parse(position.getGameSFEN());
             board.setSource(position.getSource());
             board.setDestination(position.getDestination());
-            commentTextArea.setText(null);
-            commentTextArea.append(position.getComment());
+            commentTextArea.setText(position.getComment());
             if (moveNumber > 0 && analysisTable.getRowCount() >= moveNumber) {
                 analysisTable.setRowSelectionInterval(moveNumber - 1, moveNumber - 1);
                 analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber - 1, 0, true)));
@@ -1578,8 +1577,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 board = SFENParser.parse(position.getGameSFEN());
                 board.setSource(position.getSource());
                 board.setDestination(position.getDestination());
-                commentTextArea.setText(null);
-                commentTextArea.append(position.getComment());
+                commentTextArea.setText(position.getComment());
                 analysisTable.repaint();
                 RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
                 return;
