@@ -22,6 +22,7 @@ import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -61,7 +62,7 @@ public class KifParser {
                 if (shiftFile) {
                     fileReader = Files.newBufferedReader(kifFile.toPath(), Charset.forName("SJIS"));
                 } else {
-                    fileReader = Files.newBufferedReader(kifFile.toPath(), Charset.forName("UTF8"));
+                    fileReader = Files.newBufferedReader(kifFile.toPath(), StandardCharsets.UTF_8);
                 }
             } else {
                 fileReader = new BufferedReader(new StringReader(clipboardStr));

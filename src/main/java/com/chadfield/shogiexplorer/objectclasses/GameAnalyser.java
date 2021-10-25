@@ -169,11 +169,7 @@ public class GameAnalyser {
         haltAnalysisButton.setEnabled(false);
         stopAnalysisMenuItem.setEnabled(false);
         analyseGameMenuItem.setEnabled(true);
-        if (count < game.getPositionList().size()-1) {
-            resumeAnalysisMenuItem.setEnabled(true);
-        } else {
-            resumeAnalysisMenuItem.setEnabled(false);
-        }
+        resumeAnalysisMenuItem.setEnabled(count < game.getPositionList().size()-1);
         analysisParam.setX1Start(x1Start);
         analysisParam.setX1(x1);
         analysisParam.setX1End(x1End);

@@ -132,7 +132,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     int mainWidth;
     static final String PREF_DIVIDER_LOCATION = "dividerLocation";
     int dividerLocation;
-    String URLStr;
+    String urlStr;
     static final String PREF_AUTO_REFRESH = "autoRefresh";
     boolean autoRefresh;
     javax.swing.Timer refreshTimer = null;
@@ -266,14 +266,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
             );
             desktop.setQuitHandler((QuitEvent evt, QuitResponse res) -> {
-                try {
-                    prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
-                    prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
-                    prefs.putInt(PREF_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
-                    prefs.flush();
-                } catch (BackingStoreException ex) {
-                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
+                prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
+                prefs.putInt(PREF_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
+                flushPrefs();
                 System.exit(0);
             });
         }
@@ -282,6 +278,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         rotateTime = System.currentTimeMillis();
         initializeChart(true);
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
+    }
+
+    private void flushPrefs() {
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -755,6 +759,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         commentTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         commentTextArea.setEnabled(false);
         commentTextArea.setFocusable(false);
+        commentTextArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                commentTextAreaMouseClicked(evt);
+            }
+        });
         commentScrollPane.setViewportView(commentTextArea);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -1126,11 +1135,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
 
         prefs.put(PREF_FILE_OPEN_DIR, kifFile.getParent());
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
 
         int dotPos = kifFile.getPath().lastIndexOf(".");
         if (kifFile.getPath().substring(dotPos + 1).contentEquals("kaf")) {
@@ -1694,20 +1699,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void jRadioButtonMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem2ActionPerformed
         prefs.put(PREF_LANGUAGE, PREF_LANGUAGE_ENGLISH);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
     }//GEN-LAST:event_jRadioButtonMenuItem2ActionPerformed
 
     private void jRadioButtonMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem6ActionPerformed
         prefs.put(PREF_LANGUAGE, PREF_LANGUAGE_JAPANESE);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
     }//GEN-LAST:event_jRadioButtonMenuItem6ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -1723,22 +1720,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
         prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
         prefs.putInt(PREF_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
         System.exit(0);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         saveAnalysis = !saveAnalysis;
         prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -1758,20 +1747,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 jCheckBox1.setEnabled(false);
                 saveAnalysis = false;
                 prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
-                prefs.flush();
+                flushPrefs();
                 parseKifu(false);
                 analyseGameMenuItem.setEnabled(true);
                 resumeAnalysisMenuItem.setEnabled(false);
-            } catch (UnsupportedFlavorException | IOException | BackingStoreException ex) {
+            } catch (UnsupportedFlavorException | IOException ex) {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void stopAnalysisMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopAnalysisMenuItemActionPerformed
-        jButton4.setEnabled(false);
-        stopAnalysisMenuItem.setEnabled(false);
-        analysisThread.interrupt();
+        jButton4ActionPerformed(evt);
     }//GEN-LAST:event_stopAnalysisMenuItemActionPerformed
 
     private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
@@ -1788,34 +1775,25 @@ public class ShogiExplorer extends javax.swing.JFrame {
             refreshTimer.stop();
             refreshTimer = null;
         }
-        if (autoRefresh) {
-            refreshMenuItem.setEnabled(false);
-        } else {
-            refreshMenuItem.setEnabled(true);
-        }
+        refreshMenuItem.setEnabled(!autoRefresh);
         Clipboard clipBoard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
         Transferable transferable = clipBoard.getContents(null);
         if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             try {
-                URLStr = (String) transferable.getTransferData(DataFlavor.stringFlavor);
-                String URLGameStr = URLUtils.readGameURL(URLStr, shiftURL);
-                clipboardStr = URLGameStr;
+                urlStr = (String) transferable.getTransferData(DataFlavor.stringFlavor);
+                String urlGameStr = URLUtils.readGameURL(urlStr, shiftURL);
+                clipboardStr = urlGameStr;
                 jCheckBox1.setSelected(false);
                 jCheckBox1.setEnabled(false);
                 saveAnalysis = false;
                 prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
-                try {
-                    prefs.flush();
-                } catch (BackingStoreException ex) {
-                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                flushPrefs();
                 parseKifu(false);
                 analyseGameMenuItem.setEnabled(true);
                 resumeAnalysisMenuItem.setEnabled(false);
-                java.awt.event.ActionListener taskPerformer = (java.awt.event.ActionEvent evt1) -> {
-                    refreshMenuItemActionPerformed(evt1);
-                };
+                java.awt.event.ActionListener taskPerformer = (java.awt.event.ActionEvent evt1)
+                        -> refreshMenuItemActionPerformed(evt1);
                 refreshTimer = new javax.swing.Timer(30000, taskPerformer);
                 refreshTimer.setRepeats(true);
                 if (autoRefresh) {
@@ -1830,63 +1808,39 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jRadioButtonMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ActionPerformed
         shiftFile = false;
         prefs.putBoolean(PREF_SHIFT_FILE, shiftFile);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
     }//GEN-LAST:event_jRadioButtonMenuItem1ActionPerformed
 
     private void jRadioButtonMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem7ActionPerformed
         shiftFile = true;
         prefs.putBoolean(PREF_SHIFT_FILE, shiftFile);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
     }//GEN-LAST:event_jRadioButtonMenuItem7ActionPerformed
 
     private void jRadioButtonMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem8ActionPerformed
         shiftURL = false;
         prefs.putBoolean(PREF_SHIFT_URL, shiftURL);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
     }//GEN-LAST:event_jRadioButtonMenuItem8ActionPerformed
 
     private void jRadioButtonMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem9ActionPerformed
         shiftURL = true;
         prefs.putBoolean(PREF_SHIFT_URL, shiftURL);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
     }//GEN-LAST:event_jRadioButtonMenuItem9ActionPerformed
 
     private void jRadioButtonMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem10ActionPerformed
         classic = true;
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
         prefs.putBoolean(PREF_CLASSIC, classic);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
     }//GEN-LAST:event_jRadioButtonMenuItem10ActionPerformed
 
     private void jRadioButtonMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem11ActionPerformed
         classic = false;
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
         prefs.putBoolean(PREF_CLASSIC, classic);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
     }//GEN-LAST:event_jRadioButtonMenuItem11ActionPerformed
 
     private void resumeAnalysisMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resumeAnalysisMenuItemActionPerformed
@@ -1927,40 +1881,24 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_resumeAnalysisMenuItemActionPerformed
 
     private void refreshMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshMenuItemActionPerformed
-        String URLGameStr = URLUtils.readGameURL(URLStr, shiftURL);
-        clipboardStr = URLGameStr;
+        String urlGameStr = URLUtils.readGameURL(urlStr, shiftURL);
+        clipboardStr = urlGameStr;
         jCheckBox1.setSelected(false);
         jCheckBox1.setEnabled(false);
         saveAnalysis = false;
         prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
         parseKifu(true);
         analyseGameMenuItem.setEnabled(true);
-        if (analysisTable.getRowCount() < game.getPositionList().size() - 1) {
-            resumeAnalysisMenuItem.setEnabled(true);
-        } else {
-            resumeAnalysisMenuItem.setEnabled(false);
-        }
+        resumeAnalysisMenuItem.setEnabled(analysisTable.getRowCount() < game.getPositionList().size() - 1);
     }//GEN-LAST:event_refreshMenuItemActionPerformed
 
     private void autoRefreshCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoRefreshCheckBoxMenuItemActionPerformed
         autoRefresh = autoRefreshCheckBoxMenuItem.getState();
         prefs.putBoolean(PREF_AUTO_REFRESH, autoRefresh);
-        try {
-            prefs.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        flushPrefs();
 
-        if (autoRefresh) {
-            refreshMenuItem.setEnabled(false);
-        } else {
-            refreshMenuItem.setEnabled(true);
-        }
+        refreshMenuItem.setEnabled(!autoRefresh);
 
         if (autoRefresh) {
             if (refreshTimer != null && !refreshTimer.isRunning()) {
@@ -1973,6 +1911,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_autoRefreshCheckBoxMenuItemActionPerformed
+
+    private void commentTextAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_commentTextAreaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_commentTextAreaMouseClicked
 
     private String getAboutMessage() {
         String aboutMessage;

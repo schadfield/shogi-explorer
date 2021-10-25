@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,23 +20,23 @@ public class URLUtils {
         throw new IllegalStateException("Utility class");
     }
 
-    public static String readGameURL(String URLStr, boolean shiftURL) {
+    public static String readGameURL(String urlStr, boolean shiftURL) {
         String parseLine;
         StringBuilder gameStrBld = new StringBuilder();
-        /* variable definition *//* create objects */
-        URL URL;
+        URL url;
         try {
-            URL = new URL(URLStr);
+            url = new URL(urlStr);
             InputStreamReader inputStreamReader;
-            if (shiftURL) { 
-                inputStreamReader = new InputStreamReader(URL.openStream(), Charset.forName("SJIS"));
+            if (shiftURL) {
+                inputStreamReader = new InputStreamReader(url.openStream(), Charset.forName("SJIS"));
             } else {
-                inputStreamReader = new InputStreamReader(URL.openStream(), Charset.forName("UTF8"));
+                inputStreamReader = new InputStreamReader(url.openStream(), StandardCharsets.UTF_8);
             }
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            while ((parseLine = bufferedReader.readLine()) != null) {
-                gameStrBld.append(parseLine);
-                gameStrBld.append("\n");
+            try ( BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                while ((parseLine = bufferedReader.readLine()) != null) {
+                    gameStrBld.append(parseLine);
+                    gameStrBld.append("\n");
+                }
             }
         } catch (MalformedURLException ex) {
             Logger.getLogger(URLUtils.class.getName()).log(Level.SEVERE, null, ex);
