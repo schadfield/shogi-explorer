@@ -1897,7 +1897,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
         flushPrefs();
         parseKifu(true);
-        analysisTable.clearSelection();
         analyseGameMenuItem.setEnabled(true);
         resumeAnalysisMenuItem.setEnabled(
                 analysisTable.getRowCount() > 0 &&
