@@ -1892,11 +1892,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
         saveAnalysis = false;
         prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
         flushPrefs();
+        int numMovesBefore = game.getPositionList().size();
         parseKifu(true);
         analyseGameMenuItem.setEnabled(true);
         resumeAnalysisMenuItem.setEnabled(
                 analysisTable.getRowCount() > 0 &&
-                analysisTable.getRowCount() < game.getPositionList().size() - 1);
+                analysisTable.getRowCount() < game.getPositionList().size() - 1
+        );
+        if (game.getPositionList().size() > numMovesBefore) {
+            moveList.setSelectedIndex(game.getPositionList().size()-1);
+        }
     }//GEN-LAST:event_refreshMenuItemActionPerformed
 
     private void autoRefreshCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoRefreshCheckBoxMenuItemActionPerformed
