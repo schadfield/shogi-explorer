@@ -1899,7 +1899,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 analysisTable.getRowCount() > 0 &&
                 analysisTable.getRowCount() < game.getPositionList().size() - 1
         );
-        if (game.getPositionList().size() > numMovesBefore) {
+        if (!browse && game.getPositionList().size() > numMovesBefore) {
             moveList.setSelectedIndex(game.getPositionList().size()-1);
         }
     }//GEN-LAST:event_refreshMenuItemActionPerformed

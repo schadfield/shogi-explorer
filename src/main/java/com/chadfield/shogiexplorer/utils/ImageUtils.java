@@ -83,7 +83,6 @@ public class ImageUtils {
         // Set the transcoding hints.
         t.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
         t.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
-        t.addTranscodingHint(SVGAbstractTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 3.543f);
         try {
             // Create the transcoder input.
             TranscoderInput input = new TranscoderInput(inputStream);
