@@ -1875,6 +1875,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         stopAnalysisMenuItem.setEnabled(true);
         analyseGameMenuItem.setEnabled(false);
         resumeAnalysisMenuItem.setEnabled(false);
+        analysisTable.clearSelection();
         analysisThread = new Thread() {
             @Override
             public void run() {
