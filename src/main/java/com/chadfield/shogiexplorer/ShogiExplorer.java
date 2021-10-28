@@ -1152,13 +1152,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void parseKifu(boolean refresh) {
         List<List<Position>> analysisPositionList;
         boolean wasBrowse = browse;
-        if (!refresh) {
+        if (refresh) {
+            analysisPositionList = game.getAnalysisPositionList();
+        } else {
             DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
             analysisTableModel.getDataVector().clear();
             jTabbedPane1.setComponentAt(1, new JPanel());
             analysisPositionList = new ArrayList<>();
-        } else {
-            analysisPositionList = game.getAnalysisPositionList();
         }
         
         int oldIndex = moveList.getSelectedIndex();
@@ -1176,15 +1176,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append(bundle.getString("label_handicap") + ": " + game.getHandicap() + "\n");
         gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
         gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
-        if (!refresh) {
-            moveNumber = 0;
-            initializeAnalysisParams(true);
-            initializeChart(false);
-            if (clipboardStr == null) {
-                AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot);
-            }
-            moveList.setSelectedIndex(0);
-        } else {
+        if (refresh) {
             initializeAnalysisParams(false);
             moveList.setSelectedIndex(oldIndex);
             if (wasBrowse) {
@@ -1197,6 +1189,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 analysisTable.repaint();
                 RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
             }
+        } else {
+            moveNumber = 0;
+            initializeAnalysisParams(true);
+            initializeChart(false);
+            if (clipboardStr == null) {
+                AnalysisManager.load(kifFile, game, analysisTable, analysisParam, plot);
+            }
+            moveList.setSelectedIndex(0);
         }
     }
 
