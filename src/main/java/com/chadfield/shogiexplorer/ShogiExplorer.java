@@ -1151,6 +1151,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void parseKifu(boolean refresh) {
         List<List<Position>> analysisPositionList;
+        boolean wasBrowse = browse;
         if (!refresh) {
             DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
             analysisTableModel.getDataVector().clear();
@@ -1175,8 +1176,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.append(bundle.getString("label_handicap") + ": " + game.getHandicap() + "\n");
         gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
         gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit() + "\n");
-        moveNumber = 0;
         if (!refresh) {
+            moveNumber = 0;
             initializeAnalysisParams(true);
             initializeChart(false);
             if (clipboardStr == null) {
@@ -1186,6 +1187,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } else {
             initializeAnalysisParams(false);
             moveList.setSelectedIndex(oldIndex);
+            if (wasBrowse) {
+                browse = true;
+                Position position = game.getAnalysisPositionList().get(moveNumber - 1).get(browsePos);
+                board = SFENParser.parse(position.getGameSFEN());
+                board.setSource(position.getSource());
+                board.setDestination(position.getDestination());
+                commentTextArea.setText(null);
+                analysisTable.repaint();
+                RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
+            }
         }
     }
 
