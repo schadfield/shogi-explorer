@@ -16,6 +16,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import com.chadfield.shogiexplorer.objects.Board;
+import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.main.RenderBoard;
 import com.chadfield.shogiexplorer.main.SFENParser;
 import com.chadfield.shogiexplorer.objects.AnalysisParameter;
@@ -137,6 +138,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_AUTO_REFRESH = "autoRefresh";
     boolean autoRefresh;
     javax.swing.Timer refreshTimer = null;
+    boolean setup = false;
 
     static final String LOGO_NAME = "logo.png";
 
@@ -370,6 +372,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         importURLMenuItem = new javax.swing.JMenuItem();
         refreshMenuItem = new javax.swing.JMenuItem();
@@ -685,7 +690,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         boardPanel.setMaximumSize(new java.awt.Dimension(603, 482));
         boardPanel.setMinimumSize(new java.awt.Dimension(603, 482));
         boardPanel.setPreferredSize(new java.awt.Dimension(603, 482));
-        boardPanel.setRequestFocusEnabled(false);
+        boardPanel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                boardPanelKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout boardPanelLayout = new javax.swing.GroupLayout(boardPanel);
         boardPanel.setLayout(boardPanelLayout);
@@ -868,6 +877,26 @@ public class ShogiExplorer extends javax.swing.JFrame {
         fileMenu.add(jMenuItem6);
 
         jMenuBar1.add(fileMenu);
+
+        jMenu3.setText(bundle.getString("ShogiExplorer.jMenu3.text")); // NOI18N
+
+        jMenuItem5.setText(bundle.getString("ShogiExplorer.jMenuItem5.text_1")); // NOI18N
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem5);
+
+        jMenuItem7.setText(bundle.getString("ShogiExplorer.jMenuItem7.text")); // NOI18N
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem7);
+
+        jMenuBar1.add(jMenu3);
 
         jMenu2.setText(bundle.getString("ShogiExplorer.jMenu2.text")); // NOI18N
 
@@ -1948,6 +1977,108 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_commentTextAreaMouseClicked
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        setup = true;
+        board = SFENParser.parse("9/9/9/9/9/9/9/9/9 b - 1");
+        board.setEdit(new Coordinate(9,1));
+        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
+        boardPanel.requestFocus();
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        board.setEdit(null);
+        setup = false;
+        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
+        
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void boardPanelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_boardPanelKeyReleased
+        if (setup) {
+            Coordinate editCoordinate = board.getEdit();
+                        
+            int keyCode = evt.getKeyCode();
+            boolean render = false;
+            switch (keyCode) {
+                case 37:
+                    // left
+                    if (editCoordinate != null) {
+                        int x = editCoordinate.getX();
+                        int y = editCoordinate.getY();
+                        if (x < 9) {
+                            board.setEdit( new Coordinate(++x, y));
+                        } else {
+                            if (y > 1) {
+                                board.setEdit(new Coordinate(1, --y));
+                            } else {
+                                board.setEdit(null);
+                                board.setEditBan(Board.Turn.GOTE);
+                            }
+                        }
+                    } else {
+                        if (board.getEditBan() == Board.Turn.GOTE) {
+                            board.setEditBan(Board.Turn.SENTE);
+                        } else {
+                            board.setEditBan(null);
+                            board.setEdit(new Coordinate(1, 9));
+                        }
+                    }
+                    render = true;
+                    break;
+                case 39:
+                    // right
+                    if (editCoordinate != null) {
+                        int x = editCoordinate.getX();
+                        int y = editCoordinate.getY();
+                        if (x > 1) {
+                            board.setEdit(new Coordinate(--x, y));
+                        } else {
+                            if (y < 9) {
+                                board.setEdit(new Coordinate(9, ++y));
+                            } else {
+                                board.setEdit(null);
+                                board.setEditBan(Board.Turn.SENTE);
+                            }
+                        }
+                    } else {
+                        if (board.getEditBan() == Board.Turn.SENTE) {
+                            board.setEditBan(Board.Turn.GOTE);
+                        } else {
+                            board.setEditBan(null);
+                            board.setEdit(new Coordinate(9, 1));
+                        }
+                    }
+                    render = true;
+                    break;
+                case 38:
+                    // up
+                    if (editCoordinate != null) {
+                        int x = editCoordinate.getX();
+                        int y = editCoordinate.getY();
+                        if (y > 1) {
+                            board.setEdit(new Coordinate(x, --y));
+                            render = true;
+                        }
+                    }
+                    break;
+                case 40:
+                    // down
+                    if (editCoordinate != null) {
+                        int x = editCoordinate.getX();
+                        int y = editCoordinate.getY();
+                        if (y < 9) {
+                            board.setEdit(new Coordinate(x, ++y));
+                            render = true;
+                        }
+                    }
+                    break;                
+            }
+            if (render) {
+                RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
+            }
+        }
+
+    }//GEN-LAST:event_boardPanelKeyReleased
+
     private String getAboutMessage() {
         String aboutMessage;
         try ( InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
@@ -2043,12 +2174,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

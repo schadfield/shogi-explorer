@@ -14,6 +14,8 @@ public class Board {
     private int moveCount;
     private Coordinate source = null;
     private Coordinate destination = null;
+    private Coordinate edit = null;
+    private Turn editBan = null;
 
     public Board() {
 
@@ -107,6 +109,34 @@ public class Board {
      */
     public void setDestination(Coordinate destination) {
         this.destination = destination;
+    }
+
+    /**
+     * @return the edit
+     */
+    public Coordinate getEdit() {
+        return edit;
+    }
+
+    /**
+     * @param edit the edit to set
+     */
+    public void setEdit(Coordinate edit) {
+        this.edit = edit;
+    }
+
+    /**
+     * @return the editBan
+     */
+    public Turn getEditBan() {
+        return editBan;
+    }
+
+    /**
+     * @param editBan the editBan to set
+     */
+    public void setEditBan(Turn editBan) {
+        this.editBan = editBan;
     }
 
 }

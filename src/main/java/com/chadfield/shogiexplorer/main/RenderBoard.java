@@ -43,7 +43,7 @@ public class RenderBoard {
         drawCoordinates(boardPanel, rotatedView);
         drawGrid(imageCache, boardPanel);
         drawHighlights(board, imageCache, boardPanel, rotatedView);
-        drawBans(imageCache, boardPanel);
+        drawKomadai(imageCache, boardPanel, rotatedView, board.getEditBan());
         drawBackground(imageCache, boardPanel);
         drawTurnNotification(board, imageCache, boardPanel, rotatedView);
         boardPanel.setVisible(true);
@@ -360,6 +360,10 @@ public class RenderBoard {
         if (thisCoord != null) {
             drawThisHighlight(rotatedView, boardPanel, thisCoord, imageCache);
         }
+        thisCoord = board.getEdit();
+        if (thisCoord != null) {
+            drawThisHighlight(rotatedView, boardPanel, thisCoord, imageCache);
+        }
     }
 
     private static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord, ImageCache imageCache) {
@@ -458,11 +462,30 @@ public class RenderBoard {
         );
     }
 
-    private static void drawBans(ImageCache imageCache, JPanel boardPanel) {
+    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel, boolean rotatedView, Turn turn) {
+        String leftKomadaiStr = "komadai";
+        String rightKomadaiStr = "komadai";
+        if (turn != null) {
+            switch (turn) {
+                case SENTE:
+                    if (rotatedView) {
+                        leftKomadaiStr = "highlight_komadai";
+                    } else {
+                        rightKomadaiStr = "highlight_komadai";
+                    }
+                    break;
+                case GOTE:
+                    if (rotatedView) {
+                        rightKomadaiStr = "highlight_komadai";
+                    } else {
+                        leftKomadaiStr = "highlight_komadai";
+                    }
+            }
+        }
         ImageUtils.drawImage(
                 imageCache,
                 boardPanel,
-                "komadai",
+                rightKomadaiStr,
                 new Coordinate(
                         MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
                         MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2
@@ -474,7 +497,7 @@ public class RenderBoard {
         ImageUtils.drawImage(
                 imageCache,
                 boardPanel,
-                "komadai",
+                leftKomadaiStr,
                 new Coordinate(0, 0),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y)
