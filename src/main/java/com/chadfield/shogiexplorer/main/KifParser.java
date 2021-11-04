@@ -358,13 +358,13 @@ public class KifParser {
         return board.getMasu()[9 - coords.getX()][coords.getY() - 1];
     }
 
-    private static void putKoma(Board board, Coordinate coords, Koma koma) {
+    public static void putKoma(Board board, Coordinate coords, Koma koma) {
         if (coords != null) {
             board.getMasu()[9 - coords.getX()][coords.getY() - 1] = koma;
         }
     }
 
-    private static void removePieceInHand(Koma.Type komaType, Board board) {
+    public static void removePieceInHand(Koma.Type komaType, Board board) {
         if (board.getInHandKomaMap().get(komaType) == 1) {
             board.getInHandKomaMap().remove(komaType);
         } else {

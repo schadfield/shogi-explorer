@@ -3,6 +3,8 @@ package com.chadfield.shogiexplorer;
 import com.chadfield.shogiexplorer.main.AnalysisManager;
 import com.chadfield.shogiexplorer.main.ConfigurationManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
+import com.chadfield.shogiexplorer.main.KifParser;
+import com.chadfield.shogiexplorer.main.PositionEditor;
 import com.chadfield.shogiexplorer.objectclasses.GameAnalyser;
 import java.io.File;
 import java.io.IOException;
@@ -139,6 +141,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     boolean autoRefresh;
     javax.swing.Timer refreshTimer = null;
     boolean setup = false;
+    boolean setupModified = false;
+    int setupKomadaiCount = -1;
 
     static final String LOGO_NAME = "logo.png";
 
@@ -694,6 +698,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 boardPanelKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                boardPanelKeyTyped(evt);
+            }
         });
 
         javax.swing.GroupLayout boardPanelLayout = new javax.swing.GroupLayout(boardPanel);
@@ -1189,7 +1196,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             jTabbedPane1.setComponentAt(1, new JPanel());
             analysisPositionList = new ArrayList<>();
         }
-        
+
         int oldIndex = moveList.getSelectedIndex();
 
         try {
@@ -1937,11 +1944,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         parseKifu(true);
         analyseGameMenuItem.setEnabled(true);
         resumeAnalysisMenuItem.setEnabled(
-                analysisTable.getRowCount() > 0 &&
-                analysisTable.getRowCount() < game.getPositionList().size() - 1
+                analysisTable.getRowCount() > 0
+                && analysisTable.getRowCount() < game.getPositionList().size() - 1
         );
         if (!browse && game.getPositionList().size() > numMovesBefore) {
-            moveList.setSelectedIndex(game.getPositionList().size()-1);
+            moveList.setSelectedIndex(game.getPositionList().size() - 1);
         }
     }//GEN-LAST:event_refreshMenuItemActionPerformed
 
@@ -1979,8 +1986,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         setup = true;
-        board = SFENParser.parse("9/9/9/9/9/9/9/9/9 b - 1");
-        board.setEdit(new Coordinate(9,1));
+        board.setEdit(new Coordinate(9, 1));
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
         boardPanel.requestFocus();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
@@ -1989,88 +1995,31 @@ public class ShogiExplorer extends javax.swing.JFrame {
         board.setEdit(null);
         setup = false;
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
-        
+
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void boardPanelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_boardPanelKeyReleased
         if (setup) {
-            Coordinate editCoordinate = board.getEdit();
-                        
+
             int keyCode = evt.getKeyCode();
             boolean render = false;
             switch (keyCode) {
                 case 37:
-                    // left
-                    if (editCoordinate != null) {
-                        int x = editCoordinate.getX();
-                        int y = editCoordinate.getY();
-                        if (x < 9) {
-                            board.setEdit( new Coordinate(++x, y));
-                        } else {
-                            if (y > 1) {
-                                board.setEdit(new Coordinate(1, --y));
-                            } else {
-                                board.setEdit(null);
-                                board.setEditBan(Board.Turn.GOTE);
-                            }
-                        }
-                    } else {
-                        if (board.getEditBan() == Board.Turn.GOTE) {
-                            board.setEditBan(Board.Turn.SENTE);
-                        } else {
-                            board.setEditBan(null);
-                            board.setEdit(new Coordinate(1, 9));
-                        }
-                    }
+                    PositionEditor.processLeft(board);
                     render = true;
                     break;
                 case 39:
-                    // right
-                    if (editCoordinate != null) {
-                        int x = editCoordinate.getX();
-                        int y = editCoordinate.getY();
-                        if (x > 1) {
-                            board.setEdit(new Coordinate(--x, y));
-                        } else {
-                            if (y < 9) {
-                                board.setEdit(new Coordinate(9, ++y));
-                            } else {
-                                board.setEdit(null);
-                                board.setEditBan(Board.Turn.SENTE);
-                            }
-                        }
-                    } else {
-                        if (board.getEditBan() == Board.Turn.SENTE) {
-                            board.setEditBan(Board.Turn.GOTE);
-                        } else {
-                            board.setEditBan(null);
-                            board.setEdit(new Coordinate(9, 1));
-                        }
-                    }
+                    PositionEditor.processRight(board);
                     render = true;
                     break;
                 case 38:
-                    // up
-                    if (editCoordinate != null) {
-                        int x = editCoordinate.getX();
-                        int y = editCoordinate.getY();
-                        if (y > 1) {
-                            board.setEdit(new Coordinate(x, --y));
-                            render = true;
-                        }
-                    }
+                    PositionEditor.processUp(board);
+                    render = true;
                     break;
                 case 40:
-                    // down
-                    if (editCoordinate != null) {
-                        int x = editCoordinate.getX();
-                        int y = editCoordinate.getY();
-                        if (y < 9) {
-                            board.setEdit(new Coordinate(x, ++y));
-                            render = true;
-                        }
-                    }
-                    break;                
+                    PositionEditor.processDown(board);
+                    render = true;
+                    break;
             }
             if (render) {
                 RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
@@ -2078,6 +2027,70 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_boardPanelKeyReleased
+
+    private void boardPanelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_boardPanelKeyTyped
+        if (setup) {
+            char thisChar = evt.getKeyChar();
+            switch (thisChar) {
+                case '0' ->
+                    setupKomadaiCount = 0;
+                case '1' ->
+                    setupKomadaiCount = 1;
+                case '2' ->
+                    setupKomadaiCount = 2;
+                case '3' ->
+                    setupKomadaiCount = 3;
+                case '4' ->
+                    setupKomadaiCount = 4;
+                case '5' ->
+                    setupKomadaiCount = 5;
+                case '6' ->
+                    setupKomadaiCount = 6;
+                case '7' ->
+                    setupKomadaiCount = 7;
+                case '8' ->
+                    setupKomadaiCount = 8;
+                case '9' ->
+                    setupKomadaiCount = 9;
+                case 'm', 'M' ->
+                    setupModified = true;
+                case 'x' -> {
+                    if (board.getEdit() != null) {
+                        KifParser.putKoma(board, board.getEdit(), null);
+                        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
+                    }
+                }
+                case 't' -> {
+                    if (board.getNextTurn() == Board.Turn.SENTE) {
+                        board.setNextTurn(Board.Turn.GOTE);
+                    } else {
+                        board.setNextTurn(Board.Turn.SENTE);
+                    }
+                    RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
+                }
+                case 'c' -> {
+                    Coordinate editCoord = board.getEdit();
+                    Board.Turn turn = board.getEditBan();
+                    board = SFENParser.parse("9/9/9/9/9/9/9/9/9 b - 1");
+                    board.setEdit(editCoord);
+                    board.setEditBan(turn);
+                    RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
+                }
+                default -> {
+                    boolean result = PositionEditor.processKey(thisChar, board, setupModified, setupKomadaiCount);
+                    if (result) {
+                        if (board.getEdit() != null) {
+                            PositionEditor.processRight(board);
+                        }
+                        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
+                    }
+                    setupModified = false;
+                    setupKomadaiCount = -1;
+                }
+            }
+        }
+
+    }//GEN-LAST:event_boardPanelKeyTyped
 
     private String getAboutMessage() {
         String aboutMessage;

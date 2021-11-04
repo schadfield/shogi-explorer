@@ -192,7 +192,7 @@ public class SFENParser {
         pieceMap.put('n', Koma.Type.GKE);
         pieceMap.put('s', Koma.Type.GGI);
         pieceMap.put('g', Koma.Type.GKI);
-        pieceMap.put('k', Koma.Type.GGY);
+        pieceMap.put('k', Koma.Type.GOU);
         pieceMap.put('r', Koma.Type.GHI);
         pieceMap.put('b', Koma.Type.GKA);
         pieceMap.put('p', Koma.Type.GFU);
@@ -201,7 +201,7 @@ public class SFENParser {
         pieceMap.put('N', Koma.Type.SKE);
         pieceMap.put('S', Koma.Type.SGI);
         pieceMap.put('G', Koma.Type.SKI);
-        pieceMap.put('K', Koma.Type.SOU);
+        pieceMap.put('K', Koma.Type.SGY);
         pieceMap.put('R', Koma.Type.SHI);
         pieceMap.put('B', Koma.Type.SKA);
         pieceMap.put('P', Koma.Type.SFU);
