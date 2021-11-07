@@ -177,7 +177,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jEngineManagerDialog.setIconImage(ImageUtils.loadIconImageFromResources("logo"));
 
         if (language.contentEquals(PREF_LANGUAGE_JAPANESE)) {
-            jRadioButtonMenuItem6.setSelected(true);
+            japaneseRadioButtonMenuItem.setSelected(true);
         }
 
         jTabbedPane1.setForeground(Color.BLACK);
@@ -187,7 +187,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         board = SFENParser.parse("lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
 
         if (prefs.getBoolean(PREF_SAVE_ANALYSIS, false)) {
-            jCheckBox1.setSelected(true);
+            saveAnalysisCheckBox.setSelected(true);
             saveAnalysis = true;
         } else {
             saveAnalysis = false;
@@ -202,32 +202,32 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         if (prefs.getBoolean(PREF_CLASSIC, true)) {
             classic = true;
-            jRadioButtonMenuItem10.setSelected(true);
-            jRadioButtonMenuItem11.setSelected(false);
+            classicRadioButtonMenuItem.setSelected(true);
+            modernRadioButtonMenuItem.setSelected(false);
         } else {
             classic = false;
-            jRadioButtonMenuItem10.setSelected(false);
-            jRadioButtonMenuItem11.setSelected(true);
+            classicRadioButtonMenuItem.setSelected(false);
+            modernRadioButtonMenuItem.setSelected(true);
         }
 
         if (prefs.getBoolean(PREF_SHIFT_FILE, false)) {
             shiftFile = true;
-            jRadioButtonMenuItem1.setSelected(false);
-            jRadioButtonMenuItem7.setSelected(true);
+            utf8KifRadioButtonMenuItem.setSelected(false);
+            shiftJISRadioButtonMenuItem.setSelected(true);
         } else {
             shiftFile = false;
-            jRadioButtonMenuItem1.setSelected(true);
-            jRadioButtonMenuItem7.setSelected(false);
+            utf8KifRadioButtonMenuItem.setSelected(true);
+            shiftJISRadioButtonMenuItem.setSelected(false);
         }
 
         if (prefs.getBoolean(PREF_SHIFT_URL, false)) {
             shiftURL = true;
-            jRadioButtonMenuItem8.setSelected(false);
-            jRadioButtonMenuItem9.setSelected(true);
+            utf8ImportRadioButtonMenuItem.setSelected(false);
+            shiftJISImportRadioButtonMenuItem.setSelected(true);
         } else {
             shiftFile = false;
-            jRadioButtonMenuItem8.setSelected(true);
-            jRadioButtonMenuItem9.setSelected(false);
+            utf8ImportRadioButtonMenuItem.setSelected(true);
+            shiftJISImportRadioButtonMenuItem.setSelected(false);
         }
 
         analysisEngineName = prefs.get(PREF_ANALYSIS_ENGINE_NAME, "");
@@ -261,7 +261,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         Desktop desktop = Desktop.getDesktop();
 
         if (IS_MAC) {
-            jMenuItem6.setVisible(false);
+            quitMenuItem.setVisible(false);
             desktop.setAboutHandler(e
                     -> {
                 try {
@@ -328,15 +328,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         analysisTimePerMoveSpinner = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
+        saveAnalysisCheckBox = new javax.swing.JCheckBox();
+        startAnalysisButton = new javax.swing.JButton();
+        cancelAnalysisButton = new javax.swing.JButton();
         buttonGroup3 = new javax.swing.ButtonGroup();
         buttonGroup4 = new javax.swing.ButtonGroup();
         buttonGroup5 = new javax.swing.ButtonGroup();
-        jCheckBoxMenuItem3 = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxMenuItem4 = new javax.swing.JCheckBoxMenuItem();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
@@ -352,7 +349,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         mediaEnd = new javax.swing.JButton();
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0));
-        jButton4 = new javax.swing.JButton();
+        stopAnalysisButton = new javax.swing.JButton();
         boardPanel = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -365,48 +362,48 @@ public class ShogiExplorer extends javax.swing.JFrame {
         commentScrollPane = new javax.swing.JScrollPane();
         commentTextArea = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        gameInfoScrollPane = new javax.swing.JScrollPane();
         gameTextArea = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        openKifMenuItem = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
-        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem7 = new javax.swing.JRadioButtonMenuItem();
+        utf8KifRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
+        shiftJISRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        importClipboardMenuItem = new javax.swing.JMenuItem();
+        quitMenuItem = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
+        setupPositionMenuItem = new javax.swing.JMenuItem();
+        endSetupMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         importURLMenuItem = new javax.swing.JMenuItem();
         refreshMenuItem = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         autoRefreshCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
-        jRadioButtonMenuItem8 = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem9 = new javax.swing.JRadioButtonMenuItem();
+        utf8ImportRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
+        shiftJISImportRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         gameMenu = new javax.swing.JMenu();
         analyseGameMenuItem = new javax.swing.JMenuItem();
         resumeAnalysisMenuItem = new javax.swing.JMenuItem();
         stopAnalysisMenuItem = new javax.swing.JMenuItem();
         enginesMenu = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        engineManageMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        rotateBoardCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jRadioButtonMenuItem10 = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem11 = new javax.swing.JRadioButtonMenuItem();
+        classicRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
+        modernRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
-        jRadioButtonMenuItem3 = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem4 = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem5 = new javax.swing.JRadioButtonMenuItem();
+        graph1000RadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
+        graph2000RadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
+        graph3000RadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem6 = new javax.swing.JRadioButtonMenuItem();
+        englishRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
+        japaneseRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        aboutMenuItem = new javax.swing.JMenuItem();
 
         jEngineManagerDialog.setAlwaysOnTop(true);
         jEngineManagerDialog.setModal(true);
@@ -521,40 +518,31 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jLabel2.setText(bundle.getString("ShogiExplorer.jLabel2.text")); // NOI18N
         jPanel2.add(jLabel2);
 
-        jCheckBox1.setText(bundle.getString("ShogiExplorer.jCheckBox1.text")); // NOI18N
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        saveAnalysisCheckBox.setText(bundle.getString("ShogiExplorer.saveAnalysisCheckBox.text")); // NOI18N
+        saveAnalysisCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                saveAnalysisCheckBoxActionPerformed(evt);
             }
         });
-        jPanel2.add(jCheckBox1);
+        jPanel2.add(saveAnalysisCheckBox);
 
-        jButton1.setText(bundle.getString("ShogiExplorer.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        startAnalysisButton.setText(bundle.getString("ShogiExplorer.startAnalysisButton.text")); // NOI18N
+        startAnalysisButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                startAnalysisButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1);
+        jPanel2.add(startAnalysisButton);
 
-        jButton2.setText(bundle.getString("ShogiExplorer.jButton2.text")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        cancelAnalysisButton.setText(bundle.getString("ShogiExplorer.cancelAnalysisButton.text")); // NOI18N
+        cancelAnalysisButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                cancelAnalysisButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton2);
+        jPanel2.add(cancelAnalysisButton);
 
         jAnalysisDialog.getContentPane().add(jPanel2);
-
-        jCheckBoxMenuItem2.setSelected(true);
-        jCheckBoxMenuItem2.setText(bundle.getString("ShogiExplorer.jCheckBoxMenuItem2.text")); // NOI18N
-
-        jCheckBoxMenuItem3.setSelected(true);
-        jCheckBoxMenuItem3.setText(bundle.getString("ShogiExplorer.jCheckBoxMenuItem3.text")); // NOI18N
-
-        jCheckBoxMenuItem4.setSelected(true);
-        jCheckBoxMenuItem4.setText(bundle.getString("ShogiExplorer.jCheckBoxMenuItem4.text")); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -677,18 +665,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(mediaEnd);
         mainToolBar.add(filler7);
 
-        jButton4.setEnabled(false);
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setLabel(bundle.getString("ShogiExplorer.jButton4.label")); // NOI18N
-        jButton4.setMaximumSize(new java.awt.Dimension(100, 24));
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        stopAnalysisButton.setEnabled(false);
+        stopAnalysisButton.setFocusable(false);
+        stopAnalysisButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        stopAnalysisButton.setLabel(bundle.getString("ShogiExplorer.stopAnalysisButton.label")); // NOI18N
+        stopAnalysisButton.setMaximumSize(new java.awt.Dimension(100, 24));
+        stopAnalysisButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        stopAnalysisButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                stopAnalysisButtonActionPerformed(evt);
             }
         });
-        mainToolBar.add(jButton4);
+        mainToolBar.add(stopAnalysisButton);
 
         boardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         boardPanel.setMaximumSize(new java.awt.Dimension(603, 482));
@@ -812,7 +800,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.setFocusable(false);
         gameTextArea.setPreferredSize(new java.awt.Dimension(100, 80));
         gameTextArea.setRequestFocusEnabled(false);
-        jScrollPane3.setViewportView(gameTextArea);
+        gameInfoScrollPane.setViewportView(gameTextArea);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -820,14 +808,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+                .addComponent(gameInfoScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                .addComponent(gameInfoScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -835,73 +823,73 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         fileMenu.setText(bundle.getString("ShogiExplorer.fileMenu.text_1")); // NOI18N
 
-        jMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        jMenuItem1.setText(bundle.getString("ShogiExplorer.jMenuItem1.text_1")); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        openKifMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        openKifMenuItem.setText(bundle.getString("ShogiExplorer.openKifMenuItem.text_1")); // NOI18N
+        openKifMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                openKifMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem1);
+        fileMenu.add(openKifMenuItem);
         fileMenu.add(jSeparator4);
 
-        buttonGroup3.add(jRadioButtonMenuItem1);
-        jRadioButtonMenuItem1.setSelected(true);
-        jRadioButtonMenuItem1.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem1.text")); // NOI18N
-        jRadioButtonMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup3.add(utf8KifRadioButtonMenuItem);
+        utf8KifRadioButtonMenuItem.setSelected(true);
+        utf8KifRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.utf8KifRadioButtonMenuItem.text")); // NOI18N
+        utf8KifRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem1ActionPerformed(evt);
+                utf8KifRadioButtonMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(jRadioButtonMenuItem1);
+        fileMenu.add(utf8KifRadioButtonMenuItem);
 
-        buttonGroup3.add(jRadioButtonMenuItem7);
-        jRadioButtonMenuItem7.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem7.text")); // NOI18N
-        jRadioButtonMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup3.add(shiftJISRadioButtonMenuItem);
+        shiftJISRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.shiftJISRadioButtonMenuItem.text")); // NOI18N
+        shiftJISRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem7ActionPerformed(evt);
+                shiftJISRadioButtonMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(jRadioButtonMenuItem7);
+        fileMenu.add(shiftJISRadioButtonMenuItem);
         fileMenu.add(jSeparator5);
 
-        jMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        jMenuItem3.setText(bundle.getString("ShogiExplorer.jMenuItem3.text_1")); // NOI18N
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        importClipboardMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        importClipboardMenuItem.setText(bundle.getString("ShogiExplorer.importClipboardMenuItem.text_1")); // NOI18N
+        importClipboardMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                importClipboardMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem3);
+        fileMenu.add(importClipboardMenuItem);
 
-        jMenuItem6.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        jMenuItem6.setText(bundle.getString("ShogiExplorer.jMenuItem6.text")); // NOI18N
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+        quitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        quitMenuItem.setText(bundle.getString("ShogiExplorer.quitMenuItem.text")); // NOI18N
+        quitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
+                quitMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem6);
+        fileMenu.add(quitMenuItem);
 
         jMenuBar1.add(fileMenu);
 
         jMenu3.setText(bundle.getString("ShogiExplorer.jMenu3.text")); // NOI18N
 
-        jMenuItem5.setText(bundle.getString("ShogiExplorer.jMenuItem5.text_1")); // NOI18N
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        setupPositionMenuItem.setText(bundle.getString("ShogiExplorer.setupPositionMenuItem.text_1")); // NOI18N
+        setupPositionMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                setupPositionMenuItemActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem5);
+        jMenu3.add(setupPositionMenuItem);
 
-        jMenuItem7.setText(bundle.getString("ShogiExplorer.jMenuItem7.text")); // NOI18N
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+        endSetupMenuItem.setText(bundle.getString("ShogiExplorer.endSetupMenuItem.text")); // NOI18N
+        endSetupMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
+                endSetupMenuItemActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem7);
+        jMenu3.add(endSetupMenuItem);
 
         jMenuBar1.add(jMenu3);
 
@@ -936,24 +924,24 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenu2.add(autoRefreshCheckBoxMenuItem);
         jMenu2.add(jSeparator6);
 
-        buttonGroup4.add(jRadioButtonMenuItem8);
-        jRadioButtonMenuItem8.setSelected(true);
-        jRadioButtonMenuItem8.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem8.text")); // NOI18N
-        jRadioButtonMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup4.add(utf8ImportRadioButtonMenuItem);
+        utf8ImportRadioButtonMenuItem.setSelected(true);
+        utf8ImportRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.utf8ImportRadioButtonMenuItem.text")); // NOI18N
+        utf8ImportRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem8ActionPerformed(evt);
+                utf8ImportRadioButtonMenuItemActionPerformed(evt);
             }
         });
-        jMenu2.add(jRadioButtonMenuItem8);
+        jMenu2.add(utf8ImportRadioButtonMenuItem);
 
-        buttonGroup4.add(jRadioButtonMenuItem9);
-        jRadioButtonMenuItem9.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem9.text")); // NOI18N
-        jRadioButtonMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup4.add(shiftJISImportRadioButtonMenuItem);
+        shiftJISImportRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.shiftJISImportRadioButtonMenuItem.text")); // NOI18N
+        shiftJISImportRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem9ActionPerformed(evt);
+                shiftJISImportRadioButtonMenuItemActionPerformed(evt);
             }
         });
-        jMenu2.add(jRadioButtonMenuItem9);
+        jMenu2.add(shiftJISImportRadioButtonMenuItem);
 
         jMenuBar1.add(jMenu2);
 
@@ -993,113 +981,113 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         enginesMenu.setText(bundle.getString("ShogiExplorer.enginesMenu.text_1")); // NOI18N
 
-        jMenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        jMenuItem2.setText(bundle.getString("ShogiExplorer.jMenuItem2.text_1")); // NOI18N
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        engineManageMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        engineManageMenuItem.setText(bundle.getString("ShogiExplorer.engineManageMenuItem.text_1")); // NOI18N
+        engineManageMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                engineManageMenuItemActionPerformed(evt);
             }
         });
-        enginesMenu.add(jMenuItem2);
+        enginesMenu.add(engineManageMenuItem);
 
         jMenuBar1.add(enginesMenu);
 
         viewMenu.setLabel(bundle.getString("ShogiExplorer.viewMenu.label_1")); // NOI18N
 
-        jCheckBoxMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        jCheckBoxMenuItem1.setText(bundle.getString("ShogiExplorer.jCheckBoxMenuItem1.text")); // NOI18N
-        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        rotateBoardCheckBoxMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        rotateBoardCheckBoxMenuItem.setText(bundle.getString("ShogiExplorer.rotateBoardCheckBoxMenuItem.text")); // NOI18N
+        rotateBoardCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMenuItem1ActionPerformed(evt);
+                rotateBoardCheckBoxMenuItemActionPerformed(evt);
             }
         });
-        viewMenu.add(jCheckBoxMenuItem1);
+        viewMenu.add(rotateBoardCheckBoxMenuItem);
         viewMenu.add(jSeparator1);
 
-        buttonGroup5.add(jRadioButtonMenuItem10);
-        jRadioButtonMenuItem10.setSelected(true);
-        jRadioButtonMenuItem10.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem10.text")); // NOI18N
-        jRadioButtonMenuItem10.setToolTipText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem10.toolTipText")); // NOI18N
-        jRadioButtonMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup5.add(classicRadioButtonMenuItem);
+        classicRadioButtonMenuItem.setSelected(true);
+        classicRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.classicRadioButtonMenuItem.text")); // NOI18N
+        classicRadioButtonMenuItem.setToolTipText(bundle.getString("ShogiExplorer.classicRadioButtonMenuItem.toolTipText")); // NOI18N
+        classicRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem10ActionPerformed(evt);
+                classicRadioButtonMenuItemActionPerformed(evt);
             }
         });
-        viewMenu.add(jRadioButtonMenuItem10);
+        viewMenu.add(classicRadioButtonMenuItem);
 
-        buttonGroup5.add(jRadioButtonMenuItem11);
-        jRadioButtonMenuItem11.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem11.text")); // NOI18N
-        jRadioButtonMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup5.add(modernRadioButtonMenuItem);
+        modernRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.modernRadioButtonMenuItem.text")); // NOI18N
+        modernRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem11ActionPerformed(evt);
+                modernRadioButtonMenuItemActionPerformed(evt);
             }
         });
-        viewMenu.add(jRadioButtonMenuItem11);
+        viewMenu.add(modernRadioButtonMenuItem);
         viewMenu.add(jSeparator3);
 
-        jRadioButtonMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        buttonGroup1.add(jRadioButtonMenuItem3);
-        jRadioButtonMenuItem3.setSelected(true);
-        jRadioButtonMenuItem3.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem3.text")); // NOI18N
-        jRadioButtonMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        graph1000RadioButtonMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        buttonGroup1.add(graph1000RadioButtonMenuItem);
+        graph1000RadioButtonMenuItem.setSelected(true);
+        graph1000RadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.graph1000RadioButtonMenuItem.text")); // NOI18N
+        graph1000RadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem3ActionPerformed(evt);
+                graph1000RadioButtonMenuItemActionPerformed(evt);
             }
         });
-        viewMenu.add(jRadioButtonMenuItem3);
+        viewMenu.add(graph1000RadioButtonMenuItem);
 
-        jRadioButtonMenuItem4.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        buttonGroup1.add(jRadioButtonMenuItem4);
-        jRadioButtonMenuItem4.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem4.text")); // NOI18N
-        jRadioButtonMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        graph2000RadioButtonMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        buttonGroup1.add(graph2000RadioButtonMenuItem);
+        graph2000RadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.graph2000RadioButtonMenuItem.text")); // NOI18N
+        graph2000RadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem4ActionPerformed(evt);
+                graph2000RadioButtonMenuItemActionPerformed(evt);
             }
         });
-        viewMenu.add(jRadioButtonMenuItem4);
+        viewMenu.add(graph2000RadioButtonMenuItem);
 
-        jRadioButtonMenuItem5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-        buttonGroup1.add(jRadioButtonMenuItem5);
-        jRadioButtonMenuItem5.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem5.text")); // NOI18N
-        jRadioButtonMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        graph3000RadioButtonMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        buttonGroup1.add(graph3000RadioButtonMenuItem);
+        graph3000RadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.graph3000RadioButtonMenuItem.text")); // NOI18N
+        graph3000RadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem5ActionPerformed(evt);
+                graph3000RadioButtonMenuItemActionPerformed(evt);
             }
         });
-        viewMenu.add(jRadioButtonMenuItem5);
+        viewMenu.add(graph3000RadioButtonMenuItem);
         viewMenu.add(jSeparator2);
 
-        buttonGroup2.add(jRadioButtonMenuItem2);
-        jRadioButtonMenuItem2.setSelected(true);
-        jRadioButtonMenuItem2.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem2.text_1")); // NOI18N
-        jRadioButtonMenuItem2.setToolTipText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem2.toolTipText")); // NOI18N
-        jRadioButtonMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup2.add(englishRadioButtonMenuItem);
+        englishRadioButtonMenuItem.setSelected(true);
+        englishRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.englishRadioButtonMenuItem.text_1")); // NOI18N
+        englishRadioButtonMenuItem.setToolTipText(bundle.getString("ShogiExplorer.englishRadioButtonMenuItem.toolTipText")); // NOI18N
+        englishRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem2ActionPerformed(evt);
+                englishRadioButtonMenuItemActionPerformed(evt);
             }
         });
-        viewMenu.add(jRadioButtonMenuItem2);
+        viewMenu.add(englishRadioButtonMenuItem);
 
-        buttonGroup2.add(jRadioButtonMenuItem6);
-        jRadioButtonMenuItem6.setText(bundle.getString("ShogiExplorer.jRadioButtonMenuItem6.text")); // NOI18N
-        jRadioButtonMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup2.add(japaneseRadioButtonMenuItem);
+        japaneseRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.japaneseRadioButtonMenuItem.text")); // NOI18N
+        japaneseRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMenuItem6ActionPerformed(evt);
+                japaneseRadioButtonMenuItemActionPerformed(evt);
             }
         });
-        viewMenu.add(jRadioButtonMenuItem6);
+        viewMenu.add(japaneseRadioButtonMenuItem);
 
         jMenuBar1.add(viewMenu);
 
         jMenu1.setText(bundle.getString("ShogiExplorer.jMenu1.text")); // NOI18N
 
-        jMenuItem4.setText(bundle.getString("ShogiExplorer.jMenuItem4.text")); // NOI18N
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        aboutMenuItem.setText(bundle.getString("ShogiExplorer.aboutMenuItem.text")); // NOI18N
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                aboutMenuItemActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem4);
+        jMenu1.add(aboutMenuItem);
 
         jMenuBar1.add(jMenu1);
 
@@ -1141,14 +1129,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         // TODO: "Save window size here?"
     }//GEN-LAST:event_formWindowClosing
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void openKifMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openKifMenuItemActionPerformed
         if (refreshTimer != null && refreshTimer.isRunning()) {
             refreshTimer.stop();
             refreshTimer = null;
         }
         refreshMenuItem.setEnabled(false);
         clipboardStr = null;
-        jCheckBox1.setEnabled(true);
+        saveAnalysisCheckBox.setEnabled(true);
         File dirFile = new File(prefs.get(PREF_FILE_OPEN_DIR, System.getProperty("user.home")));
         if (IS_MAC) {
             FileDialog fileDialog = new FileDialog(mainFrame);
@@ -1183,7 +1171,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         parseKifu(false);
         analyseGameMenuItem.setEnabled(true);
         resumeAnalysisMenuItem.setEnabled(false);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_openKifMenuItemActionPerformed
 
     private void parseKifu(boolean refresh) {
         List<List<Position>> analysisPositionList;
@@ -1241,10 +1229,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
             analysisParam = new AnalysisParameter();
         }
         analysisParam.setAnalysisTimePerMove(analysisTimePerMove);
-        analysisParam.setGraphView1(jRadioButtonMenuItem3);
-        analysisParam.setGraphView2(jRadioButtonMenuItem4);
-        analysisParam.setGraphView3(jRadioButtonMenuItem5);
-        analysisParam.setHaltAnalysisButton(jButton4);
+        analysisParam.setGraphView1(graph1000RadioButtonMenuItem);
+        analysisParam.setGraphView2(graph2000RadioButtonMenuItem);
+        analysisParam.setGraphView3(graph3000RadioButtonMenuItem);
+        analysisParam.setHaltAnalysisButton(stopAnalysisButton);
         analysisParam.setAnalyseGameMenuItem(analyseGameMenuItem);
         analysisParam.setStopAnalysisMenuItem(stopAnalysisMenuItem);
         analysisParam.setResumeAnalysisMenuItem(resumeAnalysisMenuItem);
@@ -1478,13 +1466,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mediaReverseActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void engineManageMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_engineManageMenuItemActionPerformed
         java.awt.EventQueue.invokeLater(() -> {
             jEngineManagerDialog.pack();
             jEngineManagerDialog.setLocationRelativeTo(mainFrame);
             jEngineManagerDialog.setVisible(true);
         });
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_engineManageMenuItemActionPerformed
 
     private void deleteEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteEngineButtonActionPerformed
         engineList = EngineManager.deleteSelectedEngine(engineListModel, jEngineList, engineList);
@@ -1544,14 +1532,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jAnalysisDialog.pack();
         jAnalysisDialog.setLocationRelativeTo(mainFrame);
         jAnalysisDialog.setVisible(true);
-        jButton1.requestFocus();
+        startAnalysisButton.requestFocus();
     }//GEN-LAST:event_openAnalyseGameDialog
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void cancelAnalysisButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelAnalysisButtonActionPerformed
         jAnalysisDialog.setVisible(false);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_cancelAnalysisButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void startAnalysisButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startAnalysisButtonActionPerformed
         jAnalysisDialog.setVisible(false);
         if (analysing.get()) {
             return;
@@ -1566,7 +1554,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
         initializeAnalysisParams(true);
         initializeChart(true);
-        jButton4.setEnabled(true);
+        stopAnalysisButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
         analysisThread = new Thread() {
             @Override
@@ -1590,7 +1578,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analyseGameMenuItem.setEnabled(false);
         resumeAnalysisMenuItem.setEnabled(false);
         analysisThread.start();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_startAnalysisButtonActionPerformed
 
     private void closeEngineManagerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeEngineManagerButtonActionPerformed
         jEngineManagerDialog.setVisible(false);
@@ -1724,64 +1712,64 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     };
 
-    private void jRadioButtonMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem3ActionPerformed
+    private void graph1000RadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graph1000RadioButtonMenuItemActionPerformed
         if (chart != null) {
             chart.getXYPlot().getRangeAxis().setRange(-1000, 1000);
         }
-    }//GEN-LAST:event_jRadioButtonMenuItem3ActionPerformed
+    }//GEN-LAST:event_graph1000RadioButtonMenuItemActionPerformed
 
-    private void jRadioButtonMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem4ActionPerformed
+    private void graph2000RadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graph2000RadioButtonMenuItemActionPerformed
         if (chart != null) {
             chart.getXYPlot().getRangeAxis().setRange(-2000, 2000);
         }
-    }//GEN-LAST:event_jRadioButtonMenuItem4ActionPerformed
+    }//GEN-LAST:event_graph2000RadioButtonMenuItemActionPerformed
 
-    private void jRadioButtonMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem5ActionPerformed
+    private void graph3000RadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graph3000RadioButtonMenuItemActionPerformed
         if (chart != null) {
             chart.getXYPlot().getRangeAxis().setRange(-3000, 3000);
         }
-    }//GEN-LAST:event_jRadioButtonMenuItem5ActionPerformed
+    }//GEN-LAST:event_graph3000RadioButtonMenuItemActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        jButton4.setEnabled(false);
+    private void stopAnalysisButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopAnalysisButtonActionPerformed
+        stopAnalysisButton.setEnabled(false);
         stopAnalysisMenuItem.setEnabled(false);
         analysisThread.interrupt();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_stopAnalysisButtonActionPerformed
 
-    private void jRadioButtonMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem2ActionPerformed
+    private void englishRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_englishRadioButtonMenuItemActionPerformed
         prefs.put(PREF_LANGUAGE, PREF_LANGUAGE_ENGLISH);
         flushPrefs();
-    }//GEN-LAST:event_jRadioButtonMenuItem2ActionPerformed
+    }//GEN-LAST:event_englishRadioButtonMenuItemActionPerformed
 
-    private void jRadioButtonMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem6ActionPerformed
+    private void japaneseRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_japaneseRadioButtonMenuItemActionPerformed
         prefs.put(PREF_LANGUAGE, PREF_LANGUAGE_JAPANESE);
         flushPrefs();
-    }//GEN-LAST:event_jRadioButtonMenuItem6ActionPerformed
+    }//GEN-LAST:event_japaneseRadioButtonMenuItemActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
         try {
             JOptionPane.showMessageDialog(mainFrame, getAboutMessage(), null, JOptionPane.INFORMATION_MESSAGE,
                     new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME))));
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
 
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+    private void quitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitMenuItemActionPerformed
         prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
         prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
         prefs.putInt(PREF_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
         flushPrefs();
         System.exit(0);
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
+    }//GEN-LAST:event_quitMenuItemActionPerformed
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+    private void saveAnalysisCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAnalysisCheckBoxActionPerformed
         saveAnalysis = !saveAnalysis;
         prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
         flushPrefs();
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    }//GEN-LAST:event_saveAnalysisCheckBoxActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void importClipboardMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importClipboardMenuItemActionPerformed
         if (refreshTimer != null && refreshTimer.isRunning()) {
             refreshTimer.stop();
             refreshTimer = null;
@@ -1794,8 +1782,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             try {
                 clipboardStr = (String) transferable.getTransferData(DataFlavor.stringFlavor);
-                jCheckBox1.setSelected(false);
-                jCheckBox1.setEnabled(false);
+                saveAnalysisCheckBox.setSelected(false);
+                saveAnalysisCheckBox.setEnabled(false);
                 saveAnalysis = false;
                 prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
                 flushPrefs();
@@ -1806,20 +1794,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_importClipboardMenuItemActionPerformed
 
     private void stopAnalysisMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopAnalysisMenuItemActionPerformed
-        jButton4ActionPerformed(evt);
+        stopAnalysisButtonActionPerformed(evt);
     }//GEN-LAST:event_stopAnalysisMenuItemActionPerformed
 
-    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+    private void rotateBoardCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rotateBoardCheckBoxMenuItemActionPerformed
         long now = System.currentTimeMillis();
         if (now - rotateTime > 500) {
             rotatedView = !rotatedView;
             RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
             rotateTime = now;
         }
-    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+    }//GEN-LAST:event_rotateBoardCheckBoxMenuItemActionPerformed
 
     private void importURLMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importURLMenuItemActionPerformed
         if (refreshTimer != null && refreshTimer.isRunning()) {
@@ -1835,8 +1823,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 urlStr = (String) transferable.getTransferData(DataFlavor.stringFlavor);
                 String urlGameStr = URLUtils.readGameURL(urlStr, shiftURL);
                 clipboardStr = urlGameStr;
-                jCheckBox1.setSelected(false);
-                jCheckBox1.setEnabled(false);
+                saveAnalysisCheckBox.setSelected(false);
+                saveAnalysisCheckBox.setEnabled(false);
                 saveAnalysis = false;
                 prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
                 flushPrefs();
@@ -1856,43 +1844,43 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_importURLMenuItemActionPerformed
 
-    private void jRadioButtonMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ActionPerformed
+    private void utf8KifRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_utf8KifRadioButtonMenuItemActionPerformed
         shiftFile = false;
         prefs.putBoolean(PREF_SHIFT_FILE, shiftFile);
         flushPrefs();
-    }//GEN-LAST:event_jRadioButtonMenuItem1ActionPerformed
+    }//GEN-LAST:event_utf8KifRadioButtonMenuItemActionPerformed
 
-    private void jRadioButtonMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem7ActionPerformed
+    private void shiftJISRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shiftJISRadioButtonMenuItemActionPerformed
         shiftFile = true;
         prefs.putBoolean(PREF_SHIFT_FILE, shiftFile);
         flushPrefs();
-    }//GEN-LAST:event_jRadioButtonMenuItem7ActionPerformed
+    }//GEN-LAST:event_shiftJISRadioButtonMenuItemActionPerformed
 
-    private void jRadioButtonMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem8ActionPerformed
+    private void utf8ImportRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_utf8ImportRadioButtonMenuItemActionPerformed
         shiftURL = false;
         prefs.putBoolean(PREF_SHIFT_URL, shiftURL);
         flushPrefs();
-    }//GEN-LAST:event_jRadioButtonMenuItem8ActionPerformed
+    }//GEN-LAST:event_utf8ImportRadioButtonMenuItemActionPerformed
 
-    private void jRadioButtonMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem9ActionPerformed
+    private void shiftJISImportRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shiftJISImportRadioButtonMenuItemActionPerformed
         shiftURL = true;
         prefs.putBoolean(PREF_SHIFT_URL, shiftURL);
         flushPrefs();
-    }//GEN-LAST:event_jRadioButtonMenuItem9ActionPerformed
+    }//GEN-LAST:event_shiftJISImportRadioButtonMenuItemActionPerformed
 
-    private void jRadioButtonMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem10ActionPerformed
+    private void classicRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classicRadioButtonMenuItemActionPerformed
         classic = true;
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
         prefs.putBoolean(PREF_CLASSIC, classic);
         flushPrefs();
-    }//GEN-LAST:event_jRadioButtonMenuItem10ActionPerformed
+    }//GEN-LAST:event_classicRadioButtonMenuItemActionPerformed
 
-    private void jRadioButtonMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem11ActionPerformed
+    private void modernRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modernRadioButtonMenuItemActionPerformed
         classic = false;
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
         prefs.putBoolean(PREF_CLASSIC, classic);
         flushPrefs();
-    }//GEN-LAST:event_jRadioButtonMenuItem11ActionPerformed
+    }//GEN-LAST:event_modernRadioButtonMenuItemActionPerformed
 
     private void resumeAnalysisMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resumeAnalysisMenuItemActionPerformed
         if (analysing.get()) {
@@ -1907,7 +1895,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
         prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
         initializeAnalysisParams(false);
-        jButton4.setEnabled(true);
+        stopAnalysisButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
         analyseGameMenuItem.setEnabled(false);
         resumeAnalysisMenuItem.setEnabled(false);
@@ -1935,8 +1923,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void refreshMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshMenuItemActionPerformed
         String urlGameStr = URLUtils.readGameURL(urlStr, shiftURL);
         clipboardStr = urlGameStr;
-        jCheckBox1.setSelected(false);
-        jCheckBox1.setEnabled(false);
+        saveAnalysisCheckBox.setSelected(false);
+        saveAnalysisCheckBox.setEnabled(false);
         saveAnalysis = false;
         prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
         flushPrefs();
@@ -1984,19 +1972,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_commentTextAreaMouseClicked
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    private void setupPositionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setupPositionMenuItemActionPerformed
         setup = true;
         board.setEdit(new Coordinate(9, 1));
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
         boardPanel.requestFocus();
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
+    }//GEN-LAST:event_setupPositionMenuItemActionPerformed
 
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+    private void endSetupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endSetupMenuItemActionPerformed
         board.setEdit(null);
         setup = false;
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView, classic);
-
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+    }//GEN-LAST:event_endSetupMenuItemActionPerformed
 
     private void boardPanelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_boardPanelKeyReleased
         if (setup) {
@@ -2139,6 +2126,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addEngineButton;
     private javax.swing.JMenuItem analyseGameMenuItem;
     private javax.swing.JComboBox<String> analysisEngineComboBox;
@@ -2151,12 +2139,17 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
     private javax.swing.ButtonGroup buttonGroup5;
+    private javax.swing.JButton cancelAnalysisButton;
+    private javax.swing.JRadioButtonMenuItem classicRadioButtonMenuItem;
     private javax.swing.JButton closeEngineManagerButton;
     private javax.swing.JScrollPane commentScrollPane;
     private javax.swing.JTextArea commentTextArea;
     private javax.swing.JButton configureEngineButton;
     private javax.swing.JButton deleteEngineButton;
+    private javax.swing.JMenuItem endSetupMenuItem;
+    private javax.swing.JMenuItem engineManageMenuItem;
     private javax.swing.JMenu enginesMenu;
+    private javax.swing.JRadioButtonMenuItem englishRadioButtonMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
@@ -2165,18 +2158,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
+    private javax.swing.JScrollPane gameInfoScrollPane;
     private javax.swing.JMenu gameMenu;
     private javax.swing.JTextArea gameTextArea;
+    private javax.swing.JRadioButtonMenuItem graph1000RadioButtonMenuItem;
+    private javax.swing.JRadioButtonMenuItem graph2000RadioButtonMenuItem;
+    private javax.swing.JRadioButtonMenuItem graph3000RadioButtonMenuItem;
+    private javax.swing.JMenuItem importClipboardMenuItem;
     private javax.swing.JMenuItem importURLMenuItem;
     private javax.swing.JDialog jAnalysisDialog;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem3;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem4;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JList<String> jEngineList;
@@ -2189,31 +2179,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem10;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem11;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem3;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem4;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem5;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem6;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem7;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem8;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -2223,6 +2194,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JRadioButtonMenuItem japaneseRadioButtonMenuItem;
     private javax.swing.JToolBar mainToolBar;
     private javax.swing.JButton mediaBack;
     private javax.swing.JButton mediaEnd;
@@ -2231,11 +2203,23 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton mediaReverse;
     private javax.swing.JButton mediaStart;
     private javax.swing.JButton mediaStop;
+    private javax.swing.JRadioButtonMenuItem modernRadioButtonMenuItem;
     private javax.swing.JList<String> moveList;
     private javax.swing.JScrollPane moveListScrollPane;
+    private javax.swing.JMenuItem openKifMenuItem;
+    private javax.swing.JMenuItem quitMenuItem;
     private javax.swing.JMenuItem refreshMenuItem;
     private javax.swing.JMenuItem resumeAnalysisMenuItem;
+    private javax.swing.JCheckBoxMenuItem rotateBoardCheckBoxMenuItem;
+    private javax.swing.JCheckBox saveAnalysisCheckBox;
+    private javax.swing.JMenuItem setupPositionMenuItem;
+    private javax.swing.JRadioButtonMenuItem shiftJISImportRadioButtonMenuItem;
+    private javax.swing.JRadioButtonMenuItem shiftJISRadioButtonMenuItem;
+    private javax.swing.JButton startAnalysisButton;
+    private javax.swing.JButton stopAnalysisButton;
     private javax.swing.JMenuItem stopAnalysisMenuItem;
+    private javax.swing.JRadioButtonMenuItem utf8ImportRadioButtonMenuItem;
+    private javax.swing.JRadioButtonMenuItem utf8KifRadioButtonMenuItem;
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
 }
