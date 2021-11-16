@@ -24,13 +24,12 @@ public class RenderBoard {
     static final String IMAGE_STR_GOTE = "gote";
     static final String IMAGE_STR_HIGHLIGHT = "highlight";
     static final String PIECE_SET_CLASSIC = "classic";
-    static final String PIECE_SET_MODERN = "modern";
 
     private RenderBoard() {
         throw new IllegalStateException("Utility class");
     }
 
-    public static void loadBoard(Board board, ImageCache imageCache, javax.swing.JPanel boardPanel, boolean rotatedView, boolean classic) {
+    public static void loadBoard(Board board, ImageCache imageCache, javax.swing.JPanel boardPanel, boolean rotatedView) {
         if (boardPanel.getWidth() == 0) {
             return;
         }
@@ -38,8 +37,8 @@ public class RenderBoard {
         // Start with a clean slate.
         boardPanel.removeAll();
 
-        drawPieces(board, imageCache, boardPanel, rotatedView, classic);
-        drawPiecesInHand(board, imageCache, boardPanel, rotatedView, classic);
+        drawPieces(board, imageCache, boardPanel, rotatedView);
+        drawPiecesInHand(board, imageCache, boardPanel, rotatedView);
         drawCoordinates(boardPanel, rotatedView);
         drawGrid(imageCache, boardPanel);
         drawHighlights(board, imageCache, boardPanel, rotatedView);
@@ -153,7 +152,7 @@ public class RenderBoard {
         }
     }
 
-    private static void drawPiecesInHand(Board board, ImageCache imageCache, JPanel boardPanel, boolean rotatedView, boolean classic) {
+    private static void drawPiecesInHand(Board board, ImageCache imageCache, JPanel boardPanel, boolean rotatedView) {
 
         EnumMap<Koma.Type, Integer> xOffsetMap = new EnumMap<>(Koma.Type.class);
         EnumMap<Koma.Type, Integer> yOffsetMap = new EnumMap<>(Koma.Type.class);
@@ -287,12 +286,7 @@ public class RenderBoard {
             if (numberHeld != null && numberHeld > 0) {
                 Image pieceImage;
                 if (rotatedView) {
-                    String name;
-                    if (classic) {
-                        name = PIECE_SET_CLASSIC + "/" + substituteKomaNameRotated(komaType.toString());
-                    } else {
-                        name = PIECE_SET_MODERN + "/" + substituteKomaNameRotated(komaType.toString());
-                    }
+                    String name = PIECE_SET_CLASSIC + "/" + substituteKomaNameRotated(komaType.toString());
                     pieceImage = imageCache.getImage(name);
                     if (pieceImage == null) {
                         pieceImage = ImageUtils.loadSVGImageFromResources(
@@ -301,12 +295,7 @@ public class RenderBoard {
                         imageCache.putImage(name, pieceImage);
                     }
                 } else {
-                    String name;
-                    if (classic) {
-                        name = PIECE_SET_CLASSIC + "/" + substituteKomaName(komaType.toString());
-                    } else {
-                        name = PIECE_SET_MODERN + "/" + substituteKomaName(komaType.toString());
-                    }
+                    String name = PIECE_SET_CLASSIC + "/" + substituteKomaName(komaType.toString());
                     pieceImage = imageCache.getImage(name);
                     if (pieceImage == null) {
                         pieceImage = ImageUtils.loadSVGImageFromResources(
@@ -392,10 +381,10 @@ public class RenderBoard {
                 ));
     }
 
-    private static void drawPieces(Board board, ImageCache imageCache, JPanel boardPanel, boolean rotatedView, boolean classic) {
+    private static void drawPieces(Board board, ImageCache imageCache, JPanel boardPanel, boolean rotatedView) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                Image pieceImage = getPieceImage(rotatedView, classic, i, j, board, imageCache);
+                Image pieceImage = getPieceImage(rotatedView, i, j, board, imageCache);
                 if (pieceImage != null) {
                     addPiece(boardPanel, pieceImage, i, j);
                 }
@@ -403,30 +392,20 @@ public class RenderBoard {
         }
     }
 
-    private static Image getPieceImage(boolean rotatedView, boolean classic, int i, int j, Board board, ImageCache imageCache) {
-        String name;
+    private static Image getPieceImage(boolean rotatedView, int i, int j, Board board, ImageCache imageCache) {
         Koma koma;
         if (rotatedView) {
             koma = board.getMasu()[8 - i][8 - j];
             if (koma == null) {
                 return null;
             }
-            if (classic) {
-                name = PIECE_SET_CLASSIC + "/" + substituteKomaNameRotated(koma.getType().toString());
-            } else {
-                name = PIECE_SET_MODERN + "/" + substituteKomaNameRotated(koma.getType().toString());
-            }
         } else {
             koma = board.getMasu()[i][j];
             if (koma == null) {
                 return null;
             }
-            if (classic) {
-                name = PIECE_SET_CLASSIC + "/" + substituteKomaName(koma.getType().toString());
-            } else {
-                name = PIECE_SET_MODERN + "/" + substituteKomaName(koma.getType().toString());
-            }
         }
+        String name = PIECE_SET_CLASSIC + "/" + substituteKomaNameRotated(koma.getType().toString());
         Image cacheImage = imageCache.getImage(name);
         if (cacheImage == null) {
             cacheImage = ImageUtils.loadSVGImageFromResources(
@@ -467,19 +446,20 @@ public class RenderBoard {
         String rightKomadaiStr = "komadai";
         if (turn != null) {
             switch (turn) {
-                case SENTE:
+                case SENTE -> {
                     if (rotatedView) {
                         leftKomadaiStr = "highlight_komadai";
                     } else {
                         rightKomadaiStr = "highlight_komadai";
                     }
-                    break;
-                case GOTE:
+                }
+                case GOTE -> {
                     if (rotatedView) {
                         rightKomadaiStr = "highlight_komadai";
                     } else {
                         leftKomadaiStr = "highlight_komadai";
                     }
+                }
             }
         }
         ImageUtils.drawImage(
