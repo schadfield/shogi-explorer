@@ -321,7 +321,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         cancelAnalysisButton = new javax.swing.JButton();
         buttonGroup3 = new javax.swing.ButtonGroup();
         buttonGroup4 = new javax.swing.ButtonGroup();
-        buttonGroup5 = new javax.swing.ButtonGroup();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
@@ -1937,26 +1936,27 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void boardPanelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_boardPanelKeyReleased
         if (setup) {
-
             int keyCode = evt.getKeyCode();
             boolean render = false;
             switch (keyCode) {
-                case 37:
+                case 37 -> {
                     PositionEditor.processLeft(board);
                     render = true;
-                    break;
-                case 39:
+                }
+                case 39 -> {
                     PositionEditor.processRight(board);
                     render = true;
-                    break;
-                case 38:
+                }
+                case 38 -> {
                     PositionEditor.processUp(board);
                     render = true;
-                    break;
-                case 40:
+                }
+                case 40 -> {
                     PositionEditor.processDown(board);
                     render = true;
-                    break;
+                }
+                default -> {
+                }
             }
             if (render) {
                 RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
@@ -2088,7 +2088,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
-    private javax.swing.ButtonGroup buttonGroup5;
     private javax.swing.JButton cancelAnalysisButton;
     private javax.swing.JButton closeEngineManagerButton;
     private javax.swing.JScrollPane commentScrollPane;

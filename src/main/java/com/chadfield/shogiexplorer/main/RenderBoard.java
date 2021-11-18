@@ -23,6 +23,7 @@ public class RenderBoard {
     static final String IMAGE_STR_SENTE = "sente";
     static final String IMAGE_STR_GOTE = "gote";
     static final String IMAGE_STR_HIGHLIGHT = "highlight";
+    static final String IMAGE_STR_HIGHLIGHT_KOMADAI = "highlight_komadai";
     static final String PIECE_SET_CLASSIC = "classic";
 
     private RenderBoard() {
@@ -445,20 +446,17 @@ public class RenderBoard {
         String leftKomadaiStr = "komadai";
         String rightKomadaiStr = "komadai";
         if (turn != null) {
-            switch (turn) {
-                case SENTE -> {
-                    if (rotatedView) {
-                        leftKomadaiStr = "highlight_komadai";
-                    } else {
-                        rightKomadaiStr = "highlight_komadai";
-                    }
+            if (turn == Turn.SENTE) {
+                if (rotatedView) {
+                    leftKomadaiStr = IMAGE_STR_HIGHLIGHT_KOMADAI;
+                } else {
+                    rightKomadaiStr = IMAGE_STR_HIGHLIGHT_KOMADAI;
                 }
-                case GOTE -> {
-                    if (rotatedView) {
-                        rightKomadaiStr = "highlight_komadai";
-                    } else {
-                        leftKomadaiStr = "highlight_komadai";
-                    }
+            } else {
+                if (rotatedView) {
+                    rightKomadaiStr = IMAGE_STR_HIGHLIGHT_KOMADAI;
+                } else {
+                    leftKomadaiStr = IMAGE_STR_HIGHLIGHT_KOMADAI;
                 }
             }
         }

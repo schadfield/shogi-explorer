@@ -3,6 +3,8 @@ package com.chadfield.shogiexplorer.main;
 import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Koma;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -84,21 +86,22 @@ public class PositionEditor {
 
     public static boolean processKey(char thisChar, Board board, boolean modified, int komadaiCount) {
         if (board.getEdit() != null) {
-            Koma koma = getKoma(thisChar, modified);
-            if (koma != null) {
-                KifParser.putKoma(board, board.getEdit(), koma);
+            Koma.Type komaType = getKomaType(thisChar, modified);
+            if (komaType != null) {
+                KifParser.putKoma(board, board.getEdit(), new Koma(komaType));
                 return true;
             }
         } else {
             Board.Turn thisTurn = board.getEditBan();
             if (thisTurn != null) {
-                Koma koma;
+                Koma.Type komaType;
                 if (thisTurn == Board.Turn.SENTE) {
-                    koma = getKoma(Character.toLowerCase(thisChar), false);
+                    komaType = getKomaType(Character.toLowerCase(thisChar), false);
                 } else {
-                    koma = getKoma(Character.toUpperCase(thisChar), false);
+                    komaType = getKomaType(Character.toUpperCase(thisChar), false);
                 }
-                updateInHand(board, koma.getType(), komadaiCount);
+                
+                updateInHand(board, komaType, komadaiCount);
                 return true;
             }
         }
@@ -121,106 +124,50 @@ public class PositionEditor {
         }
     }
 
-    private static Koma getKoma(char thisChar, boolean modified) {
-        switch (thisChar) {
-            case 'p':
-                if (modified) {
-                    return new Koma(Koma.Type.STO);
-                } else {
-                    return new Koma(Koma.Type.SFU);
-                }
-            case 'l':
-                if (modified) {
-                    return new Koma(Koma.Type.SNY);
-                } else {
-                    return new Koma(Koma.Type.SKY);
-                }
-            case 'n':
-                if (modified) {
-                    return new Koma(Koma.Type.SNK);
-                } else {
-                    return new Koma(Koma.Type.SKE);
-                }
-            case 's':
-                if (modified) {
-                    return new Koma(Koma.Type.SNG);
-                } else {
-                    return new Koma(Koma.Type.SGI);
-                }
-            case 'g':
-                if (modified) {
-                    return new Koma(Koma.Type.SKI);
-                } else {
-                    return new Koma(Koma.Type.SKI);
-                }
-            case 'b':
-                if (modified) {
-                    return new Koma(Koma.Type.SUM);
-                } else {
-                    return new Koma(Koma.Type.SKA);
-                }
-            case 'r':
-                if (modified) {
-                    return new Koma(Koma.Type.SRY);
-                } else {
-                    return new Koma(Koma.Type.SHI);
-                }
-            case 'k':
-                if (modified) {
-                    return new Koma(Koma.Type.SOU);
-                } else {
-                    return new Koma(Koma.Type.SGY);
-                }
-            case 'P':
-                if (modified) {
-                    return new Koma(Koma.Type.GTO);
-                } else {
-                    return new Koma(Koma.Type.GFU);
-                }
-            case 'L':
-                if (modified) {
-                    return new Koma(Koma.Type.GNY);
-                } else {
-                    return new Koma(Koma.Type.GKY);
-                }
-            case 'N':
-                if (modified) {
-                    return new Koma(Koma.Type.GNK);
-                } else {
-                    return new Koma(Koma.Type.GKE);
-                }
-            case 'S':
-                if (modified) {
-                    return new Koma(Koma.Type.GNG);
-                } else {
-                    return new Koma(Koma.Type.GGI);
-                }
-            case 'G':
-                if (modified) {
-                    return new Koma(Koma.Type.GKI);
-                } else {
-                    return new Koma(Koma.Type.GKI);
-                }
-            case 'B':
-                if (modified) {
-                    return new Koma(Koma.Type.GUM);
-                } else {
-                    return new Koma(Koma.Type.GKA);
-                }
-            case 'R':
-                if (modified) {
-                    return new Koma(Koma.Type.GRY);
-                } else {
-                    return new Koma(Koma.Type.GHI);
-                }
-            case 'K':
-                if (modified) {
-                    return new Koma(Koma.Type.GGY);
-                } else {
-                    return new Koma(Koma.Type.GOU);
-                }
-            default:
-                return null;
+    private static Koma.Type getKomaType(char thisChar, boolean modified) {
+ 
+        Map<Character, Koma.Type> komaTypeMap = new HashMap<>();
+        
+        komaTypeMap.put('p', Koma.Type.SFU);
+        komaTypeMap.put('l', Koma.Type.SKY);
+        komaTypeMap.put('n', Koma.Type.SKE);
+        komaTypeMap.put('s', Koma.Type.SGI);
+        komaTypeMap.put('g', Koma.Type.SKI);
+        komaTypeMap.put('b', Koma.Type.SKA);
+        komaTypeMap.put('r', Koma.Type.SHI);
+        komaTypeMap.put('k', Koma.Type.SGY);
+        komaTypeMap.put('P', Koma.Type.GFU);
+        komaTypeMap.put('L', Koma.Type.GKY);
+        komaTypeMap.put('N', Koma.Type.GKE);
+        komaTypeMap.put('S', Koma.Type.GGI);
+        komaTypeMap.put('G', Koma.Type.GKI);
+        komaTypeMap.put('B', Koma.Type.GKA);
+        komaTypeMap.put('R', Koma.Type.GHI);
+        komaTypeMap.put('K', Koma.Type.GOU);
+        
+        Map<Character, Koma.Type> komaTypeMapModified = new HashMap<>();
+        
+        komaTypeMapModified.put('p', Koma.Type.STO);
+        komaTypeMapModified.put('l', Koma.Type.SNY);
+        komaTypeMapModified.put('n', Koma.Type.SNK);
+        komaTypeMapModified.put('s', Koma.Type.SNG);
+        komaTypeMapModified.put('g', Koma.Type.SKI);
+        komaTypeMapModified.put('b', Koma.Type.SUM);
+        komaTypeMapModified.put('r', Koma.Type.SRY);
+        komaTypeMapModified.put('k', Koma.Type.SOU);
+        komaTypeMapModified.put('P', Koma.Type.GTO);
+        komaTypeMapModified.put('L', Koma.Type.GNY);
+        komaTypeMapModified.put('N', Koma.Type.GNK);
+        komaTypeMapModified.put('S', Koma.Type.GNG);
+        komaTypeMapModified.put('G', Koma.Type.GKI);
+        komaTypeMapModified.put('B', Koma.Type.GUM);
+        komaTypeMapModified.put('R', Koma.Type.GRY);
+        komaTypeMapModified.put('K', Koma.Type.GGY);
+
+        if (modified) {
+            return komaTypeMapModified.get(thisChar);
+        } else {
+            return komaTypeMap.get(thisChar);
         }
     }
 

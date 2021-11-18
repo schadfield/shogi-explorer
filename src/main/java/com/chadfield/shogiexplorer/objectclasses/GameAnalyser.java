@@ -177,6 +177,7 @@ public class GameAnalyser {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
                 Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
+                Thread.currentThread().interrupt();
             }
         }
 
