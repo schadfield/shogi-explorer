@@ -395,18 +395,20 @@ public class RenderBoard {
 
     private static Image getPieceImage(boolean rotatedView, int i, int j, Board board, ImageCache imageCache) {
         Koma koma;
+        String name;
         if (rotatedView) {
             koma = board.getMasu()[8 - i][8 - j];
             if (koma == null) {
                 return null;
             }
+            name = PIECE_SET_CLASSIC + "/" + substituteKomaNameRotated(koma.getType().toString());
         } else {
             koma = board.getMasu()[i][j];
             if (koma == null) {
                 return null;
             }
+            name = PIECE_SET_CLASSIC + "/" + substituteKomaName(koma.getType().toString());
         }
-        String name = PIECE_SET_CLASSIC + "/" + substituteKomaNameRotated(koma.getType().toString());
         Image cacheImage = imageCache.getImage(name);
         if (cacheImage == null) {
             cacheImage = ImageUtils.loadSVGImageFromResources(
