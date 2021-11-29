@@ -375,6 +375,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analyseGameMenuItem = new javax.swing.JMenuItem();
         resumeAnalysisMenuItem = new javax.swing.JMenuItem();
         stopAnalysisMenuItem = new javax.swing.JMenuItem();
+        analysePositionMenuItem = new javax.swing.JMenuItem();
         enginesMenu = new javax.swing.JMenu();
         engineManageMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
@@ -532,7 +533,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
         setBounds(new java.awt.Rectangle(58, 25, 1000, 650));
         setMinimumSize(new java.awt.Dimension(1000, 650));
-        setPreferredSize(new java.awt.Dimension(mainWidth, mainHeight));
         setSize(new java.awt.Dimension(0, 0));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -594,7 +594,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mediaStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaStop.setMaximumSize(new java.awt.Dimension(24, 24));
         mediaStop.setMinimumSize(new java.awt.Dimension(24, 24));
-        mediaStop.setPreferredSize(new java.awt.Dimension(40, 24));
         mediaStop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         mediaStop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -718,7 +717,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 53, Short.MAX_VALUE)
+            .addGap(0, 54, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
@@ -961,6 +960,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         gameMenu.add(stopAnalysisMenuItem);
 
+        analysePositionMenuItem.setText(bundle.getString("ShogiExplorer.analysePositionMenuItem.text")); // NOI18N
+        analysePositionMenuItem.setToolTipText(bundle.getString("ShogiExplorer.analysePositionMenuItem.toolTipText")); // NOI18N
+        analysePositionMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analysePositionMenuItemActionPerformed(evt);
+            }
+        });
+        gameMenu.add(analysePositionMenuItem);
+
         jMenuBar1.add(gameMenu);
 
         enginesMenu.setText(bundle.getString("ShogiExplorer.enginesMenu.text_1")); // NOI18N
@@ -1078,10 +1086,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 .addComponent(mainToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(boardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSplitPane1))
+                    .addComponent(boardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+                    .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2029,6 +2037,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_boardPanelKeyTyped
 
+    private void analysePositionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analysePositionMenuItemActionPerformed
+        
+    }//GEN-LAST:event_analysePositionMenuItemActionPerformed
+
     private String getAboutMessage() {
         String aboutMessage;
         try ( InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
@@ -2079,6 +2091,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addEngineButton;
     private javax.swing.JMenuItem analyseGameMenuItem;
+    private javax.swing.JMenuItem analysePositionMenuItem;
     private javax.swing.JComboBox<String> analysisEngineComboBox;
     private javax.swing.JTable analysisTable;
     private javax.swing.JSpinner analysisTimePerMoveSpinner;

@@ -235,6 +235,17 @@ public class GameAnalyser {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void analysePosition(Engine engine, AnalysisParameter analysisParam, AtomicBoolean analysing, Position position) throws IOException {
+        analysing.set(true);
+        initializeEngine(engine);
+        initiateUSIProtocol();
+        setOptions(engine);
+        getReady();
+        stdin.write(("position sfen " + position.getGameSFEN() + "\n").getBytes());
+        stdin.write(("go btime 0 wtime 0 byoyomi " + analysisTimePerMove * 1000 + "\n").getBytes());
+        stdin.flush();
+    }
 
     private void initializeEngine(Engine engine) {
         try {
