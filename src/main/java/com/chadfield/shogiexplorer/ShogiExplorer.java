@@ -682,7 +682,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         );
         boardPanelLayout.setVerticalGroup(
             boardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 480, Short.MAX_VALUE)
         );
 
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -808,6 +808,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         openKifMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         openKifMenuItem.setText(bundle.getString("ShogiExplorer.openKifMenuItem.text_1")); // NOI18N
+        openKifMenuItem.setBorder(null);
         openKifMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openKifMenuItemActionPerformed(evt);
@@ -819,6 +820,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         buttonGroup3.add(utf8KifRadioButtonMenuItem);
         utf8KifRadioButtonMenuItem.setSelected(true);
         utf8KifRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.utf8KifRadioButtonMenuItem.text")); // NOI18N
+        utf8KifRadioButtonMenuItem.setBorder(null);
         utf8KifRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 utf8KifRadioButtonMenuItemActionPerformed(evt);
@@ -828,6 +830,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         buttonGroup3.add(shiftJISRadioButtonMenuItem);
         shiftJISRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.shiftJISRadioButtonMenuItem.text")); // NOI18N
+        shiftJISRadioButtonMenuItem.setBorder(null);
         shiftJISRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 shiftJISRadioButtonMenuItemActionPerformed(evt);
@@ -838,6 +841,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         importClipboardMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         importClipboardMenuItem.setText(bundle.getString("ShogiExplorer.importClipboardMenuItem.text_1")); // NOI18N
+        importClipboardMenuItem.setBorder(null);
         importClipboardMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 importClipboardMenuItemActionPerformed(evt);
@@ -847,6 +851,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         quitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         quitMenuItem.setText(bundle.getString("ShogiExplorer.quitMenuItem.text")); // NOI18N
+        quitMenuItem.setBorder(null);
         quitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 quitMenuItemActionPerformed(evt);
@@ -856,9 +861,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jMenuBar1.add(fileMenu);
 
+        jMenu3.setBorder(null);
         jMenu3.setText(bundle.getString("ShogiExplorer.jMenu3.text")); // NOI18N
 
         setupPositionMenuItem.setText(bundle.getString("ShogiExplorer.setupPositionMenuItem.text_1")); // NOI18N
+        setupPositionMenuItem.setBorder(null);
         setupPositionMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setupPositionMenuItemActionPerformed(evt);
@@ -867,6 +874,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenu3.add(setupPositionMenuItem);
 
         endSetupMenuItem.setText(bundle.getString("ShogiExplorer.endSetupMenuItem.text")); // NOI18N
+        endSetupMenuItem.setBorder(null);
         endSetupMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 endSetupMenuItemActionPerformed(evt);
@@ -1085,9 +1093,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(mainToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(boardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
-                    .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(boardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
                 .addContainerGap())
