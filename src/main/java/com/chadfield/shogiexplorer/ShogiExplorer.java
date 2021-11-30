@@ -65,6 +65,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import org.jfree.chart.ChartFactory;
@@ -2069,21 +2070,22 @@ public class ShogiExplorer extends javax.swing.JFrame {
      */
     public static void main(String[] args) {
         try {
-            //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-            /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-            * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-             */
-            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+            FontUIResource defaultFont;
             if (IS_WINDOWS) {
-                java.util.Enumeration<?> keys = UIManager.getDefaults().keys();
-                while (keys.hasMoreElements()) {
-                    Object key = keys.nextElement();
-                    Object value = UIManager.get(key);
-                    if (value instanceof javax.swing.plaf.FontUIResource) {
-                        UIManager.put(key, new javax.swing.plaf.FontUIResource("Meiryo", Font.PLAIN, 12));
-                    }
+                defaultFont = new FontUIResource("Meiryo",Font.PLAIN,13);
+            } else {
+                defaultFont = new FontUIResource("SanSerif",Font.PLAIN,12);
+                
+            } 
+            java.util.Enumeration<?> keys = UIManager.getDefaults().keys();
+            while (keys.hasMoreElements()) {
+                Object key = keys.nextElement();
+                Object value = UIManager.get (key);
+                if (value instanceof javax.swing.plaf.FontUIResource) {
+                    UIManager.put (key, defaultFont);
                 }
-            }            //</editor-fold>
+            }
         } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
