@@ -2071,13 +2071,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
     public static void main(String[] args) {
         try {
             javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
-            FontUIResource defaultFont;
-            if (IS_WINDOWS) {
-                defaultFont = new FontUIResource("Meiryo",Font.PLAIN,13);
-            } else {
-                defaultFont = new FontUIResource("SanSerif",Font.PLAIN,12);
-                
-            } 
+        } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (IS_WINDOWS) {
+            FontUIResource defaultFont = new FontUIResource("Meiryo",Font.PLAIN,12);
             java.util.Enumeration<?> keys = UIManager.getDefaults().keys();
             while (keys.hasMoreElements()) {
                 Object key = keys.nextElement();
@@ -2086,9 +2085,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     UIManager.put (key, defaultFont);
                 }
             }
-        } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
