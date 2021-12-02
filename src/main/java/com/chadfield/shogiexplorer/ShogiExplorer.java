@@ -2076,13 +2076,17 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
         
         if (IS_WINDOWS) {
-            FontUIResource defaultFont = new FontUIResource("Meiryo",Font.PLAIN,12);
             java.util.Enumeration<?> keys = UIManager.getDefaults().keys();
             while (keys.hasMoreElements()) {
                 Object key = keys.nextElement();
                 Object value = UIManager.get (key);
                 if (value instanceof javax.swing.plaf.FontUIResource) {
-                    UIManager.put (key, defaultFont);
+                    Font font = (Font) value;
+                    int fontSize = font.getSize();
+                    if (fontSize < 12) {
+                        fontSize = 12;
+                    }
+                    UIManager.put(key, new FontUIResource("Meiryo", font.getStyle(), fontSize));
                 }
             }
         } 
