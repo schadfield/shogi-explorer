@@ -495,6 +495,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jLabel1.setText(bundle.getString("ShogiExplorer.jLabel1.text")); // NOI18N
         jLabel1.setMinimumSize(new java.awt.Dimension(200, 16));
         jPanel2.add(jLabel1);
+
+        analysisEngineComboBox.setPreferredSize(new java.awt.Dimension(200, 27));
         jPanel2.add(analysisEngineComboBox);
 
         jLabel3.setText(bundle.getString("ShogiExplorer.jLabel3.text")); // NOI18N
