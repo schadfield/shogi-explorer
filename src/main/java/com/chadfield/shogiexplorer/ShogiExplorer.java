@@ -1392,7 +1392,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
                 analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber - 1, 0, true)));
             } else {
-                analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(0, 0, true)));
+                if (moveNumber > 0) {
+                    analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(analysisTable.getRowCount(), 0, true)));
+                } else {
+                    analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(0, 0, true)));
+                }
                 analysisTable.clearSelection();
             }
             if (plotDataset != null && plotDataset.getSeriesCount() > 0) {
