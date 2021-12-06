@@ -88,6 +88,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     transient Preferences prefs;
     transient Game game;
     int moveNumber;
+    int lastMoveNumber;
     boolean play;
     boolean browse;
     int browsePos;
@@ -1383,6 +1384,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
             commentTextArea.setText(position.getComment());
             if (moveNumber > 0 && analysisTable.getRowCount() >= moveNumber) {
                 analysisTable.setRowSelectionInterval(moveNumber - 1, moveNumber - 1);
+                if (lastMoveNumber > moveNumber) {
+                    analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber - 5, 0, true)));
+                } else {
+                    analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber + 3, 0, true)));
+                }
                 analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber - 1, 0, true)));
             } else {
                 analysisTable.clearSelection();
@@ -1420,6 +1426,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
             analysisTable.repaint();
             RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
+            lastMoveNumber = moveNumber;
             inSelectionChange = false;
         }
     }//GEN-LAST:event_moveListValueChanged
