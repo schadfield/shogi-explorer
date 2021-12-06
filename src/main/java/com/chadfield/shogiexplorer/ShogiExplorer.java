@@ -1199,6 +1199,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         } else {
             moveNumber = 0;
+            lastMoveNumber = 0;
             initializeAnalysisParams(true);
             initializeChart(false);
             if (clipboardStr == null) {
@@ -1391,6 +1392,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
                 analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(moveNumber - 1, 0, true)));
             } else {
+                analysisTable.scrollRectToVisible(new Rectangle(analysisTable.getCellRect(0, 0, true)));
                 analysisTable.clearSelection();
             }
             if (plotDataset != null && plotDataset.getSeriesCount() > 0) {
