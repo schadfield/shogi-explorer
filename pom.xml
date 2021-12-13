@@ -22,7 +22,7 @@
         <dependency>
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
-            <version>RELEASE124</version>
+            <version>RELEASE126</version>
         </dependency>
         <dependency>
             <groupId>com.ibm.icu</groupId>
