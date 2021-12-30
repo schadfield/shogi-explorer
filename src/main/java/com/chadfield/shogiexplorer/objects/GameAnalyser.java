@@ -1,19 +1,9 @@
-package com.chadfield.shogiexplorer.objectclasses;
+package com.chadfield.shogiexplorer.objects;
 
 import com.chadfield.shogiexplorer.main.AnalysisManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
 import com.chadfield.shogiexplorer.main.SFENParser;
-import com.chadfield.shogiexplorer.objects.Analysis;
-import com.chadfield.shogiexplorer.objects.AnalysisParameter;
-import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.objects.Board.Turn;
-import com.chadfield.shogiexplorer.objects.Coordinate;
-import com.chadfield.shogiexplorer.objects.Engine;
-import com.chadfield.shogiexplorer.objects.EngineOption;
-import com.chadfield.shogiexplorer.objects.Game;
-import com.chadfield.shogiexplorer.objects.Koma;
-import com.chadfield.shogiexplorer.objects.Notation;
-import com.chadfield.shogiexplorer.objects.Position;
 import com.chadfield.shogiexplorer.utils.NotationUtils;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
@@ -235,15 +225,27 @@ public class GameAnalyser {
             Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void analysePosition(Engine engine, AnalysisParameter analysisParam, AtomicBoolean analysing, Position position) throws IOException {
         analysing.set(true);
         initializeEngine(engine);
         initiateUSIProtocol();
         setOptions(engine);
+        // Infinite analysis does not play well with opening books.
+        stdin.write(("setoption USI_OwnBook value false\n").getBytes());
         getReady();
         stdin.write(("position sfen " + position.getGameSFEN() + "\n").getBytes());
-        stdin.write(("go btime 0 wtime 0 byoyomi " + analysisTimePerMove * 1000 + "\n").getBytes());
+        stdin.write(("go infinite\n").getBytes());
+        stdin.flush();
+        String line;
+        while (!Thread.interrupted() && (line = bufferedReader.readLine()) != null) {
+            if (Thread.interrupted()) {
+                System.out.println("Interrupted");
+                stdin.write(("stop\n").getBytes());
+                stdin.flush();
+            }
+            System.out.println(line);
+        }
         stdin.flush();
     }
 

@@ -1,6 +1,6 @@
 package com.chadfield.shogiexplorer.main;
 
-import com.chadfield.shogiexplorer.objectclasses.GameAnalyser;
+import com.chadfield.shogiexplorer.objects.GameAnalyser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;

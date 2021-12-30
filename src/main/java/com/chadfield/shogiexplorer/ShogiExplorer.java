@@ -5,7 +5,7 @@ import com.chadfield.shogiexplorer.main.ConfigurationManager;
 import com.chadfield.shogiexplorer.main.EngineManager;
 import com.chadfield.shogiexplorer.main.KifParser;
 import com.chadfield.shogiexplorer.main.PositionEditor;
-import com.chadfield.shogiexplorer.objectclasses.GameAnalyser;
+import com.chadfield.shogiexplorer.objects.GameAnalyser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -344,6 +344,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         analysisTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
         moveListScrollPane = new javax.swing.JScrollPane();
@@ -726,6 +728,21 @@ public class ShogiExplorer extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
+
+        jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jScrollPane3.TabConstraints.tabTitle"), jScrollPane3); // NOI18N
 
         jSplitPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jSplitPane1.setDividerLocation(dividerLocation);
@@ -2063,7 +2080,29 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_boardPanelKeyTyped
 
     private void analysePositionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analysePositionMenuItemActionPerformed
-        
+        analysisEngineName ="Mizusho_4kai/YaneuraOu_6";
+        Position position = new Position(SFENParser.getSFEN(board), null, null, null);
+        System.out.println(SFENParser.getSFEN(board));
+        stopAnalysisButton.setEnabled(true);
+        stopAnalysisMenuItem.setEnabled(true);
+        analysisThread = new Thread() {
+            @Override
+            public void run() {
+                Engine engine = null;
+                for (Engine thisEngine : engineList) {
+                    if (thisEngine.getName().contentEquals(analysisEngineName)) {
+                        engine = thisEngine;
+                        break;
+                    }
+                }
+                try {
+                    new GameAnalyser().analysePosition(engine, analysisParam, analysing, position);
+                } catch (IOException ex) {
+                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        };
+        analysisThread.start();
     }//GEN-LAST:event_analysePositionMenuItemActionPerformed
 
     private String getAboutMessage() {
@@ -2173,6 +2212,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -2181,6 +2221,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JRadioButtonMenuItem japaneseRadioButtonMenuItem;
     private javax.swing.JToolBar mainToolBar;
     private javax.swing.JButton mediaBack;
