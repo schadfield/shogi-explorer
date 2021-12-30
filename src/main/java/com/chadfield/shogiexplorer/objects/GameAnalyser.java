@@ -72,6 +72,8 @@ public class GameAnalyser {
     Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
     boolean handicap;
     Turn turn;
+    int multiPV;
+    int rowNum;
 
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, boolean saveAnalysis, boolean resume) throws IOException {
         analysing.set(true);
@@ -226,8 +228,13 @@ public class GameAnalyser {
         }
     }
 
-    public void analysePosition(Engine engine, AnalysisParameter analysisParam, AtomicBoolean analysing, Position position) throws IOException {
+    public void analysePosition(Engine engine, AnalysisParameter analysisParam, AtomicBoolean analysing, Position position, JTable positionAnalysisTable) throws IOException {
         analysing.set(true);
+        multiPV = 0;
+        rowNum = 0;
+        DefaultTableModel tableModel = (DefaultTableModel) positionAnalysisTable.getModel();
+        Turn positionTurn = getTurn(position);
+        String sfen = position.getGameSFEN();
         initializeEngine(engine);
         initiateUSIProtocol();
         setOptions(engine);
@@ -244,9 +251,100 @@ public class GameAnalyser {
                 stdin.write(("stop\n").getBytes());
                 stdin.flush();
             }
-            System.out.println(line);
+            updateTableModel(line, tableModel, positionTurn, sfen);
         }
         stdin.flush();
+    }
+
+    private Turn getTurn(Position position) {
+        if (position.getGameSFEN().split(" ")[1].contentEquals("b")) {
+            return Turn.SENTE;
+        } else {
+            return Turn.GOTE;
+        }
+    }
+
+    private void updateTableModel(String line, DefaultTableModel tableModel, Turn positionTurn, String sfen) {
+        System.out.println(line);
+        if (!line.contains("bestmove")) {
+            ArrayList<Position> pvPositionList = getPVPositionList(sfen, line, null);
+            Object[] tableInsert = getTableInsert(line, positionTurn, pvPositionList, tableModel);
+            tableModel.insertRow(rowNum, tableInsert);
+        }
+    }
+
+    private Object[] getTableInsert(String line, Turn positionTurn, ArrayList<Position> pvPositionList, DefaultTableModel tableModel) {
+        turn = positionTurn;
+        boolean lower = false;
+        boolean upper = false;
+        boolean foundPV = false;
+        String depth = null;
+        String seldepth = null;
+        String nodes = null;
+        Integer score = null;
+        String[] splitLine = line.split(" ");
+        for (int i = 0; i < splitLine.length; i++) {
+            if (!foundPV) {
+                switch (splitLine[i]) {
+                    case "multipv" -> {
+                        int thisMultiPv = Integer.parseInt(splitLine[i + 1]);
+                        if (thisMultiPv < multiPV) {
+                            tableModel.insertRow(0, new Object[]{});
+                        }
+                        multiPV = thisMultiPv;
+                        rowNum = multiPV-1;
+                        System.out.println("rowNum= " + rowNum);
+                    }
+                    case "depth" ->
+                        depth = splitLine[i + 1];
+                    case "seldepth" ->
+                        seldepth = splitLine[i + 1];
+                    case "nodes" ->
+                        nodes = splitLine[i + 1];
+                    case "lowerbound" ->
+                        lower = true;
+                    case "upperbound" ->
+                        upper = true;
+                    case "cp" -> {
+                        score = getScore(turn, splitLine[i + 1]);
+                        scoreStr = Integer.toString(score);
+                    }
+                    case "mate" -> {
+                        int mateNum = Integer.parseInt(splitLine[i + 1]);
+                        if (mateNum > 0) {
+                            score = 31111;
+                        } else {
+                            score = -31111;
+                        }
+                        if (turn == Turn.GOTE) {
+                            score = -score;
+                        }
+                        if (score > 0) {
+                            scoreStr = "+Mate:" + Math.abs(mateNum);
+                        } else {
+                            scoreStr = "-Mate:" + Math.abs(mateNum);
+                        }
+                    }
+                    case "pv" ->
+                        foundPV = true;
+                    default -> {
+                        // Unwanted element.
+                    }
+                }
+            }
+        }
+
+        StringBuilder pvBuilder = new StringBuilder("");
+
+        for (Position position : pvPositionList) {
+            pvBuilder.append(position.getNotation().getJapanese());
+            pvBuilder.append("\u3000");
+        }
+
+        String pvStr = pvBuilder.toString().trim();
+        String lowUp = getLowUpString(lower, upper);
+
+        return new Object[]{depth + "/" + seldepth, nodes, scoreStr, lowUp, pvStr};
     }
 
     private void initializeEngine(Engine engine) {

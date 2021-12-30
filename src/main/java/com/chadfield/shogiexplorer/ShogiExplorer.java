@@ -244,6 +244,19 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.setShowVerticalLines(false);
         analysisTable.setDefaultEditor(Object.class, null);
 
+
+        positionAnalysisTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        positionAnalysisTable.getColumnModel().getColumn(0).setMinWidth(50);
+        positionAnalysisTable.getColumnModel().getColumn(1).setMinWidth(100);
+        positionAnalysisTable.getColumnModel().getColumn(2).setMinWidth(70);
+        positionAnalysisTable.getColumnModel().getColumn(3).setMinWidth(35);
+        positionAnalysisTable.getColumnModel().getColumn(4).setMinWidth(1000);
+        positionAnalysisTable.getSelectionModel().addListSelectionListener(new AnalysisTableListener());
+        //positionAnalysisTable.getColumnModel().getColumn(4).setCellRenderer(analysisMoveRenderer);
+        positionAnalysisTable.setShowHorizontalLines(false);
+        positionAnalysisTable.setShowVerticalLines(false);
+        positionAnalysisTable.setDefaultEditor(Object.class, null);
+
         if (IS_LINUX) {
             moveList.setFixedCellHeight(analysisTable.getRowHeight());
         }
@@ -345,7 +358,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        positionAnalysisTable = new javax.swing.JTable();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel3 = new javax.swing.JPanel();
         moveListScrollPane = new javax.swing.JScrollPane();
@@ -729,18 +742,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        positionAnalysisTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Depth", "Nodes", "Score", "+-", "Principal Variation"
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(positionAnalysisTable);
 
         jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jScrollPane3.TabConstraints.tabTitle"), jScrollPane3); // NOI18N
 
@@ -1582,6 +1592,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 DefaultTableModel analysisTableModel = (DefaultTableModel) analysisTable.getModel();
                 analysisTableModel.getDataVector().clear();
                 try {
+                    jTabbedPane1.setSelectedIndex(0);
                     new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, plot, saveAnalysis, false);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
@@ -1910,6 +1921,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     }
                 }
                 try {
+                    jTabbedPane1.setSelectedIndex(0);
                     new GameAnalyser().analyse(game, engine, moveList, analysisTable, analysisParam, analysing, plot, saveAnalysis, true);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
@@ -2085,6 +2097,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         System.out.println(SFENParser.getSFEN(board));
         stopAnalysisButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
+        DefaultTableModel positionTableModel = (DefaultTableModel) positionAnalysisTable.getModel();
+        positionTableModel.setRowCount(0);
         analysisThread = new Thread() {
             @Override
             public void run() {
@@ -2096,7 +2110,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     }
                 }
                 try {
-                    new GameAnalyser().analysePosition(engine, analysisParam, analysing, position);
+                    jTabbedPane1.setSelectedIndex(2);
+                    new GameAnalyser().analysePosition(engine, analysisParam, analysing, position, positionAnalysisTable);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -2221,7 +2236,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JRadioButtonMenuItem japaneseRadioButtonMenuItem;
     private javax.swing.JToolBar mainToolBar;
     private javax.swing.JButton mediaBack;
@@ -2234,6 +2248,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JList<String> moveList;
     private javax.swing.JScrollPane moveListScrollPane;
     private javax.swing.JMenuItem openKifMenuItem;
+    private javax.swing.JTable positionAnalysisTable;
     private javax.swing.JMenuItem quitMenuItem;
     private javax.swing.JMenuItem refreshMenuItem;
     private javax.swing.JMenuItem resumeAnalysisMenuItem;
