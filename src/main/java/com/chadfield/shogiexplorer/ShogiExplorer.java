@@ -336,6 +336,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
         cancelAnalysisButton = new javax.swing.JButton();
         buttonGroup3 = new javax.swing.ButtonGroup();
         buttonGroup4 = new javax.swing.ButtonGroup();
+        jAnalysisDialog1 = new javax.swing.JDialog();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        analysisEngineComboBox1 = new javax.swing.JComboBox<>();
+        startAnalysisButton1 = new javax.swing.JButton();
+        cancelAnalysisButton1 = new javax.swing.JButton();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
@@ -547,6 +553,36 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jPanel2.add(cancelAnalysisButton);
 
         jAnalysisDialog.getContentPane().add(jPanel2);
+
+        jAnalysisDialog1.setResizable(false);
+        jAnalysisDialog1.getContentPane().setLayout(new java.awt.FlowLayout());
+
+        jPanel5.setLayout(new java.awt.GridLayout(0, 2, 20, 4));
+
+        jLabel4.setText(bundle.getString("ShogiExplorer.jLabel4.text")); // NOI18N
+        jLabel4.setMinimumSize(new java.awt.Dimension(200, 16));
+        jPanel5.add(jLabel4);
+
+        analysisEngineComboBox1.setPreferredSize(new java.awt.Dimension(200, 27));
+        jPanel5.add(analysisEngineComboBox1);
+
+        startAnalysisButton1.setText(bundle.getString("ShogiExplorer.startAnalysisButton1.text")); // NOI18N
+        startAnalysisButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startAnalysisButton1ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(startAnalysisButton1);
+
+        cancelAnalysisButton1.setText(bundle.getString("ShogiExplorer.cancelAnalysisButton1.text")); // NOI18N
+        cancelAnalysisButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelAnalysisButton1ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(cancelAnalysisButton1);
+
+        jAnalysisDialog1.getContentPane().add(jPanel5);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -1000,6 +1036,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         gameMenu.add(stopAnalysisMenuItem);
 
+        analysePositionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         analysePositionMenuItem.setText(bundle.getString("ShogiExplorer.analysePositionMenuItem.text")); // NOI18N
         analysePositionMenuItem.setToolTipText(bundle.getString("ShogiExplorer.analysePositionMenuItem.toolTipText")); // NOI18N
         analysePositionMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -2092,7 +2129,24 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_boardPanelKeyTyped
 
     private void analysePositionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analysePositionMenuItemActionPerformed
-        analysisEngineName ="Mizusho_4kai/YaneuraOu_6";
+        analysisEngineComboBox1.removeAllItems();
+        for (Engine engine : engineList) {
+            analysisEngineComboBox1.addItem(engine.getName());
+            if (engine.getName().contentEquals(analysisEngineName)) {
+                analysisEngineComboBox1.setSelectedItem(analysisEngineName);
+            }
+        }
+        jAnalysisDialog1.pack();
+        jAnalysisDialog1.setLocationRelativeTo(mainFrame);
+        jAnalysisDialog1.setVisible(true);
+        startAnalysisButton1.requestFocus();
+    }//GEN-LAST:event_analysePositionMenuItemActionPerformed
+
+    private void startAnalysisButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startAnalysisButton1ActionPerformed
+        jAnalysisDialog1.setVisible(false);
+        if (analysing.get()) {
+            return;
+        }
         Position position = new Position(SFENParser.getSFEN(board), null, null, null);
         System.out.println(SFENParser.getSFEN(board));
         stopAnalysisButton.setEnabled(true);
@@ -2118,7 +2172,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         };
         analysisThread.start();
-    }//GEN-LAST:event_analysePositionMenuItemActionPerformed
+    }//GEN-LAST:event_startAnalysisButton1ActionPerformed
+
+    private void cancelAnalysisButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelAnalysisButton1ActionPerformed
+        jAnalysisDialog1.setVisible(false);
+    }//GEN-LAST:event_cancelAnalysisButton1ActionPerformed
 
     private String getAboutMessage() {
         String aboutMessage;
@@ -2174,6 +2232,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem analyseGameMenuItem;
     private javax.swing.JMenuItem analysePositionMenuItem;
     private javax.swing.JComboBox<String> analysisEngineComboBox;
+    private javax.swing.JComboBox<String> analysisEngineComboBox1;
     private javax.swing.JTable analysisTable;
     private javax.swing.JSpinner analysisTimePerMoveSpinner;
     private javax.swing.JCheckBoxMenuItem autoRefreshCheckBoxMenuItem;
@@ -2183,6 +2242,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
     private javax.swing.JButton cancelAnalysisButton;
+    private javax.swing.JButton cancelAnalysisButton1;
     private javax.swing.JButton closeEngineManagerButton;
     private javax.swing.JScrollPane commentScrollPane;
     private javax.swing.JTextArea commentTextArea;
@@ -2209,6 +2269,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem importClipboardMenuItem;
     private javax.swing.JMenuItem importURLMenuItem;
     private javax.swing.JDialog jAnalysisDialog;
+    private javax.swing.JDialog jAnalysisDialog1;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JList<String> jEngineList;
@@ -2217,6 +2278,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -2225,6 +2287,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2258,6 +2321,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JRadioButtonMenuItem shiftJISImportRadioButtonMenuItem;
     private javax.swing.JRadioButtonMenuItem shiftJISRadioButtonMenuItem;
     private javax.swing.JButton startAnalysisButton;
+    private javax.swing.JButton startAnalysisButton1;
     private javax.swing.JButton stopAnalysisButton;
     private javax.swing.JMenuItem stopAnalysisMenuItem;
     private javax.swing.JRadioButtonMenuItem utf8ImportRadioButtonMenuItem;
