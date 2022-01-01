@@ -144,8 +144,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     boolean setupModified = false;
     int setupKomadaiCount = -1;
 
-    static final String LOGO_NAME = "logo.png";
-
     private static final String OS = System.getProperty("os.name").toLowerCase();
     public static final boolean IS_WINDOWS = (OS.contains("win"));
     public static final boolean IS_MAC = (OS.contains("mac"));
@@ -173,8 +171,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         initComponents();
 
-        setIconImage(ImageUtils.loadIconImageFromResources("logo"));
-        jEngineManagerDialog.setIconImage(ImageUtils.loadIconImageFromResources("logo"));
+        setIconImage(ImageUtils.loadTaskbarImageFromResources("taskbar"));
+        jEngineManagerDialog.setIconImage(ImageUtils.loadTaskbarImageFromResources("taskbar"));
 
         if (language.contentEquals(PREF_LANGUAGE_JAPANESE)) {
             japaneseRadioButtonMenuItem.setSelected(true);
@@ -267,12 +265,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             quitMenuItem.setVisible(false);
             desktop.setAboutHandler(e
                     -> {
-                try {
                     JOptionPane.showMessageDialog(mainFrame, getAboutMessage(), null, JOptionPane.INFORMATION_MESSAGE,
-                            new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME))));
-                } catch (IOException ex) {
-                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                        new ImageIcon(ImageUtils.loadIconImageFromResources("logo")));
             }
             );
             desktop.setQuitHandler((QuitEvent evt, QuitResponse res) -> {
@@ -1808,12 +1802,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_japaneseRadioButtonMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-        try {
             JOptionPane.showMessageDialog(mainFrame, getAboutMessage(), null, JOptionPane.INFORMATION_MESSAGE,
-                    new ImageIcon(ImageIO.read(ClassLoader.getSystemClassLoader().getResource(LOGO_NAME))));
-        } catch (IOException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+                    new ImageIcon(ImageUtils.loadIconImageFromResources("logo")));
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void quitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitMenuItemActionPerformed
@@ -2184,7 +2174,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             Properties prop = new Properties();
             prop.load(input);
             aboutMessage = "Shogi Explorer\n\nVersion " + prop.getProperty("project.version")
-                    + "\n\nCopyright © 2021 Stephen R Chadfield\nAll rights reserved."
+                    + "\n\nCopyright © 2022 Stephen R Chadfield\nAll rights reserved."
                     + "\n\nPlay more Shogi!";
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
