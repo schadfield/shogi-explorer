@@ -939,7 +939,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenu3.setBorder(null);
         jMenu3.setText(bundle.getString("ShogiExplorer.jMenu3.text")); // NOI18N
 
-        positionSetupRadioButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        positionSetupRadioButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         positionSetupRadioButton.setText(bundle.getString("ShogiExplorer.positionSetupRadioButton.text")); // NOI18N
         positionSetupRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
