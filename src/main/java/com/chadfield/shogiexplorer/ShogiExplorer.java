@@ -252,7 +252,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         positionAnalysisTable.getColumnModel().getColumn(3).setMinWidth(35);
         positionAnalysisTable.getColumnModel().getColumn(4).setMinWidth(1000);
         positionAnalysisTable.getSelectionModel().addListSelectionListener(new PositionTableListener());
-        //positionAnalysisTable.getColumnModel().getColumn(4).setCellRenderer(analysisMoveRenderer);
+        positionAnalysisTable.getColumnModel().getColumn(4).setCellRenderer(analysisMovePosRenderer);
         positionAnalysisTable.setShowHorizontalLines(false);
         positionAnalysisTable.setShowVerticalLines(false);
         positionAnalysisTable.setDefaultEditor(Object.class, null);
@@ -784,6 +784,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         ));
         positionAnalysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         positionAnalysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        positionAnalysisTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                positionAnalysisTableKeyReleased(evt);
+            }
+        });
         jScrollPane3.setViewportView(positionAnalysisTable);
 
         jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jScrollPane3.TabConstraints.tabTitle"), jScrollPane3); // NOI18N
@@ -1433,11 +1438,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }
     
     private void loadPosAnalysisPosition() {
-            Position position = analysisParam.getPositionAnalysisList().get(posBrowseRow).get(posBrowsePos);
-            if (position != null) {
-                board = SFENParser.parse(position.getGameSFEN());
+            List<Position> positionList = analysisParam.getPositionAnalysisList().get(posBrowseRow);
+            if (positionList != null) {
+                Position position = positionList.get(posBrowsePos);
+                board = SFENParser.parse(positionList.get(posBrowsePos).getGameSFEN());
                 board.setSource(position.getSource());
                 board.setDestination(position.getDestination());  
+                commentTextArea.setText(null);
+                positionAnalysisTable.repaint();
                 RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
             }
     }
@@ -1725,6 +1733,29 @@ public class ShogiExplorer extends javax.swing.JFrame {
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
     }
 
+    private void rightButtonPosAnalysis() {
+        if (posBrowse) {
+            if (posBrowsePos < analysisParam.getPositionAnalysisList().get(posBrowseRow).size() - 1) {
+                posBrowsePos++;
+            }
+        } else {
+            posBrowse = true;
+            posBrowsePos = 0;
+        }
+
+        loadPosAnalysisPosition();
+    }
+
+    private void leftButtonPosAnalysis() {
+        if (posBrowse) {
+            if (posBrowsePos > 0) {
+                posBrowsePos--;
+            }
+        } 
+
+        loadPosAnalysisPosition();
+    }
+
     transient TableCellRenderer analysisMoveRenderer = new TableCellRenderer() {
         JLabel cellLabel = new JLabel();
 
@@ -1773,6 +1804,74 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         } else {
                             // Just a regular char.
                             if (browsePos < 7 || spaceCount > browsePos - 7) {
+                                cellStrBld.append(cellContents.toString().charAt(i));
+                            }
+                        }
+                    }
+                    if (foundStart && !foundEnd) {
+                        cellStrBld.append("</span>");
+                    }
+                    cellStrBld.append("</html>");
+                    cellLabel.setText(cellStrBld.toString());
+                } else {
+                    // Either we are not browsing or we are rendering PV for a non-active line.
+                    cellLabel.setText(cellContents.toString());
+                }
+            } else {
+                cellLabel.setText("");
+            }
+            return cellLabel;
+        }
+    };
+
+    transient TableCellRenderer analysisMovePosRenderer = new TableCellRenderer() {
+        JLabel cellLabel = new JLabel();
+
+        @Override
+        public Component getTableCellRendererComponent(JTable jTable, Object cellContents, boolean arg2, boolean arg3, int row, int arg5) {
+            Color selBG = positionAnalysisTable.getSelectionBackground();
+            String hexCol = String.format("#%06x", selBG.getRGB() & 0x00FFFFFF);
+            if (cellContents != null) {
+                if (posBrowse && row == posBrowseRow) {
+                    // We are in browse mode and rendering the PV for the active line.
+                    StringBuilder cellStrBld = new StringBuilder("<html>");
+                    int spaceCount = 0;
+                    boolean foundStart = false;
+                    boolean foundEnd = false;
+                    if (posBrowsePos == 0) {
+                        // In this case we insert at the begining.
+                        cellStrBld.append("<span style=\"background:");
+                        cellStrBld.append(hexCol);
+                        cellStrBld.append(";color:white;\">");
+                        foundStart = true;
+                    }
+                    for (int i = 0; i < cellContents.toString().length(); i++) {
+                        if (posBrowsePos > 6 && i == 0) {
+                            cellStrBld.append("…");
+                        }
+                        if (!foundEnd && cellContents.toString().charAt(i) == '\u3000') {
+                            spaceCount++;
+                            if (foundStart) {
+                                //　This is the end, my friend.
+                                cellStrBld.append("</span>\u3000");
+                                foundEnd = true;
+                            } else {
+                                // Is this the start?
+                                if (spaceCount == posBrowsePos) {
+                                    cellStrBld.append("\u3000<span style=\"background:");
+                                    cellStrBld.append(hexCol);
+                                    cellStrBld.append(";color:white;\">");
+                                    foundStart = true;
+                                } else {
+                                    // Keep looking.
+                                    if (posBrowsePos < 7 || spaceCount > posBrowsePos - 6) {
+                                        cellStrBld.append("\u3000");
+                                    }
+                                }
+                            }
+                        } else {
+                            // Just a regular char.
+                            if (posBrowsePos < 7 || spaceCount > posBrowsePos - 7) {
                                 cellStrBld.append(cellContents.toString().charAt(i));
                             }
                         }
@@ -2193,6 +2292,19 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void cancelAnalysisButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelAnalysisButton1ActionPerformed
         jAnalysisDialog1.setVisible(false);
     }//GEN-LAST:event_cancelAnalysisButton1ActionPerformed
+
+    private void positionAnalysisTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_positionAnalysisTableKeyReleased
+        if (analysing.get()) {
+            return;
+        }
+        int keyCode = evt.getKeyCode();
+        switch (keyCode) {
+            case 37 ->
+                leftButtonPosAnalysis();
+            case 39 ->
+                rightButtonPosAnalysis();                
+        }
+    }//GEN-LAST:event_positionAnalysisTableKeyReleased
 
     private String getAboutMessage() {
         String aboutMessage;

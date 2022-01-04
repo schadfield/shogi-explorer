@@ -1246,6 +1246,9 @@
                   <JTableSelectionModel selectionMode="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="positionAnalysisTableKeyReleased"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
