@@ -1037,6 +1037,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysePositionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         analysePositionMenuItem.setText(bundle.getString("ShogiExplorer.analysePositionMenuItem.text")); // NOI18N
         analysePositionMenuItem.setToolTipText(bundle.getString("ShogiExplorer.analysePositionMenuItem.toolTipText")); // NOI18N
+        analysePositionMenuItem.setEnabled(false);
         analysePositionMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analysePositionMenuItemActionPerformed(evt);
@@ -1217,6 +1218,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
         parseKifu(false);
         analyseGameMenuItem.setEnabled(true);
+        analysePositionMenuItem.setEnabled(true);
         resumeAnalysisMenuItem.setEnabled(false);
     }//GEN-LAST:event_openKifMenuItemActionPerformed
 
@@ -1282,6 +1284,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setGraphView3(graph3000RadioButtonMenuItem);
         analysisParam.setHaltAnalysisButton(stopAnalysisButton);
         analysisParam.setAnalyseGameMenuItem(analyseGameMenuItem);
+        analysisParam.setAnalysePositionMenuItem(analysePositionMenuItem);
         analysisParam.setStopAnalysisMenuItem(stopAnalysisMenuItem);
         analysisParam.setResumeAnalysisMenuItem(resumeAnalysisMenuItem);
         analysisParam.setKifFile(kifFile);
@@ -1662,6 +1665,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         };
         analyseGameMenuItem.setEnabled(false);
+        analysePositionMenuItem.setEnabled(false);
         resumeAnalysisMenuItem.setEnabled(false);
         analysisThread.start();
     }//GEN-LAST:event_startAnalysisButtonActionPerformed
@@ -1960,6 +1964,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 flushPrefs();
                 parseKifu(false);
                 analyseGameMenuItem.setEnabled(true);
+                analysePositionMenuItem.setEnabled(true);
                 resumeAnalysisMenuItem.setEnabled(false);
             } catch (UnsupportedFlavorException | IOException ex) {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
@@ -2001,6 +2006,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 flushPrefs();
                 parseKifu(false);
                 analyseGameMenuItem.setEnabled(true);
+                analysePositionMenuItem.setEnabled(true);
                 resumeAnalysisMenuItem.setEnabled(false);
                 java.awt.event.ActionListener taskPerformer = (java.awt.event.ActionEvent evt1)
                         -> refreshMenuItemActionPerformed(evt1);
@@ -2055,6 +2061,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         stopAnalysisButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
         analyseGameMenuItem.setEnabled(false);
+        analysePositionMenuItem.setEnabled(false);
         resumeAnalysisMenuItem.setEnabled(false);
         analysisTable.clearSelection();
         analysisThread = new Thread() {
@@ -2089,6 +2096,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         int numMovesBefore = game.getPositionList().size();
         parseKifu(true);
         analyseGameMenuItem.setEnabled(true);
+        analysePositionMenuItem.setEnabled(true);
         resumeAnalysisMenuItem.setEnabled(
                 analysisTable.getRowCount() > 0
                 && analysisTable.getRowCount() < game.getPositionList().size() - 1
@@ -2294,12 +2302,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void positionSetupRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_positionSetupRadioButtonActionPerformed
         if (setup) {
             setup = false;
+            if (game != null && !game.getPositionList().isEmpty()) {
+                analyseGameMenuItem.setEnabled(true);
+                analysePositionMenuItem.setEnabled(true);
+            }
             board.setEdit(null);
             board.setDestination(null);
             board.setSource(null);
             RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
         } else {
             setup = true;
+            analyseGameMenuItem.setEnabled(false);
+            analysePositionMenuItem.setEnabled(false);
             board.setEdit(new Coordinate(9, 1));
             board.setDestination(null);
             board.setSource(null);

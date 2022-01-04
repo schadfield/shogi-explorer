@@ -18,6 +18,7 @@ public class AnalysisParameter {
     private JRadioButtonMenuItem graphView3;
     private JButton haltAnalysisButton;
     private JMenuItem analyseGameMenuItem;
+    private JMenuItem analysePositionMenuItem;
     private JMenuItem stopAnalysisMenuItem;
     private JMenuItem resumeAnalysisMenuItem;
     private List<List<Position>> positionAnalysisList;
@@ -342,5 +343,19 @@ public class AnalysisParameter {
      */
     public void setPositionAnalysisList(List<List<Position>> positionAnalysisList) {
         this.positionAnalysisList = positionAnalysisList;
+    }
+
+    /**
+     * @return the analysePositionMenuItem
+     */
+    public JMenuItem getAnalysePositionMenuItem() {
+        return analysePositionMenuItem;
+    }
+
+    /**
+     * @param analysePositionMenuItem the analysePositionMenuItem to set
+     */
+    public void setAnalysePositionMenuItem(JMenuItem analysePositionMenuItem) {
+        this.analysePositionMenuItem = analysePositionMenuItem;
     }
 }

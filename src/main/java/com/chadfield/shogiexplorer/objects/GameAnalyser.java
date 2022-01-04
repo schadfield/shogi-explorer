@@ -68,6 +68,7 @@ public class GameAnalyser {
     JButton haltAnalysisButton;
     JMenuItem stopAnalysisMenuItem;
     JMenuItem analyseGameMenuItem;
+    JMenuItem analysePositionMenuItem;
     JMenuItem resumeAnalysisMenuItem;
     Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
     boolean handicap;
@@ -89,6 +90,7 @@ public class GameAnalyser {
         this.haltAnalysisButton = analysisParam.getHaltAnalysisButton();
         this.stopAnalysisMenuItem = analysisParam.getStopAnalysisMenuItem();
         this.analyseGameMenuItem = analysisParam.getAnalyseGameMenuItem();
+        this.analysePositionMenuItem = analysisParam.getAnalysePositionMenuItem();
         this.resumeAnalysisMenuItem = analysisParam.getResumeAnalysisMenuItem();
         this.x1Start = analysisParam.getX1Start();
         this.x1 = analysisParam.getX1();
@@ -174,6 +176,7 @@ public class GameAnalyser {
         haltAnalysisButton.setEnabled(false);
         stopAnalysisMenuItem.setEnabled(false);
         analyseGameMenuItem.setEnabled(true);
+        analysePositionMenuItem.setEnabled(true);
         resumeAnalysisMenuItem.setEnabled(count < game.getPositionList().size() - 1);
         analysisParam.setX1Start(x1Start);
         analysisParam.setX1(x1);
