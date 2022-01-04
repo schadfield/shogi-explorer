@@ -52,7 +52,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -91,7 +90,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     int lastMoveNumber;
     boolean play;
     boolean browse;
+    boolean posBrowse;
     int browsePos;
+    int posBrowsePos;
+    int posBrowseRow;
     AtomicBoolean analysing = new AtomicBoolean(false);
     DefaultListModel<String> moveListModel = new DefaultListModel<>();
     DefaultListModel<String> engineListModel = new DefaultListModel<>();
@@ -249,7 +251,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         positionAnalysisTable.getColumnModel().getColumn(2).setMinWidth(70);
         positionAnalysisTable.getColumnModel().getColumn(3).setMinWidth(35);
         positionAnalysisTable.getColumnModel().getColumn(4).setMinWidth(1000);
-        positionAnalysisTable.getSelectionModel().addListSelectionListener(new AnalysisTableListener());
+        positionAnalysisTable.getSelectionModel().addListSelectionListener(new PositionTableListener());
         //positionAnalysisTable.getColumnModel().getColumn(4).setCellRenderer(analysisMoveRenderer);
         positionAnalysisTable.setShowHorizontalLines(false);
         positionAnalysisTable.setShowVerticalLines(false);
@@ -780,6 +782,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 "Depth", "Nodes", "Score", "+-", "Principal Variation"
             }
         ));
+        positionAnalysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        positionAnalysisTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane3.setViewportView(positionAnalysisTable);
 
         jTabbedPane1.addTab(bundle.getString("ShogiExplorer.jScrollPane3.TabConstraints.tabTitle"), jScrollPane3); // NOI18N
@@ -1415,8 +1419,30 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mediaPlayActionPerformed
 
-    private class AnalysisTableListener implements ListSelectionListener {
+    private class PositionTableListener implements ListSelectionListener {
+        @Override
+        public void valueChanged(ListSelectionEvent evt) {
+            if (!evt.getValueIsAdjusting() && !analysing.get()) {
+                System.out.println("table row = " + positionAnalysisTable.getSelectedRow());
+                posBrowse = true;
+                posBrowseRow = positionAnalysisTable.getSelectedRow();
+                posBrowsePos = 0;
+                loadPosAnalysisPosition();
+            }
+        }
+    }
+    
+    private void loadPosAnalysisPosition() {
+            Position position = analysisParam.getPositionAnalysisList().get(posBrowseRow).get(posBrowsePos);
+            if (position != null) {
+                board = SFENParser.parse(position.getGameSFEN());
+                board.setSource(position.getSource());
+                board.setDestination(position.getDestination());  
+                RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
+            }
+    }
 
+    private class AnalysisTableListener implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent evt) {
             if (!evt.getValueIsAdjusting() && !inSelectionChange && !analysing.get()) {

@@ -1,6 +1,7 @@
 package com.chadfield.shogiexplorer.objects;
 
 import java.io.File;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
@@ -19,6 +20,7 @@ public class AnalysisParameter {
     private JMenuItem analyseGameMenuItem;
     private JMenuItem stopAnalysisMenuItem;
     private JMenuItem resumeAnalysisMenuItem;
+    private List<List<Position>> positionAnalysisList;
     private File kifFile;
     private double[] x1Start;
     private double[] x1;
@@ -326,5 +328,19 @@ public class AnalysisParameter {
      */
     public void setAnalyseGameMenuItem(JMenuItem analyseGameMenuItem) {
         this.analyseGameMenuItem = analyseGameMenuItem;
+    }
+
+    /**
+     * @return the positionAnalysisList
+     */
+    public List<List<Position>> getPositionAnalysisList() {
+        return positionAnalysisList;
+    }
+
+    /**
+     * @param positionAnalysisList the positionAnalysisList to set
+     */
+    public void setPositionAnalysisList(List<List<Position>> positionAnalysisList) {
+        this.positionAnalysisList = positionAnalysisList;
     }
 }
