@@ -893,6 +893,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         fileMenu.add(openKifMenuItem);
 
+        saveKifMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         saveKifMenuItem.setText(bundle.getString("ShogiExplorer.saveKifMenuItem.text")); // NOI18N
         saveKifMenuItem.setEnabled(false);
         saveKifMenuItem.addActionListener(new java.awt.event.ActionListener() {
