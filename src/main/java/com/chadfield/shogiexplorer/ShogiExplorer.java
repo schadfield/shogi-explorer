@@ -244,7 +244,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisTable.setShowVerticalLines(false);
         analysisTable.setDefaultEditor(Object.class, null);
 
-
         positionAnalysisTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         positionAnalysisTable.getColumnModel().getColumn(0).setMinWidth(50);
         positionAnalysisTable.getColumnModel().getColumn(1).setMinWidth(100);
@@ -266,10 +265,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (IS_MAC) {
             quitMenuItem.setVisible(false);
             desktop.setAboutHandler(e
-                    -> {
-                    JOptionPane.showMessageDialog(mainFrame, getAboutMessage(), null, JOptionPane.INFORMATION_MESSAGE,
-                        new ImageIcon(ImageUtils.loadIconImageFromResources("logo")));
-            }
+                    -> JOptionPane.showMessageDialog(mainFrame, getAboutMessage(), null, JOptionPane.INFORMATION_MESSAGE,
+                            new ImageIcon(ImageUtils.loadIconImageFromResources("logo")))
             );
             desktop.setQuitHandler((QuitEvent evt, QuitResponse res) -> {
                 prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
@@ -293,7 +290,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void noSetup() {
         if (!setup) {
             return;
@@ -1424,10 +1421,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_mediaPlayActionPerformed
 
     private class PositionTableListener implements ListSelectionListener {
+
         @Override
         public void valueChanged(ListSelectionEvent evt) {
             if (!evt.getValueIsAdjusting() && !analysing.get()) {
-                System.out.println("table row = " + positionAnalysisTable.getSelectedRow());
                 posBrowse = true;
                 posBrowseRow = positionAnalysisTable.getSelectedRow();
                 posBrowsePos = 0;
@@ -1435,21 +1432,22 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private void loadPosAnalysisPosition() {
-            List<Position> positionList = analysisParam.getPositionAnalysisList().get(posBrowseRow);
-            if (positionList != null) {
-                Position position = positionList.get(posBrowsePos);
-                board = SFENParser.parse(positionList.get(posBrowsePos).getGameSFEN());
-                board.setSource(position.getSource());
-                board.setDestination(position.getDestination());  
-                commentTextArea.setText(null);
-                positionAnalysisTable.repaint();
-                RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
-            }
+        List<Position> positionList = analysisParam.getPositionAnalysisList().get(posBrowseRow);
+        if (positionList != null) {
+            Position position = positionList.get(posBrowsePos);
+            board = SFENParser.parse(positionList.get(posBrowsePos).getGameSFEN());
+            board.setSource(position.getSource());
+            board.setDestination(position.getDestination());
+            commentTextArea.setText(null);
+            positionAnalysisTable.repaint();
+            RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
+        }
     }
 
     private class AnalysisTableListener implements ListSelectionListener {
+
         @Override
         public void valueChanged(ListSelectionEvent evt) {
             if (!evt.getValueIsAdjusting() && !inSelectionChange && !analysing.get()) {
@@ -1746,11 +1744,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }
 
     private void leftButtonPosAnalysis() {
-        if (posBrowse) {
-            if (posBrowsePos > 0) {
-                posBrowsePos--;
-            }
-        } 
+        if (posBrowse && posBrowsePos > 0) {
+            posBrowsePos--;     
+        }
 
         loadPosAnalysisPosition();
     }
@@ -1926,8 +1922,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_japaneseRadioButtonMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-            JOptionPane.showMessageDialog(mainFrame, getAboutMessage(), null, JOptionPane.INFORMATION_MESSAGE,
-                    new ImageIcon(ImageUtils.loadIconImageFromResources("logo")));
+        JOptionPane.showMessageDialog(mainFrame, getAboutMessage(), null, JOptionPane.INFORMATION_MESSAGE,
+                new ImageIcon(ImageUtils.loadIconImageFromResources("logo")));
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void quitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitMenuItemActionPerformed
@@ -2249,7 +2245,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             return;
         }
         Position position = new Position(SFENParser.getSFEN(board), null, null, null);
-        System.out.println(SFENParser.getSFEN(board));
         stopAnalysisButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
         initializeAnalysisParams(false);
@@ -2289,7 +2284,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
             case 37 ->
                 leftButtonPosAnalysis();
             case 39 ->
-                rightButtonPosAnalysis();                
+                rightButtonPosAnalysis();
+            default -> {
+                // Do nothing 
+            }
         }
     }//GEN-LAST:event_positionAnalysisTableKeyReleased
 
@@ -2330,16 +2328,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
      */
     public static void main(String[] args) {
         try {
-            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         if (IS_WINDOWS) {
             java.util.Enumeration<?> keys = UIManager.getDefaults().keys();
             while (keys.hasMoreElements()) {
                 Object key = keys.nextElement();
-                Object value = UIManager.get (key);
+                Object value = UIManager.get(key);
                 if (value instanceof javax.swing.plaf.FontUIResource) {
                     Font font = (Font) value;
                     int fontSize = font.getSize();
@@ -2349,7 +2347,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     UIManager.put(key, new FontUIResource("Meiryo", font.getStyle(), fontSize));
                 }
             }
-        } 
+        }
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {

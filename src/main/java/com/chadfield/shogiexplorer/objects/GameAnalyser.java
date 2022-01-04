@@ -78,7 +78,6 @@ public class GameAnalyser {
     boolean interrupted;
     private List<List<Position>> positionAnalysisList;
 
-
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, boolean saveAnalysis, boolean resume) throws IOException {
         analysing.set(true);
         this.plot = plot;
@@ -242,18 +241,13 @@ public class GameAnalyser {
         String line;
         while (!bestMove && (line = bufferedReader.readLine()) != null) {
             if (Thread.interrupted()) {
-                System.out.println("Interrupted");
                 stdin.write(("stop\n").getBytes());
                 stdin.flush();
             }
-            System.out.println("B");
             updateTableModel(line, tableModel, positionTurn, sfen);
-            System.out.println("C");
         }
-        System.out.println("A");
         stdin.flush();
         analysisParam.setPositionAnalysisList(positionAnalysisList);
-        System.out.println("setting false");
         analysing.set(false);
     }
 
@@ -266,7 +260,6 @@ public class GameAnalyser {
     }
 
     private void updateTableModel(String line, DefaultTableModel tableModel, Turn positionTurn, String sfen) {
-        System.out.println(line);
         if (!line.contains("bestmove")) {
             ArrayList<Position> pvPositionList = getPVPositionList(sfen, line, null);
             Object[] tableInsert = getTableInsert(line, positionTurn, pvPositionList, tableModel);
@@ -297,8 +290,7 @@ public class GameAnalyser {
                             tableModel.insertRow(0, new Object[]{});
                         }
                         multiPV = thisMultiPv;
-                        rowNum = multiPV-1;
-                        System.out.println("rowNum= " + rowNum);
+                        rowNum = multiPV - 1;
                     }
                     case "depth" ->
                         depth = splitLine[i + 1];
@@ -413,7 +405,6 @@ public class GameAnalyser {
         String line;
         List<String> lineList = new ArrayList<>();
         while (!interrupted && (line = bufferedReader.readLine()) != null) {
-            System.out.println(line);
             if (Thread.interrupted()) {
                 stdin.write("stop\n".getBytes());
                 stdin.flush();
