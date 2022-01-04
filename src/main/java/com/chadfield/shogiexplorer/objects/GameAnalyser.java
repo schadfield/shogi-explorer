@@ -75,6 +75,7 @@ public class GameAnalyser {
     int multiPV;
     int rowNum;
     boolean bestMove;
+    boolean interrupted;
     private List<List<Position>> positionAnalysisList;
 
 
@@ -129,7 +130,7 @@ public class GameAnalyser {
             turn = Turn.SENTE;
         }
 
-        boolean interrupted = false;
+        interrupted = false;
 
         for (Position position : game.getPositionList()) {
 
@@ -137,6 +138,9 @@ public class GameAnalyser {
                 if (!resume || count > resumeCount) {
                     updateMoveList(moveList, count);
                     analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, turn, previousMoveDestination);
+                }
+                if (interrupted) {
+                    break;
                 }
                 previousMoveDestination = lastDestination;
                 count++;
@@ -154,26 +158,12 @@ public class GameAnalyser {
             }
 
             lastDestination = position.getDestination();
-
-            if (Thread.interrupted()) {
-                interrupted = true;
-                break;
-            }
         }
 
         if (!interrupted) {
             updateMoveList(moveList, count);
             analysePosition(game, lastSFEN, engineMove, japaneseMove, analysisTable, plotDataset, count, turn, previousMoveDestination);
             count++;
-        }
-
-        while (analysisTable.getRowCount() < count - 1) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(GameAnalyser.class.getName()).log(Level.SEVERE, null, ex);
-                Thread.currentThread().interrupt();
-            }
         }
 
         if (analysisTable.getRowCount() > 0) {
@@ -422,7 +412,13 @@ public class GameAnalyser {
         stdin.flush();
         String line;
         List<String> lineList = new ArrayList<>();
-        while ((line = bufferedReader.readLine()) != null) {
+        while (!interrupted && (line = bufferedReader.readLine()) != null) {
+            System.out.println(line);
+            if (Thread.interrupted()) {
+                stdin.write("stop\n".getBytes());
+                stdin.flush();
+                interrupted = true;
+            }
             if (line.contains("bestmove")) {
                 String bestLine = getBestLine(line, lineList);
                 ArrayList<Position> pvPositionList = getPVPositionList(sfen, bestLine, previousMoveDestination);
@@ -592,10 +588,10 @@ public class GameAnalyser {
     }
 
     private String getBestLine(String line, List<String> lineList) {
-        String bestMove = line.split(" ")[1];
+        String bestMoveStr = line.split(" ")[1];
         int lineListSize = lineList.size();
         for (int j = lineListSize - 1; j >= 0; j--) {
-            if (lineList.get(j).contains("pv " + bestMove)) {
+            if (lineList.get(j).contains("pv " + bestMoveStr)) {
                 return lineList.get(j);
             }
         }
