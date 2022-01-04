@@ -293,6 +293,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private void noSetup() {
+        if (!setup) {
+            return;
+        }
+        setup = false;
+        positionSetupRadioButton.setEnabled(false);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -380,8 +388,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         importClipboardMenuItem = new javax.swing.JMenuItem();
         quitMenuItem = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        setupPositionMenuItem = new javax.swing.JMenuItem();
-        endSetupMenuItem = new javax.swing.JMenuItem();
+        positionSetupRadioButton = new javax.swing.JRadioButtonMenuItem();
         jMenu2 = new javax.swing.JMenu();
         importURLMenuItem = new javax.swing.JMenuItem();
         refreshMenuItem = new javax.swing.JMenuItem();
@@ -935,23 +942,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenu3.setBorder(null);
         jMenu3.setText(bundle.getString("ShogiExplorer.jMenu3.text")); // NOI18N
 
-        setupPositionMenuItem.setText(bundle.getString("ShogiExplorer.setupPositionMenuItem.text_1")); // NOI18N
-        setupPositionMenuItem.setBorder(null);
-        setupPositionMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        positionSetupRadioButton.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        positionSetupRadioButton.setText(bundle.getString("ShogiExplorer.positionSetupRadioButton.text")); // NOI18N
+        positionSetupRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setupPositionMenuItemActionPerformed(evt);
+                positionSetupRadioButtonActionPerformed(evt);
             }
         });
-        jMenu3.add(setupPositionMenuItem);
-
-        endSetupMenuItem.setText(bundle.getString("ShogiExplorer.endSetupMenuItem.text")); // NOI18N
-        endSetupMenuItem.setBorder(null);
-        endSetupMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                endSetupMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu3.add(endSetupMenuItem);
+        jMenu3.add(positionSetupRadioButton);
 
         jMenuBar1.add(jMenu3);
 
@@ -1181,6 +1179,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void openKifMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openKifMenuItemActionPerformed
+        noSetup();
         if (refreshTimer != null && refreshTimer.isRunning()) {
             refreshTimer.stop();
             refreshTimer = null;
@@ -1277,7 +1276,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }
 
     private void initializeAnalysisParams(boolean initChart) {
-        if (initChart) {
+        if (initChart || analysisParam == null) {
             analysisParam = new AnalysisParameter();
         }
         analysisParam.setAnalysisTimePerMove(analysisTimePerMove);
@@ -1373,25 +1372,25 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }
 
     private void mediaForwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaForwardActionPerformed
-        if (!play && game != null && !analysing.get() && moveNumber < game.getPositionList().size() + 1) {
+        if (!setup && !play && game != null && !analysing.get() && moveNumber < game.getPositionList().size() + 1) {
             moveList.setSelectedIndex(moveNumber + 1);
         }
     }//GEN-LAST:event_mediaForwardActionPerformed
 
     private void mediaBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaBackActionPerformed
-        if (!play && moveNumber > 0 && !analysing.get()) {
+        if (!setup && !play && moveNumber > 0 && !analysing.get()) {
             moveList.setSelectedIndex(moveNumber - 1);
         }
     }//GEN-LAST:event_mediaBackActionPerformed
 
     private void mediaStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaStartActionPerformed
-        if (!play && !analysing.get()) {
+        if (!setup && !play && !analysing.get()) {
             moveList.setSelectedIndex(0);
         }
     }//GEN-LAST:event_mediaStartActionPerformed
 
     private void mediaEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaEndActionPerformed
-        if (!play && game != null && !analysing.get()) {
+        if (!setup && !play && game != null && !analysing.get()) {
             moveList.setSelectedIndex(game.getPositionList().size() - 1);
         }
     }//GEN-LAST:event_mediaEndActionPerformed
@@ -1401,7 +1400,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_mediaStopActionPerformed
 
     private void mediaPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaPlayActionPerformed
-        if (!play && game != null && !analysing.get()) {
+        if (!setup && !play && game != null && !analysing.get()) {
             new Thread() {
                 @Override
                 public void run() {
@@ -1530,7 +1529,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_moveListValueChanged
 
     private void mediaReverseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mediaReverseActionPerformed
-        if (!play && !analysing.get()) {
+        if (!setup && !play && !analysing.get()) {
             new Thread() {
                 @Override
                 public void run() {
@@ -1629,7 +1628,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void startAnalysisButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startAnalysisButtonActionPerformed
         jAnalysisDialog.setVisible(false);
-        if (analysing.get()) {
+        if (setup || analysing.get()) {
             return;
         }
         if (game == null || game.getPositionList().size() < 2) {
@@ -2045,7 +2044,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_shiftJISImportRadioButtonMenuItemActionPerformed
 
     private void resumeAnalysisMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resumeAnalysisMenuItemActionPerformed
-        if (analysing.get()) {
+        if (setup || analysing.get()) {
             return;
         }
         if (game == null || game.getPositionList().size() < 2) {
@@ -2134,19 +2133,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_commentTextAreaMouseClicked
-
-    private void setupPositionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setupPositionMenuItemActionPerformed
-        setup = true;
-        board.setEdit(new Coordinate(9, 1));
-        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
-        boardPanel.requestFocus();
-    }//GEN-LAST:event_setupPositionMenuItemActionPerformed
-
-    private void endSetupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endSetupMenuItemActionPerformed
-        board.setEdit(null);
-        setup = false;
-        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
-    }//GEN-LAST:event_endSetupMenuItemActionPerformed
 
     private void boardPanelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_boardPanelKeyReleased
         if (setup) {
@@ -2259,13 +2245,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void startAnalysisButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startAnalysisButton1ActionPerformed
         jAnalysisDialog1.setVisible(false);
-        if (analysing.get()) {
+        if (setup || analysing.get()) {
             return;
         }
         Position position = new Position(SFENParser.getSFEN(board), null, null, null);
         System.out.println(SFENParser.getSFEN(board));
         stopAnalysisButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
+        initializeAnalysisParams(false);
         DefaultTableModel positionTableModel = (DefaultTableModel) positionAnalysisTable.getModel();
         positionTableModel.setRowCount(0);
         analysisThread = new Thread() {
@@ -2305,6 +2292,23 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 rightButtonPosAnalysis();                
         }
     }//GEN-LAST:event_positionAnalysisTableKeyReleased
+
+    private void positionSetupRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_positionSetupRadioButtonActionPerformed
+        if (setup) {
+            setup = false;
+            board.setEdit(null);
+            board.setDestination(null);
+            board.setSource(null);
+            RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
+        } else {
+            setup = true;
+            board.setEdit(new Coordinate(9, 1));
+            board.setDestination(null);
+            board.setSource(null);
+            RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
+            boardPanel.requestFocus();
+        }
+    }//GEN-LAST:event_positionSetupRadioButtonActionPerformed
 
     private String getAboutMessage() {
         String aboutMessage;
@@ -2376,7 +2380,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JTextArea commentTextArea;
     private javax.swing.JButton configureEngineButton;
     private javax.swing.JButton deleteEngineButton;
-    private javax.swing.JMenuItem endSetupMenuItem;
     private javax.swing.JMenuItem engineManageMenuItem;
     private javax.swing.JMenu enginesMenu;
     private javax.swing.JRadioButtonMenuItem englishRadioButtonMenuItem;
@@ -2440,12 +2443,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JScrollPane moveListScrollPane;
     private javax.swing.JMenuItem openKifMenuItem;
     private javax.swing.JTable positionAnalysisTable;
+    private javax.swing.JRadioButtonMenuItem positionSetupRadioButton;
     private javax.swing.JMenuItem quitMenuItem;
     private javax.swing.JMenuItem refreshMenuItem;
     private javax.swing.JMenuItem resumeAnalysisMenuItem;
     private javax.swing.JCheckBoxMenuItem rotateBoardCheckBoxMenuItem;
     private javax.swing.JCheckBox saveAnalysisCheckBox;
-    private javax.swing.JMenuItem setupPositionMenuItem;
     private javax.swing.JRadioButtonMenuItem shiftJISImportRadioButtonMenuItem;
     private javax.swing.JRadioButtonMenuItem shiftJISRadioButtonMenuItem;
     private javax.swing.JButton startAnalysisButton;
