@@ -1745,7 +1745,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     private void leftButtonPosAnalysis() {
         if (posBrowse && posBrowsePos > 0) {
-            posBrowsePos--;     
+            posBrowsePos--;
         }
 
         loadPosAnalysisPosition();
