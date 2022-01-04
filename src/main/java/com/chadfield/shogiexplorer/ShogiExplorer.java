@@ -378,11 +378,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openKifMenuItem = new javax.swing.JMenuItem();
+        saveKifMenuItem = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         utf8KifRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         shiftJISRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         importClipboardMenuItem = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
         quitMenuItem = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         positionSetupRadioButton = new javax.swing.JRadioButtonMenuItem();
@@ -890,6 +892,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         fileMenu.add(openKifMenuItem);
+
+        saveKifMenuItem.setText(bundle.getString("ShogiExplorer.saveKifMenuItem.text")); // NOI18N
+        saveKifMenuItem.setEnabled(false);
+        saveKifMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveKifMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(saveKifMenuItem);
         fileMenu.add(jSeparator4);
 
         buttonGroup3.add(utf8KifRadioButtonMenuItem);
@@ -923,6 +934,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         fileMenu.add(importClipboardMenuItem);
+        fileMenu.add(jSeparator8);
 
         quitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         quitMenuItem.setText(bundle.getString("ShogiExplorer.quitMenuItem.text")); // NOI18N
@@ -2322,6 +2334,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_positionSetupRadioButtonActionPerformed
 
+    private void saveKifMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveKifMenuItemActionPerformed
+        
+    }//GEN-LAST:event_saveKifMenuItemActionPerformed
+
     private String getAboutMessage() {
         String aboutMessage;
         try ( InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
@@ -2440,6 +2456,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JRadioButtonMenuItem japaneseRadioButtonMenuItem;
@@ -2461,6 +2478,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem resumeAnalysisMenuItem;
     private javax.swing.JCheckBoxMenuItem rotateBoardCheckBoxMenuItem;
     private javax.swing.JCheckBox saveAnalysisCheckBox;
+    private javax.swing.JMenuItem saveKifMenuItem;
     private javax.swing.JRadioButtonMenuItem shiftJISImportRadioButtonMenuItem;
     private javax.swing.JRadioButtonMenuItem shiftJISRadioButtonMenuItem;
     private javax.swing.JButton startAnalysisButton;
