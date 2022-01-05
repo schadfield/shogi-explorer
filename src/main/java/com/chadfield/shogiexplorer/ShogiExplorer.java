@@ -46,6 +46,8 @@ import java.awt.desktop.QuitResponse;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -1203,7 +1205,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             FileDialog fileDialog = new FileDialog(mainFrame);
             fileDialog.setDirectory(dirFile.getPath());
             fileDialog.setMode(FileDialog.LOAD);
-            fileDialog.setTitle("Select KIF fileFile");
+            fileDialog.setTitle("Select KIF File");
             fileDialog.setVisible(true);
             String name = fileDialog.getFile();
             String dir = fileDialog.getDirectory();
@@ -1983,6 +1985,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        saveKifMenuItem.setEnabled(true);
     }//GEN-LAST:event_importClipboardMenuItemActionPerformed
 
     private void stopAnalysisMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopAnalysisMenuItemActionPerformed
@@ -2336,7 +2339,47 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_positionSetupRadioButtonActionPerformed
 
     private void saveKifMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveKifMenuItemActionPerformed
-        
+        File dirFile = new File(prefs.get(PREF_FILE_OPEN_DIR, System.getProperty("user.home")));
+        if (IS_MAC) {
+            FileDialog fileDialog = new FileDialog(mainFrame);
+            fileDialog.setDirectory(dirFile.getPath());
+            fileDialog.setMode(FileDialog.SAVE);
+            fileDialog.setTitle("Save KIF File");
+            fileDialog.setVisible(true);
+            String name = fileDialog.getFile();
+            String dir = fileDialog.getDirectory();
+            if (name == null || dir == null) {
+                return;
+            }
+            kifFile = new File(fileDialog.getDirectory(), fileDialog.getFile());
+            try {
+                if (kifFile.createNewFile()) {
+                    kifFile.createNewFile();
+                    FileWriter fileWriter = new FileWriter(kifFile.getAbsoluteFile());
+                    try (BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+                        bufferedWriter.write(clipboardStr);
+                    }
+                    saveAnalysisCheckBox.setEnabled(true);
+                    saveKifMenuItem.setEnabled(false);
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Sorry - replacing files is forbidden.", "", JOptionPane.PLAIN_MESSAGE, null);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            prefs.put(PREF_FILE_OPEN_DIR, kifFile.getParent());
+            flushPrefs();
+        } else {
+//            JFileChooser fileChooser = new JFileChooser();
+//            fileChooser.setCurrentDirectory(dirFile);
+//            fileChooser.showOpenDialog(mainFrame);
+//            kifFile = fileChooser.getSelectedFile();
+            if (kifFile == null) {
+                return;
+            }
+        }
+
     }//GEN-LAST:event_saveKifMenuItemActionPerformed
 
     private String getAboutMessage() {
