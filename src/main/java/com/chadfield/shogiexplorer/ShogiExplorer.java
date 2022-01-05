@@ -49,10 +49,11 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -453,6 +454,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         japaneseRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
         jEngineManagerDialog.setAlwaysOnTop(true);
@@ -1188,6 +1191,22 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem1);
+
+        jMenuItem3.setText(bundle.getString("ShogiExplorer.jMenuItem3.text_1")); // NOI18N
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
+        jMenuItem2.setLabel(bundle.getString("ShogiExplorer.jMenuItem2.label")); // NOI18N
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
 
         aboutMenuItem.setText(bundle.getString("ShogiExplorer.aboutMenuItem.text")); // NOI18N
         aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -2431,6 +2450,25 @@ public class ShogiExplorer extends javax.swing.JFrame {
         updateCheck(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        Desktop desk=Desktop.getDesktop();
+        try {
+            desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-v2.html"));
+        } catch (URISyntaxException | IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        Desktop desk=Desktop.getDesktop();
+        try {
+            desk.browse(new URI("https://drive.google.com/drive/folders/1S_5RZrIAD6svAcZMGbcbiCxmAUlAECEo?usp=sharing"));
+        } catch (URISyntaxException | IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     private String getAboutMessage() {
         String aboutMessage;
         try ( InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
@@ -2536,6 +2574,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
