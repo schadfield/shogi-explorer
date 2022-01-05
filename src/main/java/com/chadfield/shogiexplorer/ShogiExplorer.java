@@ -154,6 +154,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     boolean setup = false;
     boolean setupModified = false;
     int setupKomadaiCount = -1;
+    Position savedPosition;
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
     public static final boolean IS_WINDOWS = (OS.contains("win"));
@@ -1510,23 +1511,27 @@ public class ShogiExplorer extends javax.swing.JFrame {
             if (!evt.getValueIsAdjusting() && !analysing.get()) {
                 posBrowse = true;
                 posBrowseRow = positionAnalysisTable.getSelectedRow();
-                posBrowsePos = 0;
+                posBrowsePos = -1;
                 loadPosAnalysisPosition();
             }
         }
     }
 
     private void loadPosAnalysisPosition() {
-        List<Position> positionList = analysisParam.getPositionAnalysisList().get(posBrowseRow);
-        if (positionList != null) {
-            Position position = positionList.get(posBrowsePos);
-            board = SFENParser.parse(positionList.get(posBrowsePos).getGameSFEN());
-            board.setSource(position.getSource());
-            board.setDestination(position.getDestination());
-            commentTextArea.setText(null);
-            positionAnalysisTable.repaint();
-            RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
+        List<List<Position>> positionAnalysisList = analysisParam.getPositionAnalysisList();
+        Position position;
+        if (posBrowsePos < 0) {
+            position = savedPosition;
+        } else {
+            List<Position> positionList = positionAnalysisList.get(posBrowseRow);
+            position = positionList.get(posBrowsePos);
         }
+        board = SFENParser.parse(position.getGameSFEN());
+        board.setSource(position.getSource());
+        board.setDestination(position.getDestination());
+        commentTextArea.setText(null);
+        positionAnalysisTable.repaint();
+        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
     }
 
     private class AnalysisTableListener implements ListSelectionListener {
@@ -2333,7 +2338,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (setup || analysing.get()) {
             return;
         }
-        Position position = new Position(SFENParser.getSFEN(board), null, null, null);
+        savedPosition = new Position(SFENParser.getSFEN(board), null, null, null);
         stopAnalysisButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
         initializeAnalysisParams(false);
@@ -2351,7 +2356,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
                 try {
                     jTabbedPane1.setSelectedIndex(2);
-                    new GameAnalyser().analysePosition(engine, analysisParam, analysing, position, positionAnalysisTable);
+                    new GameAnalyser().analysePosition(engine, analysisParam, analysing, savedPosition, positionAnalysisTable);
                 } catch (IOException ex) {
                     Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                 }
