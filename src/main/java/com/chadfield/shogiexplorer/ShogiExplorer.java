@@ -2595,7 +2595,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         dateStr = dateStr.replace(" ", "");
         dateStr = dateStr.replace(":", "");
         String senteStr = game.getSente().substring(0, game.getSente().indexOf("("));
+        senteStr = senteStr.replace("*", "");
         String goteStr = game.getGote().substring(0, game.getGote().indexOf("("));
+        goteStr = goteStr.replace("*", "");
         Path thisSavePathDir = Paths.get(fastSavePath);
         if (!Files.exists(thisSavePathDir) || !Files.isDirectory(thisSavePathDir)) {
             JOptionPane.showMessageDialog(rootPane, "Invalid fast save path.", "", JOptionPane.PLAIN_MESSAGE, null);
