@@ -12,12 +12,13 @@ import javax.swing.JPanel;
 import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Dimension;
 import com.chadfield.shogiexplorer.objects.ImageCache;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import org.apache.batik.gvt.renderer.ImageRenderer;
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
-import org.apache.batik.transcoder.Transcoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -78,11 +79,29 @@ public class ImageUtils {
 
     public static BufferedImage transcodeSVGToBufferedImage(InputStream inputStream, double width, double height) throws TranscoderException {
         // Create a PNG transcoder.
-        Transcoder t = new PNGTranscoder();
+        PNGTranscoder t = new PNGTranscoder() {
+            @Override
+            protected ImageRenderer createRenderer() {
+                ImageRenderer r = super.createRenderer();
+                RenderingHints rh = r.getRenderingHints();
+                rh.add(new RenderingHints(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY));
+                rh.add(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
+                rh.add(new RenderingHints(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY));
+                rh.add(new RenderingHints(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE));
+                rh.add(new RenderingHints(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON));
+                rh.add(new RenderingHints(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC));
+                rh.add(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+                rh.add(new RenderingHints(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE));
+                rh.add(new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF));
+                return r;
+            }
+        };
 
         // Set the transcoding hints.
         t.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
         t.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
+        t.addTranscodingHint(PNGTranscoder.KEY_GAMMA, (float) 2.2);
+
         try {
             // Create the transcoder input.
             TranscoderInput input = new TranscoderInput(inputStream);
@@ -121,7 +140,6 @@ public class ImageUtils {
         return (mri);
     }
 
-    
     public static Image loadTaskbarImageFromResources(String imageName) {
         Image image1 = null;
         Image image2 = null;
@@ -143,7 +161,7 @@ public class ImageUtils {
         BaseMultiResolutionImage mri = new BaseMultiResolutionImage(image1, image2, image3, image4, image5, image6);
         return (mri);
     }
-    
+
     public static void drawImage(ImageCache imageCache, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset) {
         Image imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
