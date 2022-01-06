@@ -32,6 +32,7 @@ import com.chadfield.shogiexplorer.utils.URLUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Point;
@@ -55,6 +56,9 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -131,6 +135,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_LANGUAGE_JAPANESE = "japanese";
     static final String PREF_SHIFT_FILE = "shiftFile";
     static final String PREF_SHIFT_URL = "shiftURL";
+    static final String PREF_FAST_SAVE_DIR = "fastSaveDir";
+    static final String PREF_FAST_SAVE_PREFIX = "fastSavePrefix";
     DefaultIntervalXYDataset plotDataset;
     JFreeChart chart;
     ChartPanel chartPanel;
@@ -155,6 +161,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     boolean setupModified = false;
     int setupKomadaiCount = -1;
     Position savedPosition;
+    String fastSavePath;
+    String fastSavePrefix;
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
     public static final boolean IS_WINDOWS = (OS.contains("win"));
@@ -209,6 +217,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } else {
             autoRefresh = false;
         }
+
+        fastSavePath = prefs.get(PREF_FAST_SAVE_DIR, "");
+        fastSavePrefix = prefs.get(PREF_FAST_SAVE_PREFIX, "ShogiDojo");
 
         if (prefs.getBoolean(PREF_SHIFT_FILE, false)) {
             shiftFile = true;
@@ -384,6 +395,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisEngineComboBox1 = new javax.swing.JComboBox<>();
         startAnalysisButton1 = new javax.swing.JButton();
         cancelAnalysisButton1 = new javax.swing.JButton();
+        preferencesDialog = new javax.swing.JDialog();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        prefsPrefix = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        prefsPath = new javax.swing.JTextField();
+        prefsSaveButton = new javax.swing.JButton();
+        prefsCancelButton = new javax.swing.JButton();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
@@ -424,6 +443,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         utf8KifRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         shiftJISRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        fastSaveMenuItem = new javax.swing.JMenuItem();
+        prefsMenuItem = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         importClipboardMenuItem = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         quitMenuItem = new javax.swing.JMenuItem();
@@ -629,6 +651,49 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jPanel5.add(cancelAnalysisButton1);
 
         jAnalysisDialog1.getContentPane().add(jPanel5);
+
+        preferencesDialog.setResizable(false);
+        preferencesDialog.getContentPane().setLayout(new java.awt.FlowLayout());
+
+        jPanel6.setLayout(new java.awt.GridLayout(0, 2, 20, 4));
+
+        jLabel5.setText(bundle.getString("ShogiExplorer.jLabel5.text")); // NOI18N
+        jLabel5.setMinimumSize(new java.awt.Dimension(200, 16));
+        jPanel6.add(jLabel5);
+
+        prefsPrefix.setText(bundle.getString("ShogiExplorer.prefsPrefix.text")); // NOI18N
+        jPanel6.add(prefsPrefix);
+
+        jLabel6.setText(bundle.getString("ShogiExplorer.jLabel6.text")); // NOI18N
+        jPanel6.add(jLabel6);
+
+        prefsPath.setText(bundle.getString("ShogiExplorer.prefsPath.text")); // NOI18N
+        prefsPath.setMinimumSize(new java.awt.Dimension(40, 26));
+        prefsPath.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prefsPathActionPerformed(evt);
+            }
+        });
+        jPanel6.add(prefsPath);
+
+        prefsSaveButton.setText(bundle.getString("ShogiExplorer.prefsSaveButton.text")); // NOI18N
+        prefsSaveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prefsSaveButtonActionPerformed(evt);
+            }
+        });
+        jPanel6.add(prefsSaveButton);
+
+        prefsCancelButton.setText(bundle.getString("ShogiExplorer.prefsCancelButton.text")); // NOI18N
+        prefsCancelButton.setPreferredSize(new java.awt.Dimension(200, 29));
+        prefsCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prefsCancelButtonActionPerformed(evt);
+            }
+        });
+        jPanel6.add(prefsCancelButton);
+
+        preferencesDialog.getContentPane().add(jPanel6);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -969,6 +1034,25 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         fileMenu.add(shiftJISRadioButtonMenuItem);
         fileMenu.add(jSeparator5);
+
+        fastSaveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        fastSaveMenuItem.setText(bundle.getString("ShogiExplorer.fastSaveMenuItem.text")); // NOI18N
+        fastSaveMenuItem.setEnabled(false);
+        fastSaveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fastSaveMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(fastSaveMenuItem);
+
+        prefsMenuItem.setText(bundle.getString("ShogiExplorer.prefsMenuItem.text")); // NOI18N
+        prefsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prefsMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(prefsMenuItem);
+        fileMenu.add(jSeparator1);
 
         importClipboardMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         importClipboardMenuItem.setText(bundle.getString("ShogiExplorer.importClipboardMenuItem.text_1")); // NOI18N
@@ -2023,12 +2107,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_quitMenuItemActionPerformed
 
-    private void saveAnalysisCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAnalysisCheckBoxActionPerformed
-        saveAnalysis = !saveAnalysis;
-        prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
-        flushPrefs();
-    }//GEN-LAST:event_saveAnalysisCheckBoxActionPerformed
-
     private void importClipboardMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importClipboardMenuItemActionPerformed
         if (refreshTimer != null && refreshTimer.isRunning()) {
             refreshTimer.stop();
@@ -2056,6 +2134,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         }
         saveKifMenuItem.setEnabled(true);
+        fastSaveMenuItem.setEnabled(true);
     }//GEN-LAST:event_importClipboardMenuItemActionPerformed
 
     private void stopAnalysisMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopAnalysisMenuItemActionPerformed
@@ -2438,6 +2517,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     }
                     saveAnalysisCheckBox.setEnabled(true);
                     saveKifMenuItem.setEnabled(false);
+                    fastSaveMenuItem.setEnabled(false);
                 } else {
                     JOptionPane.showMessageDialog(rootPane, "Sorry - replacing files is forbidden.", "", JOptionPane.PLAIN_MESSAGE, null);
                 }
@@ -2456,7 +2536,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        Desktop desk=Desktop.getDesktop();
+        Desktop desk = Desktop.getDesktop();
         try {
             desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-v2.html"));
         } catch (URISyntaxException | IOException ex) {
@@ -2465,7 +2545,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        Desktop desk=Desktop.getDesktop();
+        Desktop desk = Desktop.getDesktop();
         try {
             desk.browse(new URI("https://drive.google.com/drive/folders/1S_5RZrIAD6svAcZMGbcbiCxmAUlAECEo?usp=sharing"));
         } catch (URISyntaxException | IOException ex) {
@@ -2473,6 +2553,82 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void prefsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prefsMenuItemActionPerformed
+        prefsPrefix.setText(fastSavePrefix);
+        prefsPath.setText(fastSavePath);
+        preferencesDialog.setLocationRelativeTo(boardPanel);
+        preferencesDialog.pack();
+        preferencesDialog.setVisible(true);
+    }//GEN-LAST:event_prefsMenuItemActionPerformed
+
+    private void prefsSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prefsSaveButtonActionPerformed
+        fastSavePrefix = prefsPrefix.getText();
+        fastSavePath = prefsPath.getText();
+        prefs.put(PREF_FAST_SAVE_PREFIX, fastSavePrefix);
+        prefs.put(PREF_FAST_SAVE_DIR, fastSavePath);
+        try {
+            prefs.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        preferencesDialog.setVisible(false);
+    }//GEN-LAST:event_prefsSaveButtonActionPerformed
+
+    private void prefsCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prefsCancelButtonActionPerformed
+        preferencesDialog.setVisible(false);
+    }//GEN-LAST:event_prefsCancelButtonActionPerformed
+
+    private void saveAnalysisCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAnalysisCheckBoxActionPerformed
+        saveAnalysis = !saveAnalysis;
+        prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
+        flushPrefs();
+    }//GEN-LAST:event_saveAnalysisCheckBoxActionPerformed
+
+    private void prefsPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prefsPathActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_prefsPathActionPerformed
+
+    private void fastSaveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fastSaveMenuItemActionPerformed
+        String dateStr;
+        dateStr = game.getDate().replace("/", "");
+        dateStr = dateStr.replace(" ", "");
+        dateStr = dateStr.replace(":", "");
+        String senteStr = game.getSente().substring(0, game.getSente().indexOf("("));
+        String goteStr = game.getGote().substring(0, game.getGote().indexOf("("));
+        Path thisSavePathDir = Paths.get(fastSavePath);
+        if (!Files.exists(thisSavePathDir) || !Files.isDirectory(thisSavePathDir)) {
+            JOptionPane.showMessageDialog(rootPane, "Invalid fast save path.", "", JOptionPane.PLAIN_MESSAGE, null);
+            return;
+        }
+        int extra = 0;
+        String thisSavePath = thisSavePathDir + File.separator + fastSavePrefix + "-" + dateStr
+                + "-" + senteStr + "-" + goteStr;
+        System.out.println(thisSavePath);
+        boolean found = false;
+        while (!found) {
+            String fullPathStr;
+            if (extra == 0) {
+                fullPathStr = thisSavePath + ".kif";
+            } else {
+                fullPathStr = thisSavePath + "-" + extra + ".kif";
+            }
+            Path fullPath = Paths.get(fullPathStr);
+            if (Files.exists(fullPath)) {
+                extra++;
+            } else {
+                try {
+                    Files.write(fullPath, clipboardStr.getBytes());
+                } catch (IOException ex) {
+                    Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                found = true;
+            }
+        }
+        saveAnalysisCheckBox.setEnabled(true);
+        fastSaveMenuItem.setEnabled(false);
+        saveKifMenuItem.setEnabled(false);
+    }//GEN-LAST:event_fastSaveMenuItemActionPerformed
 
     private String getAboutMessage() {
         String aboutMessage;
@@ -2547,6 +2703,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem engineManageMenuItem;
     private javax.swing.JMenu enginesMenu;
     private javax.swing.JRadioButtonMenuItem englishRadioButtonMenuItem;
+    private javax.swing.JMenuItem fastSaveMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
@@ -2574,6 +2731,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -2586,9 +2745,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -2612,6 +2773,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem openKifMenuItem;
     private javax.swing.JTable positionAnalysisTable;
     private javax.swing.JRadioButtonMenuItem positionSetupRadioButton;
+    private javax.swing.JDialog preferencesDialog;
+    private javax.swing.JButton prefsCancelButton;
+    private javax.swing.JMenuItem prefsMenuItem;
+    private javax.swing.JTextField prefsPath;
+    private javax.swing.JTextField prefsPrefix;
+    private javax.swing.JButton prefsSaveButton;
     private javax.swing.JMenuItem quitMenuItem;
     private javax.swing.JMenuItem refreshMenuItem;
     private javax.swing.JMenuItem resumeAnalysisMenuItem;
