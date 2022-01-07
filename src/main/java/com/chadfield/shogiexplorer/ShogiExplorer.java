@@ -32,7 +32,6 @@ import com.chadfield.shogiexplorer.utils.URLUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Point;
@@ -79,6 +78,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax0.license3j.License;
+import javax0.license3j.io.LicenseReader;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
@@ -137,6 +138,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_SHIFT_URL = "shiftURL";
     static final String PREF_FAST_SAVE_DIR = "fastSaveDir";
     static final String PREF_FAST_SAVE_PREFIX = "fastSavePrefix";
+    static final String PREF_LICENSE_FILE_PATH = "licenseFilePath";
     DefaultIntervalXYDataset plotDataset;
     JFreeChart chart;
     ChartPanel chartPanel;
@@ -163,6 +165,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     Position savedPosition;
     String fastSavePath;
     String fastSavePrefix;
+    boolean goodLicense = false;
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
     public static final boolean IS_WINDOWS = (OS.contains("win"));
@@ -303,7 +306,54 @@ public class ShogiExplorer extends javax.swing.JFrame {
         initializeChart(true);
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
 
-        updateCheck(false);
+        if (!licenseCheck()) {
+            getLicenseFile();
+        }
+        
+        updateCheck(false);        
+    }
+    
+    private boolean licenseCheck() {
+        byte[] key = new byte[]{
+            (byte) 0x52,
+            (byte) 0x53, (byte) 0x41, (byte) 0x00, (byte) 0x30, (byte) 0x81, (byte) 0x9F, (byte) 0x30, (byte) 0x0D,
+            (byte) 0x06, (byte) 0x09, (byte) 0x2A, (byte) 0x86, (byte) 0x48, (byte) 0x86, (byte) 0xF7, (byte) 0x0D,
+            (byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x05, (byte) 0x00, (byte) 0x03, (byte) 0x81, (byte) 0x8D,
+            (byte) 0x00, (byte) 0x30, (byte) 0x81, (byte) 0x89, (byte) 0x02, (byte) 0x81, (byte) 0x81, (byte) 0x00,
+            (byte) 0xD4, (byte) 0x7A, (byte) 0x94, (byte) 0x5D, (byte) 0x53, (byte) 0x52, (byte) 0x4D, (byte) 0xD5,
+            (byte) 0xD3, (byte) 0xAC, (byte) 0x34, (byte) 0x14, (byte) 0x16, (byte) 0x03, (byte) 0x24, (byte) 0x2E,
+            (byte) 0x5B, (byte) 0xB1, (byte) 0x84, (byte) 0x07, (byte) 0x3B, (byte) 0x2D, (byte) 0xF7, (byte) 0xFC,
+            (byte) 0x38, (byte) 0x5E, (byte) 0x2F, (byte) 0x72, (byte) 0xE2, (byte) 0xCC, (byte) 0x84, (byte) 0xD3,
+            (byte) 0x5D, (byte) 0xC1, (byte) 0xA4, (byte) 0xBE, (byte) 0x9A, (byte) 0x7A, (byte) 0x13, (byte) 0x95,
+            (byte) 0xC3, (byte) 0xDE, (byte) 0x36, (byte) 0x13, (byte) 0x34, (byte) 0x9E, (byte) 0xD5, (byte) 0x57,
+            (byte) 0x98, (byte) 0xA5, (byte) 0x06, (byte) 0x92, (byte) 0xC0, (byte) 0x25, (byte) 0x53, (byte) 0x95,
+            (byte) 0x8E, (byte) 0x13, (byte) 0xAE, (byte) 0x59, (byte) 0xB9, (byte) 0x99, (byte) 0xD4, (byte) 0x82,
+            (byte) 0xB6, (byte) 0x86, (byte) 0x91, (byte) 0x2B, (byte) 0xB8, (byte) 0x24, (byte) 0x45, (byte) 0x29,
+            (byte) 0x99, (byte) 0xD9, (byte) 0x1A, (byte) 0x48, (byte) 0x1A, (byte) 0x22, (byte) 0xF1, (byte) 0xC8,
+            (byte) 0x52, (byte) 0xC8, (byte) 0x16, (byte) 0xEB, (byte) 0x93, (byte) 0x6D, (byte) 0xB6, (byte) 0x60,
+            (byte) 0x6E, (byte) 0x82, (byte) 0x9E, (byte) 0x50, (byte) 0x3E, (byte) 0xE0, (byte) 0x7F, (byte) 0x8F,
+            (byte) 0xC8, (byte) 0xF3, (byte) 0x45, (byte) 0x81, (byte) 0x88, (byte) 0x36, (byte) 0x00, (byte) 0xCC,
+            (byte) 0x49, (byte) 0xDC, (byte) 0x0B, (byte) 0x95, (byte) 0x4F, (byte) 0x66, (byte) 0x6E, (byte) 0xC0,
+            (byte) 0x16, (byte) 0xE7, (byte) 0xE0, (byte) 0xED, (byte) 0xAE, (byte) 0xDE, (byte) 0x47, (byte) 0x47,
+            (byte) 0x0C, (byte) 0x30, (byte) 0xBD, (byte) 0xE7, (byte) 0x54, (byte) 0x44, (byte) 0x25, (byte) 0x9D,
+            (byte) 0x02, (byte) 0x03, (byte) 0x01, (byte) 0x00, (byte) 0x01,};
+
+        File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty("user.home") +
+                File.separator + "license.bin"));
+        try ( var reader = new LicenseReader(licenseFile)) {
+            License license = reader.read();
+            return license.isOK(key);           
+        } catch (IOException | IllegalArgumentException ex) {
+            return false;
+        }
+    }
+    
+    private void getLicenseFile() {
+        licenseDialog.pack();
+        licenseDialog.setVisible(true);
+        if (!goodLicense) {
+            System.exit(0);
+        }
     }
 
     private void updateCheck(boolean force) {
@@ -395,6 +445,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         prefsPath = new javax.swing.JTextField();
         prefsSaveButton = new javax.swing.JButton();
         prefsCancelButton = new javax.swing.JButton();
+        licenseDialog = new javax.swing.JDialog();
+        jPanel7 = new javax.swing.JPanel();
+        selectLicenseButton = new javax.swing.JButton();
+        buyLicenseButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
@@ -686,6 +741,39 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jPanel6.add(prefsCancelButton);
 
         preferencesDialog.getContentPane().add(jPanel6);
+
+        licenseDialog.setModal(true);
+        licenseDialog.setResizable(false);
+        licenseDialog.getContentPane().setLayout(new java.awt.FlowLayout());
+
+        jPanel7.setLayout(new java.awt.GridLayout(0, 2, 20, 4));
+
+        selectLicenseButton.setText(bundle.getString("ShogiExplorer.selectLicenseButton.text")); // NOI18N
+        selectLicenseButton.setPreferredSize(new java.awt.Dimension(200, 29));
+        selectLicenseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectLicenseButtonActionPerformed(evt);
+            }
+        });
+        jPanel7.add(selectLicenseButton);
+
+        buyLicenseButton.setText(bundle.getString("ShogiExplorer.buyLicenseButton.text")); // NOI18N
+        buyLicenseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyLicenseButtonActionPerformed(evt);
+            }
+        });
+        jPanel7.add(buyLicenseButton);
+
+        licenseDialog.getContentPane().add(jPanel7);
+
+        jButton1.setText(bundle.getString("ShogiExplorer.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        licenseDialog.getContentPane().add(jButton1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -2635,6 +2723,49 @@ public class ShogiExplorer extends javax.swing.JFrame {
         saveKifMenuItem.setEnabled(false);
     }//GEN-LAST:event_fastSaveMenuItemActionPerformed
 
+    private void buyLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyLicenseButtonActionPerformed
+        Desktop desk = Desktop.getDesktop();
+        try {
+            desk.browse(new URI("https://www.chadfield.com/p/buy.html"));
+        } catch (URISyntaxException | IOException ex) {
+            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_buyLicenseButtonActionPerformed
+
+    private void selectLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectLicenseButtonActionPerformed
+        File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty("user.home") +
+                File.separator + "license.bin"));
+        if (IS_MAC) {
+            FileDialog fileDialog = new FileDialog(mainFrame);
+            fileDialog.setDirectory(licenseFile.getPath());
+            fileDialog.setMode(FileDialog.LOAD);
+            fileDialog.setTitle("Select license File");
+            fileDialog.setVisible(true);
+            String name = fileDialog.getFile();
+            String dir = fileDialog.getDirectory();
+            if (name == null || dir == null) {
+                return;
+            }
+            licenseFile = new File(fileDialog.getDirectory(), fileDialog.getFile());
+        } else {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(licenseFile);
+            fileChooser.showOpenDialog(mainFrame);
+            licenseFile = fileChooser.getSelectedFile();
+            if (licenseFile == null) {
+                return;
+            }
+        }
+        prefs.put(PREF_LICENSE_FILE_PATH, licenseFile.getAbsolutePath());
+        flushPrefs();
+        goodLicense = licenseCheck();
+        licenseDialog.setVisible(false);
+    }//GEN-LAST:event_selectLicenseButtonActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     private String getAboutMessage() {
         String aboutMessage;
         try ( InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
@@ -2698,6 +2829,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
+    private javax.swing.JButton buyLicenseButton;
     private javax.swing.JButton cancelAnalysisButton;
     private javax.swing.JButton cancelAnalysisButton1;
     private javax.swing.JButton closeEngineManagerButton;
@@ -2727,6 +2859,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem importURLMenuItem;
     private javax.swing.JDialog jAnalysisDialog;
     private javax.swing.JDialog jAnalysisDialog1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JList<String> jEngineList;
@@ -2751,6 +2884,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2765,6 +2899,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JRadioButtonMenuItem japaneseRadioButtonMenuItem;
+    private javax.swing.JDialog licenseDialog;
     private javax.swing.JToolBar mainToolBar;
     private javax.swing.JButton mediaBack;
     private javax.swing.JButton mediaEnd;
@@ -2790,6 +2925,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem rotateBoardCheckBoxMenuItem;
     private javax.swing.JCheckBox saveAnalysisCheckBox;
     private javax.swing.JMenuItem saveKifMenuItem;
+    private javax.swing.JButton selectLicenseButton;
     private javax.swing.JRadioButtonMenuItem shiftJISImportRadioButtonMenuItem;
     private javax.swing.JRadioButtonMenuItem shiftJISRadioButtonMenuItem;
     private javax.swing.JButton startAnalysisButton;

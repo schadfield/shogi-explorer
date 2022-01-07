@@ -49,6 +49,11 @@
             <artifactId>batik-codec</artifactId>
             <version>1.14</version>
         </dependency>
+        <dependency>
+            <groupId>com.javax0.license3j</groupId>
+            <artifactId>license3j</artifactId>
+            <version>3.2.0</version>
+        </dependency>
     </dependencies>
     <build>
         <resources>
