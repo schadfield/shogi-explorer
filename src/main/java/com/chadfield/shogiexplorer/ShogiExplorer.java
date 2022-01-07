@@ -2303,10 +2303,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             return;
         }
         browse = false;
-        analysisEngineName = (String) analysisEngineComboBox.getSelectedItem();
-        analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
-        prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
-        prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
         initializeAnalysisParams(false);
         stopAnalysisButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
@@ -2503,6 +2499,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             return;
         }
         savedPosition = new Position(SFENParser.getSFEN(board), null, null, null);
+        analysisEngineName = (String) analysisEngineComboBox1.getSelectedItem();
+        prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
         stopAnalysisButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
         initializeAnalysisParams(false);
