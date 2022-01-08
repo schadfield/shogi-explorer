@@ -1429,6 +1429,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             refreshTimer.stop();
             refreshTimer = null;
         }
+        fastSaveMenuItem.setEnabled(false);
+        saveKifMenuItem.setEnabled(false);
         refreshMenuItem.setEnabled(false);
         clipboardStr = null;
         saveAnalysisCheckBox.setEnabled(true);
@@ -2252,6 +2254,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             getLicenseFile();
             return;
         }
+        fastSaveMenuItem.setEnabled(false);
+        saveKifMenuItem.setEnabled(false);
         refreshMenuItem.setEnabled(!autoRefresh);
         Clipboard clipBoard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
