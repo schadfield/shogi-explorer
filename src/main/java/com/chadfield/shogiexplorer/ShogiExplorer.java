@@ -1173,7 +1173,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jMenu2.setText(bundle.getString("ShogiExplorer.jMenu2.text")); // NOI18N
 
-        importURLMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        importURLMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         importURLMenuItem.setText(bundle.getString("ShogiExplorer.importURLMenuItem.text_1")); // NOI18N
         importURLMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1182,7 +1182,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         jMenu2.add(importURLMenuItem);
 
-        refreshMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | java.awt.Event.SHIFT_MASK));
+        refreshMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         refreshMenuItem.setText(bundle.getString("ShogiExplorer.refreshMenuItem.text")); // NOI18N
         refreshMenuItem.setEnabled(false);
         refreshMenuItem.addActionListener(new java.awt.event.ActionListener() {
