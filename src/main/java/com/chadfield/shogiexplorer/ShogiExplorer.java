@@ -306,13 +306,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         initializeChart(true);
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
 
-        if (!licenseCheck()) {
-            getLicenseFile();
-        }
-        
-        updateCheck(false);        
+        goodLicense = licenseCheck();
+
+        updateCheck(false);
     }
-    
+
     private boolean licenseCheck() {
         byte[] key = new byte[]{
             (byte) 0x52,
@@ -338,22 +336,20 @@ public class ShogiExplorer extends javax.swing.JFrame {
             (byte) 0x0C, (byte) 0x30, (byte) 0xBD, (byte) 0xE7, (byte) 0x54, (byte) 0x44, (byte) 0x25, (byte) 0x9D,
             (byte) 0x02, (byte) 0x03, (byte) 0x01, (byte) 0x00, (byte) 0x01,};
 
-        File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty("user.home") +
-                File.separator + "license.bin"));
+        File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty("user.home")
+                + File.separator + "license.bin"));
         try ( var reader = new LicenseReader(licenseFile)) {
             License license = reader.read();
-            return license.isOK(key);           
+            return license.isOK(key);
         } catch (IOException | IllegalArgumentException ex) {
             return false;
         }
     }
-    
+
     private void getLicenseFile() {
         licenseDialog.pack();
+        licenseDialog.setLocationRelativeTo(mainFrame);
         licenseDialog.setVisible(true);
-        if (!goodLicense) {
-            System.exit(0);
-        }
     }
 
     private void updateCheck(boolean force) {
@@ -449,7 +445,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         selectLicenseButton = new javax.swing.JButton();
         buyLicenseButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        cancelLicenseButton = new javax.swing.JButton();
         mainToolBar = new javax.swing.JToolBar();
         mediaStart = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
@@ -765,15 +762,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         jPanel7.add(buyLicenseButton);
 
-        licenseDialog.getContentPane().add(jPanel7);
+        jLabel7.setText(bundle.getString("ShogiExplorer.jLabel7.text")); // NOI18N
+        jPanel7.add(jLabel7);
 
-        jButton1.setText(bundle.getString("ShogiExplorer.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cancelLicenseButton.setText(bundle.getString("ShogiExplorer.cancelLicenseButton.text")); // NOI18N
+        cancelLicenseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cancelLicenseButtonActionPerformed(evt);
             }
         });
-        licenseDialog.getContentPane().add(jButton1);
+        jPanel7.add(cancelLicenseButton);
+
+        licenseDialog.getContentPane().add(jPanel7);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
@@ -1470,6 +1470,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_openKifMenuItemActionPerformed
 
     private void parseKifu(boolean refresh) {
+        if (refreshTimer != null && refreshTimer.isRunning()) {
+            refreshTimer.stop();
+            refreshTimer = null;
+        }
         List<List<Position>> analysisPositionList;
         boolean wasBrowse = browse;
         if (refresh) {
@@ -1855,6 +1859,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_configureEngineButtonActionPerformed
 
     private void openAnalyseGameDialog(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openAnalyseGameDialog
+        if (!goodLicense) {
+            getLicenseFile();
+            return;
+        }
         analysisEngineComboBox.removeAllItems();
         for (Engine engine : engineList) {
             analysisEngineComboBox.addItem(engine.getName());
@@ -2190,6 +2198,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_quitMenuItemActionPerformed
 
     private void importClipboardMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importClipboardMenuItemActionPerformed
+        if (!goodLicense) {
+            getLicenseFile();
+            return;
+        }
         if (setup) {
             return;
         }
@@ -2236,9 +2248,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_rotateBoardCheckBoxMenuItemActionPerformed
 
     private void importURLMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importURLMenuItemActionPerformed
-        if (refreshTimer != null && refreshTimer.isRunning()) {
-            refreshTimer.stop();
-            refreshTimer = null;
+        if (!goodLicense) {
+            getLicenseFile();
+            return;
         }
         refreshMenuItem.setEnabled(!autoRefresh);
         Clipboard clipBoard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -2480,6 +2492,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_boardPanelKeyTyped
 
     private void analysePositionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analysePositionMenuItemActionPerformed
+        if (!goodLicense) {
+            getLicenseFile();
+            return;
+        }
+
         analysisEngineComboBox1.removeAllItems();
         for (Engine engine : engineList) {
             analysisEngineComboBox1.addItem(engine.getName());
@@ -2731,8 +2748,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_buyLicenseButtonActionPerformed
 
     private void selectLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectLicenseButtonActionPerformed
-        File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty("user.home") +
-                File.separator + "license.bin"));
+        File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty("user.home")
+                + File.separator + "license.bin"));
         if (IS_MAC) {
             FileDialog fileDialog = new FileDialog(mainFrame);
             fileDialog.setDirectory(licenseFile.getPath());
@@ -2760,9 +2777,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         licenseDialog.setVisible(false);
     }//GEN-LAST:event_selectLicenseButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void cancelLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelLicenseButtonActionPerformed
+        licenseDialog.setVisible(false);
+    }//GEN-LAST:event_cancelLicenseButtonActionPerformed
 
     private String getAboutMessage() {
         String aboutMessage;
@@ -2830,6 +2847,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JButton buyLicenseButton;
     private javax.swing.JButton cancelAnalysisButton;
     private javax.swing.JButton cancelAnalysisButton1;
+    private javax.swing.JButton cancelLicenseButton;
     private javax.swing.JButton closeEngineManagerButton;
     private javax.swing.JScrollPane commentScrollPane;
     private javax.swing.JTextArea commentTextArea;
@@ -2857,7 +2875,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem importURLMenuItem;
     private javax.swing.JDialog jAnalysisDialog;
     private javax.swing.JDialog jAnalysisDialog1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JDialog jEngineConfDialog;
     private javax.swing.JPanel jEngineConfPanel;
     private javax.swing.JList<String> jEngineList;
@@ -2869,6 +2886,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
