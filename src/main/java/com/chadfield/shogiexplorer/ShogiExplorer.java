@@ -2582,8 +2582,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             setup = false;
             if (game != null && !game.getPositionList().isEmpty()) {
                 analyseGameMenuItem.setEnabled(true);
-                analysePositionMenuItem.setEnabled(true);
             }
+            analysePositionMenuItem.setEnabled(true);
             importClipboardMenuItem.setEnabled(true);
             openKifMenuItem.setEnabled(true);
             importURLMenuItem.setEnabled(true);
