@@ -43,7 +43,7 @@ public class RenderBoard {
         drawCoordinates(boardPanel, rotatedView);
         drawGrid(imageCache, boardPanel);
         drawHighlights(board, imageCache, boardPanel, rotatedView);
-        drawKomadai(imageCache, boardPanel, rotatedView);
+        drawKomadai(imageCache, boardPanel);
         drawBackground(imageCache, boardPanel);
         drawTurnNotification(board, imageCache, boardPanel, rotatedView);
         boardPanel.setVisible(true);
@@ -444,7 +444,7 @@ public class RenderBoard {
         );
     }
 
-    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel, boolean rotatedView) {        
+    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel) {        
         ImageUtils.drawImage(
                 imageCache,
                 boardPanel,

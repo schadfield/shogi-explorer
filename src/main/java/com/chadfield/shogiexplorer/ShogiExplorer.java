@@ -163,12 +163,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
     boolean setup = false;
     boolean setupModified = false;
     int setupKomadaiCount = -1;
-    Position savedPosition;
+    transient Position savedPosition;
     String fastSavePath;
     String fastSavePrefix;
     boolean goodLicense = false;
     String savedComment;
     boolean seenPaid2;
+    static final String USER_HOME = "user.home";
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
     public static final boolean IS_WINDOWS = (OS.contains("win"));
@@ -341,7 +342,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             (byte) 0x0C, (byte) 0x30, (byte) 0xBD, (byte) 0xE7, (byte) 0x54, (byte) 0x44, (byte) 0x25, (byte) 0x9D,
             (byte) 0x02, (byte) 0x03, (byte) 0x01, (byte) 0x00, (byte) 0x01,};
 
-        File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty("user.home")
+        File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty(USER_HOME)
                 + File.separator + "license.bin"));
         try ( var reader = new LicenseReader(licenseFile)) {
             License license = reader.read();
@@ -1470,7 +1471,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         clipboardStr = null;
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         saveAnalysisCheckBox.setEnabled(true);
-        File dirFile = new File(prefs.get(PREF_FILE_OPEN_DIR, System.getProperty("user.home")));
+        File dirFile = new File(prefs.get(PREF_FILE_OPEN_DIR, System.getProperty(USER_HOME)));
         if (IS_MAC) {
             FileDialog fileDialog = new FileDialog(mainFrame);
             fileDialog.setDirectory(dirFile.getPath());
@@ -1867,7 +1868,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteEngineButtonActionPerformed
 
     private void addEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEngineButtonActionPerformed
-        File dirFile = new File(prefs.get("engineOpenDir", System.getProperty("user.home")));
+        File dirFile = new File(prefs.get("engineOpenDir", System.getProperty(USER_HOME)));
         if (IS_MAC) {
             ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
             FileDialog fileChooser = new FileDialog(mainFrame);
@@ -2660,7 +2661,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_positionSetupRadioButtonActionPerformed
 
     private void saveKifMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveKifMenuItemActionPerformed
-        File dirFile = new File(prefs.get(PREF_FILE_OPEN_DIR, System.getProperty("user.home")));
+        File dirFile = new File(prefs.get(PREF_FILE_OPEN_DIR, System.getProperty(USER_HOME)));
         if (IS_MAC) {
             FileDialog fileDialog = new FileDialog(mainFrame);
             fileDialog.setDirectory(dirFile.getPath());
@@ -2813,7 +2814,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_buyLicenseButtonActionPerformed
 
     private void selectLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectLicenseButtonActionPerformed
-        File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty("user.home")
+        File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty(USER_HOME)
                 + File.separator + "license.bin"));
         if (IS_MAC) {
             ResourceBundle bundle = ResourceBundle.getBundle("Bundle");

@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -15,6 +13,10 @@ import javax.net.ssl.HttpsURLConnection;
  * @author Stephen Chadfield <stephen@chadfield.com>
  */
 public class HttpUtils {
+    
+    private HttpUtils() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static String getLatestVersion(String httpsURL, boolean seenPaid) {
         try {
