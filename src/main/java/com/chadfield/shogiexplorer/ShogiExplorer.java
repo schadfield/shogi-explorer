@@ -358,6 +358,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }
 
     private void updateCheck(boolean force) {
+        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         long now = System.currentTimeMillis();
         long lastUpdateCheck = prefs.getLong(PREF_LAST_UPDATE_CHECK, 0);
         if (force || now - lastUpdateCheck > 604800000) {
@@ -369,7 +370,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 String latestVersion = HttpUtils.getLatestVersion("https://www.chadfield.com/p/shogi-explorer-v2-changelog.html", seenPaid2);
                 if (latestVersion == null) {
                     if (force) {
-                        JOptionPane.showMessageDialog(rootPane, "Update check failed.", "", JOptionPane.PLAIN_MESSAGE, null);
+                        JOptionPane.showMessageDialog(rootPane, bundle.getString("update_check_failed"), "", JOptionPane.PLAIN_MESSAGE, null);
                     }
                 } else {
                     if (!seenPaid2 && latestVersion.startsWith("3.")) {
@@ -380,7 +381,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         } catch (BackingStoreException ex) {
                             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                            JOptionPane.showMessageDialog(rootPane, "PAID update available: " + latestVersion, "", JOptionPane.PLAIN_MESSAGE, null);         
+                            JOptionPane.showMessageDialog(rootPane, bundle.getString("paid_update_available") + ": " + latestVersion, "", JOptionPane.PLAIN_MESSAGE, null);         
                             Desktop desk = Desktop.getDesktop();
                             try {
                                 desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-v3.html"));
@@ -389,7 +390,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                             }
                     } else {
                         if (!prop.getProperty("project.version").contentEquals(latestVersion)) {
-                            JOptionPane.showMessageDialog(rootPane, "Update available: " + latestVersion, "", JOptionPane.PLAIN_MESSAGE, null);
+                            JOptionPane.showMessageDialog(rootPane, bundle.getString("update_available") + ": " + latestVersion, "", JOptionPane.PLAIN_MESSAGE, null);
                             Desktop desk = Desktop.getDesktop();
                             try {
                                 desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-v2-changelog.html"));
@@ -398,7 +399,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                             }
                         } else {
                             if (force) {
-                                JOptionPane.showMessageDialog(rootPane, latestVersion + " is the latest version.", "", JOptionPane.PLAIN_MESSAGE, null);
+                                JOptionPane.showMessageDialog(rootPane, latestVersion + " " + bundle.getString("is_the_latest_version"), "", JOptionPane.PLAIN_MESSAGE, null);
                             }
                         }
                     }
@@ -865,7 +866,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(filler3);
 
         mediaStop.setText(bundle.getString("ShogiExplorer.mediaStop.text")); // NOI18N
-        mediaStop.setToolTipText(bundle.getString("ShogiExplorer.mediaStop.toolTipText")); // NOI18N
         mediaStop.setFocusable(false);
         mediaStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaStop.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -1286,7 +1286,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         analysePositionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
         analysePositionMenuItem.setText(bundle.getString("ShogiExplorer.analysePositionMenuItem.text")); // NOI18N
-        analysePositionMenuItem.setToolTipText(bundle.getString("ShogiExplorer.analysePositionMenuItem.toolTipText")); // NOI18N
         analysePositionMenuItem.setEnabled(false);
         analysePositionMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1357,7 +1356,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         buttonGroup2.add(englishRadioButtonMenuItem);
         englishRadioButtonMenuItem.setSelected(true);
         englishRadioButtonMenuItem.setText(bundle.getString("ShogiExplorer.englishRadioButtonMenuItem.text_1")); // NOI18N
-        englishRadioButtonMenuItem.setToolTipText(bundle.getString("ShogiExplorer.englishRadioButtonMenuItem.toolTipText")); // NOI18N
         englishRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 englishRadioButtonMenuItemActionPerformed(evt);
@@ -1470,13 +1468,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         saveKifMenuItem.setEnabled(false);
         refreshMenuItem.setEnabled(false);
         clipboardStr = null;
+        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         saveAnalysisCheckBox.setEnabled(true);
         File dirFile = new File(prefs.get(PREF_FILE_OPEN_DIR, System.getProperty("user.home")));
         if (IS_MAC) {
             FileDialog fileDialog = new FileDialog(mainFrame);
             fileDialog.setDirectory(dirFile.getPath());
             fileDialog.setMode(FileDialog.LOAD);
-            fileDialog.setTitle("Select KIF File");
+            fileDialog.setTitle(bundle.getString("select_kif_file"));
             fileDialog.setVisible(true);
             String name = fileDialog.getFile();
             String dir = fileDialog.getDirectory();
@@ -1863,10 +1862,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void addEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEngineButtonActionPerformed
         File dirFile = new File(prefs.get("engineOpenDir", System.getProperty("user.home")));
         if (IS_MAC) {
+            ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
             FileDialog fileChooser = new FileDialog(mainFrame);
             fileChooser.setDirectory(dirFile.getPath());
             fileChooser.setMode(FileDialog.LOAD);
-            fileChooser.setTitle("Select engine executable");
+            fileChooser.setTitle(bundle.getString("select_engine_executable"));
             fileChooser.setVisible(true);
             String name = fileChooser.getFile();
             String dir = fileChooser.getDirectory();
@@ -2716,7 +2716,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void prefsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prefsMenuItemActionPerformed
@@ -2810,10 +2809,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
         File licenseFile = new File(prefs.get(PREF_LICENSE_FILE_PATH, System.getProperty("user.home")
                 + File.separator + "license.bin"));
         if (IS_MAC) {
+            ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
             FileDialog fileDialog = new FileDialog(mainFrame);
             fileDialog.setDirectory(licenseFile.getPath());
             fileDialog.setMode(FileDialog.LOAD);
-            fileDialog.setTitle("Select license File");
+            fileDialog.setTitle(bundle.getString("select_license_file"));
             fileDialog.setVisible(true);
             String name = fileDialog.getFile();
             String dir = fileDialog.getDirectory();
