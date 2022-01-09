@@ -166,6 +166,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     String fastSavePath;
     String fastSavePrefix;
     boolean goodLicense = false;
+    String savedComment;
     
     private static final String OS = System.getProperty("os.name").toLowerCase();
     public static final boolean IS_WINDOWS = (OS.contains("win"));
@@ -2590,7 +2591,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void positionSetupRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_positionSetupRadioButtonActionPerformed
         if (setup) {
             setup = false;
-            commentTextArea.setText(null);
+            commentTextArea.setText(savedComment);
             if (game != null && !game.getPositionList().isEmpty()) {
                 analyseGameMenuItem.setEnabled(true);
             }
@@ -2604,11 +2605,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
             RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
         } else {
             setup = true;
-            commentTextArea.setText("delete: x\n"
-                    + "clear_board: c\n"
-                    + "piece: p|l|k|s|g|b|r|k|P|L|K|S|G|B|R|K\n"
-                    + "promoted_piece: m<piece>\n"
-                    + "komadai_piece: <0-18><piece>");
+            savedComment = commentTextArea.getText();
+            commentTextArea.setText("""
+                                    delete: x
+                                    clear_board: c
+                                    piece: p|l|k|s|g|b|r|k|P|L|K|S|G|B|R|K
+                                    promoted_piece: m<piece>
+                                    komadai_piece: <0-18><piece>""");
             analyseGameMenuItem.setEnabled(false);
             analysePositionMenuItem.setEnabled(false);
             importClipboardMenuItem.setEnabled(false);
