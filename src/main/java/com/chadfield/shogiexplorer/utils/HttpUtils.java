@@ -16,7 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class HttpUtils {
 
-    public static String getLatestVersion(String httpsURL) {
+    public static String getLatestVersion(String httpsURL, boolean seenPaid) {
         try {
             URL myurl = new URL(httpsURL);
             HttpsURLConnection con = (HttpsURLConnection) myurl.openConnection();
@@ -26,8 +26,11 @@ public class HttpUtils {
             try ( BufferedReader in = new BufferedReader(isr)) {
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
-                    if (inputLine.contains(">Version ")) {
-                        return inputLine.substring(inputLine.indexOf(">Version ") + 9, inputLine.indexOf("</h2>"));
+                    if (!seenPaid && inputLine.contains("x3VersStart")) {
+                        return inputLine.substring(inputLine.indexOf("x3VersStart") + 11, inputLine.indexOf("x3VersEnd"));
+                    }
+                    if (inputLine.contains("x2VersStart")) {
+                        return inputLine.substring(inputLine.indexOf("x2VersStart") + 11, inputLine.indexOf("x2VersEnd"));
                     }
                 }
             }
