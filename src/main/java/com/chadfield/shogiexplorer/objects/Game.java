@@ -16,6 +16,7 @@ public class Game {
     private String sente;
     private String gote;
     private String handicap;
+    private String tournament;
     public static final String HANDICAP_NONE = "平手";
     public static final String HANDICAP_LANCE = "香落ち";
     public static final String HANDICAP_BISHOP = "角落ち";
@@ -29,6 +30,7 @@ public class Game {
         date = "";
         place = "";
         timeLimit = "";
+        tournament = "";
         sente = "";
         gote = "";
         handicap = "";
@@ -153,6 +155,20 @@ public class Game {
             default ->
                 false;
         };
+    }
+
+    /**
+     * @return the tournament
+     */
+    public String getTournament() {
+        return tournament;
+    }
+
+    /**
+     * @param tournament the tournament to set
+     */
+    public void setTournament(String tournament) {
+        this.tournament = tournament;
     }
 
 }

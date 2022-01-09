@@ -34,6 +34,7 @@ public class KifParser {
     private static final String DATE = "開始日時：";
     private static final String PLACE = "場所：";
     private static final String TIME_LIMIT = "持ち時間：";
+    private static final String TOURNAMENT = "棋戦：";
     private static final String SENTE = "先手：";
     private static final String GOTE = "後手：";
     private static final String MOVE_HEADER = "手数----指手---------消費時間-";
@@ -186,6 +187,9 @@ public class KifParser {
         }
         if (line.startsWith(TIME_LIMIT)) {
             game.setTimeLimit(line.substring(TIME_LIMIT.length()).trim());
+        }
+        if (line.startsWith(TOURNAMENT)) {
+            game.setTournament(line.substring(TOURNAMENT.length()).trim());
         }
         if (line.startsWith(DATE)) {
             game.setDate(line.substring(DATE.length()).trim());

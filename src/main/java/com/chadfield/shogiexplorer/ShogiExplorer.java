@@ -1534,10 +1534,17 @@ public class ShogiExplorer extends javax.swing.JFrame {
         gameTextArea.setText(null);
         gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
         gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
-        gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
+        if (!game.getPlace().isEmpty()) {
+            gameTextArea.append(bundle.getString("label_place") + ": " + game.getPlace() + "\n");
+        }
+        if (!game.getTournament().isEmpty()) {
+            gameTextArea.append(bundle.getString("label_tournament") + ": " + game.getTournament() + "\n");
+        }
         gameTextArea.append(bundle.getString("label_handicap") + ": " + game.getHandicap() + "\n");
         gameTextArea.append(bundle.getString("label_date") + ": " + game.getDate() + "\n");
-        gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit());
+        if (!game.getTimeLimit().isEmpty()) {
+            gameTextArea.append(bundle.getString("label_time_limit") + ": " + game.getTimeLimit());
+        }
         if (refresh) {
             initializeAnalysisParams(false);
             moveList.setSelectedIndex(oldIndex);
