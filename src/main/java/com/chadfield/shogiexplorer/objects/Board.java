@@ -15,7 +15,6 @@ public class Board {
     private Coordinate source = null;
     private Coordinate destination = null;
     private Coordinate edit = null;
-    private Turn editBan = null;
 
     public Board() {
 
@@ -123,20 +122,6 @@ public class Board {
      */
     public void setEdit(Coordinate edit) {
         this.edit = edit;
-    }
-
-    /**
-     * @return the editBan
-     */
-    public Turn getEditBan() {
-        return editBan;
-    }
-
-    /**
-     * @param editBan the editBan to set
-     */
-    public void setEditBan(Turn editBan) {
-        this.editBan = editBan;
     }
 
 }

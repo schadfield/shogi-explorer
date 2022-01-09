@@ -17,48 +17,28 @@ public class PositionEditor {
     }
 
     public static void processLeft(Board board) {
-        if (board.getEdit() != null) {
-            int x = board.getEdit().getX();
-            int y = board.getEdit().getY();
-            if (x < 9) {
-                board.setEdit(new Coordinate(++x, y));
-            } else {
-                if (y > 1) {
-                    board.setEdit(new Coordinate(1, --y));
-                } else {
-                    board.setEdit(null);
-                    board.setEditBan(Board.Turn.GOTE);
-                }
-            }
+        int x = board.getEdit().getX();
+        int y = board.getEdit().getY();
+        if (x < 9) {
+            board.setEdit(new Coordinate(++x, y));
         } else {
-            if (board.getEditBan() == Board.Turn.GOTE) {
-                board.setEditBan(Board.Turn.SENTE);
+            if (y > 1) {
+                board.setEdit(new Coordinate(1, --y));
             } else {
-                board.setEditBan(null);
                 board.setEdit(new Coordinate(1, 9));
             }
         }
     }
 
     public static void processRight(Board board) {
-        if (board.getEdit() != null) {
-            int x = board.getEdit().getX();
-            int y = board.getEdit().getY();
-            if (x > 1) {
-                board.setEdit(new Coordinate(--x, y));
-            } else {
-                if (y < 9) {
-                    board.setEdit(new Coordinate(9, ++y));
-                } else {
-                    board.setEdit(null);
-                    board.setEditBan(Board.Turn.SENTE);
-                }
-            }
+        int x = board.getEdit().getX();
+        int y = board.getEdit().getY();
+        if (x > 1) {
+            board.setEdit(new Coordinate(--x, y));
         } else {
-            if (board.getEditBan() == Board.Turn.SENTE) {
-                board.setEditBan(Board.Turn.GOTE);
+            if (y < 9) {
+                board.setEdit(new Coordinate(9, ++y));
             } else {
-                board.setEditBan(null);
                 board.setEdit(new Coordinate(9, 1));
             }
         }
@@ -85,49 +65,30 @@ public class PositionEditor {
     }
 
     public static boolean processKey(char thisChar, Board board, boolean modified, int komadaiCount) {
-        if (board.getEdit() != null) {
-            Koma.Type komaType = getKomaType(thisChar, modified);
-            if (komaType != null) {
-                KifParser.putKoma(board, board.getEdit(), new Koma(komaType));
-                return true;
-            }
-        } else {
-            Board.Turn thisTurn = board.getEditBan();
-            if (thisTurn != null) {
-                Koma.Type komaType;
-                if (thisTurn == Board.Turn.SENTE) {
-                    komaType = getKomaType(Character.toLowerCase(thisChar), false);
-                } else {
-                    komaType = getKomaType(Character.toUpperCase(thisChar), false);
-                }
-                
+        Koma.Type komaType = getKomaType(thisChar, modified && (komadaiCount == -1));
+        if (komaType != null) {
+            if (komadaiCount != -1) {
                 updateInHand(board, komaType, komadaiCount);
-                return true;
+            } else {
+                KifParser.putKoma(board, board.getEdit(), new Koma(komaType));
             }
+            return true;
         }
         return false;
     }
-    
+
     private static void updateInHand(Board board, Koma.Type komaType, int komadaiCount) {
-        if (komadaiCount == -1) {
-            if (board.getInHandKomaMap().containsKey(komaType)) {
-                board.getInHandKomaMap().put(komaType, board.getInHandKomaMap().get(komaType) + 1); 
-            } else {
-                board.getInHandKomaMap().put(komaType, 1);
-            }
+        if (komadaiCount == 0) {
+            board.getInHandKomaMap().remove(komaType);
         } else {
-            if (komadaiCount == 0) {
-                board.getInHandKomaMap().remove(komaType);
-            } else {
-                board.getInHandKomaMap().put(komaType, komadaiCount);
-            }
+            board.getInHandKomaMap().put(komaType, komadaiCount);
         }
     }
 
     private static Koma.Type getKomaType(char thisChar, boolean modified) {
- 
+
         Map<Character, Koma.Type> komaTypeMap = new HashMap<>();
-        
+
         komaTypeMap.put('p', Koma.Type.SFU);
         komaTypeMap.put('l', Koma.Type.SKY);
         komaTypeMap.put('n', Koma.Type.SKE);
@@ -144,9 +105,9 @@ public class PositionEditor {
         komaTypeMap.put('B', Koma.Type.GKA);
         komaTypeMap.put('R', Koma.Type.GHI);
         komaTypeMap.put('K', Koma.Type.GOU);
-        
+
         Map<Character, Koma.Type> komaTypeMapModified = new HashMap<>();
-        
+
         komaTypeMapModified.put('p', Koma.Type.STO);
         komaTypeMapModified.put('l', Koma.Type.SNY);
         komaTypeMapModified.put('n', Koma.Type.SNK);

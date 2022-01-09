@@ -43,7 +43,7 @@ public class RenderBoard {
         drawCoordinates(boardPanel, rotatedView);
         drawGrid(imageCache, boardPanel);
         drawHighlights(board, imageCache, boardPanel, rotatedView);
-        drawKomadai(imageCache, boardPanel, rotatedView, board.getEditBan());
+        drawKomadai(imageCache, boardPanel, rotatedView);
         drawBackground(imageCache, boardPanel);
         drawTurnNotification(board, imageCache, boardPanel, rotatedView);
         boardPanel.setVisible(true);
@@ -444,28 +444,11 @@ public class RenderBoard {
         );
     }
 
-    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel, boolean rotatedView, Turn turn) {
-        String leftKomadaiStr = "komadai";
-        String rightKomadaiStr = "komadai";
-        if (turn != null) {
-            if (turn == Turn.SENTE) {
-                if (rotatedView) {
-                    leftKomadaiStr = IMAGE_STR_HIGHLIGHT_KOMADAI;
-                } else {
-                    rightKomadaiStr = IMAGE_STR_HIGHLIGHT_KOMADAI;
-                }
-            } else {
-                if (rotatedView) {
-                    rightKomadaiStr = IMAGE_STR_HIGHLIGHT_KOMADAI;
-                } else {
-                    leftKomadaiStr = IMAGE_STR_HIGHLIGHT_KOMADAI;
-                }
-            }
-        }
+    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel, boolean rotatedView) {        
         ImageUtils.drawImage(
                 imageCache,
                 boardPanel,
-                rightKomadaiStr,
+                "komadai",
                 new Coordinate(
                         MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
                         MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2
@@ -477,7 +460,7 @@ public class RenderBoard {
         ImageUtils.drawImage(
                 imageCache,
                 boardPanel,
-                leftKomadaiStr,
+                "komadai",
                 new Coordinate(0, 0),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y)

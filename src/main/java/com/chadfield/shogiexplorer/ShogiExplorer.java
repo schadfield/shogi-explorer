@@ -2445,25 +2445,25 @@ public class ShogiExplorer extends javax.swing.JFrame {
             char thisChar = evt.getKeyChar();
             switch (thisChar) {
                 case '0' ->
-                    setupKomadaiCount = 0;
+                    setupKomadaiCount = findKomadaiCount(0);
                 case '1' ->
-                    setupKomadaiCount = 1;
+                    setupKomadaiCount = findKomadaiCount(1);
                 case '2' ->
-                    setupKomadaiCount = 2;
+                    setupKomadaiCount = findKomadaiCount(2);
                 case '3' ->
-                    setupKomadaiCount = 3;
+                    setupKomadaiCount = findKomadaiCount(3);
                 case '4' ->
-                    setupKomadaiCount = 4;
+                    setupKomadaiCount = findKomadaiCount(4);
                 case '5' ->
-                    setupKomadaiCount = 5;
+                    setupKomadaiCount = findKomadaiCount(5);
                 case '6' ->
-                    setupKomadaiCount = 6;
+                    setupKomadaiCount = findKomadaiCount(6);
                 case '7' ->
-                    setupKomadaiCount = 7;
+                    setupKomadaiCount = findKomadaiCount(7);
                 case '8' ->
-                    setupKomadaiCount = 8;
+                    setupKomadaiCount = findKomadaiCount(8);
                 case '9' ->
-                    setupKomadaiCount = 9;
+                    setupKomadaiCount = findKomadaiCount(9);
                 case 'm', 'M' ->
                     setupModified = true;
                 case 'x' -> {
@@ -2482,16 +2482,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
                 case 'c' -> {
                     Coordinate editCoord = board.getEdit();
-                    Board.Turn turn = board.getEditBan();
                     board = SFENParser.parse("9/9/9/9/9/9/9/9/9 b - 1");
                     board.setEdit(editCoord);
-                    board.setEditBan(turn);
                     RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
                 }
                 default -> {
                     boolean result = PositionEditor.processKey(thisChar, board, setupModified, setupKomadaiCount);
                     if (result) {
-                        if (board.getEdit() != null) {
+                        if (setupKomadaiCount == -1) {
                             PositionEditor.processRight(board);
                         }
                         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
@@ -2503,6 +2501,18 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_boardPanelKeyTyped
+
+    private int findKomadaiCount(int thisVal) {
+        if (setupKomadaiCount != 1) {
+            return thisVal;
+        } else {
+            if (thisVal > 8) {
+                return thisVal;
+            } else {
+                return 10 + thisVal;
+            }
+        }
+    }
 
     private void analysePositionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analysePositionMenuItemActionPerformed
         if (!goodLicense) {
