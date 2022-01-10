@@ -382,13 +382,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         } catch (BackingStoreException ex) {
                             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                            JOptionPane.showMessageDialog(rootPane, bundle.getString("paid_update_available") + ": " + latestVersion, "", JOptionPane.PLAIN_MESSAGE, null);         
-                            Desktop desk = Desktop.getDesktop();
-                            try {
-                                desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-v3.html"));
-                            } catch (URISyntaxException | IOException ex) {
-                                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                        JOptionPane.showMessageDialog(rootPane, bundle.getString("paid_update_available") + ": " + latestVersion, "", JOptionPane.PLAIN_MESSAGE, null);
+                        Desktop desk = Desktop.getDesktop();
+                        try {
+                            desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-v3.html"));
+                        } catch (URISyntaxException | IOException ex) {
+                            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     } else {
                         if (!prop.getProperty("project.version").contentEquals(latestVersion)) {
                             JOptionPane.showMessageDialog(rootPane, bundle.getString("update_available") + ": " + latestVersion, "", JOptionPane.PLAIN_MESSAGE, null);
