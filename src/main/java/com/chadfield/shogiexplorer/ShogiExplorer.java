@@ -245,7 +245,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             utf8ImportRadioButtonMenuItem.setSelected(false);
             shiftJISImportRadioButtonMenuItem.setSelected(true);
         } else {
-            shiftFile = false;
+            shiftURL = false;
             utf8ImportRadioButtonMenuItem.setSelected(true);
             shiftJISImportRadioButtonMenuItem.setSelected(false);
         }
