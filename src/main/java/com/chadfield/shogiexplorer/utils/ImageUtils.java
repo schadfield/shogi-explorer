@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Dimension;
 import com.chadfield.shogiexplorer.objects.ImageCache;
+import java.awt.Color;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -160,18 +161,30 @@ public class ImageUtils {
         return (mri);
     }
 
+    public static void drawLabel(JPanel boardPanel, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset, Color color) {
+        JLabel imageLabel = new JLabel();
+        imageLabel.setBounds(
+                offset.getX() + imageCoordinate.getX(),
+                offset.getY() + imageCoordinate.getY(),
+                imageDimension.getWidth(),
+                imageDimension.getHeight());
+        imageLabel.setBackground(color);
+        imageLabel.setOpaque(true);
+        boardPanel.add(imageLabel);
+    }
+
     public static void drawImage(ImageCache imageCache, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset) {
         BaseMultiResolutionImage imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
             imageFile = loadSVGImageFromResources(imageName, imageDimension);
             imageCache.putImage(imageName, imageFile);
         }
-        JLabel imageLable = new JLabel(new ImageIcon(imageFile));
-        imageLable.setBounds(
+        JLabel imageLabel = new JLabel(new ImageIcon(imageFile));
+        imageLabel.setBounds(
                 offset.getX() + imageCoordinate.getX(),
                 offset.getY() + imageCoordinate.getY(),
                 imageDimension.getWidth(),
                 imageDimension.getHeight());
-        boardPanel.add(imageLable);
+        boardPanel.add(imageLabel);
     }
 }

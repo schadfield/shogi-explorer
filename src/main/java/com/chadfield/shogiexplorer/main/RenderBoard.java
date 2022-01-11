@@ -12,6 +12,7 @@ import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Dimension;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaName;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaNameRotated;
+import java.awt.Color;
 import java.awt.image.BaseMultiResolutionImage;
 import java.util.EnumMap;
 
@@ -35,6 +36,10 @@ public class RenderBoard {
         if (boardPanel.getWidth() == 0) {
             return;
         }
+        float hsb[] = Color.RGBtoHSB(214, 176, 101, null);
+        Color boardColor = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+        float hsb2[] = Color.RGBtoHSB(225, 121, 102, null);
+        Color highlightColor = Color.getHSBColor(hsb2[0], hsb2[1], hsb2[2]);
 
         // Start with a clean slate.
         boardPanel.removeAll();
@@ -43,9 +48,9 @@ public class RenderBoard {
         drawPiecesInHand(board, imageCache, boardPanel, rotatedView);
         drawCoordinates(boardPanel, rotatedView);
         drawGrid(imageCache, boardPanel);
-        drawHighlights(board, imageCache, boardPanel, rotatedView);
-        drawKomadai(imageCache, boardPanel);
-        drawBackground(imageCache, boardPanel);
+        drawHighlights(board, boardPanel, rotatedView, highlightColor);
+        drawKomadai(imageCache, boardPanel, boardColor);
+        drawBackground(imageCache, boardPanel, boardColor);
         drawTurnNotification(board, imageCache, boardPanel, rotatedView);
         boardPanel.setVisible(true);
         boardPanel.repaint();
@@ -342,29 +347,22 @@ public class RenderBoard {
 
     }
 
-    private static void drawHighlights(Board board, ImageCache imageCache, JPanel boardPanel, boolean rotatedView) {
+    private static void drawHighlights(Board board, JPanel boardPanel, boolean rotatedView, Color highlightColor) {
         Coordinate thisCoord = board.getSource();
         if (thisCoord != null) {
-            drawThisHighlight(rotatedView, boardPanel, thisCoord, imageCache);
+            drawThisHighlight(rotatedView, boardPanel, thisCoord, highlightColor);
         }
         thisCoord = board.getDestination();
         if (thisCoord != null) {
-            drawThisHighlight(rotatedView, boardPanel, thisCoord, imageCache);
+            drawThisHighlight(rotatedView, boardPanel, thisCoord, highlightColor);
         }
         thisCoord = board.getEdit();
         if (thisCoord != null) {
-            drawThisHighlight(rotatedView, boardPanel, thisCoord, imageCache);
+            drawThisHighlight(rotatedView, boardPanel, thisCoord, highlightColor);
         }
     }
 
-    private static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord, ImageCache imageCache) {
-        BaseMultiResolutionImage highLightImage = imageCache.getImage(IMAGE_STR_HIGHLIGHT);
-        if (highLightImage == null) {
-            highLightImage = ImageUtils.loadSVGImageFromResources(
-                    IMAGE_STR_HIGHLIGHT,
-                    new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
-            imageCache.putImage(IMAGE_STR_HIGHLIGHT, highLightImage);
-        }
+    private static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord, Color highlightColor) {
         int x;
         int y;
         if (rotatedView) {
@@ -374,13 +372,14 @@ public class RenderBoard {
             x = 9 - thisCoord.getX();
             y = thisCoord.getY() - 1;
         }
-        boardPanel.add(
-                ImageUtils.getPieceLabelForKoma(
-                        highLightImage,
-                        new Coordinate(x, y),
-                        new Dimension(MathUtils.KOMA_X + 3 * MathUtils.COORD_XY, MathUtils.COORD_XY),
-                        new Coordinate(CENTRE_X, CENTRE_Y)
-                ));
+        ImageUtils.drawLabel(
+                boardPanel,
+                new Coordinate(
+                        MathUtils.KOMA_X * (x + 1) + MathUtils.COORD_XY * 3,
+                        MathUtils.KOMA_Y * y + MathUtils.COORD_XY),
+                new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y),
+                new Coordinate(CENTRE_X, CENTRE_Y),
+                highlightColor);
     }
 
     private static void drawPieces(Board board, ImageCache imageCache, JPanel boardPanel, boolean rotatedView) {
@@ -445,40 +444,37 @@ public class RenderBoard {
         );
     }
 
-    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel) {        
-        ImageUtils.drawImage(
-                imageCache,
+    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel, Color boardColor) {
+        ImageUtils.drawLabel(
                 boardPanel,
-                "komadai",
                 new Coordinate(
                         MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
                         MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2
                 ),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
-                new Coordinate(CENTRE_X, CENTRE_Y)
+                new Coordinate(CENTRE_X, CENTRE_Y),
+                boardColor
         );
 
-        ImageUtils.drawImage(
-                imageCache,
+        ImageUtils.drawLabel(
                 boardPanel,
-                "komadai",
                 new Coordinate(0, 0),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
-                new Coordinate(CENTRE_X, CENTRE_Y)
+                new Coordinate(CENTRE_X, CENTRE_Y),
+                boardColor
         );
     }
 
-    private static void drawBackground(ImageCache imageCache, JPanel boardPanel) {
-        ImageUtils.drawImage(
-                imageCache,
+    private static void drawBackground(ImageCache imageCache, JPanel boardPanel, Color boardColor) {
+        ImageUtils.drawLabel(
                 boardPanel,
-                "background",
                 new Coordinate(MathUtils.KOMA_X + MathUtils.COORD_XY * 2, 0),
                 new Dimension(
                         MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
                         MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2
                 ),
-                new Coordinate(CENTRE_X, CENTRE_Y)
+                new Coordinate(CENTRE_X, CENTRE_Y),
+                boardColor
         );
     }
 
