@@ -50,11 +50,11 @@ public class ImageUtils {
         return numberLabel;
     }
 
-    public static Image loadSVGImageFromResources(String imageName, Dimension imageDimension) {
-        Image image1 = null;
-        Image image2 = null;
-        Image image3 = null;
-        Image image4 = null;
+    public static BaseMultiResolutionImage loadSVGImageFromResources(String imageName, Dimension imageDimension) {
+        BufferedImage image1 = null;
+        BufferedImage image2 = null;
+        BufferedImage image3 = null;
+        BufferedImage image4 = null;
 
         try {
             InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
@@ -163,7 +163,7 @@ public class ImageUtils {
     }
 
     public static void drawImage(ImageCache imageCache, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset) {
-        Image imageFile = imageCache.getImage(imageName);
+        BaseMultiResolutionImage imageFile = imageCache.getImage(imageName);
         if (imageFile == null) {
             imageFile = loadSVGImageFromResources(imageName, imageDimension);
             imageCache.putImage(imageName, imageFile);

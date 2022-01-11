@@ -12,6 +12,7 @@ import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Dimension;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaName;
 import static com.chadfield.shogiexplorer.utils.StringUtils.substituteKomaNameRotated;
+import java.awt.image.BaseMultiResolutionImage;
 import java.util.EnumMap;
 
 public class RenderBoard {
@@ -103,7 +104,7 @@ public class RenderBoard {
 
     private static void drawTurnNotification(Board board, ImageCache imageCache, JPanel boardPanel, boolean rotatedView) {
         if (board.getNextTurn() == Turn.SENTE) {
-            Image image = imageCache.getImage(IMAGE_STR_SENTE);
+            BaseMultiResolutionImage image = imageCache.getImage(IMAGE_STR_SENTE);
             if (image == null) {
                 image = ImageUtils.loadSVGImageFromResources(IMAGE_STR_SENTE, new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
                 imageCache.putImage(IMAGE_STR_SENTE, image);
@@ -127,7 +128,7 @@ public class RenderBoard {
                 );
             }
         } else {
-            Image image = imageCache.getImage(IMAGE_STR_GOTE);
+            BaseMultiResolutionImage image = imageCache.getImage(IMAGE_STR_GOTE);
             if (image == null) {
                 image = ImageUtils.loadSVGImageFromResources(IMAGE_STR_GOTE, new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
                 imageCache.putImage(IMAGE_STR_GOTE, image);
@@ -285,7 +286,7 @@ public class RenderBoard {
         for (Koma.Type komaType : Koma.Type.values()) {
             Integer numberHeld = board.getInHandKomaMap().get(komaType);
             if (numberHeld != null && numberHeld > 0) {
-                Image pieceImage;
+                BaseMultiResolutionImage pieceImage;
                 if (rotatedView) {
                     String name = PIECE_SET_CLASSIC + "/" + substituteKomaNameRotated(komaType.toString());
                     pieceImage = imageCache.getImage(name);
@@ -357,7 +358,7 @@ public class RenderBoard {
     }
 
     private static void drawThisHighlight(boolean rotatedView, JPanel boardPanel, Coordinate thisCoord, ImageCache imageCache) {
-        Image highLightImage = imageCache.getImage(IMAGE_STR_HIGHLIGHT);
+        BaseMultiResolutionImage highLightImage = imageCache.getImage(IMAGE_STR_HIGHLIGHT);
         if (highLightImage == null) {
             highLightImage = ImageUtils.loadSVGImageFromResources(
                     IMAGE_STR_HIGHLIGHT,
@@ -409,7 +410,7 @@ public class RenderBoard {
             }
             name = PIECE_SET_CLASSIC + "/" + substituteKomaName(koma.getType().toString());
         }
-        Image cacheImage = imageCache.getImage(name);
+        BaseMultiResolutionImage cacheImage = imageCache.getImage(name);
         if (cacheImage == null) {
             cacheImage = ImageUtils.loadSVGImageFromResources(
                     name,
