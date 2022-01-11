@@ -100,7 +100,6 @@ public class ImageUtils {
         // Set the transcoding hints.
         t.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
         t.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
-        t.addTranscodingHint(PNGTranscoder.KEY_GAMMA, (float) 2.2);
 
         try {
             // Create the transcoder input.
