@@ -58,16 +58,16 @@ public class ImageUtils {
 
         try {
             InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
-            image1 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth(), imageDimension.getHeight());
+            image1 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth());
             inputStream.close();
             inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
-            image2 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 1.25, imageDimension.getHeight() * 1.25);
+            image2 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 1.25);
             inputStream.close();
             inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
-            image3 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 1.5, imageDimension.getHeight() * 1.5);
+            image3 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 1.5);
             inputStream.close();
             inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
-            image4 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 2.0, imageDimension.getHeight() * 2.0);
+            image4 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 2.0);
             inputStream.close();
         } catch (TranscoderException | IOException ex) {
             Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,7 +77,7 @@ public class ImageUtils {
         return (mri);
     }
 
-    public static BufferedImage transcodeSVGToBufferedImage(InputStream inputStream, double width, double height) throws TranscoderException {
+    public static BufferedImage transcodeSVGToBufferedImage(InputStream inputStream, double width) throws TranscoderException {
         // Create a PNG transcoder.
         PNGTranscoder t = new PNGTranscoder() {
             @Override
@@ -99,7 +99,6 @@ public class ImageUtils {
 
         // Set the transcoding hints.
         t.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
-        t.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
 
         try {
             // Create the transcoder input.
