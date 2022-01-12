@@ -18,9 +18,12 @@ public class AnalysisParameter {
     private JRadioButtonMenuItem graphView3;
     private JButton haltAnalysisButton;
     private JMenuItem analyseGameMenuItem;
+    private JButton analyseGameToolbarButton;
     private JMenuItem analysePositionMenuItem;
+    private JButton analysePositionToolbarButton;
     private JMenuItem stopAnalysisMenuItem;
     private JMenuItem resumeAnalysisMenuItem;
+    private JButton resumeAnalysisToolbarButton;
     private List<List<Position>> positionAnalysisList;
     private File kifFile;
     private double[] x1Start;
@@ -357,5 +360,47 @@ public class AnalysisParameter {
      */
     public void setAnalysePositionMenuItem(JMenuItem analysePositionMenuItem) {
         this.analysePositionMenuItem = analysePositionMenuItem;
+    }
+
+    /**
+     * @return the analyseGameToolbarButton
+     */
+    public JButton getAnalyseGameToolbarButton() {
+        return analyseGameToolbarButton;
+    }
+
+    /**
+     * @param analyseGameToolbarButton the analyseGameToolbarButton to set
+     */
+    public void setAnalyseGameToolbarButton(JButton analyseGameToolbarButton) {
+        this.analyseGameToolbarButton = analyseGameToolbarButton;
+    }
+
+    /**
+     * @return the resumeAnalysisToolbarButton
+     */
+    public JButton getResumeAnalysisToolbarButton() {
+        return resumeAnalysisToolbarButton;
+    }
+
+    /**
+     * @param resumeAnalysisToolbarButton the resumeAnalysisToolbarButton to set
+     */
+    public void setResumeAnalysisToolbarButton(JButton resumeAnalysisToolbarButton) {
+        this.resumeAnalysisToolbarButton = resumeAnalysisToolbarButton;
+    }
+
+    /**
+     * @return the analysePositionToolbarButton
+     */
+    public JButton getAnalysePositionToolbarButton() {
+        return analysePositionToolbarButton;
+    }
+
+    /**
+     * @param analysePositionToolbarButton the analysePositionToolbarButton to set
+     */
+    public void setAnalysePositionToolbarButton(JButton analysePositionToolbarButton) {
+        this.analysePositionToolbarButton = analysePositionToolbarButton;
     }
 }
