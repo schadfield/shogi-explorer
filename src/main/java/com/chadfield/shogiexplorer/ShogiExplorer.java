@@ -2866,7 +2866,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_prefsCancelButtonActionPerformed
 
     private void saveAnalysisCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAnalysisCheckBoxActionPerformed
-        saveAnalysis = !saveAnalysis;
+        saveAnalysis = saveAnalysisCheckBox.isSelected();
         prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
         flushPrefs();
     }//GEN-LAST:event_saveAnalysisCheckBoxActionPerformed
