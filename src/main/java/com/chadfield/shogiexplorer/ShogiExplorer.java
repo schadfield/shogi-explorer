@@ -2908,6 +2908,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
                 found = true;
             }
+            kifFile =new File(fullPathStr);
         }
         saveAnalysisCheckBox.setEnabled(true);
         fastSaveMenuItem.setEnabled(false);
