@@ -2028,6 +2028,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (game == null || game.getPositionList().size() < 2) {
             return;
         }
+        saveAnalysis = saveAnalysisCheckBox.isSelected();
+        prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
+        flushPrefs();
         browse = false;
         analysisEngineName = (String) analysisEngineComboBox.getSelectedItem();
         analysisTimePerMove = (int) analysisTimePerMoveSpinner.getValue();
@@ -2360,7 +2363,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 clipboardStr = (String) transferable.getTransferData(DataFlavor.stringFlavor);
                 saveAnalysisCheckBox.setSelected(false);
                 saveAnalysisCheckBox.setEnabled(false);
-                saveAnalysis = false;
                 prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
                 flushPrefs();
                 parseKifu(false);
@@ -2409,7 +2411,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 clipboardStr = urlGameStr;
                 saveAnalysisCheckBox.setSelected(false);
                 saveAnalysisCheckBox.setEnabled(false);
-                saveAnalysis = false;
                 prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
                 flushPrefs();
                 parseKifu(false);
@@ -2498,9 +2499,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void refreshMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshMenuItemActionPerformed
         String urlGameStr = URLUtils.readGameURL(urlStr, shiftURL);
         clipboardStr = urlGameStr;
-        saveAnalysisCheckBox.setSelected(false);
-        saveAnalysisCheckBox.setEnabled(false);
-        saveAnalysis = false;
         prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
         flushPrefs();
         int numMovesBefore = game.getPositionList().size();
@@ -2866,9 +2864,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_prefsCancelButtonActionPerformed
 
     private void saveAnalysisCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAnalysisCheckBoxActionPerformed
-        saveAnalysis = saveAnalysisCheckBox.isSelected();
-        prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
-        flushPrefs();
+
     }//GEN-LAST:event_saveAnalysisCheckBoxActionPerformed
 
     private void prefsPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prefsPathActionPerformed
