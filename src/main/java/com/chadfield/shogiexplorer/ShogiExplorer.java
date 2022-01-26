@@ -42,6 +42,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.desktop.OpenFilesEvent;
 import java.awt.desktop.QuitEvent;
 import java.awt.desktop.QuitResponse;
 import java.awt.event.KeyEvent;
@@ -144,7 +145,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     JFreeChart chart;
     ChartPanel chartPanel;
     transient Thread analysisThread;
-    File kifFile;
+    static File kifFile = null;
     transient AnalysisParameter analysisParam;
     XYPlot plot;
     String clipboardStr;
@@ -170,6 +171,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     String savedComment;
     boolean seenPaid2;
     static final String USER_HOME = "user.home";
+
+    static String argTest;
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
     public static final boolean IS_WINDOWS = (OS.contains("win"));
@@ -315,6 +318,38 @@ public class ShogiExplorer extends javax.swing.JFrame {
         goodLicense = licenseCheck();
 
         updateCheck(false);
+
+        if (IS_MAC) {
+            Desktop.getDesktop().setOpenFileHandler((OpenFilesEvent e) -> {
+                if (setup || analysing.get()) {
+                    return;
+                }
+                if (refreshTimer != null && refreshTimer.isRunning()) {
+                    refreshTimer.stop();
+                    refreshTimer = null;
+                }
+                kifFile = e.getFiles().stream().findFirst().get();
+                openFromFileSystem();
+            });
+        }
+
+    }
+
+    private void openFromFileSystem() {
+        if (kifFile != null) {
+            fastSaveMenuItem.setEnabled(false);
+            saveKifMenuItem.setEnabled(false);
+            refreshMenuItem.setEnabled(false);
+            clipboardStr = null;
+            saveAnalysisCheckBox.setEnabled(true);
+            parseKifu(false);
+            analyseGameMenuItem.setEnabled(true);
+            analyseGameToolbarButton.setEnabled(true);
+            analysePositionMenuItem.setEnabled(true);
+            analysePositionToolbarButton.setEnabled(true);
+            resumeAnalysisMenuItem.setEnabled(false);
+            resumeAnalysisToolbarButton.setEnabled(false);
+        }
     }
 
     private boolean licenseCheck() {
@@ -1665,7 +1700,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setGraphView3(graph3000RadioButtonMenuItem);
         analysisParam.setHaltAnalysisButton(stopAnalysisButton);
         analysisParam.setAnalyseGameMenuItem(analyseGameMenuItem);
-        analysisParam.setAnalyseGameToolbarButton(analyseGameToolbarButton);        
+        analysisParam.setAnalyseGameToolbarButton(analyseGameToolbarButton);
         analysisParam.setAnalysePositionMenuItem(analysePositionMenuItem);
         analysisParam.setAnalysePositionToolbarButton(analysePositionToolbarButton);
         analysisParam.setStopAnalysisMenuItem(stopAnalysisMenuItem);
@@ -2908,7 +2943,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
                 found = true;
             }
-            kifFile =new File(fullPathStr);
+            kifFile = new File(fullPathStr);
         }
         saveAnalysisCheckBox.setEnabled(true);
         fastSaveMenuItem.setEnabled(false);

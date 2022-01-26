@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.chadfield</groupId>
     <artifactId>ShogiExplorer</artifactId>
-    <version>2.1.1</version>
+    <version>2.2.0</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -57,10 +57,10 @@
     </dependencies>
     <build>
         <resources>
-          <resource>
-            <directory>src/main/resources</directory>
-            <filtering>true</filtering>
-          </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
         </resources>
         <plugins>
             <plugin>
@@ -85,6 +85,46 @@
                     </descriptorRefs>
                 </configuration>
             </plugin> 
+            <plugin>
+                <groupId>io.github.fvarrui</groupId>
+                <artifactId>javapackager</artifactId>
+                <version>1.6.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                        <configuration>
+                            <!-- mandatory -->
+                            <mainClass>com.chadfield.shogiexplorer.ShogiExplorer</mainClass>
+                            <!-- optional -->
+                            <bundleJre>false</bundleJre>
+                            <generateInstaller>false</generateInstaller>
+                            <administratorRequired>false</administratorRequired>
+                            <platform>mac</platform>
+                            <jreMinVersion>17</jreMinVersion>
+                            <name>Shogi Explorer</name>
+                            <displayName>Shogi Explorer</displayName>
+                            <url>https://www.chadfield.com/</url>
+                            <version>${project.version}</version>
+                            <vmArgs>
+                                <vmArg>-Dfile.encoding=UTF-8</vmArg>
+                            </vmArgs>
+                            <fileAssociations>
+                                <fileAssociation>
+                                    <description>Shogi KIFU</description>
+                                    <extension>kif</extension>
+                                    <mimeType>application/x-shogi-explorer</mimeType>
+                                </fileAssociation>
+                            </fileAssociations>                
+                            <macConfig>
+                                <icnsFile>/Users/stephen/Projects/shogi-explorer/ShogiExplorer.icns</icnsFile>
+                            </macConfig>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>        
         </plugins>
     </build>
 </project>
