@@ -349,6 +349,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             analysePositionToolbarButton.setEnabled(true);
             resumeAnalysisMenuItem.setEnabled(false);
             resumeAnalysisToolbarButton.setEnabled(false);
+            mainFrame.setVisible(true);
         }
     }
 
