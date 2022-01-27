@@ -91,6 +91,42 @@
                 <version>1.6.2</version>
                 <executions>
                     <execution>
+                        <id>bundling-for-windows</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                        <configuration>
+                            <!-- mandatory -->
+                            <mainClass>com.chadfield.shogiexplorer.ShogiExplorer</mainClass>
+                            <!-- optional -->
+                            <bundleJre>false</bundleJre>
+                            <generateInstaller>false</generateInstaller>
+                            <administratorRequired>false</administratorRequired>
+                            <platform>windows</platform>
+                            <jreMinVersion>17</jreMinVersion>
+                            <name>Shogi Explorer</name>
+                            <outputDirectory>windows</outputDirectory>
+                            <displayName>Shogi Explorer</displayName>
+                            <url>https://www.chadfield.com/</url>
+                            <version>${project.version}</version>
+                            <vmArgs>
+                                <vmArg>-Dfile.encoding=UTF-8</vmArg>
+                            </vmArgs>
+                            <fileAssociations>
+                                <fileAssociation>
+                                    <description>Shogi KIFU</description>
+                                    <extension>kif</extension>
+                                    <mimeType>application/x-shogi-explorer</mimeType>
+                                </fileAssociation>
+                            </fileAssociations>                
+                            <winConfig>
+                                <icoFile>/Users/stephen/Projects/shogi-explorer/ShogiExplorer.ico</icoFile>
+                            </winConfig>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>bundling-for-mac</id>
                         <phase>package</phase>
                         <goals>
                             <goal>package</goal>
@@ -105,12 +141,10 @@
                             <platform>mac</platform>
                             <jreMinVersion>17</jreMinVersion>
                             <name>Shogi Explorer</name>
+                            <outputDirectory>mac</outputDirectory>
                             <displayName>Shogi Explorer</displayName>
                             <url>https://www.chadfield.com/</url>
                             <version>${project.version}</version>
-                            <vmArgs>
-                                <vmArg>-Dfile.encoding=UTF-8</vmArg>
-                            </vmArgs>
                             <fileAssociations>
                                 <fileAssociation>
                                     <description>Shogi KIFU</description>

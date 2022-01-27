@@ -171,6 +171,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     String savedComment;
     boolean seenPaid2;
     static final String USER_HOME = "user.home";
+    static String argument = null;
 
     static String argTest;
 
@@ -331,6 +332,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 kifFile = e.getFiles().stream().findFirst().get();
                 openFromFileSystem();
             });
+        } else {
+            if (argument != null) {
+                kifFile = new File(argument);
+                openFromFileSystem();
+            }
         }
 
     }
@@ -349,7 +355,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
             analysePositionToolbarButton.setEnabled(true);
             resumeAnalysisMenuItem.setEnabled(false);
             resumeAnalysisToolbarButton.setEnabled(false);
-            mainFrame.setVisible(true);
+            if (IS_MAC) {
+                mainFrame.setVisible(true);
+            }
         }
     }
 
@@ -3058,6 +3066,12 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     }
                     UIManager.put(key, new FontUIResource("Meiryo", font.getStyle(), fontSize));
                 }
+            }
+        }
+
+        if (IS_WINDOWS | IS_LINUX) {
+            if (args.length > 0) {
+                argument = args[0];
             }
         }
 
