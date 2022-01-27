@@ -106,7 +106,7 @@
                             <platform>windows</platform>
                             <jreMinVersion>17</jreMinVersion>
                             <name>Shogi Explorer</name>
-                            <outputDirectory>windows</outputDirectory>
+                            <outputDirectory>target/windows</outputDirectory>
                             <displayName>Shogi Explorer</displayName>
                             <url>https://www.chadfield.com/</url>
                             <version>${project.version}</version>
@@ -141,7 +141,7 @@
                             <platform>mac</platform>
                             <jreMinVersion>17</jreMinVersion>
                             <name>Shogi Explorer</name>
-                            <outputDirectory>mac</outputDirectory>
+                            <outputDirectory>target/mac</outputDirectory>
                             <displayName>Shogi Explorer</displayName>
                             <url>https://www.chadfield.com/</url>
                             <version>${project.version}</version>
