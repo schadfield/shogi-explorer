@@ -102,11 +102,12 @@
                             <!-- optional -->
                             <bundleJre>false</bundleJre>
                             <generateInstaller>false</generateInstaller>
+                            <createZipball>true</createZipball>
                             <administratorRequired>false</administratorRequired>
                             <platform>windows</platform>
                             <jreMinVersion>17</jreMinVersion>
                             <name>Shogi Explorer</name>
-                            <outputDirectory>target/windows</outputDirectory>
+                            <outputDirectory>target/packages/windows</outputDirectory>
                             <displayName>Shogi Explorer</displayName>
                             <url>https://www.chadfield.com/</url>
                             <version>${project.version}</version>
@@ -136,12 +137,12 @@
                             <mainClass>com.chadfield.shogiexplorer.ShogiExplorer</mainClass>
                             <!-- optional -->
                             <bundleJre>false</bundleJre>
-                            <generateInstaller>false</generateInstaller>
+                            <generateInstaller>true</generateInstaller>
                             <administratorRequired>false</administratorRequired>
                             <platform>mac</platform>
                             <jreMinVersion>17</jreMinVersion>
                             <name>Shogi Explorer</name>
-                            <outputDirectory>target/mac</outputDirectory>
+                            <outputDirectory>target/packages/mac</outputDirectory>
                             <displayName>Shogi Explorer</displayName>
                             <url>https://www.chadfield.com/</url>
                             <version>${project.version}</version>
@@ -155,6 +156,38 @@
                             <macConfig>
                                 <icnsFile>/Users/stephen/Projects/shogi-explorer/ShogiExplorer.icns</icnsFile>
                             </macConfig>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>bundling-for-linux</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                        <configuration>
+                            <!-- mandatory -->
+                            <mainClass>com.chadfield.shogiexplorer.ShogiExplorer</mainClass>
+                            <!-- optional -->
+                            <bundleJre>false</bundleJre>
+                            <generateInstaller>true</generateInstaller>
+                            <administratorRequired>false</administratorRequired>
+                            <platform>linux</platform>
+                            <jreMinVersion>17</jreMinVersion>
+                            <name>ShogiExplorer</name>
+                            <outputDirectory>target/packages/linux</outputDirectory>
+                            <displayName>Shogi Explorer</displayName>
+                            <url>https://www.chadfield.com/</url>
+                            <version>${project.version}</version>
+                            <fileAssociations>
+                                <fileAssociation>
+                                    <description>Shogi KIFU</description>
+                                    <extension>kif</extension>
+                                    <mimeType>application/x-shogi-explorer</mimeType>
+                                </fileAssociation>
+                            </fileAssociations>                
+                            <linuxConfig>
+                                <pngFile>/Users/stephen/Projects/shogi-explorer/ShogiExplorer.png</pngFile>
+                            </linuxConfig>
                         </configuration>
                     </execution>
                 </executions>
