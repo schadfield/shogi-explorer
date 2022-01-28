@@ -2876,7 +2876,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         Desktop desk = Desktop.getDesktop();
         try {
-            desk.browse(new URI("https://drive.google.com/drive/folders/1S_5RZrIAD6svAcZMGbcbiCxmAUlAECEo?usp=sharing"));
+            desk.browse(new URI("https://1drv.ms/u/s!AhfLAkrQNW7u-zsr-NSY9YZHd2V2?e=T9gMJn"));
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
