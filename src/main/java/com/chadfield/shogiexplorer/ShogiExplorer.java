@@ -2653,6 +2653,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 case 'x' -> {
                     if (board.getEdit() != null) {
                         KifParser.putKoma(board, board.getEdit(), null);
+                        PositionEditor.processRight(board);
                         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
                     }
                 }
