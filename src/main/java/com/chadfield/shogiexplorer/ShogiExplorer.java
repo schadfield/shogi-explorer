@@ -43,6 +43,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.desktop.OpenFilesEvent;
+import java.awt.desktop.OpenURIEvent;
 import java.awt.desktop.QuitEvent;
 import java.awt.desktop.QuitResponse;
 import java.awt.event.KeyEvent;
@@ -157,7 +158,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_DIVIDER_LOCATION = "dividerLocation";
     int dividerLocation;
     static final String PREF_LAST_UPDATE_CHECK = "lastUpdateCheck";
-    String urlStr;
+    String urlStr = null;
     static final String PREF_AUTO_REFRESH = "autoRefresh";
     boolean autoRefresh;
     javax.swing.Timer refreshTimer = null;
@@ -338,6 +339,25 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 openFromFileSystem();
             }
         }
+
+        if (IS_MAC) {
+            Desktop.getDesktop().setOpenURIHandler((OpenURIEvent e) -> {
+                if (setup || analysing.get()) {
+                    return;
+                }
+                if (refreshTimer != null && refreshTimer.isRunning()) {
+                    refreshTimer.stop();
+                    refreshTimer = null;
+                }
+                urlStr = e.getURI().toString().substring(20);
+                openGameFromURL();
+            });
+        } else {
+        }
+
+    }
+
+    private void openFromURI() {
 
     }
 
@@ -2451,31 +2471,35 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             try {
                 urlStr = (String) transferable.getTransferData(DataFlavor.stringFlavor);
-                String urlGameStr = URLUtils.readGameURL(urlStr, shiftURL);
-                clipboardStr = urlGameStr;
-                saveAnalysisCheckBox.setSelected(false);
-                saveAnalysisCheckBox.setEnabled(false);
-                prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
-                flushPrefs();
-                parseKifu(false);
-                analyseGameMenuItem.setEnabled(true);
-                analyseGameToolbarButton.setEnabled(true);
-                analysePositionMenuItem.setEnabled(true);
-                analysePositionToolbarButton.setEnabled(true);
-                resumeAnalysisMenuItem.setEnabled(false);
-                resumeAnalysisToolbarButton.setEnabled(false);
-                java.awt.event.ActionListener taskPerformer = (java.awt.event.ActionEvent evt1)
-                        -> refreshMenuItemActionPerformed(evt1);
-                refreshTimer = new javax.swing.Timer(30000, taskPerformer);
-                refreshTimer.setRepeats(true);
-                if (autoRefresh) {
-                    refreshTimer.start();
-                }
+                openGameFromURL();
             } catch (UnsupportedFlavorException | IOException ex) {
                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_importURLMenuItemActionPerformed
+
+    private void openGameFromURL() {
+        String urlGameStr = URLUtils.readGameURL(urlStr, shiftURL);
+        clipboardStr = urlGameStr;
+        saveAnalysisCheckBox.setSelected(false);
+        saveAnalysisCheckBox.setEnabled(false);
+        prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
+        flushPrefs();
+        parseKifu(false);
+        analyseGameMenuItem.setEnabled(true);
+        analyseGameToolbarButton.setEnabled(true);
+        analysePositionMenuItem.setEnabled(true);
+        analysePositionToolbarButton.setEnabled(true);
+        resumeAnalysisMenuItem.setEnabled(false);
+        resumeAnalysisToolbarButton.setEnabled(false);
+        java.awt.event.ActionListener taskPerformer = (java.awt.event.ActionEvent evt1)
+                -> refreshMenuItemActionPerformed(evt1);
+        refreshTimer = new javax.swing.Timer(30000, taskPerformer);
+        refreshTimer.setRepeats(true);
+        if (autoRefresh) {
+            refreshTimer.start();
+        }
+    }
 
     private void utf8KifRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_utf8KifRadioButtonMenuItemActionPerformed
         shiftFile = false;
