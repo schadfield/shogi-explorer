@@ -335,8 +335,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
             });
         } else {
             if (argument != null) {
-                kifFile = new File(argument);
-                openFromFileSystem();
+                if (argument.startsWith("shogiexplorer:")) {
+                    urlStr = argument.substring(21);
+                    openGameFromURL();
+                } else {
+                    kifFile = new File(argument);
+                    openFromFileSystem();
+                }
             }
         }
 
@@ -352,13 +357,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 urlStr = e.getURI().toString().substring(20);
                 openGameFromURL();
             });
-        } else {
         }
-
-    }
-
-    private void openFromURI() {
-
+        
     }
 
     private void openFromFileSystem() {
