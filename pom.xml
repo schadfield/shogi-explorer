@@ -122,7 +122,6 @@
                                 </fileAssociation>
                             </fileAssociations>                
                             <winConfig>
-                                <icoFile>/Users/stephen/Projects/shogi-explorer/ShogiExplorer.ico</icoFile>
                             </winConfig>
                         </configuration>
                     </execution>
@@ -154,7 +153,6 @@
                                 </fileAssociation>
                             </fileAssociations>                
                             <macConfig>
-                                <icnsFile>/Users/stephen/Projects/shogi-explorer/ShogiExplorer.icns</icnsFile>
                             </macConfig>
                         </configuration>
                     </execution>
@@ -186,7 +184,6 @@
                                 </fileAssociation>
                             </fileAssociations>                
                             <linuxConfig>
-                                <pngFile>/Users/stephen/Projects/shogi-explorer/ShogiExplorer.png</pngFile>
                             </linuxConfig>
                         </configuration>
                     </execution>
