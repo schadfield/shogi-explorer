@@ -49,8 +49,8 @@ public class RenderBoard {
         drawCoordinates(boardPanel, rotatedView);
         drawGrid(imageCache, boardPanel);
         drawHighlights(board, boardPanel, rotatedView, highlightColor);
-        drawKomadai(imageCache, boardPanel, boardColor);
-        drawBackground(imageCache, boardPanel, boardColor);
+        drawKomadai(boardPanel, boardColor);
+        drawBackground(boardPanel, boardColor);
         drawTurnNotification(board, imageCache, boardPanel, rotatedView);
         boardPanel.setVisible(true);
         boardPanel.repaint();
@@ -444,7 +444,7 @@ public class RenderBoard {
         );
     }
 
-    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel, Color boardColor) {
+    private static void drawKomadai(JPanel boardPanel, Color boardColor) {
         ImageUtils.drawLabel(
                 boardPanel,
                 new Coordinate(
@@ -465,7 +465,7 @@ public class RenderBoard {
         );
     }
 
-    private static void drawBackground(ImageCache imageCache, JPanel boardPanel, Color boardColor) {
+    private static void drawBackground(JPanel boardPanel, Color boardColor) {
         ImageUtils.drawLabel(
                 boardPanel,
                 new Coordinate(MathUtils.KOMA_X + MathUtils.COORD_XY * 2, 0),
