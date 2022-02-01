@@ -27,6 +27,7 @@ public class RenderBoard {
     static final String IMAGE_STR_HIGHLIGHT = "highlight";
     static final String IMAGE_STR_HIGHLIGHT_KOMADAI = "highlight_komadai";
     static final String PIECE_SET_CLASSIC = "classic";
+    static final Color boardShadow = new Color(100, 100, 100);
 
     private RenderBoard() {
         throw new IllegalStateException("Utility class");
@@ -458,10 +459,29 @@ public class RenderBoard {
 
         ImageUtils.drawLabel(
                 boardPanel,
+                new Coordinate(
+                        MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5 + 1,
+                        MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2 + 1
+                ),
+                new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
+                new Coordinate(CENTRE_X, CENTRE_Y),
+                boardShadow
+        );
+
+        ImageUtils.drawLabel(
+                boardPanel,
                 new Coordinate(0, 0),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y),
                 boardColor
+        );
+
+        ImageUtils.drawLabel(
+                boardPanel,
+                new Coordinate(0 + 1, 0 + 1),
+                new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
+                new Coordinate(CENTRE_X, CENTRE_Y),
+                boardShadow
         );
     }
 
@@ -475,6 +495,17 @@ public class RenderBoard {
                 ),
                 new Coordinate(CENTRE_X, CENTRE_Y),
                 boardColor
+        );
+
+        ImageUtils.drawLabel(
+                boardPanel,
+                new Coordinate(MathUtils.KOMA_X + MathUtils.COORD_XY * 2 + 1, 0 + 1),
+                new Dimension(
+                        MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
+                        MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2
+                ),
+                new Coordinate(CENTRE_X, CENTRE_Y),
+                boardShadow
         );
     }
 
