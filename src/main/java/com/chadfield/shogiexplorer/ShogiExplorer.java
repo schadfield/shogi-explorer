@@ -175,6 +175,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static String argument = null;
 
     static String argTest;
+    
+    java.awt.event.ActionListener taskPerformer;
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
     public static final boolean IS_WINDOWS = (OS.contains("win"));
@@ -1657,7 +1659,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_openKifMenuItemActionPerformed
 
     private void parseKifu(boolean refresh) {
-        if (refreshTimer != null && refreshTimer.isRunning()) {
+        if (!refresh && refreshTimer != null && refreshTimer.isRunning()) {
             refreshTimer.stop();
             refreshTimer = null;
         }
@@ -2492,7 +2494,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysePositionToolbarButton.setEnabled(true);
         resumeAnalysisMenuItem.setEnabled(false);
         resumeAnalysisToolbarButton.setEnabled(false);
-        java.awt.event.ActionListener taskPerformer = (java.awt.event.ActionEvent evt1)
+        taskPerformer = (java.awt.event.ActionEvent evt1)
                 -> refreshMenuItemActionPerformed(evt1);
         refreshTimer = new javax.swing.Timer(30000, taskPerformer);
         refreshTimer.setRepeats(true);
@@ -2567,8 +2569,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void refreshMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshMenuItemActionPerformed
         String urlGameStr = URLUtils.readGameURL(urlStr, shiftURL);
         clipboardStr = urlGameStr;
-        prefs.putBoolean(PREF_SAVE_ANALYSIS, saveAnalysis);
-        flushPrefs();
         int numMovesBefore = game.getPositionList().size();
         parseKifu(true);
         analyseGameMenuItem.setEnabled(true);
@@ -2957,7 +2957,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         int extra = 0;
         String thisSavePath = thisSavePathDir + File.separator + fastSavePrefix + "-" + dateStr
                 + "-" + senteStr + "-" + goteStr;
-        System.out.println(thisSavePath);
         boolean found = false;
         while (!found) {
             String fullPathStr;
