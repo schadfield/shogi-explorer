@@ -434,7 +434,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             try ( InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
                 Properties prop = new Properties();
                 prop.load(input);
-                String latestVersion = HttpUtils.getLatestVersion("https://www.chadfield.com/p/shogi-explorer-v2-changelog.html", seenPaid2);
+                String latestVersion = HttpUtils.getLatestVersion("https://www.chadfield.com/p/shogi-explorer-changelog.html", seenPaid2);
                 if (latestVersion == null) {
                     if (force) {
                         JOptionPane.showMessageDialog(rootPane, bundle.getString("update_check_failed"), "", JOptionPane.PLAIN_MESSAGE, null);
@@ -460,7 +460,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(rootPane, bundle.getString("update_available") + ": " + latestVersion, "", JOptionPane.PLAIN_MESSAGE, null);
                             Desktop desk = Desktop.getDesktop();
                             try {
-                                desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-v2-changelog.html"));
+                                desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-changelog.html"));
                             } catch (URISyntaxException | IOException ex) {
                                 Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -2892,7 +2892,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Desktop desk = Desktop.getDesktop();
         try {
-            desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-v2.html"));
+            desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer.html"));
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2901,7 +2901,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         Desktop desk = Desktop.getDesktop();
         try {
-            desk.browse(new URI("https://1drv.ms/u/s!AhfLAkrQNW7u-zsr-NSY9YZHd2V2?e=T9gMJn"));
+            desk.browse(new URI("https://1drv.ms/u/s!AhfLAkrQNW7u-zlxV5_xW940LKke?e=GvhmJI"));
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -3030,7 +3030,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         Desktop desk = Desktop.getDesktop();
         try {
-            desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-v2-changelog.html"));
+            desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-changelog.html"));
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
