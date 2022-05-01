@@ -319,7 +319,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         initializeChart(true);
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
 
-        goodLicense = licenseCheck();
+        goodLicense = true;
 
         updateCheck(false);
 
@@ -884,7 +884,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
         setBounds(new java.awt.Rectangle(58, 25, 1000, 650));
         setMinimumSize(new java.awt.Dimension(1000, 650));
-        setPreferredSize(new java.awt.Dimension(mainWidth, mainHeight));
         setSize(new java.awt.Dimension(0, 0));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
