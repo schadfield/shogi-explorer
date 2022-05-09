@@ -42,7 +42,6 @@ import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.Game;
 import com.chadfield.shogiexplorer.objects.ImageCache;
 import com.chadfield.shogiexplorer.objects.Position;
-import com.chadfield.shogiexplorer.utils.HttpUtils;
 import com.chadfield.shogiexplorer.utils.ImageUtils;
 import com.chadfield.shogiexplorer.utils.URLUtils;
 import java.awt.Color;
@@ -145,7 +144,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_ANALYSIS_BLUNDER_THRESHOLD = "analysisBlunderThreshold";
     int analysisBlunderThreshold;
     static final String PREF_ANALYSIS_IGNORE_THRESHOLD = "analysisLosingThreshold";
-    static final String PREF_SEEN_PAID2 = "seenPaid2";
     int analysisIgnoreThreshold;
     static final String PREF_FILE_OPEN_DIR = "fileOpenDir";
     static final String PREF_LANGUAGE = "language";
@@ -155,7 +153,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_SHIFT_URL = "shiftURL";
     static final String PREF_FAST_SAVE_DIR = "fastSaveDir";
     static final String PREF_FAST_SAVE_PREFIX = "fastSavePrefix";
-    static final String PREF_LICENSE_FILE_PATH = "licenseFilePath";
     DefaultIntervalXYDataset plotDataset;
     JFreeChart chart;
     ChartPanel chartPanel;
@@ -171,7 +168,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     int mainWidth;
     static final String PREF_DIVIDER_LOCATION = "dividerLocation";
     int dividerLocation;
-    static final String PREF_LAST_UPDATE_CHECK = "lastUpdateCheck";
     String urlStr = null;
     static final String PREF_AUTO_REFRESH = "autoRefresh";
     boolean autoRefresh;
@@ -182,9 +178,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     transient Position savedPosition;
     String fastSavePath;
     String fastSavePrefix;
-    boolean goodLicense = false;
     String savedComment;
-    boolean seenPaid2;
     static final String USER_HOME = "user.home";
     static String argument = null;
 
@@ -231,8 +225,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         imageCache = new ImageCache();
 
         board = SFENParser.parse("lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1");
-
-        seenPaid2 = prefs.getBoolean(PREF_SEEN_PAID2, false);
 
         if (prefs.getBoolean(PREF_SAVE_ANALYSIS, false)) {
             saveAnalysisCheckBox.setSelected(true);
@@ -333,10 +325,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         initializeChart(true);
         RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
 
-        goodLicense = true;
-
-        updateCheck(false);
-
         if (IS_MAC) {
             Desktop.getDesktop().setOpenFileHandler((OpenFilesEvent e) -> {
                 if (setup || analysing.get()) {
@@ -393,42 +381,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             resumeAnalysisToolbarButton.setEnabled(false);
             if (IS_MAC) {
                 mainFrame.setVisible(true);
-            }
-        }
-    }
-
-    private void updateCheck(boolean force) {
-        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
-        long now = System.currentTimeMillis();
-        long lastUpdateCheck = prefs.getLong(PREF_LAST_UPDATE_CHECK, 0);
-        if (force || now - lastUpdateCheck > 604800000) {
-            prefs.putLong(PREF_LAST_UPDATE_CHECK, now);
-            flushPrefs();
-            try ( InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream("Project.properties")) {
-                Properties prop = new Properties();
-                prop.load(input);
-                String latestVersion = HttpUtils.getLatestVersion("https://www.chadfield.com/p/shogi-explorer-changelog.html");
-                if (latestVersion == null) {
-                    if (force) {
-                        JOptionPane.showMessageDialog(rootPane, bundle.getString("update_check_failed"), "", JOptionPane.PLAIN_MESSAGE, null);
-                    }
-                } else {
-                    if (!prop.getProperty("project.version").contentEquals(latestVersion)) {
-                        JOptionPane.showMessageDialog(rootPane, bundle.getString("update_available") + ": " + latestVersion, "", JOptionPane.PLAIN_MESSAGE, null);
-                        Desktop desk = Desktop.getDesktop();
-                        try {
-                            desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-changelog.html"));
-                        } catch (URISyntaxException | IOException ex) {
-                            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
-                        if (force) {
-                            JOptionPane.showMessageDialog(rootPane, latestVersion + " " + bundle.getString("is_the_latest_version"), "", JOptionPane.PLAIN_MESSAGE, null);
-                        }
-                    }
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -574,7 +526,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         englishRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         japaneseRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -1426,14 +1377,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jMenuBar1.add(viewMenu);
 
         jMenu1.setText(bundle.getString("ShogiExplorer.jMenu1.text")); // NOI18N
-
-        jMenuItem1.setLabel(bundle.getString("ShogiExplorer.jMenuItem1.label")); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem1);
 
         jMenuItem4.setText(bundle.getString("ShogiExplorer.jMenuItem4.text")); // NOI18N
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
@@ -2771,10 +2714,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_saveKifMenuItemActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        updateCheck(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Desktop desk = Desktop.getDesktop();
         try {
@@ -3005,7 +2944,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
