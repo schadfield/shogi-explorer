@@ -526,8 +526,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         englishRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         japaneseRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
@@ -1378,23 +1376,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jMenu1.setText(bundle.getString("ShogiExplorer.jMenu1.text")); // NOI18N
 
-        jMenuItem4.setText(bundle.getString("ShogiExplorer.jMenuItem4.text")); // NOI18N
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem4);
-
-        jMenuItem3.setText(bundle.getString("ShogiExplorer.jMenuItem3.text_1")); // NOI18N
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem3);
-
-        jMenuItem2.setLabel(bundle.getString("ShogiExplorer.jMenuItem2.label")); // NOI18N
+        jMenuItem2.setText(bundle.getString("ShogiExplorer.jMenuItem2.text_1")); // NOI18N
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -2717,20 +2699,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Desktop desk = Desktop.getDesktop();
         try {
-            desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer.html"));
+            desk.browse(new URI("https://github.com/schadfield/shogi-explorer"));
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        Desktop desk = Desktop.getDesktop();
-        try {
-            desk.browse(new URI("https://1drv.ms/u/s!AhfLAkrQNW7u-zlxV5_xW940LKke?e=GvhmJI"));
-        } catch (URISyntaxException | IOException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void prefsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prefsMenuItemActionPerformed
         prefsPrefix.setText(fastSavePrefix);
@@ -2799,15 +2772,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         fastSaveMenuItem.setEnabled(false);
         saveKifMenuItem.setEnabled(false);
     }//GEN-LAST:event_fastSaveMenuItemActionPerformed
-
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        Desktop desk = Desktop.getDesktop();
-        try {
-            desk.browse(new URI("https://www.chadfield.com/p/shogi-explorer-changelog.html"));
-        } catch (URISyntaxException | IOException ex) {
-            Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void analyseGameToolbarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyseGameToolbarButtonActionPerformed
         analyseGameMenuItem.doClick();
@@ -2945,8 +2909,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
