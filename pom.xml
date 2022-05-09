@@ -104,7 +104,7 @@
                             <name>Shogi Explorer</name>
                             <outputDirectory>target/packages/windows</outputDirectory>
                             <displayName>Shogi Explorer</displayName>
-                            <url>https://www.chadfield.com/</url>
+                            <url>https://github.com/schadfield/shogi-explorer</url>
                             <version>${project.version}</version>
                             <vmArgs>
                                 <vmArg>-Dfile.encoding=UTF-8</vmArg>
@@ -138,7 +138,7 @@
                             <name>Shogi Explorer</name>
                             <outputDirectory>target/packages/mac</outputDirectory>
                             <displayName>Shogi Explorer</displayName>
-                            <url>https://www.chadfield.com/</url>
+                            <url>https://github.com/schadfield/shogi-explorer</url>
                             <version>${project.version}</version>
                             <fileAssociations>
                                 <fileAssociation>
@@ -169,7 +169,7 @@
                             <name>ShogiExplorer</name>
                             <outputDirectory>target/packages/linux</outputDirectory>
                             <displayName>Shogi Explorer</displayName>
-                            <url>https://www.chadfield.com/</url>
+                            <url>https://github.com/schadfield/shogi-explorer</url>
                             <version>${project.version}</version>
                             <fileAssociations>
                                 <fileAssociation>
