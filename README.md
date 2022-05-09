@@ -56,7 +56,7 @@ komadai_piece: \<0-18\>\<piece\>
 
 ## Saving Game Records
 
-Game records can now be saved for games opened using the import clipboard feature. There is a special Fast Save option which saves game records to a preferred directory using a template: <prefix>-<dateTime>-<sente>-<gote>-<index>.kif.
+Game records can now be saved for games opened using the import clipboard feature. There is a special Fast Save option which saves game records to a preferred directory using a template: \<prefix\>-\<dateTime\>-\<sente\>-\<gote\>-\<index\>.kif.
 
 <img src="images/image8.png" width="576">
 
