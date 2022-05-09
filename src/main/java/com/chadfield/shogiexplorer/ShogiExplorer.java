@@ -191,9 +191,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     public static final boolean IS_MAC = (OS.contains("mac"));
     public static final boolean IS_LINUX = (OS.contains("nux"));
 
-    /**
-     * Creates new form NewJFrame
-     */
     public ShogiExplorer() {
         prefs = Preferences.userNodeForPackage(ShogiExplorer.class);
         String language = prefs.get(PREF_LANGUAGE, PREF_LANGUAGE_ENGLISH);
