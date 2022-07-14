@@ -166,6 +166,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     int mainHeight;
     static final String PREF_WIDTH = "width";
     int mainWidth;
+    static final String PREF_MAXIMIZED = "maximized";
     static final String PREF_DIVIDER_LOCATION = "dividerLocation";
     int dividerLocation;
     String urlStr = null;
@@ -209,6 +210,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
 
         initComponents();
+        
+        if (prefs.getBoolean(PREF_MAXIMIZED, false)) {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        }
 
         setIconImage(ImageUtils.loadTaskbarImageFromResources("taskbar"));
         jEngineManagerDialog.setIconImage(ImageUtils.loadTaskbarImageFromResources("taskbar"));
@@ -2225,6 +2230,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
         prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
         prefs.putInt(PREF_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
+        prefs.putBoolean(PREF_MAXIMIZED, this.getExtendedState() == MAXIMIZED_BOTH);
         flushPrefs();
         System.exit(0);
     }//GEN-LAST:event_quitMenuItemActionPerformed
