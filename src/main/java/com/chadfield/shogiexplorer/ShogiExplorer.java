@@ -1026,6 +1026,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         moveList.setModel(moveListModel);
         moveList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        moveList.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                moveListKeyReleased(evt);
+            }
+        });
         moveList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 moveListValueChanged(evt);
@@ -2792,6 +2797,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void rotateToolbarButton(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rotateToolbarButton
         rotateBoardCheckBoxMenuItem.doClick();
     }//GEN-LAST:event_rotateToolbarButton
+
+    private void moveListKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_moveListKeyReleased
+        analysisTableKeyReleased(evt);
+    }//GEN-LAST:event_moveListKeyReleased
 
     private String getAboutMessage() {
         String aboutMessage;
