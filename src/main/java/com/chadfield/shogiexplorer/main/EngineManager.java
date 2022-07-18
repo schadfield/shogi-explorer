@@ -95,8 +95,13 @@ public class EngineManager {
                     index += 2;
                 }
                 case "default" -> {
-                    engineOption.setDef(optionArray[index + 1]);
-                    engineOption.setValue(optionArray[index + 1]);
+                    if (index+1 >= optionArray.length) {
+                        engineOption.setDef("");
+                        engineOption.setValue("");      
+                    } else {
+                        engineOption.setDef(optionArray[index + 1]);
+                        engineOption.setValue(optionArray[index + 1]);
+                    }
                     index += 2;
                 }
                 case "min" -> {
