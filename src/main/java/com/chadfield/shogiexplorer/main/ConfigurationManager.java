@@ -25,6 +25,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -137,11 +138,12 @@ public class ConfigurationManager {
         }
         jEngineConfPanel.add(new JLabel(""));
         jEngineConfPanel.add(new JLabel(""));
-        JButton applyButton = new JButton("Apply");
+        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+        JButton applyButton = new JButton(bundle.getString("ShogiExplorer.prefsSaveButton.text"));
         applyButton.addActionListener((java.awt.event.ActionEvent evt)
                 -> applyChanges(configurationItemList, engineList, engineConfDialog));
         jEngineConfPanel.add(applyButton);
-        JButton cancelButton = new JButton("Cancel");
+        JButton cancelButton = new JButton(bundle.getString("ShogiExplorer.prefsCancelButton.text"));
         cancelButton.addActionListener((java.awt.event.ActionEvent evt)
                 -> cancelChanges(engineConfDialog));
         jEngineConfPanel.add(cancelButton);
