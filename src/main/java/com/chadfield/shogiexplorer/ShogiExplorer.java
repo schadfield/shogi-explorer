@@ -752,6 +752,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         mediaStart.setText(bundle.getString("ShogiExplorer.mediaStart.text_1")); // NOI18N
         mediaStart.setToolTipText(bundle.getString("ShogiExplorer.mediaStart.toolTipText")); // NOI18N
+        mediaStart.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaStart.setFocusable(false);
         mediaStart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaStart.setMaximumSize(new java.awt.Dimension(40, 24));
@@ -767,6 +768,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(filler1);
 
         mediaReverse.setToolTipText(bundle.getString("ShogiExplorer.mediaReverse.toolTipText")); // NOI18N
+        mediaReverse.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaReverse.setFocusable(false);
         mediaReverse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaReverse.setLabel(bundle.getString("ShogiExplorer.mediaReverse.label_1")); // NOI18N
@@ -783,6 +785,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(filler2);
 
         mediaBack.setToolTipText(bundle.getString("ShogiExplorer.mediaBack.toolTipText")); // NOI18N
+        mediaBack.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaBack.setFocusable(false);
         mediaBack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaBack.setLabel(bundle.getString("ShogiExplorer.mediaBack.label_1")); // NOI18N
@@ -800,6 +803,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         mediaStop.setText(bundle.getString("ShogiExplorer.mediaStop.text")); // NOI18N
         mediaStop.setToolTipText(bundle.getString("ShogiExplorer.mediaStop.toolTipText")); // NOI18N
+        mediaStop.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaStop.setFocusable(false);
         mediaStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaStop.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -814,6 +818,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(filler4);
 
         mediaForward.setToolTipText(bundle.getString("ShogiExplorer.mediaForward.toolTipText")); // NOI18N
+        mediaForward.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaForward.setFocusable(false);
         mediaForward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaForward.setLabel(bundle.getString("ShogiExplorer.mediaForward.label_1")); // NOI18N
@@ -830,6 +835,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(filler5);
 
         mediaPlay.setToolTipText(bundle.getString("ShogiExplorer.mediaPlay.toolTipText")); // NOI18N
+        mediaPlay.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaPlay.setFocusable(false);
         mediaPlay.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaPlay.setLabel(bundle.getString("ShogiExplorer.mediaPlay.label_1")); // NOI18N
@@ -846,6 +852,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(filler6);
 
         mediaEnd.setToolTipText(bundle.getString("ShogiExplorer.mediaEnd.toolTipText")); // NOI18N
+        mediaEnd.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaEnd.setFocusable(false);
         mediaEnd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaEnd.setLabel(bundle.getString("ShogiExplorer.mediaEnd.label_1")); // NOI18N
@@ -862,6 +869,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(filler7);
 
         analyseGameToolbarButton.setToolTipText(bundle.getString("ShogiExplorer.analyseGameToolbarButton.toolTipText")); // NOI18N
+        analyseGameToolbarButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         analyseGameToolbarButton.setEnabled(false);
         analyseGameToolbarButton.setFocusable(false);
         analyseGameToolbarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -878,6 +886,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(filler9);
 
         resumeAnalysisToolbarButton.setToolTipText(bundle.getString("ShogiExplorer.resumeAnalysisToolbarButton.toolTipText")); // NOI18N
+        resumeAnalysisToolbarButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         resumeAnalysisToolbarButton.setEnabled(false);
         resumeAnalysisToolbarButton.setFocusable(false);
         resumeAnalysisToolbarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -895,6 +904,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         stopAnalysisButton.setText(bundle.getString("ShogiExplorer.stopAnalysisButton.text")); // NOI18N
         stopAnalysisButton.setToolTipText(bundle.getString("ShogiExplorer.stopAnalysisButton.toolTipText")); // NOI18N
+        stopAnalysisButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         stopAnalysisButton.setEnabled(false);
         stopAnalysisButton.setFocusable(false);
         stopAnalysisButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -910,6 +920,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         analysePositionToolbarButton.setText(bundle.getString("ShogiExplorer.analysePositionToolbarButton.text")); // NOI18N
         analysePositionToolbarButton.setToolTipText(bundle.getString("ShogiExplorer.analysePositionToolbarButton.toolTipText")); // NOI18N
+        analysePositionToolbarButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         analysePositionToolbarButton.setEnabled(false);
         analysePositionToolbarButton.setFocusable(false);
         analysePositionToolbarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -928,6 +939,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         rotateViewToobarButton.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         rotateViewToobarButton.setText(bundle.getString("ShogiExplorer.rotateViewToobarButton.text")); // NOI18N
         rotateViewToobarButton.setToolTipText(bundle.getString("ShogiExplorer.rotateViewToobarButton.toolTipText")); // NOI18N
+        rotateViewToobarButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         rotateViewToobarButton.setFocusable(false);
         rotateViewToobarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         rotateViewToobarButton.setMaximumSize(new java.awt.Dimension(24, 24));
@@ -1422,9 +1434,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(3, 3, 3)
+                .addGap(1, 1, 1)
                 .addComponent(mainToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
+                .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
