@@ -42,15 +42,28 @@ public class RenderBoard {
     static final String IMAGE_STR_SENTE = "sente";
     static final String IMAGE_STR_GOTE = "gote";
     static final String PIECE_SET_CLASSIC = "classic";
+    static double scale;
 
     private RenderBoard() {
         throw new IllegalStateException("Utility class");
     }
 
     public static void loadBoard(Board board, ImageCache imageCache, javax.swing.JPanel boardPanel, boolean rotatedView) {
-        if (boardPanel.getWidth() == 0) {
+        int boardPanelWidth = boardPanel.getWidth();
+        if (boardPanelWidth == 0) {
             return;
         }
+        
+        java.awt.Dimension minimumDimension = boardPanel.getMinimumSize();
+        double vertScale = (double) boardPanel.getHeight() / minimumDimension.getHeight();
+        double horizScale = (double) boardPanelWidth / minimumDimension.getWidth();
+        
+        if (vertScale < horizScale) {
+            scale = vertScale;
+        } else {
+            scale = horizScale;
+        }
+        
         float hsb1[] = Color.RGBtoHSB(214, 176, 100, null);
         Color boardColor = Color.getHSBColor(hsb1[0], hsb1[1], hsb1[2]);
         float hsb2[] = Color.RGBtoHSB(107, 88, 50, null);
@@ -84,7 +97,8 @@ public class RenderBoard {
                                 MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
                                 MathUtils.BOARD_XY * MathUtils.KOMA_Y + MathUtils.COORD_XY / 2 - 3),
                         new Coordinate(CENTRE_X, CENTRE_Y),
-                        Integer.toString(i + 1)
+                        Integer.toString(i + 1),
+                        scale
                 ));
             }
             for (int i = 0; i < 9; i++) {
@@ -95,7 +109,8 @@ public class RenderBoard {
                                         MathUtils.COORD_XY * 4 + 7,
                                         MathUtils.COORD_XY / 2 + 7),
                                 new Coordinate(CENTRE_X, CENTRE_Y),
-                                rank[8 - i]
+                                rank[8 - i],
+                                scale
                         ));
             }
         } else {
@@ -107,7 +122,8 @@ public class RenderBoard {
                                         MathUtils.KOMA_X + MathUtils.COORD_XY * 4 - 2,
                                         -(MathUtils.COORD_XY / 2) - 3),
                                 new Coordinate(CENTRE_X, CENTRE_Y),
-                                Integer.toString(9 - i)
+                                Integer.toString(9 - i),
+                                scale
                         ));
             }
             for (int i = 0; i < 9; i++) {
@@ -118,7 +134,8 @@ public class RenderBoard {
                                         MathUtils.KOMA_X * 10 + MathUtils.COORD_XY * 3 + 3,
                                         MathUtils.COORD_XY / 2 + 7),
                                 new Coordinate(CENTRE_X, CENTRE_Y),
-                                rank[i]
+                                rank[i],
+                                scale
                         ));
             }
         }
@@ -128,7 +145,7 @@ public class RenderBoard {
         if (board.getNextTurn() == Turn.SENTE) {
             BaseMultiResolutionImage image = imageCache.getImage(IMAGE_STR_SENTE);
             if (image == null) {
-                image = ImageUtils.loadSVGImageFromResources(IMAGE_STR_SENTE, new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+                image = ImageUtils.loadSVGImageFromResources(IMAGE_STR_SENTE, new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y), scale);
                 imageCache.putImage(IMAGE_STR_SENTE, image);
             }
             if (rotatedView) {
@@ -136,7 +153,8 @@ public class RenderBoard {
                         ImageUtils.getPieceLabelForKoma(image,
                                 new Coordinate(0, 8),
                                 new Dimension(MathUtils.COORD_XY, MathUtils.COORD_XY),
-                                new Coordinate(CENTRE_X, CENTRE_Y)
+                                new Coordinate(CENTRE_X, CENTRE_Y),
+                                scale
                         )
                 );
             } else {
@@ -145,14 +163,15 @@ public class RenderBoard {
                                 image,
                                 new Coordinate(0, -2),
                                 new Dimension(SBAN_XOFFSET, SBAN_YOFFSET - MathUtils.COORD_XY),
-                                new Coordinate(CENTRE_X, CENTRE_Y)
+                                new Coordinate(CENTRE_X, CENTRE_Y),
+                                scale
                         )
                 );
             }
         } else {
             BaseMultiResolutionImage image = imageCache.getImage(IMAGE_STR_GOTE);
             if (image == null) {
-                image = ImageUtils.loadSVGImageFromResources(IMAGE_STR_GOTE, new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+                image = ImageUtils.loadSVGImageFromResources(IMAGE_STR_GOTE, new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y), scale);
                 imageCache.putImage(IMAGE_STR_GOTE, image);
             }
             if (rotatedView) {
@@ -160,7 +179,8 @@ public class RenderBoard {
                         ImageUtils.getPieceLabelForKoma(image,
                                 new Coordinate(0, -2),
                                 new Dimension(SBAN_XOFFSET, SBAN_YOFFSET - MathUtils.COORD_XY),
-                                new Coordinate(CENTRE_X, CENTRE_Y)
+                                new Coordinate(CENTRE_X, CENTRE_Y),
+                                scale
                         )
                 );
             } else {
@@ -169,7 +189,8 @@ public class RenderBoard {
                                 image,
                                 new Coordinate(0, 8),
                                 new Dimension(MathUtils.COORD_XY, MathUtils.COORD_XY),
-                                new Coordinate(CENTRE_X, CENTRE_Y)
+                                new Coordinate(CENTRE_X, CENTRE_Y),
+                                scale
                         )
                 );
             }
@@ -315,7 +336,8 @@ public class RenderBoard {
                     if (pieceImage == null) {
                         pieceImage = ImageUtils.loadSVGImageFromResources(
                                 name,
-                                new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+                                new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y),
+                                scale);
                         imageCache.putImage(name, pieceImage);
                     }
                 } else {
@@ -324,7 +346,8 @@ public class RenderBoard {
                     if (pieceImage == null) {
                         pieceImage = ImageUtils.loadSVGImageFromResources(
                                 name,
-                                new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+                                new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y),
+                                scale);
                         imageCache.putImage(name, pieceImage);
                     }
                 }
@@ -334,14 +357,16 @@ public class RenderBoard {
                                     pieceImage,
                                     new Coordinate(xCoordMapRotated.get(komaType), yCoordMapRotated.get(komaType)),
                                     new Dimension(xOffsetMapRotated.get(komaType), yOffsetMapRotated.get(komaType)),
-                                    new Coordinate(CENTRE_X, CENTRE_Y)
+                                    new Coordinate(CENTRE_X, CENTRE_Y),
+                                    scale
                             ));
                     boardPanel.add(
                             ImageUtils.getTextLabelForBan(
                                     new Coordinate(xCoordMapRotated.get(komaType) + 1, yCoordMapRotated.get(komaType)),
                                     new Dimension(xOffsetMapRotated.get(komaType), yOffsetMapRotated.get(komaType)),
                                     new Coordinate(CENTRE_X, CENTRE_Y),
-                                    numberHeld.toString()
+                                    numberHeld.toString(),
+                                    scale
                             ));
                 } else {
                     boardPanel.add(
@@ -349,14 +374,16 @@ public class RenderBoard {
                                     pieceImage,
                                     new Coordinate(xCoordMap.get(komaType), yCoordMap.get(komaType)),
                                     new Dimension(xOffsetMap.get(komaType), yOffsetMap.get(komaType)),
-                                    new Coordinate(CENTRE_X, CENTRE_Y)
+                                    new Coordinate(CENTRE_X, CENTRE_Y),
+                                    scale
                             ));
                     boardPanel.add(
                             ImageUtils.getTextLabelForBan(
                                     new Coordinate(xCoordMap.get(komaType) + 1, yCoordMap.get(komaType)),
                                     new Dimension(xOffsetMap.get(komaType), yOffsetMap.get(komaType)),
                                     new Coordinate(CENTRE_X, CENTRE_Y),
-                                    numberHeld.toString()
+                                    numberHeld.toString(),
+                                    scale
                             ));
                 }
             }
@@ -396,7 +423,8 @@ public class RenderBoard {
                         MathUtils.KOMA_Y * y + MathUtils.COORD_XY),
                 new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y),
                 new Coordinate(CENTRE_X, CENTRE_Y),
-                highlightColor);
+                highlightColor,
+                scale);
     }
 
     private static void drawPieces(Board board, ImageCache imageCache, JPanel boardPanel, boolean rotatedView) {
@@ -430,7 +458,8 @@ public class RenderBoard {
         if (cacheImage == null) {
             cacheImage = ImageUtils.loadSVGImageFromResources(
                     name,
-                    new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y));
+                    new Dimension(MathUtils.KOMA_X, MathUtils.KOMA_Y),
+                    scale);
             imageCache.putImage(name, cacheImage);
         }
 
@@ -443,7 +472,8 @@ public class RenderBoard {
                         pieceImage,
                         new Coordinate(i, j),
                         new Dimension(MathUtils.KOMA_X + 3 * MathUtils.COORD_XY, MathUtils.COORD_XY),
-                        new Coordinate(CENTRE_X, CENTRE_Y)
+                        new Coordinate(CENTRE_X, CENTRE_Y),
+                        scale
                 ));
     }
 
@@ -457,7 +487,8 @@ public class RenderBoard {
                         MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
                         MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2
                 ),
-                new Coordinate(CENTRE_X, CENTRE_Y)
+                new Coordinate(CENTRE_X, CENTRE_Y),
+                scale
         );
     }
 
@@ -470,7 +501,8 @@ public class RenderBoard {
                 ),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y),
-                boardColor
+                boardColor,
+                scale
         );
 
         ImageUtils.drawLabel(
@@ -481,7 +513,8 @@ public class RenderBoard {
                 ),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y),
-                boardShadowColor
+                boardShadowColor,
+                scale
         );
 
         ImageUtils.drawLabel(
@@ -489,7 +522,8 @@ public class RenderBoard {
                 new Coordinate(0, 0),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y),
-                boardColor
+                boardColor,
+                scale
         );
 
         ImageUtils.drawLabel(
@@ -497,7 +531,8 @@ public class RenderBoard {
                 new Coordinate(0 + 1, 0 + 1),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y),
-                boardShadowColor
+                boardShadowColor,
+                scale
         );
     }
 
@@ -510,7 +545,8 @@ public class RenderBoard {
                         MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2
                 ),
                 new Coordinate(CENTRE_X, CENTRE_Y),
-                boardColor
+                boardColor,
+                scale
         );
 
         ImageUtils.drawLabel(
@@ -521,7 +557,8 @@ public class RenderBoard {
                         MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2
                 ),
                 new Coordinate(CENTRE_X, CENTRE_Y),
-                boardShadowColor
+                boardShadowColor,
+                scale
         );
     }
 

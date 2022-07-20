@@ -170,6 +170,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_MAXIMIZED = "maximized";
     static final String PREF_DIVIDER_LOCATION = "dividerLocation";
     int dividerLocation;
+    static final String PREF_DIVIDER_LOCATION_2 = "dividerLocation2";
+    int dividerLocation2;
+    static final String PREF_DIVIDER_LOCATION_3 = "dividerLocation3";
+    int dividerLocation3;
     String urlStr = null;
     static final String PREF_AUTO_REFRESH = "autoRefresh";
     boolean autoRefresh;
@@ -203,6 +207,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainHeight = prefs.getInt(PREF_HEIGHT, 650);
         mainWidth = prefs.getInt(PREF_WIDTH, 1000);
         dividerLocation = prefs.getInt(PREF_DIVIDER_LOCATION, 86);
+        dividerLocation2 = prefs.getInt(PREF_DIVIDER_LOCATION_2, 610);
+        dividerLocation3 = prefs.getInt(PREF_DIVIDER_LOCATION_3, 490);
 
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         this.kifFileFilter = new FileNameExtensionFilter(bundle.getString("label_kif_files"), "kif");
@@ -215,7 +221,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (prefs.getBoolean(PREF_MAXIMIZED, false)) {
             setExtendedState(JFrame.MAXIMIZED_BOTH);
         }
-
+        
         setIconImage(ImageUtils.loadTaskbarImageFromResources("taskbar"));
         jEngineManagerDialog.setIconImage(ImageUtils.loadTaskbarImageFromResources("taskbar"));
 
@@ -318,6 +324,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
                 prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
                 prefs.putInt(PREF_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
+                prefs.putInt(PREF_DIVIDER_LOCATION_2, jSplitPane2.getDividerLocation());
+                prefs.putInt(PREF_DIVIDER_LOCATION_3, jSplitPane3.getDividerLocation());
                 flushPrefs();
                 System.exit(0);
             });
@@ -955,14 +963,22 @@ public class ShogiExplorer extends javax.swing.JFrame {
         });
         mainToolBar.add(rotateViewToobarButton);
 
+        jSplitPane3.setDividerLocation(dividerLocation3);
         jSplitPane3.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane3.setMinimumSize(new java.awt.Dimension(400, 300));
         jSplitPane3.setPreferredSize(new java.awt.Dimension(1000, 600));
+
+        jSplitPane2.setDividerLocation(dividerLocation2);
 
         boardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         boardPanel.setMaximumSize(new java.awt.Dimension(603, 482));
         boardPanel.setMinimumSize(new java.awt.Dimension(603, 482));
         boardPanel.setPreferredSize(new java.awt.Dimension(603, 482));
+        boardPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                boardPanelComponentResized(evt);
+            }
+        });
         boardPanel.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 boardPanelKeyReleased(evt);
@@ -2255,6 +2271,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         prefs.putInt(PREF_HEIGHT, mainFrame.getHeight());
         prefs.putInt(PREF_WIDTH, mainFrame.getWidth());
         prefs.putInt(PREF_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
+        prefs.putInt(PREF_DIVIDER_LOCATION_2, jSplitPane2.getDividerLocation());
+        prefs.putInt(PREF_DIVIDER_LOCATION_3, jSplitPane3.getDividerLocation());
         prefs.putBoolean(PREF_MAXIMIZED, this.getExtendedState() == MAXIMIZED_BOTH);
         flushPrefs();
         System.exit(0);
@@ -2821,6 +2839,11 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void moveListKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_moveListKeyReleased
         analysisTableKeyReleased(evt);
     }//GEN-LAST:event_moveListKeyReleased
+
+    private void boardPanelComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_boardPanelComponentResized
+        imageCache = new ImageCache();
+        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
+    }//GEN-LAST:event_boardPanelComponentResized
 
     private String getAboutMessage() {
         String aboutMessage;

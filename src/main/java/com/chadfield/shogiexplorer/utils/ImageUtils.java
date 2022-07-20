@@ -56,17 +56,27 @@ public class ImageUtils {
         return pieceLabel;
     }
 
-    public static JLabel getTextLabelForBan(Coordinate boardCoord, Dimension offset, Coordinate imageLocation, String text) {
+    public static JLabel getPieceLabelForKoma(Image image, Coordinate boardCoord, Dimension offset, Coordinate imageLocation, double scale) {
+        JLabel pieceLabel = new JLabel(new ImageIcon(image));
+        pieceLabel.setBounds(
+                (int) Math.round((imageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getWidth())) * scale),
+                (int) Math.round((imageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getHeight())) * scale),
+                (int) Math.round(MathUtils.KOMA_X * scale),
+                (int) Math.round(MathUtils.KOMA_Y * scale));
+        return pieceLabel;
+    }
+
+    public static JLabel getTextLabelForBan(Coordinate boardCoord, Dimension offset, Coordinate imageLocation, String text, double scale) {
         JLabel numberLabel = new JLabel(text);
         numberLabel.setBounds(
-                imageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getWidth()),
-                imageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getHeight()),
-                MathUtils.KOMA_X,
-                MathUtils.KOMA_Y);
+                (int) Math.round((imageLocation.getX() + (boardCoord.getX() * MathUtils.KOMA_X + offset.getWidth())) * scale),
+                (int) Math.round((imageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getHeight())) * scale),
+                (int) Math.round(MathUtils.KOMA_X * scale),
+                (int) Math.round(MathUtils.KOMA_Y * scale));
         return numberLabel;
     }
 
-    public static BaseMultiResolutionImage loadSVGImageFromResources(String imageName, Dimension imageDimension) {
+    public static BaseMultiResolutionImage loadSVGImageFromResources(String imageName, Dimension imageDimension, double scale) {
         BufferedImage image1 = null;
         BufferedImage image2 = null;
         BufferedImage image3 = null;
@@ -74,16 +84,16 @@ public class ImageUtils {
 
         try {
             InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
-            image1 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth());
+            image1 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * scale);
             inputStream.close();
             inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
-            image2 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 1.25);
+            image2 = transcodeSVGToBufferedImage(inputStream, (imageDimension.getWidth() * 1.25) * scale);
             inputStream.close();
             inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
-            image3 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 1.5);
+            image3 = transcodeSVGToBufferedImage(inputStream, (imageDimension.getWidth() * 1.5) * scale);
             inputStream.close();
             inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(imageName + ".svg");
-            image4 = transcodeSVGToBufferedImage(inputStream, imageDimension.getWidth() * 2.0);
+            image4 = transcodeSVGToBufferedImage(inputStream, (imageDimension.getWidth() * 2.0) * scale);
             inputStream.close();
         } catch (TranscoderException | IOException ex) {
             Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
@@ -160,30 +170,30 @@ public class ImageUtils {
         return (mri);
     }
 
-    public static void drawLabel(JPanel boardPanel, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset, Color color) {
+    public static void drawLabel(JPanel boardPanel, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset, Color color, double scale) {
         JLabel imageLabel = new JLabel();
         imageLabel.setBounds(
-                offset.getX() + imageCoordinate.getX(),
-                offset.getY() + imageCoordinate.getY(),
-                imageDimension.getWidth(),
-                imageDimension.getHeight());
+                (int) Math.round((offset.getX() + imageCoordinate.getX()) * scale),
+                (int) Math.round((offset.getY() + imageCoordinate.getY()) * scale),
+                (int) Math.round((imageDimension.getWidth()) * scale),
+                (int) Math.round((imageDimension.getHeight()) * scale));
         imageLabel.setBackground(color);
         imageLabel.setOpaque(true);
         boardPanel.add(imageLabel);
     }
 
-    public static void drawImage(ImageCache imageCache, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset) {
-        BaseMultiResolutionImage imageFile = imageCache.getImage(imageName);
+    public static void drawImage(ImageCache imageCache, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset, double scale) {
+        BaseMultiResolutionImage imageFile = imageCache.getImage(imageName+scale);
         if (imageFile == null) {
-            imageFile = loadSVGImageFromResources(imageName, imageDimension);
-            imageCache.putImage(imageName, imageFile);
+            imageFile = loadSVGImageFromResources(imageName, imageDimension, scale);
+            imageCache.putImage(imageName+scale, imageFile);
         }
         JLabel imageLabel = new JLabel(new ImageIcon(imageFile));
         imageLabel.setBounds(
-                offset.getX() + imageCoordinate.getX(),
-                offset.getY() + imageCoordinate.getY(),
-                imageDimension.getWidth(),
-                imageDimension.getHeight());
+                (int) Math.round((offset.getX() + imageCoordinate.getX()) * scale),
+                (int) Math.round((offset.getY() + imageCoordinate.getY()) * scale),
+                (int) Math.round((imageDimension.getWidth()) * scale),
+                (int) Math.round((imageDimension.getHeight()) * scale));
         boardPanel.add(imageLabel);
     }
 }
