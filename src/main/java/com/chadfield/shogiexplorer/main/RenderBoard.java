@@ -41,8 +41,6 @@ public class RenderBoard {
     static final int CENTRE_Y = 5;
     static final String IMAGE_STR_SENTE = "sente";
     static final String IMAGE_STR_GOTE = "gote";
-    static final String IMAGE_STR_HIGHLIGHT = "highlight";
-    static final String IMAGE_STR_HIGHLIGHT_KOMADAI = "highlight_komadai";
     static final String PIECE_SET_CLASSIC = "classic";
 
     private RenderBoard() {
