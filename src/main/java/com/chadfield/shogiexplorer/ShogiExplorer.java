@@ -47,6 +47,7 @@ import com.chadfield.shogiexplorer.utils.URLUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Point;
@@ -208,6 +209,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
 
         initComponents();
+        
+        this.setSize(new Dimension(mainWidth, mainHeight));
         
         if (prefs.getBoolean(PREF_MAXIMIZED, false)) {
             setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -739,6 +742,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         setTitle(bundle.getString("ShogiExplorer.title_1")); // NOI18N
         setBounds(new java.awt.Rectangle(58, 25, 1000, 650));
         setMinimumSize(new java.awt.Dimension(1000, 650));
+        setPreferredSize(new java.awt.Dimension(1000, 650));
         setSize(new java.awt.Dimension(0, 0));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -952,6 +956,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(rotateViewToobarButton);
 
         jSplitPane3.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        jSplitPane3.setMinimumSize(new java.awt.Dimension(400, 300));
+        jSplitPane3.setPreferredSize(new java.awt.Dimension(1000, 600));
 
         boardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         boardPanel.setMaximumSize(new java.awt.Dimension(603, 482));
@@ -1073,6 +1079,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
         jTabbedPane1.setName(""); // NOI18N
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(100, 100));
+
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(452, 100));
 
         analysisTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1433,7 +1442,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 .addGap(4, 4, 4)
                 .addComponent(mainToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(3, 3, 3))
-            .addComponent(jSplitPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jSplitPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1441,7 +1450,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 .addGap(1, 1, 1)
                 .addComponent(mainToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 971, Short.MAX_VALUE))
+                .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
