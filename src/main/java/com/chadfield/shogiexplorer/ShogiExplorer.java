@@ -183,8 +183,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String USER_HOME = "user.home";
     static String argument = null;
 
-    static String argTest;
-
     java.awt.event.ActionListener taskPerformer;
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
