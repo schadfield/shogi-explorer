@@ -141,11 +141,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String PREF_ANALYSIS_TIME_PER_MOVE = "analysisTimePerMove";
     int analysisTimePerMove;
     static final String PREF_ANALYSIS_MISTAKE_THRESHOLD = "analysisMistakeThreshold";
-    int analysisMistakeThreshold;
     static final String PREF_ANALYSIS_BLUNDER_THRESHOLD = "analysisBlunderThreshold";
-    int analysisBlunderThreshold;
     static final String PREF_ANALYSIS_IGNORE_THRESHOLD = "analysisLosingThreshold";
-    int analysisIgnoreThreshold;
     static final String PREF_FILE_OPEN_DIR = "fileOpenDir";
     static final String PREF_LANGUAGE = "language";
     static final String PREF_LANGUAGE_ENGLISH = "english";
@@ -274,9 +271,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         analysisEngineName = prefs.get(PREF_ANALYSIS_ENGINE_NAME, "");
         analysisTimePerMove = prefs.getInt(PREF_ANALYSIS_TIME_PER_MOVE, 3);
-        analysisMistakeThreshold = prefs.getInt(PREF_ANALYSIS_MISTAKE_THRESHOLD, 250);
-        analysisBlunderThreshold = prefs.getInt(PREF_ANALYSIS_BLUNDER_THRESHOLD, 500);
-        analysisIgnoreThreshold = prefs.getInt(PREF_ANALYSIS_IGNORE_THRESHOLD, 2000);
+        prefs.getInt(PREF_ANALYSIS_MISTAKE_THRESHOLD, 250);
+        prefs.getInt(PREF_ANALYSIS_BLUNDER_THRESHOLD, 500);
+        prefs.getInt(PREF_ANALYSIS_IGNORE_THRESHOLD, 2000);
         engineList = EngineManager.loadEngines(engineListModel);
         if (engineList == null) {
             engineList = new ArrayList<>();
