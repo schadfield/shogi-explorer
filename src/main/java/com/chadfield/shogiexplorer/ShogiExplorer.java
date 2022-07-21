@@ -331,7 +331,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         UIManager.put("TabbedPane.selectedForeground", Color.BLACK);
         rotateTime = System.currentTimeMillis();
         initializeChart(true);
-        RenderBoard.loadBoard(board, imageCache, boardPanel, rotatedView);
 
         if (IS_MAC) {
             Desktop.getDesktop().setOpenFileHandler((OpenFilesEvent e) -> {
