@@ -171,6 +171,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     int dividerLocation2;
     static final String PREF_DIVIDER_LOCATION_3 = "dividerLocation3";
     int dividerLocation3;
+    static final String PREF_DIVIDER_LOCATION_4 = "dividerLocation4";
+    int dividerLocation4;
     String urlStr = null;
     static final String PREF_AUTO_REFRESH = "autoRefresh";
     boolean autoRefresh;
@@ -206,6 +208,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         dividerLocation = prefs.getInt(PREF_DIVIDER_LOCATION, 86);
         dividerLocation2 = prefs.getInt(PREF_DIVIDER_LOCATION_2, 610);
         dividerLocation3 = prefs.getInt(PREF_DIVIDER_LOCATION_3, 490);
+        dividerLocation4 = prefs.getInt(PREF_DIVIDER_LOCATION_4, 160);
 
         ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
         this.kifFileFilter = new FileNameExtensionFilter(bundle.getString("label_kif_files"), "kif");
@@ -323,6 +326,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 prefs.putInt(PREF_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
                 prefs.putInt(PREF_DIVIDER_LOCATION_2, jSplitPane2.getDividerLocation());
                 prefs.putInt(PREF_DIVIDER_LOCATION_3, jSplitPane3.getDividerLocation());
+                prefs.putInt(PREF_DIVIDER_LOCATION_4, jSplitPane4.getDividerLocation());
                 flushPrefs();
                 System.exit(0);
             });
@@ -480,14 +484,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jSplitPane2 = new javax.swing.JSplitPane();
         boardPanel = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
-        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        gameInfoScrollPane = new javax.swing.JScrollPane();
+        gameTextArea = new javax.swing.JTextArea();
+        jSplitPane4 = new javax.swing.JSplitPane();
         moveListScrollPane = new javax.swing.JScrollPane();
         moveList = new javax.swing.JList<>();
         commentScrollPane = new javax.swing.JScrollPane();
         commentTextArea = new javax.swing.JTextArea();
-        jPanel4 = new javax.swing.JPanel();
-        gameInfoScrollPane = new javax.swing.JScrollPane();
-        gameTextArea = new javax.swing.JTextArea();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         analysisTable = new javax.swing.JTable();
@@ -1001,60 +1005,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jSplitPane1.setDividerLocation(dividerLocation);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
-        moveList.setModel(moveListModel);
-        moveList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        moveList.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                moveListKeyReleased(evt);
-            }
-        });
-        moveList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                moveListValueChanged(evt);
-            }
-        });
-        moveListScrollPane.setViewportView(moveList);
-
-        commentScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        commentScrollPane.setPreferredSize(new java.awt.Dimension(230, 84));
-
-        commentTextArea.setEditable(false);
-        commentTextArea.setColumns(20);
-        commentTextArea.setLineWrap(true);
-        commentTextArea.setRows(5);
-        commentTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        commentTextArea.setEnabled(false);
-        commentTextArea.setFocusable(false);
-        commentTextArea.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                commentTextAreaMouseClicked(evt);
-            }
-        });
-        commentScrollPane.setViewportView(commentTextArea);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(3, 3, 3)
-                .addComponent(moveListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(3, 3, 3))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(3, 3, 3)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(moveListScrollPane)
-                    .addComponent(commentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(3, 3, 3))
-        );
-
-        jSplitPane1.setRightComponent(jPanel3);
-
         gameTextArea.setEditable(false);
         gameTextArea.setColumns(20);
         gameTextArea.setRows(5);
@@ -1083,6 +1033,45 @@ public class ShogiExplorer extends javax.swing.JFrame {
         );
 
         jSplitPane1.setTopComponent(jPanel4);
+
+        jSplitPane4.setDividerLocation(dividerLocation4);
+
+        moveList.setModel(moveListModel);
+        moveList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        moveList.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                moveListKeyReleased(evt);
+            }
+        });
+        moveList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                moveListValueChanged(evt);
+            }
+        });
+        moveListScrollPane.setViewportView(moveList);
+
+        jSplitPane4.setLeftComponent(moveListScrollPane);
+
+        commentScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        commentScrollPane.setPreferredSize(new java.awt.Dimension(230, 84));
+
+        commentTextArea.setEditable(false);
+        commentTextArea.setColumns(20);
+        commentTextArea.setLineWrap(true);
+        commentTextArea.setRows(5);
+        commentTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        commentTextArea.setEnabled(false);
+        commentTextArea.setFocusable(false);
+        commentTextArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                commentTextAreaMouseClicked(evt);
+            }
+        });
+        commentScrollPane.setViewportView(commentTextArea);
+
+        jSplitPane4.setRightComponent(commentScrollPane);
+
+        jSplitPane1.setBottomComponent(jSplitPane4);
 
         jSplitPane2.setRightComponent(jSplitPane1);
 
@@ -2269,6 +2258,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         prefs.putInt(PREF_DIVIDER_LOCATION, jSplitPane1.getDividerLocation());
         prefs.putInt(PREF_DIVIDER_LOCATION_2, jSplitPane2.getDividerLocation());
         prefs.putInt(PREF_DIVIDER_LOCATION_3, jSplitPane3.getDividerLocation());
+        prefs.putInt(PREF_DIVIDER_LOCATION_4, jSplitPane4.getDividerLocation());
         prefs.putBoolean(PREF_MAXIMIZED, this.getExtendedState() == MAXIMIZED_BOTH);
         flushPrefs();
         System.exit(0);
@@ -2963,7 +2953,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -2981,6 +2970,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
+    private javax.swing.JSplitPane jSplitPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JRadioButtonMenuItem japaneseRadioButtonMenuItem;
     private javax.swing.JToolBar mainToolBar;
