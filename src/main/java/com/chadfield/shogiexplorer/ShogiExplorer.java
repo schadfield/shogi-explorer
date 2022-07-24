@@ -131,7 +131,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
     boolean shiftURL;
     boolean saveAnalysis;
     transient List<Engine> engineList = new ArrayList<>();
-    transient FileNameExtensionFilter kifFileFilter;
     File newEngineFile;
     static JFrame mainFrame;
     boolean inSelectionChange = false;
@@ -210,8 +209,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
         dividerLocation3 = prefs.getInt(PREF_DIVIDER_LOCATION_3, 490);
         dividerLocation4 = prefs.getInt(PREF_DIVIDER_LOCATION_4, 160);
 
-        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
-        this.kifFileFilter = new FileNameExtensionFilter(bundle.getString("label_kif_files"), "kif");
         System.setProperty("apple.laf.useScreenMenuBar", "true");
 
         initComponents();
