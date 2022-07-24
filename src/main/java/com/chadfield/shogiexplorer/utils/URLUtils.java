@@ -20,7 +20,6 @@ package com.chadfield.shogiexplorer.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -51,8 +50,6 @@ public class URLUtils {
                     gameStrBld.append("\n");
                 }
             }
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(URLUtils.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(URLUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
