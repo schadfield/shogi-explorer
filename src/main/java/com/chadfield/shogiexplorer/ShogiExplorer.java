@@ -2002,8 +2002,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 leftButtonAnalysis();
             case 39 ->
                 rightButtonAnalysis();
-            default ->
+            default -> {
                 browse = false;
+            }
         }
     }//GEN-LAST:event_analysisTableKeyReleased
 
@@ -2488,6 +2489,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     render = true;
                 }
                 default -> {
+                    // Do nothing
                 }
             }
             if (render) {
@@ -2501,28 +2503,39 @@ public class ShogiExplorer extends javax.swing.JFrame {
         if (setup) {
             char thisChar = evt.getKeyChar();
             switch (thisChar) {
-                case '0' ->
+                case '0' -> {
                     setupKomadaiCount = findKomadaiCount(0);
-                case '1' ->
+                }
+                case '1' -> {
                     setupKomadaiCount = findKomadaiCount(1);
-                case '2' ->
+                }
+                case '2' -> {
                     setupKomadaiCount = findKomadaiCount(2);
-                case '3' ->
+                }
+                case '3' -> {
                     setupKomadaiCount = findKomadaiCount(3);
-                case '4' ->
+                }
+                case '4' -> {
                     setupKomadaiCount = findKomadaiCount(4);
-                case '5' ->
+                }
+                case '5' -> {
                     setupKomadaiCount = findKomadaiCount(5);
-                case '6' ->
+                }
+                case '6' -> {
                     setupKomadaiCount = findKomadaiCount(6);
-                case '7' ->
+                }
+                case '7' -> {
                     setupKomadaiCount = findKomadaiCount(7);
-                case '8' ->
+                }
+                case '8' -> {
                     setupKomadaiCount = findKomadaiCount(8);
-                case '9' ->
+                }
+                case '9' -> {
                     setupKomadaiCount = findKomadaiCount(9);
-                case 'm', 'M' ->
+                }
+                case 'm', 'M' -> {
                     setupModified = true;
+                }
                 case 'x' -> {
                     if (board.getEdit() != null) {
                         KifParser.putKoma(board, board.getEdit(), null);
