@@ -32,7 +32,6 @@ import java.util.prefs.Preferences;
 import javax.swing.DefaultListModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import com.chadfield.shogiexplorer.objects.Board;
 import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.main.RenderBoard;
@@ -2869,10 +2868,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         }
 
-        if (IS_WINDOWS | IS_LINUX) {
-            if (args.length > 0) {
-                argument = args[0];
-            }
+        if ((IS_WINDOWS || IS_LINUX) && args.length > 0) {
+            argument = args[0];
         }
 
         /* Create and display the form */
