@@ -184,6 +184,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     String savedComment;
     static final String USER_HOME = "user.home";
     static String argument = null;
+    static final String RESOURCE_BUNDLE_NAME = "Bundle";
 
     java.awt.event.ActionListener taskPerformer;
 
@@ -1469,7 +1470,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         saveKifMenuItem.setEnabled(false);
         refreshMenuItem.setEnabled(false);
         clipboardStr = null;
-        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+        ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME);
         saveAnalysisCheckBox.setEnabled(true);
         File dirFile = new File(prefs.get(PREF_FILE_OPEN_DIR, System.getProperty(USER_HOME)));
         if (IS_MAC) {
@@ -1534,7 +1535,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+        ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME);
         gameTextArea.setText(null);
         gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");
         gameTextArea.append(bundle.getString("label_gote") + ": " + game.getGote() + "\n");
@@ -1876,7 +1877,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void addEngineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEngineButtonActionPerformed
         File dirFile = new File(prefs.get("engineOpenDir", System.getProperty(USER_HOME)));
         if (IS_MAC) {
-            ResourceBundle bundle = ResourceBundle.getBundle("Bundle");
+            ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME);
             FileDialog fileChooser = new FileDialog(mainFrame);
             fileChooser.setDirectory(dirFile.getPath());
             fileChooser.setMode(FileDialog.LOAD);
