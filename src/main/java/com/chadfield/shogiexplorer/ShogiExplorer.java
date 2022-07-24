@@ -49,6 +49,7 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -90,6 +91,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.FontUIResource;
@@ -153,7 +155,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     JFreeChart chart;
     ChartPanel chartPanel;
     transient Thread analysisThread;
-    static File kifFile = null;
+    File kifFile = null;
     transient AnalysisParameter analysisParam;
     XYPlot plot;
     String clipboardStr;
@@ -185,8 +187,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
     static final String USER_HOME = "user.home";
     static String argument = null;
     static final String RESOURCE_BUNDLE_NAME = "Bundle";
+    static final String WHITE_SPAN = ";color:white;\">";
 
-    java.awt.event.ActionListener taskPerformer;
+    transient java.awt.event.ActionListener taskPerformer;
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
     public static final boolean IS_WINDOWS = (OS.contains("win"));
@@ -216,7 +219,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         this.setSize(new Dimension(mainWidth, mainHeight));
         
         if (prefs.getBoolean(PREF_MAXIMIZED, false)) {
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            setExtendedState(Frame.MAXIMIZED_BOTH);
         }
         
         setIconImage(ImageUtils.loadTaskbarImageFromResources("taskbar"));
@@ -1075,7 +1078,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         jSplitPane3.setTopComponent(jSplitPane2);
 
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
+        jTabbedPane1.setTabPlacement(SwingConstants.RIGHT);
         jTabbedPane1.setName(""); // NOI18N
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(100, 100));
 
@@ -2088,7 +2091,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         // In this case we insert at the begining.
                         cellStrBld.append("<span style=\"background:");
                         cellStrBld.append(hexCol);
-                        cellStrBld.append(";color:white;\">");
+                        cellStrBld.append(WHITE_SPAN);
                         foundStart = true;
                     }
                     for (int i = 0; i < cellContents.toString().length(); i++) {
@@ -2106,7 +2109,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                                 if (spaceCount == browsePos) {
                                     cellStrBld.append("\u3000<span style=\"background:");
                                     cellStrBld.append(hexCol);
-                                    cellStrBld.append(";color:white;\">");
+                                    cellStrBld.append(WHITE_SPAN);
                                     foundStart = true;
                                 } else {
                                     // Keep looking.
@@ -2156,7 +2159,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                         // In this case we insert at the begining.
                         cellStrBld.append("<span style=\"background:");
                         cellStrBld.append(hexCol);
-                        cellStrBld.append(";color:white;\">");
+                        cellStrBld.append(WHITE_SPAN);
                         foundStart = true;
                     }
                     for (int i = 0; i < cellContents.toString().length(); i++) {
@@ -2174,7 +2177,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                                 if (spaceCount == posBrowsePos) {
                                     cellStrBld.append("\u3000<span style=\"background:");
                                     cellStrBld.append(hexCol);
-                                    cellStrBld.append(";color:white;\">");
+                                    cellStrBld.append(WHITE_SPAN);
                                     foundStart = true;
                                 } else {
                                     // Keep looking.
