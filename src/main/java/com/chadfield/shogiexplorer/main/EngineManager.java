@@ -14,7 +14,6 @@
     You should have received a copy of the GNU General Public License along with Shogi Explorer. 
     If not, see <https://www.gnu.org/licenses/>.
  */
-
 package com.chadfield.shogiexplorer.main;
 
 import com.chadfield.shogiexplorer.objects.Engine;
@@ -95,9 +94,9 @@ public class EngineManager {
                     index += 2;
                 }
                 case "default" -> {
-                    if (index+1 >= optionArray.length) {
+                    if (index + 1 >= optionArray.length) {
                         engineOption.setDef("");
-                        engineOption.setValue("");      
+                        engineOption.setValue("");
                     } else {
                         engineOption.setDef(optionArray[index + 1]);
                         engineOption.setValue(optionArray[index + 1]);
@@ -211,23 +210,18 @@ public class EngineManager {
         xstream.addPermission(AnyTypePermission.ANY);
         xstream.alias("engine", Engine.class);
         xstream.alias("engineOption", EngineOption.class);
-        try {
-            List<Engine> result;
-            try ( FileInputStream inputFileStream = new FileInputStream(directoryName + File.separator + "engines.xml")) {
-                result = (List<Engine>) xstream.fromXML(inputFileStream);
-            } catch (IOException ex) {
-                return new ArrayList<>();
-            }
-            int index = 0;
-            for (Engine engine : result) {
-                engineListModel.add(index, engine.getName());
-                index++;
-            }
-            return result;
-        } catch (StreamException ex) {
-            Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
+        List<Engine> result;
+        try ( FileInputStream inputFileStream = new FileInputStream(directoryName + File.separator + "engines.xml")) {
+            result = (List<Engine>) xstream.fromXML(inputFileStream);
+        } catch (IOException ex) {
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
+        int index = 0;
+        for (Engine engine : result) {
+            engineListModel.add(index, engine.getName());
+            index++;
+        }
+        return result;
     }
 
     public static void saveEngines(List<Engine> engineList) {
