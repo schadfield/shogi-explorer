@@ -317,16 +317,21 @@ public class GameAnalyser {
                         multiPV = thisMultiPv;
                         rowNum = multiPV - 1;
                     }
-                    case "depth" ->
+                    case "depth" -> {
                         depth = splitLine[i + 1];
-                    case "seldepth" ->
-                        seldepth = splitLine[i + 1];
-                    case "nodes" ->
+                    }
+                    case "seldepth" -> {
+                        seldepth = splitLine[i + 1]; 
+                    }
+                    case "nodes" -> {
                         nodes = splitLine[i + 1];
-                    case "lowerbound" ->
+                    }
+                    case "lowerbound" -> {
                         lower = true;
-                    case "upperbound" ->
+                    }
+                    case "upperbound" -> {
                         upper = true;
+                    }
                     case "cp" -> {
                         score = getScore(turn, splitLine[i + 1]);
                         scoreStr = Integer.toString(score);
@@ -347,8 +352,9 @@ public class GameAnalyser {
                             scoreStr = "-Mate:" + Math.abs(mateNum);
                         }
                     }
-                    case "pv" ->
+                    case "pv" -> {
                         foundPV = true;
+                    }
                     default -> {
                         // Unwanted element.
                     }
@@ -623,10 +629,12 @@ public class GameAnalyser {
         for (int i = 0; i < splitLine.length; i++) {
             if (!foundPV) {
                 switch (splitLine[i]) {
-                    case "lowerbound" ->
+                    case "lowerbound" -> {
                         lower = true;
-                    case "upperbound" ->
+                    }
+                    case "upperbound" -> {
                         upper = true;
+                    }
                     case "cp" -> {
                         score = getScore(turn, splitLine[i + 1]);
                         processScore(score, moveNum, turn, plotDataset);
@@ -648,8 +656,9 @@ public class GameAnalyser {
                             scoreStr = "-Mate:" + Math.abs(mateNum);
                         }
                     }
-                    case "pv" ->
+                    case "pv" -> {
                         foundPV = true;
+                    }
                     default -> {
                         // Unwanted element.
                     }
