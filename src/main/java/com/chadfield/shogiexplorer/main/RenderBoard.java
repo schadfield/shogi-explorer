@@ -55,8 +55,8 @@ public class RenderBoard {
         }
         
         java.awt.Dimension minimumDimension = boardPanel.getMinimumSize();
-        double vertScale = (double) boardPanel.getHeight() / minimumDimension.getHeight();
-        double horizScale = (double) boardPanelWidth / minimumDimension.getWidth();
+        double vertScale = boardPanel.getHeight() / minimumDimension.getHeight();
+        double horizScale = boardPanelWidth / minimumDimension.getWidth();
         
         if (vertScale < horizScale) {
             scale = vertScale;
@@ -64,12 +64,12 @@ public class RenderBoard {
             scale = horizScale;
         }
         
-        float hsb1[] = Color.RGBtoHSB(214, 176, 100, null);
+        var hsb1 = Color.RGBtoHSB(214, 176, 100, null);
         Color boardColor = Color.getHSBColor(hsb1[0], hsb1[1], hsb1[2]);
-        float hsb2[] = Color.RGBtoHSB(107, 88, 50, null);
+        var hsb2 = Color.RGBtoHSB(107, 88, 50, null);
         Color boardShadowColor = Color.getHSBColor(hsb2[0], hsb2[1], hsb2[2]);
-        float hsb3[] = Color.RGBtoHSB(226, 122, 102, null);
-        Color highlightColor = Color.getHSBColor(hsb3[0], hsb3[1], hsb3[2]);
+        var hsb3 = Color.RGBtoHSB(226, 122, 102, null);
+        var highlightColor = Color.getHSBColor(hsb3[0], hsb3[1], hsb3[2]);
 
         // Start with a clean slate.
         boardPanel.removeAll();
