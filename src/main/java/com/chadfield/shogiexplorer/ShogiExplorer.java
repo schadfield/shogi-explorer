@@ -800,9 +800,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mediaBack.setFocusable(false);
         mediaBack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaBack.setLabel(bundle.getString("ShogiExplorer.mediaBack.label_1")); // NOI18N
-        mediaBack.setMaximumSize(new java.awt.Dimension(24, 24));
-        mediaBack.setMinimumSize(new java.awt.Dimension(24, 24));
-        mediaBack.setPreferredSize(new java.awt.Dimension(40, 24));
+        mediaBack.setMaximumSize(new java.awt.Dimension(30, 24));
+        mediaBack.setMinimumSize(new java.awt.Dimension(30, 24));
+        mediaBack.setPreferredSize(new java.awt.Dimension(30, 24));
         mediaBack.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         mediaBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -817,8 +817,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mediaStop.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mediaStop.setFocusable(false);
         mediaStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        mediaStop.setMaximumSize(new java.awt.Dimension(24, 24));
-        mediaStop.setMinimumSize(new java.awt.Dimension(24, 24));
+        mediaStop.setMaximumSize(new java.awt.Dimension(30, 24));
+        mediaStop.setMinimumSize(new java.awt.Dimension(30, 24));
+        mediaStop.setPreferredSize(new java.awt.Dimension(30, 24));
         mediaStop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         mediaStop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -833,9 +834,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mediaForward.setFocusable(false);
         mediaForward.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         mediaForward.setLabel(bundle.getString("ShogiExplorer.mediaForward.label_1")); // NOI18N
-        mediaForward.setMaximumSize(new java.awt.Dimension(24, 24));
-        mediaForward.setMinimumSize(new java.awt.Dimension(24, 24));
-        mediaForward.setPreferredSize(new java.awt.Dimension(40, 24));
+        mediaForward.setMaximumSize(new java.awt.Dimension(30, 24));
+        mediaForward.setMinimumSize(new java.awt.Dimension(30, 24));
+        mediaForward.setPreferredSize(new java.awt.Dimension(30, 24));
         mediaForward.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         mediaForward.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -885,8 +886,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analyseGameToolbarButton.setFocusable(false);
         analyseGameToolbarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         analyseGameToolbarButton.setLabel(bundle.getString("ShogiExplorer.analyseGameToolbarButton.label")); // NOI18N
-        analyseGameToolbarButton.setMaximumSize(new java.awt.Dimension(24, 24));
-        analyseGameToolbarButton.setMinimumSize(new java.awt.Dimension(24, 24));
+        analyseGameToolbarButton.setMaximumSize(new java.awt.Dimension(30, 24));
+        analyseGameToolbarButton.setMinimumSize(new java.awt.Dimension(30, 24));
+        analyseGameToolbarButton.setPreferredSize(new java.awt.Dimension(30, 24));
         analyseGameToolbarButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         analyseGameToolbarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -902,8 +904,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         resumeAnalysisToolbarButton.setFocusable(false);
         resumeAnalysisToolbarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         resumeAnalysisToolbarButton.setLabel(bundle.getString("ShogiExplorer.resumeAnalysisToolbarButton.label")); // NOI18N
-        resumeAnalysisToolbarButton.setMaximumSize(new java.awt.Dimension(24, 24));
-        resumeAnalysisToolbarButton.setMinimumSize(new java.awt.Dimension(24, 24));
+        resumeAnalysisToolbarButton.setMaximumSize(new java.awt.Dimension(30, 24));
+        resumeAnalysisToolbarButton.setMinimumSize(new java.awt.Dimension(30, 24));
+        resumeAnalysisToolbarButton.setPreferredSize(new java.awt.Dimension(30, 24));
         resumeAnalysisToolbarButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         resumeAnalysisToolbarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -919,7 +922,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         stopAnalysisButton.setEnabled(false);
         stopAnalysisButton.setFocusable(false);
         stopAnalysisButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        stopAnalysisButton.setMaximumSize(new java.awt.Dimension(48, 24));
+        stopAnalysisButton.setMaximumSize(new java.awt.Dimension(40, 24));
+        stopAnalysisButton.setMinimumSize(new java.awt.Dimension(40, 24));
+        stopAnalysisButton.setPreferredSize(new java.awt.Dimension(40, 24));
         stopAnalysisButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         stopAnalysisButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -936,8 +941,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysePositionToolbarButton.setFocusable(false);
         analysePositionToolbarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         analysePositionToolbarButton.setLabel(bundle.getString("ShogiExplorer.analysePositionToolbarButton.label")); // NOI18N
-        analysePositionToolbarButton.setMaximumSize(new java.awt.Dimension(24, 24));
-        analysePositionToolbarButton.setMinimumSize(new java.awt.Dimension(24, 24));
+        analysePositionToolbarButton.setMaximumSize(new java.awt.Dimension(30, 24));
+        analysePositionToolbarButton.setMinimumSize(new java.awt.Dimension(30, 24));
+        analysePositionToolbarButton.setPreferredSize(new java.awt.Dimension(30, 24));
         analysePositionToolbarButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         analysePositionToolbarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -953,8 +959,9 @@ public class ShogiExplorer extends javax.swing.JFrame {
         rotateViewToobarButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         rotateViewToobarButton.setFocusable(false);
         rotateViewToobarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        rotateViewToobarButton.setMaximumSize(new java.awt.Dimension(24, 24));
-        rotateViewToobarButton.setMinimumSize(new java.awt.Dimension(24, 24));
+        rotateViewToobarButton.setMaximumSize(new java.awt.Dimension(30, 24));
+        rotateViewToobarButton.setMinimumSize(new java.awt.Dimension(30, 24));
+        rotateViewToobarButton.setPreferredSize(new java.awt.Dimension(30, 24));
         rotateViewToobarButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         rotateViewToobarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
