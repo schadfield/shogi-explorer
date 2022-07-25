@@ -308,7 +308,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         positionAnalysisTable.setShowVerticalLines(false);
         positionAnalysisTable.setDefaultEditor(Object.class, null);
 
-        if (IS_LINUX) {
+        if (IS_LINUX || IS_WINDOWS) {
             moveList.setFixedCellHeight(analysisTable.getRowHeight());
         }
 
