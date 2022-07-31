@@ -87,7 +87,6 @@ public class GameAnalyser {
     JMenuItem resumeAnalysisMenuItem;
     JButton resumeAnalysisToolbarButton;
     Transliterator trans = Transliterator.getInstance("Halfwidth-Fullwidth");
-    boolean handicap;
     Turn turn;
     int multiPV;
     int rowNum;
@@ -142,7 +141,7 @@ public class GameAnalyser {
             game.setAnalysisPositionList(new ArrayList<>());
         }
         scoreList = new ArrayList<>();
-        handicap = game.isHandicap();
+        game.isHandicap();
 
         if (game.isHandicap()) {
             turn = Turn.GOTE;
@@ -431,7 +430,7 @@ public class GameAnalyser {
 
     private void analysePosition(Game game, String sfen, String engineMove, String japaneseMove, JTable analysisTable, DefaultIntervalXYDataset plotDataset, int moveNum, Turn turn, Coordinate previousMoveDestination) throws IOException {
         stdin.write(("position sfen " + sfen + " " + engineMove + "\n").getBytes());
-        stdin.write(("go btime 0 wtime 0 byoyomi " + analysisTimePerMove * 1000 + "\n").getBytes());
+        stdin.write(("go movetime " + analysisTimePerMove * 1000 + "\n").getBytes());
         stdin.flush();
         String line;
         List<String> lineList = new ArrayList<>();
