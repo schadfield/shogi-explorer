@@ -443,7 +443,7 @@ public class GameAnalyser {
             if (line.contains("bestmove")) {
                 String bestLine = getBestLine(line, lineList);
                 ArrayList<Position> pvPositionList = getPVPositionList(sfen, bestLine, previousMoveDestination);
-                updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, turn, japaneseMove, pvPositionList, plotDataset));
+                updateTableModel(analysisTable, getTableInsert(bestLine, moveNum, turn, japaneseMove, pvPositionList, plotDataset, engineMove.contentEquals(pvPositionList.get(0).getNotation().getEngineMove())));
                 game.getAnalysisPositionList().add(pvPositionList);
                 return;
             }
@@ -480,6 +480,7 @@ public class GameAnalyser {
         thisDestination = getDestinationCoordinate(move);
         if (thisDestination == null) {
             Notation notation = new Notation();
+            notation.setEngineMove(move);
             notation.setJapanese(move);
             return notation;
         }
@@ -504,7 +505,8 @@ public class GameAnalyser {
 
         Notation notation = new Notation();
         notation.setJapanese(trans.transliterate(getNotation(board, lastDestination, sourceKomaType, isDrop, move, disambiguation)));
-
+        notation.setEngineMove(move);
+        
         return notation;
     }
 
@@ -619,7 +621,7 @@ public class GameAnalyser {
         return lineList.get(lineListSize - 1);
     }
 
-    private Object[] getTableInsert(String lastLine, int moveNum, Turn turn, String japaneseMove, ArrayList<Position> pvPositionList, DefaultIntervalXYDataset plotDataset) {
+    private Object[] getTableInsert(String lastLine, int moveNum, Turn turn, String japaneseMove, ArrayList<Position> pvPositionList, DefaultIntervalXYDataset plotDataset, boolean match) {
         boolean lower = false;
         boolean upper = false;
         boolean foundPV = false;
@@ -677,8 +679,15 @@ public class GameAnalyser {
         String pvStr = pvBuilder.toString().trim();
 
         String lowUp = getLowUpString(lower, upper);
+        
+        String matchStr;
+        if (match) {
+            matchStr = "〇";
+        } else {
+            matchStr = "";
+        }
 
-        return new Object[]{moveNum + japaneseMove, "", scoreStr, lowUp, pvStr};
+        return new Object[]{moveNum + japaneseMove, matchStr, scoreStr, lowUp, pvStr};
     }
 
     private void processScore(int score, int moveNum, Turn turn, DefaultIntervalXYDataset plotDataset) {
