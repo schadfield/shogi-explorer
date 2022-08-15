@@ -38,6 +38,7 @@ public class Game {
     public static final String HANDICAP_2_PIECE = "二枚落ち";
     public static final String HANDICAP_4_PIECE = "四枚落ち";
     public static final String HANDICAP_6_PIECE = "六枚落ち";
+    public static final String HANDICAP_8_PIECE = "八枚落ち";
 
     public Game() {
         date = "";
@@ -163,7 +164,7 @@ public class Game {
 
     public boolean isHandicap() {
         return switch (this.handicap) {
-            case HANDICAP_2_PIECE, HANDICAP_4_PIECE, HANDICAP_6_PIECE, HANDICAP_BISHOP, HANDICAP_LANCE, HANDICAP_ROOK, HANDICAP_ROOK_LANCE ->
+            case HANDICAP_2_PIECE, HANDICAP_4_PIECE, HANDICAP_6_PIECE, HANDICAP_8_PIECE, HANDICAP_BISHOP, HANDICAP_LANCE, HANDICAP_ROOK, HANDICAP_ROOK_LANCE ->
                 true;
             default ->
                 false;
