@@ -65,10 +65,7 @@ public class RenderBoard {
             scale = horizScale;
         }
 
-        var hsb2 = Color.RGBtoHSB(107, 88, 50, null);
-        Color boardShadowColor = Color.getHSBColor(hsb2[0], hsb2[1], hsb2[2]);
-        var hsb3 = Color.RGBtoHSB(226, 122, 102, null);
-        var highlightColor = Color.getHSBColor(hsb3[0], hsb3[1], hsb3[2]);
+        var highlightColor = new Color(200, 100, 100, 150);
 
         // Start with a clean slate.
         boardPanel.removeAll();
@@ -78,8 +75,8 @@ public class RenderBoard {
         drawCoordinates(boardPanel, rotatedView);
         drawGrid(imageCache, boardPanel);
         drawHighlights(board, boardPanel, rotatedView, highlightColor);
-        drawKomadai(imageCache, boardPanel, boardShadowColor);
-        drawBackground(imageCache, boardPanel, boardShadowColor);
+        drawKomadai(imageCache, boardPanel);
+        drawBackground(imageCache, boardPanel);
         drawTurnNotification(board, imageCache, boardPanel, rotatedView);
         boardPanel.setVisible(true);
         boardPanel.repaint();
@@ -491,7 +488,7 @@ public class RenderBoard {
         );
     }
 
-    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel, Color boardShadowColor) {
+    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel) {
         ImageUtils.drawPNGImage(
                 imageCache,
                 boardPanel, IMAGE_STR_KOMADAI,
@@ -503,18 +500,6 @@ public class RenderBoard {
                 new Coordinate(CENTRE_X, CENTRE_Y),
                 scale);
 
-        ImageUtils.drawLabel(
-                boardPanel,
-                new Coordinate(
-                        MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5 + 1,
-                        MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2 + 1
-                ),
-                new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
-                new Coordinate(CENTRE_X, CENTRE_Y),
-                boardShadowColor,
-                scale
-        );
-
         ImageUtils.drawPNGImage(
                 imageCache,
                 boardPanel, IMAGE_STR_KOMADAI,
@@ -522,18 +507,9 @@ public class RenderBoard {
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y),
                 scale);
-
-        ImageUtils.drawLabel(
-                boardPanel,
-                new Coordinate(0 + 1, 0 + 1),
-                new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
-                new Coordinate(CENTRE_X, CENTRE_Y),
-                boardShadowColor,
-                scale
-        );
     }
 
-    private static void drawBackground(ImageCache imageCache, JPanel boardPanel, Color boardShadowColor) {
+    private static void drawBackground(ImageCache imageCache, JPanel boardPanel) {
         ImageUtils.drawPNGImage(
                 imageCache,
                 boardPanel,
@@ -547,17 +523,6 @@ public class RenderBoard {
                 scale
         );
 
-        ImageUtils.drawLabel(
-                boardPanel,
-                new Coordinate(MathUtils.KOMA_X + MathUtils.COORD_XY * 2 + 1, 0 + 1),
-                new Dimension(
-                        MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
-                        MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2
-                ),
-                new Coordinate(CENTRE_X, CENTRE_Y),
-                boardShadowColor,
-                scale
-        );
     }
 
 }
