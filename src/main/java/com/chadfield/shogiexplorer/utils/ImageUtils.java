@@ -42,6 +42,11 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 
 public class ImageUtils {
 
+    private static final String OS = System.getProperty("os.name").toLowerCase();
+    public static final boolean IS_WINDOWS = (OS.contains("win"));
+    public static final boolean IS_MAC = (OS.contains("mac"));
+    public static final boolean IS_LINUX = (OS.contains("nux"));
+
     private ImageUtils() {
         throw new IllegalStateException("Utility class");
     }
@@ -74,7 +79,11 @@ public class ImageUtils {
                 (int) Math.round(MathUtils.KOMA_X * scale),
                 (int) Math.round(MathUtils.KOMA_Y * scale));
         Font labelFont = numberLabel.getFont();
-        numberLabel.setFont(new Font(labelFont.getName(), Font.BOLD, labelFont.getSize()));
+        if (IS_LINUX) {
+            numberLabel.setFont(new Font("Mincho", Font.BOLD, labelFont.getSize()));
+        } else {
+            numberLabel.setFont(new Font(labelFont.getName(), Font.BOLD, labelFont.getSize()));
+        }
         return numberLabel;
     }
 
