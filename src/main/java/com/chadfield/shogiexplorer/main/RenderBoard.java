@@ -14,7 +14,6 @@
     You should have received a copy of the GNU General Public License along with Shogi Explorer. 
     If not, see <https://www.gnu.org/licenses/>.
  */
-
 package com.chadfield.shogiexplorer.main;
 
 import java.awt.Image;
@@ -41,6 +40,8 @@ public class RenderBoard {
     static final int CENTRE_Y = 5;
     static final String IMAGE_STR_SENTE = "sente";
     static final String IMAGE_STR_GOTE = "gote";
+    static final String IMAGE_STR_BOARD = "board";
+    static final String IMAGE_STR_KOMADAI = "komadai";
     static final String PIECE_SET_CLASSIC = "classic";
     static double scale;
 
@@ -53,19 +54,17 @@ public class RenderBoard {
         if (boardPanelWidth == 0) {
             return;
         }
-        
+
         java.awt.Dimension minimumDimension = boardPanel.getMinimumSize();
         double vertScale = boardPanel.getHeight() / minimumDimension.getHeight();
         double horizScale = boardPanelWidth / minimumDimension.getWidth();
-        
+
         if (vertScale < horizScale) {
             scale = vertScale;
         } else {
             scale = horizScale;
         }
-        
-        var hsb1 = Color.RGBtoHSB(214, 176, 100, null);
-        Color boardColor = Color.getHSBColor(hsb1[0], hsb1[1], hsb1[2]);
+
         var hsb2 = Color.RGBtoHSB(107, 88, 50, null);
         Color boardShadowColor = Color.getHSBColor(hsb2[0], hsb2[1], hsb2[2]);
         var hsb3 = Color.RGBtoHSB(226, 122, 102, null);
@@ -79,8 +78,8 @@ public class RenderBoard {
         drawCoordinates(boardPanel, rotatedView);
         drawGrid(imageCache, boardPanel);
         drawHighlights(board, boardPanel, rotatedView, highlightColor);
-        drawKomadai(boardPanel, boardColor, boardShadowColor);
-        drawBackground(boardPanel, boardColor,boardShadowColor);
+        drawKomadai(imageCache, boardPanel, boardShadowColor);
+        drawBackground(imageCache, boardPanel, boardShadowColor);
         drawTurnNotification(board, imageCache, boardPanel, rotatedView);
         boardPanel.setVisible(true);
         boardPanel.repaint();
@@ -492,18 +491,17 @@ public class RenderBoard {
         );
     }
 
-    private static void drawKomadai(JPanel boardPanel, Color boardColor, Color boardShadowColor) {
-        ImageUtils.drawLabel(
-                boardPanel,
+    private static void drawKomadai(ImageCache imageCache, JPanel boardPanel, Color boardShadowColor) {
+        ImageUtils.drawPNGImage(
+                imageCache,
+                boardPanel, IMAGE_STR_KOMADAI,
                 new Coordinate(
                         MathUtils.KOMA_X * (MathUtils.BOARD_XY + 1) + MathUtils.COORD_XY * 5,
                         MathUtils.COORD_XY * 2 + MathUtils.KOMA_Y * 2
                 ),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y),
-                boardColor,
-                scale
-        );
+                scale);
 
         ImageUtils.drawLabel(
                 boardPanel,
@@ -517,14 +515,13 @@ public class RenderBoard {
                 scale
         );
 
-        ImageUtils.drawLabel(
-                boardPanel,
+        ImageUtils.drawPNGImage(
+                imageCache,
+                boardPanel, IMAGE_STR_KOMADAI,
                 new Coordinate(0, 0),
                 new Dimension(MathUtils.KOMA_X + MathUtils.COORD_XY, MathUtils.KOMA_Y * 7),
                 new Coordinate(CENTRE_X, CENTRE_Y),
-                boardColor,
-                scale
-        );
+                scale);
 
         ImageUtils.drawLabel(
                 boardPanel,
@@ -536,16 +533,17 @@ public class RenderBoard {
         );
     }
 
-    private static void drawBackground(JPanel boardPanel, Color boardColor, Color boardShadowColor) {
-        ImageUtils.drawLabel(
+    private static void drawBackground(ImageCache imageCache, JPanel boardPanel, Color boardShadowColor) {
+        ImageUtils.drawPNGImage(
+                imageCache,
                 boardPanel,
+                IMAGE_STR_BOARD,
                 new Coordinate(MathUtils.KOMA_X + MathUtils.COORD_XY * 2, 0),
                 new Dimension(
                         MathUtils.KOMA_X * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2,
                         MathUtils.KOMA_Y * MathUtils.BOARD_XY + MathUtils.COORD_XY * 2
                 ),
                 new Coordinate(CENTRE_X, CENTRE_Y),
-                boardColor,
                 scale
         );
 

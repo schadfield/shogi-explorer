@@ -14,7 +14,6 @@
     You should have received a copy of the GNU General Public License along with Shogi Explorer. 
     If not, see <https://www.gnu.org/licenses/>.
  */
-
 package com.chadfield.shogiexplorer.utils;
 
 import java.awt.Image;
@@ -30,6 +29,7 @@ import com.chadfield.shogiexplorer.objects.Coordinate;
 import com.chadfield.shogiexplorer.objects.Dimension;
 import com.chadfield.shogiexplorer.objects.ImageCache;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -73,7 +73,28 @@ public class ImageUtils {
                 (int) Math.round((imageLocation.getY() + (boardCoord.getY() * MathUtils.KOMA_Y + offset.getHeight())) * scale),
                 (int) Math.round(MathUtils.KOMA_X * scale),
                 (int) Math.round(MathUtils.KOMA_Y * scale));
+        Font labelFont = numberLabel.getFont();
+        numberLabel.setFont(new Font(labelFont.getName(), Font.BOLD, labelFont.getSize()));
         return numberLabel;
+    }
+
+    public static BaseMultiResolutionImage loadPNGImageFromResources(String imageName) {
+        BufferedImage image1 = null;
+        BufferedImage image2 = null;
+        BufferedImage image3 = null;
+        BufferedImage image4 = null;
+
+        try {
+            image1 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + ".png"));
+            image2 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "@1.25x.png"));
+            image3 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "@1.5x.png"));
+            image4 = ImageIO.read(ClassLoader.getSystemClassLoader().getResource(imageName + "@2x.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(ImageUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        BaseMultiResolutionImage mri = new BaseMultiResolutionImage(image1, image2, image3, image4);
+        return (mri);
+
     }
 
     public static BaseMultiResolutionImage loadSVGImageFromResources(String imageName, Dimension imageDimension, double scale) {
@@ -182,11 +203,26 @@ public class ImageUtils {
         boardPanel.add(imageLabel);
     }
 
+    public static void drawPNGImage(ImageCache imageCache, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset, double scale) {
+        BaseMultiResolutionImage imageFile = imageCache.getImage(imageName + scale);
+        if (imageFile == null) {
+            imageFile = loadPNGImageFromResources(imageName);
+            imageCache.putImage(imageName + scale, imageFile);
+        }
+        JLabel imageLabel = new JLabel(new ImageIcon(imageFile));
+        imageLabel.setBounds(
+                (int) Math.round((offset.getX() + imageCoordinate.getX()) * scale),
+                (int) Math.round((offset.getY() + imageCoordinate.getY()) * scale),
+                (int) Math.round((imageDimension.getWidth()) * scale),
+                (int) Math.round((imageDimension.getHeight()) * scale));
+        boardPanel.add(imageLabel);
+    }
+
     public static void drawImage(ImageCache imageCache, JPanel boardPanel, String imageName, Coordinate imageCoordinate, Dimension imageDimension, Coordinate offset, double scale) {
-        BaseMultiResolutionImage imageFile = imageCache.getImage(imageName+scale);
+        BaseMultiResolutionImage imageFile = imageCache.getImage(imageName + scale);
         if (imageFile == null) {
             imageFile = loadSVGImageFromResources(imageName, imageDimension, scale);
-            imageCache.putImage(imageName+scale, imageFile);
+            imageCache.putImage(imageName + scale, imageFile);
         }
         JLabel imageLabel = new JLabel(new ImageIcon(imageFile));
         imageLabel.setBounds(
