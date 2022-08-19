@@ -65,7 +65,7 @@ public class RenderBoard {
             scale = horizScale;
         }
 
-        var highlightColor = new Color(200, 100, 100, 150);
+        var highlightColor = new Color(200, 100, 100, 160);
 
         // Start with a clean slate.
         boardPanel.removeAll();
