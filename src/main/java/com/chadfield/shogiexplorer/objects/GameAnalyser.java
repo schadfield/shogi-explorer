@@ -74,6 +74,7 @@ public class GameAnalyser {
     XYPlot plot;
     int range;
     String scoreStr;
+    boolean lastMatch;
     List<Integer> scoreList;
     JRadioButtonMenuItem graphView1;
     JRadioButtonMenuItem graphView2;
@@ -682,8 +683,10 @@ public class GameAnalyser {
         
         String matchStr;
         if (match) {
+            lastMatch = true;
             matchStr = "〇";
         } else {
+            lastMatch = false;
             matchStr = "";
         }
 
@@ -846,7 +849,7 @@ public class GameAnalyser {
         try {
             java.awt.EventQueue.invokeAndWait(()
                     -> {
-                if (!opinion.isEmpty()) {
+                if (!opinion.isEmpty() & !lastMatch) {
                     analysisTableModel.setValueAt(opinion, analysisTableModel.getRowCount() - 1, 1);
                     opinion = "";
                 }
