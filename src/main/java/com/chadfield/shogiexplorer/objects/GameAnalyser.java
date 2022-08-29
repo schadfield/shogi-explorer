@@ -14,7 +14,6 @@
     You should have received a copy of the GNU General Public License along with Shogi Explorer. 
     If not, see <https://www.gnu.org/licenses/>.
  */
-
 package com.chadfield.shogiexplorer.objects;
 
 import com.chadfield.shogiexplorer.main.AnalysisManager;
@@ -74,7 +73,6 @@ public class GameAnalyser {
     XYPlot plot;
     int range;
     String scoreStr;
-    boolean lastMatch;
     List<Integer> scoreList;
     JRadioButtonMenuItem graphView1;
     JRadioButtonMenuItem graphView2;
@@ -321,7 +319,7 @@ public class GameAnalyser {
                         depth = splitLine[i + 1];
                     }
                     case "seldepth" -> {
-                        seldepth = splitLine[i + 1]; 
+                        seldepth = splitLine[i + 1];
                     }
                     case "nodes" -> {
                         nodes = splitLine[i + 1];
@@ -507,7 +505,7 @@ public class GameAnalyser {
         Notation notation = new Notation();
         notation.setJapanese(trans.transliterate(getNotation(board, lastDestination, sourceKomaType, isDrop, move, disambiguation)));
         notation.setEngineMove(move);
-        
+
         return notation;
     }
 
@@ -680,13 +678,11 @@ public class GameAnalyser {
         String pvStr = pvBuilder.toString().trim();
 
         String lowUp = getLowUpString(lower, upper);
-        
+
         String matchStr;
         if (match) {
-            lastMatch = true;
             matchStr = "〇";
         } else {
-            lastMatch = false;
             matchStr = "";
         }
 
@@ -849,7 +845,7 @@ public class GameAnalyser {
         try {
             java.awt.EventQueue.invokeAndWait(()
                     -> {
-                if (!opinion.isEmpty() & !lastMatch) {
+                if (!opinion.isEmpty()) {
                     analysisTableModel.setValueAt(opinion, analysisTableModel.getRowCount() - 1, 1);
                     opinion = "";
                 }
