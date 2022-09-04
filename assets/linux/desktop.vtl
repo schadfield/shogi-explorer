@@ -1,0 +1,15 @@
+#set ($categories = $StringUtils.join($info.linuxConfig.categories, ";"))
+[Desktop Entry]
+Name=${info.displayName}
+GenericName=${info.displayName}
+Comment=${info.description}
+Exec=/opt/${info.name}/${info.name} %U
+Icon=/opt/${info.name}/${info.name}.png
+Terminal=false
+Type=Application
+StartupNotify=true
+StartupWMClass=com-chadfield-shogiexplorer-ShogiExplorer
+#if ($info.isThereFileAssociations())
+MimeType=${info.getMimeTypesListAsString(";")}
+#end
+Categories=${categories}
