@@ -22,6 +22,7 @@ import com.chadfield.shogiexplorer.main.SFENParser;
 import com.chadfield.shogiexplorer.objects.Board.Turn;
 import com.chadfield.shogiexplorer.utils.NotationUtils;
 import com.chadfield.shogiexplorer.utils.ParserUtils;
+import static com.chadfield.shogiexplorer.utils.StringUtils.getFileExtension;
 import com.ibm.icu.text.Transliterator;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
@@ -92,6 +93,10 @@ public class GameAnalyser {
     boolean bestMove;
     boolean interrupted;
     private List<List<Position>> positionAnalysisList;
+    private static final String OS = System.getProperty("os.name").toLowerCase();
+    public static final boolean IS_WINDOWS = (OS.contains("win"));
+    public static final boolean IS_MAC = (OS.contains("mac"));
+    public static final boolean IS_LINUX = (OS.contains("nux"));
 
     public void analyse(Game game, Engine engine, JList<String> moveList, JTable analysisTable, AnalysisParameter analysisParam, AtomicBoolean analysing, XYPlot plot, boolean saveAnalysis, boolean resume) throws IOException {
         analysing.set(true);
@@ -375,7 +380,12 @@ public class GameAnalyser {
 
     private void initializeEngine(Engine engine) {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(engine.getPath());
+            ProcessBuilder processBuilder;
+            if (!IS_WINDOWS && getFileExtension(engine.getPath()).contentEquals("exe")) {
+                processBuilder = new ProcessBuilder("wine", engine.getPath());
+            } else {
+                processBuilder = new ProcessBuilder(engine.getPath());
+            }
             processBuilder.directory((new File(engine.getPath())).getParentFile());
             process = processBuilder.start();
         } catch (IOException ex) {

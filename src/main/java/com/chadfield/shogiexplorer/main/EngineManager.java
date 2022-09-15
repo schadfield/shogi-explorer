@@ -18,8 +18,8 @@ package com.chadfield.shogiexplorer.main;
 
 import com.chadfield.shogiexplorer.objects.Engine;
 import com.chadfield.shogiexplorer.objects.EngineOption;
+import static com.chadfield.shogiexplorer.utils.StringUtils.getFileExtension;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.StreamException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import java.io.BufferedReader;
@@ -40,6 +40,11 @@ import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
 
 public class EngineManager {
+
+    private static final String OS = System.getProperty("os.name").toLowerCase();
+    public static final boolean IS_WINDOWS = (OS.contains("win"));
+    public static final boolean IS_MAC = (OS.contains("mac"));
+    public static final boolean IS_LINUX = (OS.contains("nux"));
 
     private EngineManager() {
         throw new IllegalStateException("Utility class");
@@ -137,10 +142,14 @@ public class EngineManager {
         Process process;
 
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(engineFile.getPath());
+            ProcessBuilder processBuilder;
+            if (!IS_WINDOWS && getFileExtension(engineFile.getPath()).contentEquals("exe")) {
+                processBuilder = new ProcessBuilder("wine", engineFile.getPath());
+            } else {
+                processBuilder = new ProcessBuilder(engineFile.getPath());
+            }
             processBuilder.directory((new File(engineFile.getPath())).getParentFile());
             process = processBuilder.start();
-
         } catch (IOException ex) {
             Logger.getLogger(EngineManager.class.getName()).log(Level.SEVERE, null, ex);
             return;
