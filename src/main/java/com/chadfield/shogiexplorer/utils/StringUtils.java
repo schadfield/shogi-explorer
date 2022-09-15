@@ -14,7 +14,6 @@
     You should have received a copy of the GNU General Public License along with Shogi Explorer. 
     If not, see <https://www.gnu.org/licenses/>.
  */
-
 package com.chadfield.shogiexplorer.utils;
 
 public class StringUtils {
@@ -29,6 +28,14 @@ public class StringUtils {
 
     public static String substituteKomaNameRotated(String name) {
         return name.replaceAll("^S", "1").replaceAll("^G", "0");
+    }
+
+    public static String getFileExtension(String fileName) {
+        int lastIndexOf = fileName.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return ""; // empty extension
+        }
+        return fileName.substring(lastIndexOf + 1);
     }
 
 }
