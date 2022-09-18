@@ -24,6 +24,8 @@ Click "Add" then select the engine executable file using the file chooser.
 
 <img src="images/image3.png" width="600">
 
+On Linux and macOS engines compiled as Windows executables may be used if they have file extension ".exe" and the wine command is in the user's path.
+
 ## Game Analyser
 
 Using the Game Analyser you can choose which engine to use, how many seconds to spend analysing each move and save the analysis to a file (extension ".kaf") which will be automatically loaded next time the game record is loaded.
