@@ -144,7 +144,7 @@ public class EngineManager {
         try {
             ProcessBuilder processBuilder;
             if (!IS_WINDOWS && getFileExtension(engineFile.getPath()).contentEquals("exe")) {
-                processBuilder = new ProcessBuilder("wine", engineFile.getPath());
+                processBuilder = new ProcessBuilder("wine64", engineFile.getPath());
             } else {
                 processBuilder = new ProcessBuilder(engineFile.getPath());
             }

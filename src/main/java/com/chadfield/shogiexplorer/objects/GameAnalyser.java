@@ -382,7 +382,7 @@ public class GameAnalyser {
         try {
             ProcessBuilder processBuilder;
             if (!IS_WINDOWS && getFileExtension(engine.getPath()).contentEquals("exe")) {
-                processBuilder = new ProcessBuilder("wine", engine.getPath());
+                processBuilder = new ProcessBuilder("wine64", engine.getPath());
             } else {
                 processBuilder = new ProcessBuilder(engine.getPath());
             }
