@@ -1545,6 +1545,10 @@ public class ShogiExplorer extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if (game == null) {
+            gameTextArea.setText("KIF parse error.");
+            return;
+        }
         ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME);
         gameTextArea.setText(null);
         gameTextArea.append(bundle.getString("label_sente") + ": " + game.getSente() + "\n");

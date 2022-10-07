@@ -14,7 +14,6 @@
     You should have received a copy of the GNU General Public License along with Shogi Explorer. 
     If not, see <https://www.gnu.org/licenses/>.
  */
-
 package com.chadfield.shogiexplorer.main;
 
 import com.chadfield.shogiexplorer.objects.GameAnalyser;
@@ -39,6 +38,7 @@ import com.chadfield.shogiexplorer.utils.ParserUtils;
 import com.ibm.icu.text.Transliterator;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -120,6 +120,8 @@ public class KifParser {
 
             }
 
+        } catch (MalformedInputException ex) {
+            return null;
         } finally {
             if (fileReader != null) {
                 fileReader.close();
