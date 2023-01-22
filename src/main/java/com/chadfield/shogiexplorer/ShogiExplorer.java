@@ -1,5 +1,5 @@
 /*
-    Copyright © 2021, 2022 Stephen R Chadfield.
+    Copyright © 2021, 2022, 2023 Stephen R Chadfield.
 
     This file is part of Shogi Explorer.
 
@@ -2860,7 +2860,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
             Properties prop = new Properties();
             prop.load(input);
             aboutMessage = "Shogi Explorer\n\nVersion " + prop.getProperty("project.version")
-                    + "\n\nCopyright © 2021, 2022 Stephen R Chadfield."
+                    + "\n\nCopyright © 2021, 2022, 2023 Stephen R Chadfield."
                     + "\n\nPlay more Shogi!";
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
