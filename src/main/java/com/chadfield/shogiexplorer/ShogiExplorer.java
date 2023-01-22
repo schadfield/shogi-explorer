@@ -758,7 +758,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
             }
         });
 
-        mainToolBar.setFloatable(false);
         mainToolBar.setRollover(true);
 
         mediaStart.setText(bundle.getString("ShogiExplorer.mediaStart.text_1")); // NOI18N
@@ -916,15 +915,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(resumeAnalysisToolbarButton);
         mainToolBar.add(filler10);
 
-        stopAnalysisButton.setText(bundle.getString("ShogiExplorer.stopAnalysisButton.text")); // NOI18N
         stopAnalysisButton.setToolTipText(bundle.getString("ShogiExplorer.stopAnalysisButton.toolTipText")); // NOI18N
         stopAnalysisButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         stopAnalysisButton.setEnabled(false);
         stopAnalysisButton.setFocusable(false);
         stopAnalysisButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        stopAnalysisButton.setMaximumSize(new java.awt.Dimension(40, 24));
-        stopAnalysisButton.setMinimumSize(new java.awt.Dimension(40, 24));
-        stopAnalysisButton.setPreferredSize(new java.awt.Dimension(40, 24));
+        stopAnalysisButton.setLabel(bundle.getString("ShogiExplorer.stopAnalysisButton.label_1")); // NOI18N
+        stopAnalysisButton.setMaximumSize(new java.awt.Dimension(30, 24));
+        stopAnalysisButton.setMinimumSize(new java.awt.Dimension(30, 24));
+        stopAnalysisButton.setPreferredSize(new java.awt.Dimension(30, 24));
         stopAnalysisButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         stopAnalysisButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
