@@ -216,6 +216,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         initComponents();
         
+        mainToolBar.setFloatable(false);
+        
         this.setSize(new Dimension(mainWidth, mainHeight));
         
         if (prefs.getBoolean(PREF_MAXIMIZED, false)) {
