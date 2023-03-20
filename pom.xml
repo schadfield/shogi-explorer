@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.chadfield</groupId>
     <artifactId>ShogiExplorer</artifactId>
-    <version>4.16.1</version>
+    <version>4.17.0</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
-            <version>RELEASE160</version>
+            <version>RELEASE170</version>
         </dependency>
         <dependency>
             <groupId>com.ibm.icu</groupId>
