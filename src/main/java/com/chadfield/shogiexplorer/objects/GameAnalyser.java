@@ -78,7 +78,7 @@ public class GameAnalyser {
     JRadioButtonMenuItem graphView1;
     JRadioButtonMenuItem graphView2;
     JRadioButtonMenuItem graphView3;
-    JButton haltAnalysisButton;
+    JButton stopAnalysisToolbarButton;
     JMenuItem stopAnalysisMenuItem;
     JMenuItem analyseGameMenuItem;
     JButton analyseGameToolbarButton;
@@ -106,7 +106,7 @@ public class GameAnalyser {
         this.graphView1 = analysisParam.getGraphView1();
         this.graphView2 = analysisParam.getGraphView2();
         this.graphView3 = analysisParam.getGraphView3();
-        this.haltAnalysisButton = analysisParam.getHaltAnalysisButton();
+        this.stopAnalysisToolbarButton = analysisParam.getHaltAnalysisButton();
         this.stopAnalysisMenuItem = analysisParam.getStopAnalysisMenuItem();
         this.analyseGameMenuItem = analysisParam.getAnalyseGameMenuItem();
         this.analyseGameToolbarButton = analysisParam.getAnalyseGameToolbarButton();
@@ -195,8 +195,8 @@ public class GameAnalyser {
         }
 
         quitEngine();
-        haltAnalysisButton.setEnabled(false);
         stopAnalysisMenuItem.setEnabled(false);
+        stopAnalysisToolbarButton.setEnabled(false);
         analyseGameMenuItem.setEnabled(true);
         analyseGameToolbarButton.setEnabled(true);
         analysePositionMenuItem.setEnabled(true);

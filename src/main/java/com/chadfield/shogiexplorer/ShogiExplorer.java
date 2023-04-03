@@ -477,7 +477,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         resumeAnalysisToolbarButton = new javax.swing.JButton();
         filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
-        stopAnalysisButton = new javax.swing.JButton();
+        stopAnalysisToolbarButton = new javax.swing.JButton();
         filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         analysePositionToolbarButton = new javax.swing.JButton();
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(25, 0));
@@ -917,22 +917,22 @@ public class ShogiExplorer extends javax.swing.JFrame {
         mainToolBar.add(resumeAnalysisToolbarButton);
         mainToolBar.add(filler10);
 
-        stopAnalysisButton.setToolTipText(bundle.getString("ShogiExplorer.stopAnalysisButton.toolTipText")); // NOI18N
-        stopAnalysisButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        stopAnalysisButton.setEnabled(false);
-        stopAnalysisButton.setFocusable(false);
-        stopAnalysisButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        stopAnalysisButton.setLabel(bundle.getString("ShogiExplorer.stopAnalysisButton.label_1")); // NOI18N
-        stopAnalysisButton.setMaximumSize(new java.awt.Dimension(30, 24));
-        stopAnalysisButton.setMinimumSize(new java.awt.Dimension(30, 24));
-        stopAnalysisButton.setPreferredSize(new java.awt.Dimension(30, 24));
-        stopAnalysisButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        stopAnalysisButton.addActionListener(new java.awt.event.ActionListener() {
+        stopAnalysisToolbarButton.setToolTipText(bundle.getString("ShogiExplorer.stopAnalysisToolbarButton.toolTipText")); // NOI18N
+        stopAnalysisToolbarButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        stopAnalysisToolbarButton.setEnabled(false);
+        stopAnalysisToolbarButton.setFocusable(false);
+        stopAnalysisToolbarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        stopAnalysisToolbarButton.setLabel(bundle.getString("ShogiExplorer.stopAnalysisToolbarButton.label_1")); // NOI18N
+        stopAnalysisToolbarButton.setMaximumSize(new java.awt.Dimension(30, 24));
+        stopAnalysisToolbarButton.setMinimumSize(new java.awt.Dimension(30, 24));
+        stopAnalysisToolbarButton.setPreferredSize(new java.awt.Dimension(30, 24));
+        stopAnalysisToolbarButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        stopAnalysisToolbarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                stopAnalysisButtonActionPerformed(evt);
+                stopAnalysisToolbarButtonActionPerformed(evt);
             }
         });
-        mainToolBar.add(stopAnalysisButton);
+        mainToolBar.add(stopAnalysisToolbarButton);
         mainToolBar.add(filler8);
 
         analysePositionToolbarButton.setText(bundle.getString("ShogiExplorer.analysePositionToolbarButton.text")); // NOI18N
@@ -1598,7 +1598,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         analysisParam.setGraphView1(graph1000RadioButtonMenuItem);
         analysisParam.setGraphView2(graph2000RadioButtonMenuItem);
         analysisParam.setGraphView3(graph3000RadioButtonMenuItem);
-        analysisParam.setHaltAnalysisButton(stopAnalysisButton);
+        analysisParam.setHaltAnalysisButton(stopAnalysisToolbarButton);
         analysisParam.setAnalyseGameMenuItem(analyseGameMenuItem);
         analysisParam.setAnalyseGameToolbarButton(analyseGameToolbarButton);
         analysisParam.setAnalysePositionMenuItem(analysePositionMenuItem);
@@ -1969,7 +1969,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         prefs.putInt(PREF_ANALYSIS_TIME_PER_MOVE, analysisTimePerMove);
         initializeAnalysisParams(true);
         initializeChart(true);
-        stopAnalysisButton.setEnabled(true);
+        stopAnalysisToolbarButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
         analysisThread = new Thread() {
             @Override
@@ -2240,15 +2240,15 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_graph3000RadioButtonMenuItemActionPerformed
 
-    private void stopAnalysisButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopAnalysisButtonActionPerformed
-        stopAnalysisButton.setEnabled(false);
+    private void stopAnalysisToolbarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopAnalysisToolbarButtonActionPerformed
+        stopAnalysisToolbarButton.setEnabled(false);
         stopAnalysisMenuItem.setEnabled(false);
         analysisThread.interrupt();
         analyseGameMenuItem.setEnabled(true);
         analyseGameToolbarButton.setEnabled(true);
         analysePositionMenuItem.setEnabled(true);
         analysePositionToolbarButton.setEnabled(true);
-    }//GEN-LAST:event_stopAnalysisButtonActionPerformed
+    }//GEN-LAST:event_stopAnalysisToolbarButtonActionPerformed
 
     private void englishRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_englishRadioButtonMenuItemActionPerformed
         prefs.put(PREF_LANGUAGE, PREF_LANGUAGE_ENGLISH);
@@ -2313,7 +2313,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     }//GEN-LAST:event_importClipboardMenuItemActionPerformed
 
     private void stopAnalysisMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopAnalysisMenuItemActionPerformed
-        stopAnalysisButtonActionPerformed(evt);
+        stopAnalysisToolbarButtonActionPerformed(evt);
     }//GEN-LAST:event_stopAnalysisMenuItemActionPerformed
 
     private void rotateBoardCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rotateBoardCheckBoxMenuItemActionPerformed
@@ -2398,7 +2398,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         }
         browse = false;
         initializeAnalysisParams(false);
-        stopAnalysisButton.setEnabled(true);
+        stopAnalysisToolbarButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
         analyseGameMenuItem.setEnabled(false);
         analyseGameToolbarButton.setEnabled(false);
@@ -2619,7 +2619,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
         savedPosition = new Position(SFENParser.getSFEN(board), null, null, null);
         analysisEngineName = (String) analysisEngineComboBox1.getSelectedItem();
         prefs.put(PREF_ANALYSIS_ENGINE_NAME, analysisEngineName);
-        stopAnalysisButton.setEnabled(true);
+        stopAnalysisToolbarButton.setEnabled(true);
         stopAnalysisMenuItem.setEnabled(true);
         analyseGameMenuItem.setEnabled(false);
         analyseGameToolbarButton.setEnabled(false);
@@ -3027,8 +3027,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private javax.swing.JRadioButtonMenuItem shiftJISRadioButtonMenuItem;
     private javax.swing.JButton startAnalysisButton;
     private javax.swing.JButton startAnalysisButton1;
-    private javax.swing.JButton stopAnalysisButton;
     private javax.swing.JMenuItem stopAnalysisMenuItem;
+    private javax.swing.JButton stopAnalysisToolbarButton;
     private javax.swing.JRadioButtonMenuItem utf8ImportRadioButtonMenuItem;
     private javax.swing.JRadioButtonMenuItem utf8KifRadioButtonMenuItem;
     private javax.swing.JMenu viewMenu;
