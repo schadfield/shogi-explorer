@@ -236,8 +236,6 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 }
                 if (IS_WINDOWS) {
                     UIManager.put(key, new FontUIResource("Meiryo", font.getStyle(), fontSize));
-                } else {
-                    UIManager.put(key, new FontUIResource(font.getName(), font.getStyle(), fontSize));
                 }
             }
         }
@@ -246,9 +244,13 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         mainToolBar.setFloatable(false);
 
-        bigFontsMenuItem.setEnabled(true);
+        if (IS_WINDOWS) {
+            bigFontsMenuItem.setEnabled(true);
+        } else {
+            bigFontsMenuItem.setEnabled(false);
+        }
         bigFontsMenuItem.setSelected(bigFonts);
-        
+
         this.setSize(new Dimension(mainWidth, mainHeight));
 
         if (prefs.getBoolean(PREF_MAXIMIZED, false)) {
@@ -2141,10 +2143,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 if (browse && row == moveNumber - 1) {
                     // We are in browse mode and rendering the PV for the active line.
                     StringBuilder cellStrBld;
-                    if (bigFonts) {
-                        cellStrBld = new StringBuilder("<html><p style=font-size:14pt>");
+                    if (IS_WINDOWS) {
+                        if (bigFonts) {
+                            cellStrBld = new StringBuilder("<html><p style=font-size:14pt>");
+                        } else {
+                            cellStrBld = new StringBuilder("<html><p style=font-size:12pt>");
+                        }
                     } else {
-                        cellStrBld = new StringBuilder("<html><p style=font-size:12pt>");
+                        cellStrBld = new StringBuilder("<html>");
                     }
                     int spaceCount = 0;
                     boolean foundStart = false;
@@ -2194,11 +2200,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     cellLabel.setText(cellStrBld.toString());
                 } else {
                     // Either we are not browsing or we are rendering PV for a non-active line.
-                    if (bigFonts) {
-                        cellLabel.setText("<html><p style=font-size:14pt>" + cellContents.toString() + "</p></html");
+                    if (IS_WINDOWS) {
+                        if (bigFonts) {
+                            cellLabel.setText("<html><p style=font-size:14pt>" + cellContents.toString() + "</p></html>");
+                        } else {
+                            cellLabel.setText("<html><p style=font-size:12pt>" + cellContents.toString() + "</p></html>");
+                        }
                     } else {
-                        cellLabel.setText("<html><p style=font-size:12pt>" + cellContents.toString() + "</p></html");
-
+                        cellLabel.setText("<html>" + cellContents.toString() + "</html>");
                     }
                 }
             } else {
@@ -2219,10 +2228,14 @@ public class ShogiExplorer extends javax.swing.JFrame {
                 if (posBrowse && row == posBrowseRow) {
                     // We are in browse mode and rendering the PV for the active line.
                     StringBuilder cellStrBld;
-                    if (bigFonts) {
-                        cellStrBld = new StringBuilder("<html><p style=font-size:14pt>");
+                    if (IS_WINDOWS) {
+                        if (bigFonts) {
+                            cellStrBld = new StringBuilder("<html><p style=font-size:14pt>");
+                        } else {
+                            cellStrBld = new StringBuilder("<html><p style=font-size:12pt>");
+                        }
                     } else {
-                        cellStrBld = new StringBuilder("<html><p style=font-size:12pt>");
+                        cellStrBld = new StringBuilder("<html>");
                     }
                     int spaceCount = 0;
                     boolean foundStart = false;
@@ -2272,12 +2285,16 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     cellLabel.setText(cellStrBld.toString());
                 } else {
                     // Either we are not browsing or we are rendering PV for a non-active line.
-                    if (bigFonts) {
-                        cellLabel.setText("<html><p style=font-size:14pt>" + cellContents.toString() + "</p></html");
+                    if (IS_WINDOWS) {
+                        if (bigFonts) {
+                            cellLabel.setText("<html><p style=font-size:14pt>" + cellContents.toString() + "</p></html>");
+                        } else {
+                            cellLabel.setText("<html><p style=font-size:12pt>" + cellContents.toString() + "</p></html>");
+                        }
                     } else {
-                        cellLabel.setText("<html><p style=font-size:12pt>" + cellContents.toString() + "</p></html");
-
-                    }                }
+                        cellLabel.setText("<html>" + cellContents.toString() + "</html>");
+                    }
+                }
             } else {
                 cellLabel.setText("");
             }
