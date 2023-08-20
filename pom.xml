@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.chadfield</groupId>
     <artifactId>ShogiExplorer</artifactId>
-    <version>4.18.1</version>
+    <version>4.19.0</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,12 +20,12 @@
         <dependency>
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
-            <version>RELEASE170</version>
+            <version>RELEASE180</version>
         </dependency>
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
-            <version>72.1</version>
+            <version>73.2</version>
         </dependency>
         <dependency>
             <groupId>org.jfree</groupId>
@@ -81,7 +81,7 @@
             <plugin>
                 <groupId>io.github.fvarrui</groupId>
                 <artifactId>javapackager</artifactId>
-                <version>1.7.0</version>
+                <version>1.7.3</version>
                 <executions>
                     <execution>
                         <id>bundling-for-windows</id>
@@ -99,7 +99,7 @@
                             <administratorRequired>false</administratorRequired>
                             <platform>windows</platform>
                             <jreMinVersion>17</jreMinVersion>
-                            <name>Shogi Explorer</name>
+                            <name>ShogiExplorer</name>
                             <outputDirectory>target/packages/windows</outputDirectory>
                             <displayName>Shogi Explorer</displayName>
                             <url>https://github.com/schadfield/shogi-explorer</url>
@@ -133,7 +133,7 @@
                             <administratorRequired>false</administratorRequired>
                             <platform>mac</platform>
                             <jreMinVersion>17</jreMinVersion>
-                            <name>Shogi Explorer</name>
+                            <name>ShogiExplorer</name>
                             <outputDirectory>target/packages/mac</outputDirectory>
                             <displayName>Shogi Explorer</displayName>
                             <url>https://github.com/schadfield/shogi-explorer</url>
