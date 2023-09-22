@@ -4,7 +4,7 @@
 
 Shogi Explorer is an application which allows Shogi players to analyse game records using a Shogi game engine. It works on macOS, Windows and Linux.
 
-<img src="images/image1.png">
+<img src="images/image1.png"> 
 
 ## Installation
 
