@@ -1014,7 +1014,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jSplitPane2.setDividerLocation(dividerLocation2);
 
-        boardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        boardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         boardPanel.setMaximumSize(new java.awt.Dimension(603, 482));
         boardPanel.setMinimumSize(new java.awt.Dimension(603, 482));
         boardPanel.setPreferredSize(new java.awt.Dimension(603, 482));
@@ -1045,7 +1045,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jSplitPane2.setLeftComponent(boardPanel);
 
-        jSplitPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jSplitPane1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         jSplitPane1.setDividerLocation(dividerLocation);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
@@ -2837,7 +2837,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Desktop desk = Desktop.getDesktop();
         try {
-            desk.browse(new URI("https://github.com/schadfield/shogi-explorer"));
+            desk.browse(new URI("https://gitlab.com/schadfield/shogi-explorer"));
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
