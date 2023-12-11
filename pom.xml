@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.chadfield</groupId>
     <artifactId>ShogiExplorer</artifactId>
-    <version>4.20.0</version>
+    <version>4.21.0</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -115,6 +115,7 @@
                                 </fileAssociation>
                             </fileAssociations>                
                             <winConfig>
+                                <icoFile>ShogiExplorer.ico</icoFile>
                             </winConfig>
                         </configuration>
                     </execution>
