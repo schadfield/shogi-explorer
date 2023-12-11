@@ -81,7 +81,7 @@
             <plugin>
                 <groupId>io.github.fvarrui</groupId>
                 <artifactId>javapackager</artifactId>
-                <version>1.7.5</version>
+                <version>1.7.4</version>
                 <executions>
                     <execution>
                         <id>bundling-for-windows</id>
