@@ -2145,7 +2145,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     StringBuilder cellStrBld;
                     if (IS_WINDOWS) {
                         if (bigFonts) {
-                            cellStrBld = new StringBuilder("<html><p style=font-size:14pt>");
+                            cellStrBld = new StringBuilder("<html><p style=font-family:Meiryo;font-size:14pt>");
                         } else {
                             cellStrBld = new StringBuilder("<html><p style=font-size:12pt>");
                         }
@@ -2202,7 +2202,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     // Either we are not browsing or we are rendering PV for a non-active line.
                     if (IS_WINDOWS) {
                         if (bigFonts) {
-                            cellLabel.setText("<html><p style=font-size:14pt>" + cellContents.toString() + "</p></html>");
+                            cellLabel.setText("<html><p style=font-family:Meiryo;font-size:14pt>" + cellContents.toString() + "</p></html>");
                         } else {
                             cellLabel.setText("<html><p style=font-size:12pt>" + cellContents.toString() + "</p></html>");
                         }
@@ -2230,7 +2230,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     StringBuilder cellStrBld;
                     if (IS_WINDOWS) {
                         if (bigFonts) {
-                            cellStrBld = new StringBuilder("<html><p style=font-size:14pt>");
+                            cellStrBld = new StringBuilder("<html><p style=font-family:Meiryo;font-size:14pt>");
                         } else {
                             cellStrBld = new StringBuilder("<html><p style=font-size:12pt>");
                         }
@@ -2287,7 +2287,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
                     // Either we are not browsing or we are rendering PV for a non-active line.
                     if (IS_WINDOWS) {
                         if (bigFonts) {
-                            cellLabel.setText("<html><p style=font-size:14pt>" + cellContents.toString() + "</p></html>");
+                            cellLabel.setText("<html><p style=font-family:Meiryo;font-size:14pt>" + cellContents.toString() + "</p></html>");
                         } else {
                             cellLabel.setText("<html><p style=font-size:12pt>" + cellContents.toString() + "</p></html>");
                         }
