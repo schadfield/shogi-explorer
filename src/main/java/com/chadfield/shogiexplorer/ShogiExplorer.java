@@ -2837,7 +2837,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Desktop desk = Desktop.getDesktop();
         try {
-            desk.browse(new URI("https://gitlab.com/schadfield/shogi-explorer"));
+            desk.browse(new URI("https://github.com/schadfield/shogi-explorer"));
         } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
         }
