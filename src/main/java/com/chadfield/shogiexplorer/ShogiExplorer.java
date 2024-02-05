@@ -1014,7 +1014,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jSplitPane2.setDividerLocation(dividerLocation2);
 
-        boardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        boardPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         boardPanel.setMaximumSize(new java.awt.Dimension(603, 482));
         boardPanel.setMinimumSize(new java.awt.Dimension(603, 482));
         boardPanel.setPreferredSize(new java.awt.Dimension(603, 482));
@@ -1045,7 +1045,7 @@ public class ShogiExplorer extends javax.swing.JFrame {
 
         jSplitPane2.setLeftComponent(boardPanel);
 
-        jSplitPane1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jSplitPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jSplitPane1.setDividerLocation(dividerLocation);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
@@ -2948,8 +2948,8 @@ public class ShogiExplorer extends javax.swing.JFrame {
             Properties prop = new Properties();
             prop.load(input);
             aboutMessage = "Shogi Explorer\n\nVersion " + prop.getProperty("project.version")
-                    + "\n\nCopyright © 2021, 2022, 2023 Stephen R Chadfield."
-                    + "\n\nPlay more Shogi!";
+                    + "\n\nCopyright © 2021, 2022, 2023, 2024 Stephen R Chadfield."
+                    + "\n\nLet's do this thing.";
         } catch (IOException ex) {
             Logger.getLogger(ShogiExplorer.class.getName()).log(Level.SEVERE, null, ex);
             return "";
