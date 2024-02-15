@@ -1,5 +1,5 @@
 /*
-    Copyright © 2021, 2022 Stephen R Chadfield.
+    Copyright © 2021, 2022, 2023, 2024 Stephen R Chadfield.
 
     This file is part of Shogi Explorer.
 
@@ -112,6 +112,9 @@ public class KifParser {
                     }
 
                     count++;
+                    if (count == 36) {
+                        System.out.println("here");
+                    }
 
                     board.setMoveCount(count);
 
@@ -239,7 +242,7 @@ public class KifParser {
         String japanese = "";
 
         if (same) {
-            japanese += NotationUtils.SAME + piece;
+            japanese += NotationUtils.SAME + piece + disambiguation;
         } else {
             japanese += NotationUtils.getJapaneseCoordinate(thisDestination) + piece + disambiguation;
         }
