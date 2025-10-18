@@ -47,6 +47,12 @@
             <artifactId>batik-codec</artifactId>
             <version>1.19</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-http</artifactId>
+            <version>3.5.3</version>
+</dependency>
+
     </dependencies>
     <build>
         <resources>
